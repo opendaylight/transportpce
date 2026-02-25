@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
@@ -40,6 +41,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Admi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.NameAndValue;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -263,7 +265,7 @@ public class ConvertTopoORtoTapiAtInit {
         int numNeps = 0;
         int numSips = 0;
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
-        LOG.info("Converting {} nodes on {}", nodeList.size(), roadm);
+        LOG.info("Converting {} nodes on {}", nodeList.size(), roadm.getNodeId().getValue());
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
             if (node.getSupportingNode().values().stream()
@@ -295,7 +297,7 @@ public class ConvertTopoORtoTapiAtInit {
                                 == OpenroadmTpType.DEGREETXTTP.getIntValue())
                         .collect(Collectors.toList());
                     // Convert TP List in NEPs and put it in onepl
-                    LOG.info("Degree port List: {}", degPortList.toString());
+                    LOG.debug("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
                     oneplist.putAll(
                          populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
@@ -646,7 +648,7 @@ public class ConvertTopoORtoTapiAtInit {
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
-                LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                LOG.debug("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
                         this.ietfNodeId, tpId, cep);
 
                 onepBdd.addAugmentation(onep1Bldr)
