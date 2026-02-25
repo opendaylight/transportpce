@@ -893,7 +893,10 @@ public final class ConnectivityUtils {
             // put in datastore
             this.networkTransactionService.put(LogicalDatastoreType.OPERATIONAL, onepIID, onep);
             this.networkTransactionService.commit().get();
-            LOG.info("NEP {} successfully added to node {} topology {} datastore.", nepName(onep), nodeUuid, topoUuid);
+            LOG.info("NEP {} successfully added to node uuid={} topology uuid={} datastore.",
+                    nepName(onep),
+                    nodeUuid.getValue(),
+                    topoUuid.getValue());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldn't save (i.e. PUT) NEP {} in topology {}, error = ", nepName(onep), topoUuid, e);
         }
