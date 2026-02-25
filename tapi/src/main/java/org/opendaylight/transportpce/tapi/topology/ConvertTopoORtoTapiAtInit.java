@@ -263,7 +263,7 @@ public class ConvertTopoORtoTapiAtInit {
         int numNeps = 0;
         int numSips = 0;
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
-        LOG.info("Converting {} nodes on {}", nodeList.size(), roadm);
+        LOG.info("Converting {} nodes on {}", nodeList.size(), roadm.getNodeId().getValue());
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
             if (node.getSupportingNode().values().stream()
@@ -295,7 +295,7 @@ public class ConvertTopoORtoTapiAtInit {
                                 == OpenroadmTpType.DEGREETXTTP.getIntValue())
                         .collect(Collectors.toList());
                     // Convert TP List in NEPs and put it in onepl
-                    LOG.info("Degree port List: {}", degPortList.toString());
+                    LOG.debug("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
                     oneplist.putAll(
                          populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
@@ -678,7 +678,7 @@ public class ConvertTopoORtoTapiAtInit {
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
-                LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                LOG.debug("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
                         this.ietfNodeId, tpId, cep);
                 LOG.info("[depth={}] TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
                         depth, this.ietfNodeId, tpId, cep);
