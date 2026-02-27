@@ -33,4 +33,3 @@ public final class PowerMgmtVersionOC190 {
         return catalogUtils.getMinMaxOutputPower(operationalMode);
     }
 }
-

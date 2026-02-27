@@ -110,4 +110,3 @@ public class OlmUtils710Test {
         assertEquals(3, result.get("test-interface-name").size());
     }
 }
-

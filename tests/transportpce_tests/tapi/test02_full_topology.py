@@ -372,7 +372,7 @@ class TestTransportPCEFullTopology(unittest.TestCase):
 #        time.sleep(self.WAITING)
 
     def test_17_get_service_PhotonicMedia(self):
-        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.pm))
+        # response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.pm))
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -588,7 +588,7 @@ class TestTransportPCEFullTopology(unittest.TestCase):
                          ['parent-node-edge-point']['node-edge-point-uuid'], '2bdca70f-ef1e-3e56-b251-07eda88f31ba')
 
     def test_21_get_service_ODU(self):
-        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.odu))
+        # response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.odu))
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceOdu4-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -689,7 +689,7 @@ class TestTransportPCEFullTopology(unittest.TestCase):
                          ['parent-node-edge-point']['node-edge-point-uuid'], 'c6cd334c-51a1-3995-bed3-5cf2b7445c04')
 
     def test_24_get_service_DSR(self):
-        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.dsr))
+        # response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.dsr))
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')

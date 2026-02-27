@@ -129,4 +129,3 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
             .build();
     }
 }
-

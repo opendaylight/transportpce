@@ -26,4 +26,3 @@ export JDK_JAVA_OPTIONS="
  --add-opens java.base/sun.nio.fs=ALL-UNNAMED
  -Xlog:disable"
 # --illegal-access=permit #default option, can be set to warn to retrieve all details
-

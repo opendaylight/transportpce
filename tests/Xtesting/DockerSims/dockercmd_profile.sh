@@ -57,5 +57,3 @@ else
         DOCKER_CMD="sudo docker"
     fi
 fi
-
-

@@ -25,4 +25,3 @@ for image in $IMAGE_LIST;do
 done
 
 exit
-
