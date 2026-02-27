@@ -1,9 +1,7 @@
 {
-"ietf-network:networks":
-{
-   "network":
-      {
-        "network-id": "openroadm-network",
+  "ietf-network:networks": {
+    "network": {
+      "network-id": "openroadm-network",
       "node": [
         {
           "node-id": "XPONDER-1",
@@ -137,6 +135,5 @@
         }
       ]
     }
-
-}
+  }
 }

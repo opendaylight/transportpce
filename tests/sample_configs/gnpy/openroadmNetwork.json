@@ -1,6 +1,6 @@
 {
-   "ietf-network:network":[
-      {
+  "ietf-network:network": [
+    {
       "network-id": "openroadm-network",
       "node": [
         {
@@ -135,5 +135,5 @@
         }
       ]
     }
-   ]
+  ]
 }

@@ -317,4 +317,3 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 }
-

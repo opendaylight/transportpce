@@ -17,10 +17,7 @@
         },
         "pce:hard-constraints": {
           "pce:exclude_": {
-            "node-id": [
-              "OpenROADM-2-1",
-              "OpenROADM-2-2"
-            ]
+            "node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]
           }
         },
         "pce:pce-metric": "hop-count"

@@ -467,4 +467,3 @@ final class OlmUtils121 {
         return Optional.empty();
     }
 }
-

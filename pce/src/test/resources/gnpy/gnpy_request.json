@@ -1,10 +1,10 @@
 {
-    "request": {
+  "request": {
     "topology": {
       "elements": [
         {
           "uid": "127.0.0.40",
-         "type": "gnpy-network-topology:Roadm",
+          "type": "gnpy-network-topology:Roadm",
           "metadata": {
             "location": {
               "region": "OpenROADM-4",
@@ -18,7 +18,7 @@
         },
         {
           "uid": "127.0.0.50",
-         "type": "gnpy-network-topology:Roadm",
+          "type": "gnpy-network-topology:Roadm",
           "metadata": {
             "location": {
               "region": "OpenROADM-5",
@@ -32,7 +32,7 @@
         },
         {
           "uid": "127.0.0.20",
-         "type": "gnpy-network-topology:Roadm",
+          "type": "gnpy-network-topology:Roadm",
           "metadata": {
             "location": {
               "region": "OpenROADM-2",
@@ -46,7 +46,7 @@
         },
         {
           "uid": "127.0.0.10",
-         "type": "gnpy-network-topology:Roadm",
+          "type": "gnpy-network-topology:Roadm",
           "metadata": {
             "location": {
               "region": "OpenROADM-1",
@@ -60,7 +60,7 @@
         },
         {
           "uid": "127.0.0.30",
-         "type": "gnpy-network-topology:Roadm",
+          "type": "gnpy-network-topology:Roadm",
           "metadata": {
             "location": {
               "region": "OpenROADM-3",

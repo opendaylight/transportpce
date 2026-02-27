@@ -13,7 +13,7 @@
         "tapi-connectivity:local-id": "local-id1",
         "tapi-connectivity:administrative-state": "LOCKED"
       },
-       {
+      {
         "tapi-connectivity:layer-protocol-name": "ETH",
         "tapi-connectivity:service-interface-point": {
           "tapi-connectivity:service-interface-point-id": "zzzzzzzz-1111-1111-1111-zzzzzzzzzzzz"
@@ -29,7 +29,7 @@
           }
         ],
         "tapi-connectivity:administrative-state": "LOCKED"
-       }
+      }
     ],
     "tapi-connectivity:conn-constraint": {
       "tapi-connectivity:service-type": "POINT_TO_POINT_CONNECTIVITY",

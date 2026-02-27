@@ -75,7 +75,7 @@
       "cp-to-degree": [],
       "switching-pool-lcp": []
     },
-        {
+    {
       "node-id": "OpenROADM-1",
       "node-info": {
         "node-type": "rdm",

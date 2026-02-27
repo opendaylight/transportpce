@@ -1,32 +1,32 @@
 {
-   "ietf-network:network":[
-      {
-          "network-id": "clli-network",
-          "network-types": {
-              "org-openroadm-clli-network:clli-network": {}
-          },
-          "node": [
-              {
-                  "node-id": "Node1",
-                  "org-openroadm-clli-network:clli": "Node1"
-              },
-              {
-                  "node-id": "Node2",
-                  "org-openroadm-clli-network:clli": "Node2"
-              },
-              {
-                  "node-id": "Node3",
-                  "org-openroadm-clli-network:clli": "Node3"
-              },
-              {
-                  "node-id": "Node4",
-                  "org-openroadm-clli-network:clli": "Node4"
-              },
-              {
-                  "node-id": "Node5",
-                  "org-openroadm-clli-network:clli": "Node5"
-              }
-          ]
-      }
-   ]
+  "ietf-network:network": [
+    {
+      "network-id": "clli-network",
+      "network-types": {
+        "org-openroadm-clli-network:clli-network": {}
+      },
+      "node": [
+        {
+          "node-id": "Node1",
+          "org-openroadm-clli-network:clli": "Node1"
+        },
+        {
+          "node-id": "Node2",
+          "org-openroadm-clli-network:clli": "Node2"
+        },
+        {
+          "node-id": "Node3",
+          "org-openroadm-clli-network:clli": "Node3"
+        },
+        {
+          "node-id": "Node4",
+          "org-openroadm-clli-network:clli": "Node4"
+        },
+        {
+          "node-id": "Node5",
+          "org-openroadm-clli-network:clli": "Node5"
+        }
+      ]
+    }
+  ]
 }

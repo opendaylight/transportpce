@@ -1,118 +1,121 @@
 {
-    "notification-process-service": {
-        "service-z-end": {
-            "service-format": "OC",
-            "node-id": "XPONDER-1-2",
-            "service-rate": 1,
-            "clli": "clli",
-            "tx-direction": [
-            {
-                "port": {
-                    "port-slot": "port slot",
-                    "port-device-name": "device name",
-                    "port-rack": "port rack",
-                    "port-shelf": "port shelf",
-                    "port-type": "port type",
-                    "port-sub-slot": "port subslot",
-                    "port-name": "port name"
-                },
-                "lgx": {
-                    "lgx-port-name": "lgx port name",
-                    "lgx-port-shelf": "lgx port shelf",
-                    "lgx-port-rack": "lgx port rack",
-                    "lgx-device-name": "lgx device name"
-                },
-                "index": 0
-            }
-            ],
-            "rx-direction": [
-            {
-                "port": {
-                    "port-slot": "port slot",
-                    "port-device-name": "device name",
-                    "port-rack": "port rack",
-                    "port-shelf": "port shelf",
-                    "port-type": "port type",
-                    "port-sub-slot": "port subslot",
-                    "port-name": "port name"
-                },
-                "lgx": {
-                    "lgx-port-name": "lgx port name",
-                    "lgx-port-shelf": "lgx port shelf",
-                    "lgx-port-rack": "lgx port rack",
-                    "lgx-device-name": "lgx device name"
-                },
-                "index": 0
-            }]
-        },
-        "connection-type": "service",
-        "operational-state": "inService",
-        "common-id": "commond-id",
-        "service-a-end": {
-            "service-format": "OC",
-            "node-id": "XPONDER-1-2",
-            "service-rate": 1,
-            "clli": "clli",
-            "tx-direction": [
-            {
-                "port": {
-                    "port-slot": "port slot",
-                    "port-device-name": "device name",
-                    "port-rack": "port rack",
-                    "port-shelf": "port shelf",
-                    "port-type": "port type",
-                    "port-sub-slot": "port subslot",
-                    "port-name": "port name"
-                },
-                "lgx": {
-                    "lgx-port-name": "lgx port name",
-                    "lgx-port-shelf": "lgx port shelf",
-                    "lgx-port-rack": "lgx port rack",
-                    "lgx-device-name": "lgx device name"
-                },
-                "index": 0
-            }],
-            "rx-direction": [
-            {
-                "port": {
-                    "port-slot": "port slot",
-                    "port-device-name": "device name",
-                    "port-rack": "port rack",
-                    "port-shelf": "port shelf",
-                    "port-type": "port type",
-                    "port-sub-slot": "port subslot",
-                    "port-name": "port name"
-                },
-                "lgx": {
-                    "lgx-port-name": "lgx port name",
-                    "lgx-port-shelf": "lgx port shelf",
-                    "lgx-port-rack": "lgx port rack",
-                    "lgx-device-name": "lgx device name"
-                },
-                "index": 0
-            }]
-        },
-        "service-name": "service1",
-        "message": "message",
-        "response-failed": "",
-        "is-temp-service": true,
-        "aToZ": {
-            "frequency": 196.125,
-            "width": 87.5,
-            "optical-operational-mode": "test",
-            "rx-estimated-osnr": 23.5,
-            "rx-estimated-gsnr": 23.5,
-            "max-output-power": 0.5,
-            "min-output-power": 0.5
-        },
-        "zToA": {
-            "frequency": 196.125,
-            "width": 87.5,
-            "optical-operational-mode": "test",
-            "rx-estimated-osnr": 23.5,
-            "rx-estimated-gsnr": 23.5,
-            "max-output-power": 0.5,
-            "min-output-power": 0.5
+  "notification-process-service": {
+    "service-z-end": {
+      "service-format": "OC",
+      "node-id": "XPONDER-1-2",
+      "service-rate": 1,
+      "clli": "clli",
+      "tx-direction": [
+        {
+          "port": {
+            "port-slot": "port slot",
+            "port-device-name": "device name",
+            "port-rack": "port rack",
+            "port-shelf": "port shelf",
+            "port-type": "port type",
+            "port-sub-slot": "port subslot",
+            "port-name": "port name"
+          },
+          "lgx": {
+            "lgx-port-name": "lgx port name",
+            "lgx-port-shelf": "lgx port shelf",
+            "lgx-port-rack": "lgx port rack",
+            "lgx-device-name": "lgx device name"
+          },
+          "index": 0
         }
+      ],
+      "rx-direction": [
+        {
+          "port": {
+            "port-slot": "port slot",
+            "port-device-name": "device name",
+            "port-rack": "port rack",
+            "port-shelf": "port shelf",
+            "port-type": "port type",
+            "port-sub-slot": "port subslot",
+            "port-name": "port name"
+          },
+          "lgx": {
+            "lgx-port-name": "lgx port name",
+            "lgx-port-shelf": "lgx port shelf",
+            "lgx-port-rack": "lgx port rack",
+            "lgx-device-name": "lgx device name"
+          },
+          "index": 0
+        }
+      ]
+    },
+    "connection-type": "service",
+    "operational-state": "inService",
+    "common-id": "commond-id",
+    "service-a-end": {
+      "service-format": "OC",
+      "node-id": "XPONDER-1-2",
+      "service-rate": 1,
+      "clli": "clli",
+      "tx-direction": [
+        {
+          "port": {
+            "port-slot": "port slot",
+            "port-device-name": "device name",
+            "port-rack": "port rack",
+            "port-shelf": "port shelf",
+            "port-type": "port type",
+            "port-sub-slot": "port subslot",
+            "port-name": "port name"
+          },
+          "lgx": {
+            "lgx-port-name": "lgx port name",
+            "lgx-port-shelf": "lgx port shelf",
+            "lgx-port-rack": "lgx port rack",
+            "lgx-device-name": "lgx device name"
+          },
+          "index": 0
+        }
+      ],
+      "rx-direction": [
+        {
+          "port": {
+            "port-slot": "port slot",
+            "port-device-name": "device name",
+            "port-rack": "port rack",
+            "port-shelf": "port shelf",
+            "port-type": "port type",
+            "port-sub-slot": "port subslot",
+            "port-name": "port name"
+          },
+          "lgx": {
+            "lgx-port-name": "lgx port name",
+            "lgx-port-shelf": "lgx port shelf",
+            "lgx-port-rack": "lgx port rack",
+            "lgx-device-name": "lgx device name"
+          },
+          "index": 0
+        }
+      ]
+    },
+    "service-name": "service1",
+    "message": "message",
+    "response-failed": "",
+    "is-temp-service": true,
+    "aToZ": {
+      "frequency": 196.125,
+      "width": 87.5,
+      "optical-operational-mode": "test",
+      "rx-estimated-osnr": 23.5,
+      "rx-estimated-gsnr": 23.5,
+      "max-output-power": 0.5,
+      "min-output-power": 0.5
+    },
+    "zToA": {
+      "frequency": 196.125,
+      "width": 87.5,
+      "optical-operational-mode": "test",
+      "rx-estimated-osnr": 23.5,
+      "rx-estimated-gsnr": 23.5,
+      "max-output-power": 0.5,
+      "min-output-power": 0.5
     }
+  }
 }

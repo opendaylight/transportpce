@@ -515,4 +515,3 @@ public class OCPortMappingTest {
         assertNotNull(method.invoke(ocPortMappingVersion190,supportedClientPorts,subcomponents));
     }
 }
-
