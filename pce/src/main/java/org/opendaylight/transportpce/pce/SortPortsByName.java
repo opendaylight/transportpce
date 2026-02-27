@@ -46,4 +46,3 @@ public class SortPortsByName implements Comparator<String>, Serializable {
         return (letter != null) ? letter : "";
     }
 }
-

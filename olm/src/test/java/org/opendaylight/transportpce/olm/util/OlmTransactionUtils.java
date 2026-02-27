@@ -344,4 +344,3 @@ public final class OlmTransactionUtils {
                 .build());
     }
 }
-

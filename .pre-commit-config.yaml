@@ -26,10 +26,10 @@ repos:
     rev: v2.0.0
     hooks:
       - id: autopep8
-        args: ['--in-place', '--max-line-length=120']
+        args: ["--in-place", "--max-line-length=120"]
 
   - repo: https://github.com/perltidy/perltidy
-    rev: '20240202.05'
+    rev: "20240202.05"
     hooks:
       - id: perltidy
         stages: [commit]

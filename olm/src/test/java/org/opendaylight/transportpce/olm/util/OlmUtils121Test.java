@@ -167,4 +167,3 @@ public class OlmUtils121Test {
         assertEquals(3, result.get("test-interface-name").size());
     }
 }
-

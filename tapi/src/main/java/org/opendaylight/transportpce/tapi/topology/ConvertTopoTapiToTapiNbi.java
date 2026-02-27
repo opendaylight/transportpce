@@ -212,4 +212,3 @@ public class ConvertTopoTapiToTapiNbi {
         this.tapiSips.putAll(tapiSip);
     }
 }
-

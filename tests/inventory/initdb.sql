@@ -822,5 +822,3 @@ CREATE TABLE `inv_dev_xponder_port` (
   `create_date` datetime DEFAULT NULL,
   `update_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
