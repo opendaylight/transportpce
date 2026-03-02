@@ -740,8 +740,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformSrgToOnep(
                 String orNodeId, Map<String, List<Mapping>> mapSrg) {
         LOG.debug("TNMSI:transformSrgToOnep, ListOfMapping {}, of NodeId {} ", mapSrg, orNodeId);
-        Map<String, TerminationPoint1> tpMap = new HashMap<>();
-        //List<TerminationPoint> tpList = new ArrayList<>();
+        //Map<String, TerminationPoint1> tpMap = new HashMap<>();
+        List<TerminationPoint> tpList = new ArrayList<>();
         for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
             // For each srg node. Loop through the LCPs and create neps and sips for PP
             for (Mapping m : entry.getValue()) {
@@ -753,10 +753,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 int counter = 50;
                 do {
-                    var netTP1fromDS = getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId);
+                    var netTP1fromDS = getNetworkTerminationPointFromDatastore(overlayNodeId, tpId);
                     if (netTP1fromDS != null) {
-                        //tpList.add(netTP1fromDS);
-                        tpMap.put(tpId, netTP1fromDS);
+                        tpList.add(netTP1fromDS);
+                        //tpMap.put(tpId, netTP1fromDS);
                         LOG.debug("TNMSI:transformSrgToOnep : LCP {} is not empty for augmentation TP1", tpId);
                         break;
                     }
@@ -781,17 +781,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
             }
         }
-        LOG.debug("TNMSI:transformSrgToOnep for tps {}, of NodeId {} ",
-            tpMap.entrySet().stream().map(tp -> tp.getKey()).collect(Collectors.toList()), orNodeId);
-        return populateNepsForRdmNode(true, orNodeId, tpMap, true, TapiConstants.PHTNC_MEDIA_OTS);
+        LOG.debug("TNMSI:transformSrgToOnep for tps {}, of NodeId {} ", tpList, orNodeId);
+        return populateNepsForRdmNode(true, orNodeId, tpList, true, TapiConstants.PHTNC_MEDIA_OTS);
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformDegToOnep(
                 String orNodeId, Map<String, List<Mapping>> mapDeg) {
         LOG.debug("CREATENEP transformDegToOnep, ListOfMapping {}, of NodeId {} ", mapDeg, orNodeId);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> degOnepMap = new HashMap<>();
-        Map<String, TerminationPoint1> tpMap = new HashMap<>();
-        //List<TerminationPoint> tpList = new ArrayList<>();
+        //Map<String, TerminationPoint1> tpMap = new HashMap<>();
+        List<TerminationPoint> tpList = new ArrayList<>();
         for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
             // For each degree node. Loop through the LCPs and create neps and sips for TTP
             for (Mapping m:entry.getValue()) {
@@ -807,13 +806,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         tpId, overlayNodeId);
                     continue;
                 }
-                //tpList.add(getNetworkTerminationPointFromDatastore(overlayNodeId, tpId));
-                tpMap.put(tpId, netTP1fromDS);
+                tpList.add(getNetworkTerminationPointFromDatastore(overlayNodeId, tpId));
+                //tpMap.put(tpId, netTP1fromDS);
                 LOG.info("LCP {} is not empty for augmentation TP1", tpId);
             }
         }
-        degOnepMap.putAll(populateNepsForRdmNode(false, orNodeId, tpMap, true, TapiConstants.PHTNC_MEDIA_OTS));
-        degOnepMap.putAll(populateNepsForRdmNode(false, orNodeId, tpMap, false, TapiConstants.PHTNC_MEDIA_OMS));
+        degOnepMap.putAll(populateNepsForRdmNode(false, orNodeId, tpList, true, TapiConstants.PHTNC_MEDIA_OTS));
+        degOnepMap.putAll(populateNepsForRdmNode(false, orNodeId, tpList, false, TapiConstants.PHTNC_MEDIA_OMS));
         return degOnepMap;
     }
 
@@ -2113,16 +2112,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     /**
      * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
      *
-     * @see RoadmNepFactory#populateNepsForRdmNode(boolean, String, Map, boolean, String, TapiLink)
+     * @see RoadmNepFactory#populateNepsForRdmNode(boolean, String, List, boolean, String, TapiLink)
      */
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
             boolean srg,
             String nodeId,
-            Map<String, TerminationPoint1> tpMap,
+            List<TerminationPoint> tpList,
             boolean withSip,
             String nepPhotonicSublayer) {
 
-        return roadmNepFactory.populateNepsForRdmNode(srg, nodeId, tpMap, withSip, nepPhotonicSublayer, tapiLink);
+        return roadmNepFactory.populateNepsForRdmNode(srg, nodeId, tpList, withSip, nepPhotonicSublayer, tapiLink);
     }
 
     /**
@@ -2134,6 +2133,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private TerminationPoint getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
         return openRoadmTerminationPointReader
                 .readTerminationPoint(new TopologyNodeId(nodeId), new TpId(tpId))
+                .orElse(null);
+    }
+
+    /**
+     * Get a network termination point for nodeId and tpId.
+     * @param nodeId String
+     * @param tpId String
+     * @return network termination point, null otherwise
+     */
+    private TerminationPoint getNetworkTerminationPointFromDatastore(TopologyNodeId nodeId, String tpId) {
+        return openRoadmTerminationPointReader
+                .readTerminationPoint(nodeId, new TpId(tpId))
                 .orElse(null);
     }
 
