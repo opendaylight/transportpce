@@ -203,7 +203,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final ORtoTapiTopoConversionTools tapiFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
-    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
     private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
     private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
@@ -218,7 +217,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.tapiLink = tapiLink;
-        this.srgOtsCepMap = new HashMap<>();
         openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
         openRoadmSpectrumRangeExtractor = new DefaultOpenRoadmSpectrumRangeExtractor(
                 new NumericFrequency(
@@ -2142,8 +2140,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      *   <li>For SRG-related TPs, if used frequencies are found, recursively creates additional NEPs for the
      *       {@code MC} and {@code OTSI_MC} sublayers for the same TP.</li>
      *   <li>If {@code withSip} is {@code true}, creates a CEP for the NEP (typically for SRG OTS) using
-     *       {@code tapiFactory.createCepRoadm(...)} and stores it in {@code srgOtsCepMap} under a deterministic
-     *       UUID-key mapping.</li>
+     *       {@code tapiFactory.createCepRoadm(...)} and attaches it to the NEP through the {@code CepList}
+     *       augmentation.</li>
      * </ul>
      *
      * <p>Deterministic UUIDs are generated using {@link #nameUuid(String...)} which relies on
@@ -2156,7 +2154,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param tpMap
      *     Map of termination point identifiers to their corresponding {@link TerminationPoint1} objects.
      * @param withSip
-     *     When {@code true}, creates and augments the NEP with a CEP and stores it into {@code srgOtsCepMap}.
+     *     When {@code true}, creates a CEP and augments the NEP with it.
      * @param nepPhotonicSublayer
      *     The photonic sublayer to build NEPs for (e.g. {@code PHTNC_MEDIA_OTS}, {@code PHTNC_MEDIA_OMS},
      *     {@code MC}, {@code OTSI_MC}). Affects qualifiers and whether photonic specs are added.
@@ -2308,7 +2306,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .setOperationalState(this.tapiLink.setTapiOperationalState(tp.getOperationalState().getName()))
                     .setLifecycleState(LifecycleState.INSTALLED);
 
-            //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
+            //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and attach it to the NEP:
             //Identify that we have an SRG through withSip set to true only for SRG
             if (withSip) {
                 //TODO: currently do not add extension corresponding to channel to OTSiMC/MC CEP on OTS CEP. Although
@@ -2326,13 +2324,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         srg);
 
                 LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : TopoInitialMapping, creating CEP for SRG", depth);
-
-                Map<String, String> uuidMap = Map.of(
-                        new Uuid(nameUuid("CEP", nodeId, nepPhotonicSublayer, tpId)).toString(),
-                        new Uuid(nameUuid(nodeId, TapiConstants.PHTNC_MEDIA)).toString()
-                );
-
-                this.srgOtsCepMap.put(uuidMap, cep);
 
                 CepList cepList = new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build();
 
