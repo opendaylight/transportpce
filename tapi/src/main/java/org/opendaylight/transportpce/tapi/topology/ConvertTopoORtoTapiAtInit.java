@@ -537,8 +537,12 @@ public class ConvertTopoORtoTapiAtInit {
      *
      * @see #populateNepsForRdmNode(boolean, String, List, boolean, String, int)
      */
-    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
-            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+            boolean srg,
+            String nodeId,
+            List<TerminationPoint> tpList,
+            boolean withSip,
+            String nepPhotonicSublayer) {
 
         return populateNepsForRdmNode(
                 srg,
@@ -560,9 +564,14 @@ public class ConvertTopoORtoTapiAtInit {
      *              {@code 0} represents the top-level call; higher values indicate
      *              nested recursive invocations.
      */
-    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
-            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer,
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+            boolean srg,
+            String nodeId,
+            List<TerminationPoint> tpList,
+            boolean withSip,
+            String nepPhotonicSublayer,
             int depth) {
+
         // create neps for MC and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         LOG.info("Populating NEPs for ROADM node {} (ietf node id: {}) from {} TPs",
