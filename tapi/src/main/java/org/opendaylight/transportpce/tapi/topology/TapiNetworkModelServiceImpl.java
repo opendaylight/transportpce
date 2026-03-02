@@ -202,7 +202,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final ORtoTapiTopoConversionTools tapiFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
-    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
     private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
     private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
@@ -217,7 +216,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.tapiLink = tapiLink;
-        this.srgOtsCepMap = new HashMap<>();
         openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
         openRoadmSpectrumRangeExtractor = new DefaultOpenRoadmSpectrumRangeExtractor(
                 new NumericFrequency(
@@ -2324,13 +2322,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         srg);
 
                 LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : TopoInitialMapping, creating CEP for SRG", depth);
-
-                Map<String, String> uuidMap = Map.of(
-                        new Uuid(nameUuid("CEP", nodeId, nepPhotonicSublayer, tpId)).toString(),
-                        new Uuid(nameUuid(nodeId, TapiConstants.PHTNC_MEDIA)).toString()
-                );
-
-                this.srgOtsCepMap.put(uuidMap, cep);
 
                 CepList cepList = new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build();
 
