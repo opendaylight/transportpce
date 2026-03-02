@@ -103,7 +103,6 @@ public class ConvertTopoORtoTapiAtInit {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
-    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor =
             DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance();
     private final LinkTerminationPointsFactory linkTerminationPointsFactory;
@@ -119,7 +118,6 @@ public class ConvertTopoORtoTapiAtInit {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
-        this.srgOtsCepMap = new HashMap<>();
         this.tapiLink = tapiLink;
         linkTerminationPointsFactory = new OpenRoadmLinkTerminationPointsFactory(
                 new TopologyTerminationPointTypeResolver());
@@ -676,12 +674,7 @@ public class ConvertTopoORtoTapiAtInit {
                 var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
                     String.join("+", this.ietfNodeId, tpId), nepPhotonicSublayer, null, srg);
                 LOG.debug("Populate NEPs for ROADM node {}: creating CEP for SRG ({})", nodeId, srg);
-                var uuidMap = new HashMap<>(Map.of(
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
-                        tpId)).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA))
-                        .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
-                this.srgOtsCepMap.put(uuidMap, cep);
+
                 logCreatedCep(this.ietfNodeId, tpId, cep);
 
                 CepList cepList = new CepListBuilder()
