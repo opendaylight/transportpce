@@ -8,9 +8,10 @@
 
 package org.opendaylight.transportpce.tapi.topology.nep;
 
+import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 
@@ -19,12 +20,12 @@ public interface RoadmNepFactory {
     /**
      * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
      *
-     * @see #populateNepsForRdmNode(boolean, String, Map, boolean, String, TapiLink, int)
+     * @see #populateNepsForRdmNode(boolean, String, List, boolean, String, TapiLink, int)
      */
     Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
             boolean srg,
             String nodeId,
-            Map<String, TerminationPoint1> tpMap,
+            List<TerminationPoint> tpList,
             boolean withSip,
             String nepPhotonicSublayer,
             TapiLink tapiLink);
@@ -32,7 +33,7 @@ public interface RoadmNepFactory {
     /**
      * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
      *
-     * <p>For each {@link TerminationPoint1} entry in {@code tpMap}, this method:
+     * <p>For each {@link TerminationPoint} entry in {@code tpMap}, this method:
      * <ul>
      *   <li>Builds a Photonic Media NEP with a deterministic UUID derived from
      *       {@code nodeId + nepPhotonicSublayer + tpId}.</li>
@@ -52,8 +53,8 @@ public interface RoadmNepFactory {
      *     Indicates whether the processing context is SRG-related; forwarded to CEP creation.
      * @param nodeId
      *     The ROADM node identifier used to compose NEP names and UUIDs.
-     * @param tpMap
-     *     Map of termination point identifiers to their corresponding {@link TerminationPoint1} objects.
+     * @param tpList
+     *     List of termination point identifiers to their corresponding {@link TerminationPoint} objects.
      * @param withSip
      *     When {@code true}, creates and augments the NEP with a CEP and stores it into {@code srgOtsCepMap}.
      * @param nepPhotonicSublayer
@@ -71,7 +72,7 @@ public interface RoadmNepFactory {
     Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
             boolean srg,
             String nodeId,
-            Map<String, TerminationPoint1> tpMap,
+            List<TerminationPoint> tpList,
             boolean withSip,
             String nepPhotonicSublayer,
             TapiLink tapiLink,

@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +51,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
@@ -111,8 +113,6 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
                 "src/test/resources/openroadm-topology.xml",
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
-
-
         NetworkTransactionService networkTransactionService = new NetworkTransactionImpl(getDataBroker());
 
         service = new TapiNetworkModelServiceImpl(
@@ -136,10 +136,12 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         boolean withSip = true;
         String nepPhotonicSublayer = "PHOTONIC_MEDIA_OTS";
 
-        Map<String, TerminationPoint1> tpMap = new HashMap<>();
         TerminationPoint1 tp = terminationPoint();
 
-        tpMap.put("SRG13-PP9-TXRX", tp);
+        TerminationPoint terminationPoint = new TerminationPointBuilder()
+                .setTpId(TpId.getDefaultInstance("SRG13-PP9-TXRX"))
+                .addAugmentation(tp)
+                .build();
 
         // ------------------------------------
         // Invoke the method under test
@@ -147,7 +149,7 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> result = service.populateNepsForRdmNode(
                 srg,
                 nodeId,
-                tpMap,
+                List.of(terminationPoint),
                 withSip,
                 nepPhotonicSublayer);
 
@@ -205,10 +207,12 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         boolean withSip = true;
         String nepPhotonicSublayer = "PHOTONIC_MEDIA_OTS";
 
-        Map<String, TerminationPoint1> tpMap = new HashMap<>();
         TerminationPoint1 tp = terminationPoint();
 
-        tpMap.put("SRG1-PP1-TXRX", tp);
+        TerminationPoint terminationPoint = new TerminationPointBuilder()
+                .setTpId(TpId.getDefaultInstance("SRG1-PP1-TXRX"))
+                .addAugmentation(tp)
+                .build();
 
         // ------------------------------------
         // Invoke the method under test
@@ -216,7 +220,7 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> result = service.populateNepsForRdmNode(
                 srg,
                 nodeId,
-                tpMap,
+                List.of(terminationPoint),
                 withSip,
                 nepPhotonicSublayer);
 
