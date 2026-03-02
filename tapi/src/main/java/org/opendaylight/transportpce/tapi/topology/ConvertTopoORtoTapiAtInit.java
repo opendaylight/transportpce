@@ -103,7 +103,6 @@ public class ConvertTopoORtoTapiAtInit {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
-    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor =
             DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance();
     private final LinkTerminationPointsFactory linkTerminationPointsFactory;
@@ -119,7 +118,6 @@ public class ConvertTopoORtoTapiAtInit {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
-        this.srgOtsCepMap = new HashMap<>();
         this.tapiLink = tapiLink;
         linkTerminationPointsFactory = new OpenRoadmLinkTerminationPointsFactory(
                 new TopologyTerminationPointTypeResolver());
@@ -663,7 +661,7 @@ public class ConvertTopoORtoTapiAtInit {
                 onepBdd = tapiFactory.addPhotSpecToRoadmOnep(
                     nodeId, usedFreqMap, availableFreqMap, onepBdd, String.join("+", nodeId, nepPhotonicSublayer));
             }
-            // Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
+            // Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and attach it to the NEP:
             // Map<Map<String nepId, String NodeId>, ConnectionEndPoint>
             // Identify that we have an SRG through withSip set to true only for SRG
             if (withSip) {
@@ -675,12 +673,7 @@ public class ConvertTopoORtoTapiAtInit {
                 var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
                     String.join("+", this.ietfNodeId, tpId), nepPhotonicSublayer, null, srg);
                 LOG.debug("Populate NEPs for ROADM node {}: creating CEP for SRG ({})", nodeId, srg);
-                var uuidMap = new HashMap<>(Map.of(
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
-                        tpId)).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA))
-                        .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
-                this.srgOtsCepMap.put(uuidMap, cep);
+
                 logCreatedCep(this.ietfNodeId, tpId, cep);
 
                 CepList cepList = new CepListBuilder()
