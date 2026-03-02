@@ -24,6 +24,10 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
@@ -76,12 +80,12 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
             boolean srg,
             String nodeId,
-            Map<String, TerminationPoint1> tpMap,
+            List<TerminationPoint> tpList,
             boolean withSip,
             String nepPhotonicSublayer,
             TapiLink tapiLink) {
 
-        return populateNepsForRdmNode(srg, nodeId, tpMap, withSip, nepPhotonicSublayer, tapiLink, 0);
+        return populateNepsForRdmNode(srg, nodeId, tpList, withSip, nepPhotonicSublayer, tapiLink, 0);
     }
 
     /**
@@ -91,19 +95,20 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
             boolean srg,
             String nodeId,
-            Map<String, TerminationPoint1> tpMap,
+            List<TerminationPoint> tpList,
             boolean withSip,
             String nepPhotonicSublayer,
             TapiLink tapiLink,
             int depth) {
 
-        LOG.info("Populating NEPs for ROADM node {} from {} TPs", nodeId, tpMap.size());
+        LOG.info("Populating NEPs for ROADM node {} from {} TPs", nodeId, tpList.size());
         // Create NEPs for MC and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         int tpCounter = 0;
-        for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
-            final String tpId = entry.getKey();
-            final TerminationPoint1 tp = entry.getValue();
+        for (TerminationPoint tp:tpList) {
+            final String tpId = tp.getTpId().getValue();
+            //final TerminationPoint1 tp1 = tp.getValue();
+            OpenroadmTpType tpType = tp.augmentation(TerminationPoint1.class).getTpType();
 
             // PHOTONIC MEDIA NEP
             final String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, tpId);
@@ -111,7 +116,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     depth,
                     nepNameValue,
                     tpCounter++,
-                    tpMap.size());
+                    tpList.size());
 
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
                     new SupportedCepLayerProtocolQualifierInstancesBuilder()
@@ -145,7 +150,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
 
                 final TopologyNodeId nodeIdInTopology = TopologyNodeId.fromNodeAndTpId(nodeId, tpId);
 
-                switch (tp.getTpType()) {
+                switch (tpType) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
                     case SRGRXPP:
@@ -157,7 +162,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                         if (tp11 != null) {
 
                             SpectrumRanges srgRanges = openRoadmSpectrumRangeExtractor.extractRoadm(
-                                    tp.getTpType(),
+                                    tpType,
                                     tp11);
                             usedFreqMap = srgRanges.occupied();
                             availableFreqMap = srgRanges.available();
@@ -167,14 +172,14 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                                                 + " with usedFreqMap non empty {} for Node {}, tp {}",
                                         usedFreqMap,
                                         nodeId,
-                                        tpMap,
+                                        tpList,
                                         depth);
 
                                 onepMap.putAll(
                                         populateNepsForRdmNode(
                                                 srg,
                                                 nodeId,
-                                                new HashMap<>(Map.of(tpId, tp)),
+                                                List.of(tp),
                                                 true,
                                                 TapiConstants.MC,
                                                 tapiLink,
@@ -184,7 +189,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                                         populateNepsForRdmNode(
                                                 srg,
                                                 nodeId,
-                                                new HashMap<>(Map.of(tpId, tp)),
+                                                List.of(tp),
                                                 true,
                                                 TapiConstants.OTSI_MC,
                                                 tapiLink,
@@ -200,7 +205,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
 
                         if (usedTp != null) {
                             SpectrumRanges degRanges = openRoadmSpectrumRangeExtractor.extractRoadm(
-                                    tp.getTpType(),
+                                    tpType,
                                     usedTp);
                             usedFreqMap = degRanges.occupied();
                             availableFreqMap = degRanges.available();
@@ -224,6 +229,9 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     .setValue(nepNameValue)
                     .build();
 
+            AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
+            State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
+
             onepBd
                     .setUuid(new Uuid(nameUuid(nodeId, nepPhotonicSublayer, tpId)))
                     .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
@@ -231,8 +239,8 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
                     .setDirection(Direction.BIDIRECTIONAL)
                     .setLinkPortRole(PortRole.SYMMETRIC)
-                    .setAdministrativeState(tapiLink.setTapiAdminState(tp.getAdministrativeState().getName()))
-                    .setOperationalState(tapiLink.setTapiOperationalState(tp.getOperationalState().getName()))
+                    .setAdministrativeState(tapiLink.setTapiAdminState(admin.getName()))
+                    .setOperationalState(tapiLink.setTapiOperationalState(oper.getName()))
                     .setLifecycleState(LifecycleState.INSTALLED);
 
             //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
@@ -271,7 +279,7 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
         }
 
         LOG.info("[depth={}] Done populating ROADM NEP: node={} sublayer={} tps={} withSip={} producedNeps={}",
-                depth, nodeId, nepPhotonicSublayer, tpMap.size(), withSip, onepMap.size());
+                depth, nodeId, nepPhotonicSublayer, tpList.size(), withSip, onepMap.size());
         return onepMap;
     }
 
