@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1385ede2_bb37724d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-03T10:36:31Z",
+      "side": 1,
+      "message": "For some reason this commit was not resolved, it is resolved now.",
+      "revId": "de03c05ca42c76cb55feaae017e4593fa1654e56",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
