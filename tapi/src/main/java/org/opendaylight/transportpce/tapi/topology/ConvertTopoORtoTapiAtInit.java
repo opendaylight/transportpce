@@ -78,7 +78,6 @@ import org.slf4j.LoggerFactory;
 public class ConvertTopoORtoTapiAtInit {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConvertTopoORtoTapiAtInit.class);
-    private String ietfNodeId;
     private OpenroadmNodeType ietfNodeType;
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
@@ -174,10 +173,14 @@ public class ConvertTopoORtoTapiAtInit {
         if (topoMode != null) {
             setTopologicalMode(topoMode);
         }
+        if (roadm == null) {
+            LOG.warn("Null roadm");
+            return;
+        }
         if (ConvertTopoORtoTapiAtInit.topologicalMode.equals("Full")) {
             convertRoadmNodeFull(roadm, openroadmTopo);
         } else {
-            convertRoadmNodeAbstracted(openroadmTopo);
+            convertRoadmNodeAbstracted(openroadmTopo, roadm.getNodeId().getValue());
         }
     }
 
@@ -237,7 +240,6 @@ public class ConvertTopoORtoTapiAtInit {
      */
     private void convertRoadmNodeFull(Node roadm, Network openroadmTopo) {
         LOG.info("Converting ROADMs by doing a full conversion");
-        this.ietfNodeId = roadm.getNodeId().getValue();
         this.ietfNodeType = roadm.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
             .getNodeType();
@@ -251,11 +253,12 @@ public class ConvertTopoORtoTapiAtInit {
         int numSips = 0;
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
         LOG.info("Converting {} nodes on {}", nodeList.size(), roadm.getNodeId().getValue());
+        String ietfNodeId = roadm.getNodeId().getValue();
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
             if (node.getSupportingNode().values().stream()
-                    .noneMatch(sp -> sp.getNodeRef().getValue().equals(this.ietfNodeId))) {
-                LOG.debug("Abstracted node {} is not part of {}", nodeId, this.ietfNodeId);
+                    .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
+                LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
                 continue;
             }
             var node1 = node.augmentation(
@@ -324,9 +327,9 @@ public class ConvertTopoORtoTapiAtInit {
         }
         // create tapi Node
         // UUID
-        String nodeIdPhMed = String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA);
+        String nodeIdPhMed = String.join("+", ietfNodeId, TapiConstants.PHTNC_MEDIA);
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
-        LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", this.ietfNodeId, nodeUuid.getValue());
+        LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", ietfNodeId, nodeUuid.getValue());
         // Names
         Name nodeNames =  new NameBuilder().setValueName("roadm node name").setValue(nodeIdPhMed).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(this.ietfNodeType.getName()).build();
@@ -342,8 +345,13 @@ public class ConvertTopoORtoTapiAtInit {
                     .build()))
             .collect(Collectors.toList()).toString());
         //org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
-        var roadmNode = createRoadmTapiNode(nodeUuid,
-            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist, "Full");
+        var roadmNode = createRoadmTapiNode(
+                nodeUuid,
+                Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType),
+                layerProtocols,
+                oneplist,
+                "Full",
+                ietfNodeId);
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNF)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNF)",
@@ -388,7 +396,7 @@ public class ConvertTopoORtoTapiAtInit {
      * Associated topology name T0_MULTILAYER.
      * @param openroadmTopo A list of networks topologies.
      */
-    private void convertRoadmNodeAbstracted(Network openroadmTopo) {
+    private void convertRoadmNodeAbstracted(Network openroadmTopo, String ietfNodeId) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneMap = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
         if (openroadmTopo.getNode() == null) {
@@ -452,7 +460,7 @@ public class ConvertTopoORtoTapiAtInit {
         // Build tapi node
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node roadmNode =
             createRoadmTapiNode(nodeUuid, Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType),
-            layerProtocols, oneMap, "Abstracted");
+            layerProtocols, oneMap, "Abstracted", ietfNodeId);
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA,
@@ -475,7 +483,7 @@ public class ConvertTopoORtoTapiAtInit {
      */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
              createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
-             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode) {
+             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode, String ietfNodeId) {
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -500,7 +508,7 @@ public class ConvertTopoORtoTapiAtInit {
                 topoMode.equals("Full")
                     ? "Full"
                     : "Abstracted",
-                nodeUuid, this.ietfNodeId, onepMap.values());
+                nodeUuid, ietfNodeId, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
             nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
@@ -510,7 +518,7 @@ public class ConvertTopoORtoTapiAtInit {
                 topoMode.equals("Full")
                     ? "Full"
                     : "Abstracted",
-                nodeUuid, this.ietfNodeId, nrgMap);
+                nodeUuid, ietfNodeId, nrgMap);
         return new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(nameMap)
