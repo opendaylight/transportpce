@@ -29,6 +29,9 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.topology.nep.DefaultRoadmNepFactory;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
@@ -209,8 +212,15 @@ public final class TopologyUtils {
             tapiNodeList = new HashMap<>();
         Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
             tapiLinkList = new HashMap<>();
-        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topoUuid, this.tapiLink);
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topoUuid);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
+                topoUuid,
+                this.tapiLink,
+                new DefaultRoadmNepFactory(
+                        new MdSalOpenRoadmTerminationPointReader(networkTransactionService),
+                        DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance(),
+                        tapiFactory)
+        );
         for (var entry : networkPortMap.entrySet()) {
             tapiFactory.convertNode(otnNodeMap.get(new NodeId(entry.getKey())), entry.getValue());
             this.tapiSips.putAll(tapiFactory.getTapiSips());
