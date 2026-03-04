@@ -30,6 +30,10 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.topology.nep.DefaultRoadmNepFactory;
+import org.opendaylight.transportpce.tapi.topology.nep.RoadmNepFactory;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
@@ -113,6 +117,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     private static NetworkTransactionService networkTransactionService;
     private static TapiLink tapiLink;
     private static DataBroker dataBroker = getDataBroker();
+    private static RoadmNepFactory roadmNepFactory;
 
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
@@ -203,6 +208,12 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             .toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
+
+        roadmNepFactory = new DefaultRoadmNepFactory(
+                new MdSalOpenRoadmTerminationPointReader(networkTransactionService),
+                DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance(),
+                new ORtoTapiTopoConversionTools(topologyUuid)
+        );
         LOG.info("TEST SETUP READY");
     }
 
@@ -284,7 +295,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
-        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
+                topologyUuid, tapiLink, roadmNepFactory);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
@@ -301,7 +313,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenRoadmNeighborAttached() {
-        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
+                topologyUuid, tapiLink, roadmNepFactory);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
         tapiFullFactory.convertRdmToRdmLinks(
@@ -349,7 +362,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenOtnMuxAttached() {
-        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
+                topologyUuid, tapiLink, roadmNepFactory);
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topologyUuid);
         tapiFactory.convertNode(
             otnMuxA,
@@ -1140,7 +1154,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     void getIdBasedOnModelVersion() {
         ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
                 topologyUuid,
-                tapiLink);
+                tapiLink,
+                roadmNepFactory);
 
         assertTrue(
                 "ROADM-A".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADM-A-SRG1"))
