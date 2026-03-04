@@ -78,7 +78,6 @@ import org.slf4j.LoggerFactory;
 public class ConvertTopoORtoTapiAtInit {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConvertTopoORtoTapiAtInit.class);
-    private OpenroadmNodeType ietfNodeType;
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
@@ -240,9 +239,6 @@ public class ConvertTopoORtoTapiAtInit {
      */
     private void convertRoadmNodeFull(Node roadm, Network openroadmTopo) {
         LOG.info("Converting ROADMs by doing a full conversion");
-        this.ietfNodeType = roadm.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
-            .getNodeType();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
         if (openroadmTopo.getNode() == null) {
@@ -331,8 +327,11 @@ public class ConvertTopoORtoTapiAtInit {
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", ietfNodeId, nodeUuid.getValue());
         // Names
+        OpenroadmNodeType ietfNodeType = roadm.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
+                .getNodeType();
         Name nodeNames =  new NameBuilder().setValueName("roadm node name").setValue(nodeIdPhMed).build();
-        Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(this.ietfNodeType.getName()).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(ietfNodeType.getName()).build();
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
