@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -297,13 +298,20 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
         ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
                 topologyUuid, tapiLink, roadmNepFactory);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
-        assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
+        Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
+                roadmANodeOpt = tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
+
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
+                tapiNodes = new HashMap<>();
+        tapiNodes.put(roadmANodeOpt.orElseThrow().key(), roadmANodeOpt.orElseThrow());
+
+        //assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
-            tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());
+        /*List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
+            tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());*/
         checkOtsiNode(
-            getNode("ROADM-A1", tapiNodes),
+            getNode("ROADM-A1", tapiNodes.values().stream().toList()),
             new Uuid(UUID.nameUUIDFromBytes(
                     (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(StandardCharsets.UTF_8))
                 .toString()),
@@ -315,18 +323,33 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     void convertNodeForRoadmWhenRoadmNeighborAttached() {
         ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(
                 topologyUuid, tapiLink, roadmNepFactory);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
-        tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
+
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
+                tapiNodes = new HashMap<>();
+
+        Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
+                roadmNodeAOpt = tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
+        tapiNodes.put(roadmNodeAOpt.orElseThrow().key(), roadmNodeAOpt.orElseThrow());
+
+        Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
+                roadmNodeCOpt = tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
+        tapiNodes.put(roadmNodeCOpt.orElseThrow().key(), roadmNodeCOpt.orElseThrow());
+
         tapiFullFactory.convertRdmToRdmLinks(
             ortopoLinks.values().stream()
                 .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
-                .collect(Collectors.toList()));
-        assertEquals(2, tapiFullFactory.getTapiNodes().size(), "Node list size should be 2");
+                .collect(Collectors.toList()), roadmNodeAOpt.orElseThrow());
+        tapiFullFactory.convertRdmToRdmLinks(
+                ortopoLinks.values().stream()
+                        .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
+                        .collect(Collectors.toList()), roadmNodeCOpt.orElseThrow());
+        //assertEquals(2, tapiFullFactory.getTapiNodes().size(), "Node list size should be 2");
         assertEquals(1, tapiFullFactory.getTapiLinks().size(), "Link list size should be 1");
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
-            tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());
+        /*List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
+            tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());*/
         int myInt = -1;
-        for (var node : tapiNodes) {
+        for (var node : tapiNodes.values()) {
             myInt++;
             if (node.getLayerProtocolName().contains(LayerProtocolName.DSR)) {
                 continue;
@@ -337,7 +360,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             }
         }
         checkOtsiNode(
-            getNode("ROADM-A1", tapiNodes),
+            getNode("ROADM-A1", tapiNodes.values().stream().toList()),
             new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(StandardCharsets.UTF_8))
                 .toString()),
@@ -372,7 +395,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                         .equals(OpenroadmTpType.XPONDERNETWORK))
                 .map(tp -> tp.getTpId().getValue())
                 .collect(Collectors.toList()));
-        tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
+        //tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         tapiFullFactory.convertXpdrToRdmLinks(
             ortopoLinks.values().stream()
@@ -383,14 +406,14 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                     && (lk1.getDestination().getDestNode().equals(otnMuxA.getNodeId())
                         || lk1.getDestination().getDestNode().getValue().contains(roadmA.getNodeId().getValue()))))
                 .collect(Collectors.toList()));
-        assertEquals(2, tapiFullFactory.getTapiNodes().size(),
-            "Node list size should be 2 (XPDR, DSR-ODU merged; ROADM)");
+        /*assertEquals(2, tapiFullFactory.getTapiNodes().size(),
+            "Node list size should be 2 (XPDR, DSR-ODU merged; ROADM)");*/
         assertEquals(1, tapiFullFactory.getTapiLinks().size(),
             "Link list size should be 1 : no more transitional link");
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeMap =
                 tapiFactory.getTapiNodes();
-        nodeMap.putAll(tapiFullFactory.getTapiNodes());
+        //nodeMap.putAll(tapiFullFactory.getTapiNodes());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
             nodeMap.values().stream()
                 .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
