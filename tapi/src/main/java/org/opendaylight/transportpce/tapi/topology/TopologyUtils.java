@@ -224,7 +224,7 @@ public final class TopologyUtils {
         for (var entry : networkPortMap.entrySet()) {
             tapiFactory.convertNode(otnNodeMap.get(new NodeId(entry.getKey())), entry.getValue());
             this.tapiSips.putAll(tapiFactory.getTapiSips());
-            tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
+            //tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
             tapiFullFactory.setTapiSips(tapiFactory.getTapiSips());
             tapiNodeList.putAll(tapiFactory.getTapiNodes());
             tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
@@ -250,9 +250,9 @@ public final class TopologyUtils {
             if (TOPOLOGICAL_MODE.equals("Full")) {
                 for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node roadm : rdmList) {
-                    tapiFullFactory.convertRoadmNode(roadm, openroadmTopo, "Full");
+                    Node node = tapiFullFactory.convertRoadmNode(roadm, openroadmTopo, "Full").orElseThrow();
+                    tapiNodeList.put(node.key(), node);
                     this.tapiSips.putAll(tapiFullFactory.getTapiSips());
-                    tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
                 }
                 tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
                 // map roadm to roadm link
@@ -263,11 +263,11 @@ public final class TopologyUtils {
                                 .filter(OpenroadmLinkType.ROADMTOROADM::equals)
                                 .isPresent())
                         .collect(Collectors.toList());
-                tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
+                tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList, tapiNodeList);
             } else {
-                tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
+                Node node = tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted").orElseThrow();
+                tapiNodeList.put(node.key(), node);
                 this.tapiSips.putAll(tapiFullFactory.getTapiSips());
-                tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
                 tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
             }
         }
