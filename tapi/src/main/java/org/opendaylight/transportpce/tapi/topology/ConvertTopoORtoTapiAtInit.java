@@ -406,6 +406,12 @@ public class ConvertTopoORtoTapiAtInit {
         int numSips = 0;
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
         for (Node node:nodeList) {
+            String nodeId = node.getNodeId().getValue();
+            if (node.getSupportingNode().values().stream()
+                    .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
+                LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
+                continue;
+            }
             if (node.augmentation(Node1.class) == null
                     && node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                         .ietf.network.topology.rev180226.Node1.class) == null) {
