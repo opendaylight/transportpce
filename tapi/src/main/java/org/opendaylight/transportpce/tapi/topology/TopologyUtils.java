@@ -224,7 +224,6 @@ public final class TopologyUtils {
         for (var entry : networkPortMap.entrySet()) {
             tapiFactory.convertNode(otnNodeMap.get(new NodeId(entry.getKey())), entry.getValue());
             this.tapiSips.putAll(tapiFactory.getTapiSips());
-            tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
             tapiFullFactory.setTapiSips(tapiFactory.getTapiSips());
             tapiNodeList.putAll(tapiFactory.getTapiNodes());
             tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
@@ -250,25 +249,32 @@ public final class TopologyUtils {
             if (TOPOLOGICAL_MODE.equals("Full")) {
                 for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node roadm : rdmList) {
-                    tapiFullFactory.convertRoadmNode(roadm, openroadmTopo, "Full");
-                    this.tapiSips.putAll(tapiFullFactory.getTapiSips());
-                    tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
+                    Optional<Node> roadmNode = tapiFullFactory.convertRoadmNode(roadm, openroadmTopo, "Full");
+                    if (roadmNode.isPresent()) {
+                        this.tapiSips.putAll(tapiFullFactory.getTapiSips());
+                        Node node = roadmNode.orElseThrow();
+                        tapiNodeList.put(node.key(), node);
+
+                        // map roadm to roadm link
+                        List<Link> rdmTordmLinkList = linkList.stream()
+                                .filter(Objects::nonNull)
+                                .filter(lk -> Optional.ofNullable(lk.augmentation(Link1.class))
+                                        .map(Link1::getLinkType)
+                                        .filter(OpenroadmLinkType.ROADMTOROADM::equals)
+                                        .isPresent())
+                                .collect(Collectors.toList());
+                        tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList, node);
+                    }
+                    tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
                 }
-                tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
-                // map roadm to roadm link
-                List<Link> rdmTordmLinkList = linkList.stream()
-                        .filter(Objects::nonNull)
-                        .filter(lk -> Optional.ofNullable(lk.augmentation(Link1.class))
-                                .map(Link1::getLinkType)
-                                .filter(OpenroadmLinkType.ROADMTOROADM::equals)
-                                .isPresent())
-                        .collect(Collectors.toList());
-                tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
             } else {
-                tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
-                this.tapiSips.putAll(tapiFullFactory.getTapiSips());
-                tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
-                tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
+                Optional<Node> roadmNode = tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
+                if (roadmNode.isPresent()) {
+                    this.tapiSips.putAll(tapiFullFactory.getTapiSips());
+                    Node node = roadmNode.orElseThrow();
+                    tapiNodeList.put(node.key(), node);
+                    tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
+                }
             }
         }
         // map xpdr_input to roadm and xpdr_output to roadm links.
