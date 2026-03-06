@@ -1,5 +1,29 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "936e4326_63064ee3",
+        "filename": "lighty/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-03-06T14:37:02Z",
+      "side": 1,
+      "message": "Maybe update the versions with the latest supported ones.",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 92
+      },
+      "revId": "5bd0f87b3bb7636747f5e883bf15aa1a37d36bea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
