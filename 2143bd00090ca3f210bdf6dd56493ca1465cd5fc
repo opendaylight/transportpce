@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f09c0e_143b605f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:04:26Z",
+      "side": 1,
+      "message": "Thank you for cleaning up this file format.",
+      "revId": "2143bd00090ca3f210bdf6dd56493ca1465cd5fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352ea905_637e08de",
+        "filename": "INFO.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:04:26Z",
+      "side": 1,
+      "message": "I think the transportpce project has been out of the incubation phase for some time now.\nAre there other possible values for this field?\nIt seems that all projects on ODL are in the incubation phase...",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 29
+      },
+      "revId": "2143bd00090ca3f210bdf6dd56493ca1465cd5fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
