@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9db802d_35fb29f4",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:15:06Z",
+      "side": 1,
+      "message": "the ordmodels/ directory no longer exists in transportpce. We can remove it from this exclusion.",
+      "range": {
+        "startLine": 10,
+        "startChar": 19,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fae123d5_52f1ec99",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:15:06Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 34,
+        "startChar": 54,
+        "endLine": 34,
+        "endChar": 63
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "326eb369_ed18c473",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:15:06Z",
+      "side": 1,
+      "message": "Could be removed.",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 11,
+        "endChar": 46
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6797c755_89fb9bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-06T13:15:06Z",
+      "side": 1,
+      "message": "Thank you for this change. Please See my comments.",
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
