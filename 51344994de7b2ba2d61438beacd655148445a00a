@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2177a97_6d5580ba",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2026-03-08T02:21:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9db802d_35fb29f4",
+      "range": {
+        "startLine": 10,
+        "startChar": 19,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fae123d5_52f1ec99",
@@ -47,6 +71,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a037b927_1fc78924",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2026-03-08T02:21:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fae123d5_52f1ec99",
+      "range": {
+        "startLine": 34,
+        "startChar": 54,
+        "endLine": 34,
+        "endChar": 63
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "326eb369_ed18c473",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-03-06T13:15:06Z",
       "side": 1,
       "message": "Could be removed.",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 11,
+        "endChar": 46
+      },
+      "revId": "51344994de7b2ba2d61438beacd655148445a00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "915390ef_83a0ee65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2026-03-08T02:21:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "326eb369_ed18c473",
       "range": {
         "startLine": 11,
         "startChar": 20,
