@@ -16,6 +16,41 @@
       "message": "According to pre-commit, there is one line too many",
       "revId": "737a6c27cceb5cc0f96b30741f51dfba850f5e64",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9bafedf_8701ab5d",
+        "filename": ".github/workflows/gerrit-verify.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2026-03-09T07:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "496744ef_96550a7e",
+      "revId": "737a6c27cceb5cc0f96b30741f51dfba850f5e64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b5b9d09_60d636ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2026-03-09T07:50:14Z",
+      "side": 1,
+      "message": "that should be fixed now! \nadditionally we can remove the tox verify on the transportpce master on Jenkins: https://git.opendaylight.org/gerrit/c/releng/builder/+/121363",
+      "revId": "737a6c27cceb5cc0f96b30741f51dfba850f5e64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
