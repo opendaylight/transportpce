@@ -48,6 +48,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dc2e177_f18781f0",
+        "filename": ".github/workflows/gerrit-verify.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-03-10T08:39:03Z",
+      "side": 1,
+      "message": "Strictly speaking, it is not that important, but given that we have a netconf debugging tool on the project developed in Perl, it would be better to keep it active on tox-verify.",
+      "parentUuid": "0b0fd003_2615bee1",
+      "range": {
+        "startLine": 113,
+        "startChar": 6,
+        "endLine": 113,
+        "endChar": 45
+      },
+      "revId": "1d407082a8bca06a5f09e88a7a2b708176427aef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "773dc489_99c94a68",
