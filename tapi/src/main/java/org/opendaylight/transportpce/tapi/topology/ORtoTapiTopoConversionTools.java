@@ -177,7 +177,6 @@ public class ORtoTapiTopoConversionTools {
     private static final TreeMap<Integer, String> OPMODE_LOOPRATE_MAP;
     private static final int OPMODE_LOOPRATE_MAX;
     static final Map<String, Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>>> LPN_MAP;
-    private AdminStates ietfNodeAdminState;
     private State ietfNodeOperState;
     private List<TerminationPoint> oorClientPortList;
     private List<TerminationPoint> oorNetworkPortList;
@@ -329,7 +328,6 @@ public class ORtoTapiTopoConversionTools {
         if (ietfAug == null) {
             return;
         }
-        this.ietfNodeAdminState = ietfAug.getAdministrativeState();
         this.ietfNodeOperState = ietfAug.getOperationalState();
         var ietfAugTopo =
             ietfNode.augmentation(
@@ -379,6 +377,7 @@ public class ORtoTapiTopoConversionTools {
         Name nameDsr = new NameBuilder().setValueName("dsr/odu node name").setValue(nodeIdXpdr).build();
         Name namePhot = new NameBuilder().setValueName("otsi node name").setValue(nodeIdXpdr).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(ietfNodeType.getName()).build();
+        AdminStates ietfNodeAdminState = ietfAug.getAdministrativeState();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node dsrNode =
             createTapiNode(
                 Map.of(nameDsr.key(), nameDsr, namePhot.key(), namePhot, nameNodeType.key(), nameNodeType),
@@ -386,7 +385,8 @@ public class ORtoTapiTopoConversionTools {
                 Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU,
                        LayerProtocolName.DIGITALOTN, LayerProtocolName.PHOTONICMEDIA),
                 ietfNodeId,
-                ietfNodeType);
+                ietfNodeType,
+                ietfNodeAdminState);
         LOG.debug("XPDR Node {} should have {} NEPs and SIPs",
             ietfNodeId, this.oorClientPortList.size() + this.oorNetworkPortList.size());
         LOG.info("XPDR Node {} has {} NEPs and {} SIPs",
@@ -1286,10 +1286,12 @@ public class ORtoTapiTopoConversionTools {
      * @param layerProtocols Set of layer protocol names supported by the Node.
      * @param ietfNodeId e.g. ROADM-A
      * @param ietfNodeType e.g. ROADM
+     * @param ietfNodeAdminState The admin state
      */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createTapiNode(
             Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols, String ietfNodeId,
-            OpenroadmNodeType ietfNodeType) {
+            OpenroadmNodeType ietfNodeType,
+            AdminStates ietfNodeAdminState) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
@@ -1326,7 +1328,7 @@ public class ORtoTapiTopoConversionTools {
             .setUuid(nodeUuid)
             .setName(nodeNames)
             .setLayerProtocolName(layerProtocols)
-            .setAdministrativeState(transformAsToTapiAdminState(this.ietfNodeAdminState.getName()))
+            .setAdministrativeState(transformAsToTapiAdminState(ietfNodeAdminState.getName()))
             .setOperationalState(transformOsToTapiOperationalState(this.ietfNodeOperState.getName()))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(onepl)
