@@ -1257,7 +1257,6 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Create an OpenROADM Odu Switching pool for 100G transponder that rely on a connection map.
-     * @param OduSwitchingPools OduSwitchingPool returned by the method.
      */
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
         Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
@@ -1283,7 +1282,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Create Tapi Node from class parameters setting automatically some mandatory default parameters.
-     * @param nodeName Map of NameKey and Name provided as an input of the method.
+     * @param nodeNames Map of NameKey and Name provided as an input of the method.
      * @param layerProtocols Set of layer protocol names supported by the Node.
      * @param ietfNodeId e.g. ROADM-A
      */
@@ -2030,7 +2029,7 @@ public class ORtoTapiTopoConversionTools {
      * @param sipUuid The SIP Uuid,
      * @param layerProtocol Layer protocol the SIP is associated to,
      * @param tpId OpenROADM termination Point Id,
-     * @param nodeId OpenROADM Node Id,
+     * @param nodeid OpenROADM Node Id,
      * @param supportedInterfaceCapability Collection of supported interface capabilities,
      * @param operState Operational state of the SIP,
      * @param adminState Administrative state of the SIP,
@@ -2061,9 +2060,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Generates a list of Supported Cep Layer Protocol Qualifier Instances supported by a Service Interface Point.
      * @param supportedInterfaceCapability Collection of supported interface capabilities,
-     * @param layerProtocolName Layer protocol the SIP is associated to,
-     * @param operState Operational state of the SIP,
-     * @param adminState Administrative state of the SIP,
+     * @param lpn Layer protocol the SIP is associated to,
      */
     private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
                 .service._interface.point.SupportedCepLayerProtocolQualifierInstances>
