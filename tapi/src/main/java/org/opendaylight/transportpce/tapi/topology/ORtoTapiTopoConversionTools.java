@@ -178,7 +178,6 @@ public class ORtoTapiTopoConversionTools {
     private static final int OPMODE_LOOPRATE_MAX;
     static final Map<String, Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>>> LPN_MAP;
     private List<TerminationPoint> oorClientPortList;
-    private Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool;
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
@@ -308,7 +307,6 @@ public class ORtoTapiTopoConversionTools {
         this.tapiLinks = new HashMap<>();
         this.uuidMap = new HashMap<>();
         this.tapiSips = new HashMap<>();
-        this.oorOduSwitchingPool = new HashMap<>();
         this.irgMap = new HashMap<>();
         this.frequencyFactory = frequencyFactory;
         this.tapiSpectrumCapabilityPacFactory = tapiSpectrumCapabilityPacFactory;
@@ -337,10 +335,11 @@ public class ORtoTapiTopoConversionTools {
             .collect(Collectors.toList());
         OduSwitchingPools oorsp;
         OpenroadmNodeType ietfNodeType = ietfAug.getNodeType();
+        Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool = new HashMap<>();
         if (ietfNodeType.equals(OpenroadmNodeType.TPDR)) {
            // this.oorOduSwitchingPool = createOduSwitchingPoolForTp100G();
             oorsp = createOduSwitchingPoolForTp100G(oorNetworkPortList);
-            this.oorOduSwitchingPool.put(oorsp.key(), oorsp);
+            oorOduSwitchingPool.put(oorsp.key(), oorsp);
             List<TpId> tpList = new ArrayList<>();
             for (Map.Entry<NonBlockingListKey, NonBlockingList> nbl : oorsp.getNonBlockingList().entrySet()) {
                 tpList.addAll(nbl.getValue().getTpList().stream().collect(Collectors.toList()));
@@ -355,7 +354,7 @@ public class ORtoTapiTopoConversionTools {
         } else {
             for (OduSwitchingPools osp : ietfNode.augmentation(Node1.class).getSwitchingPools()
                     .getOduSwitchingPools().values()) {
-                this.oorOduSwitchingPool.put(osp.key(), osp);
+                oorOduSwitchingPool.put(osp.key(), osp);
             }
             this.oorClientPortList = ietfAugTopo.getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
@@ -386,7 +385,8 @@ public class ORtoTapiTopoConversionTools {
                 ietfNodeType,
                 ietfNodeAdminState,
                 ietfNodeOperState,
-                oorNetworkPortList);
+                oorNetworkPortList,
+                oorOduSwitchingPool);
         LOG.debug("XPDR Node {} should have {} NEPs and SIPs",
             ietfNodeId, this.oorClientPortList.size() + oorNetworkPortList.size());
         LOG.info("XPDR Node {} has {} NEPs and {} SIPs",
@@ -1291,13 +1291,15 @@ public class ORtoTapiTopoConversionTools {
      * @param ietfNodeAdminState The admin state
      * @param ietfNodeOperState Operation state
      * @param oorNetworkPortList OpenROADM network port list
+     * @param oorOduSwitchingPool OpenROADM Switching pool
      */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createTapiNode(
             Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols, String ietfNodeId,
             OpenroadmNodeType ietfNodeType,
             AdminStates ietfNodeAdminState,
             State ietfNodeOperState,
-            List<TerminationPoint> oorNetworkPortList) {
+            List<TerminationPoint> oorNetworkPortList,
+            Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
@@ -1308,7 +1310,8 @@ public class ORtoTapiTopoConversionTools {
 //                .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
 //                .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
 //                .build();
-            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupMap, ietfNodeId, ietfNodeType, oorNetworkPortList);
+            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupMap, ietfNodeId, ietfNodeType, oorNetworkPortList,
+                    oorOduSwitchingPool);
         } else {
             var nodeName = nodeNames.get(nodeNames.keySet().iterator().next());
             LOG.error("Undefined LayerProtocolName for {} node {}", nodeName.getValueName(), nodeName.getValue());
@@ -1364,13 +1367,15 @@ public class ORtoTapiTopoConversionTools {
      * @param ietfNodeId e.g. ROADM-A
      * @param ietfNodeType e.g ROADM
      * @param oorNetworkPortList OpenRoadm Network Port list
+     * @param oorOduSwitchingPool OpenROADM ODU switching pool
      */
     private Uuid getNodeUuid4Dsr(
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
             Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList,
             String ietfNodeId,
             OpenroadmNodeType ietfNodeType,
-            List<TerminationPoint> oorNetworkPortList) {
+            List<TerminationPoint> oorNetworkPortList,
+            Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool) {
         // client NEP DSR creation on DSR/ODU node
         List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
         for (int i = 0; i < oorClientPortList.size(); i++) {
@@ -1484,7 +1489,7 @@ public class ORtoTapiTopoConversionTools {
 
         // create NodeRuleGroup
         String ietfXpdr = String.join("+", ietfNodeId, TapiConstants.XPDR);
-        nodeRuleGroupList.putAll(createNodeRuleGroupForXpdrNode(ietfNodeId, this.oorOduSwitchingPool));
+        nodeRuleGroupList.putAll(createNodeRuleGroupForXpdrNode(ietfNodeId, oorOduSwitchingPool));
 
         return this.uuidMap.get(ietfXpdr);
     }
