@@ -446,7 +446,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 .map(tp -> tp.getTpId().getValue())
                 .collect(Collectors.toList()));
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR-ODU merged)");
-        assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0 : no more transitional link");
         //checkDsrNode(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node,
         //    Uuid nodeUuid, String dsrNodeType, String nodeId) {
         Uuid nodeUuid =

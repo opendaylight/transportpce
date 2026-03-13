@@ -149,8 +149,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
@@ -180,7 +178,6 @@ public class ORtoTapiTopoConversionTools {
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
-    private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private Map<String, Uuid> uuidMap;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
@@ -303,7 +300,6 @@ public class ORtoTapiTopoConversionTools {
 
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
-        this.tapiLinks = new HashMap<>();
         this.uuidMap = new HashMap<>();
         this.tapiSips = new HashMap<>();
         this.irgMap = new HashMap<>();
@@ -2126,10 +2122,6 @@ public class ORtoTapiTopoConversionTools {
     public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
             getTapiNodes() {
         return tapiNodes;
-    }
-
-    public Map<LinkKey, Link> getTapiLinks() {
-        return tapiLinks;
     }
 
     /**
