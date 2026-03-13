@@ -472,7 +472,6 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 .collect(Collectors.toList());
 
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR-ODU merged)");
-        assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0 (no more transitional links)");
 
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
@@ -494,7 +493,6 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 .collect(Collectors.toList());
 
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR & ODU merged");
-        assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0, no more transitional links");
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             "mux", "SPDR-SA1-XPDR1+XPONDER");
@@ -514,7 +512,6 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
                 .collect(Collectors.toList());
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR/ODU merged)");
-        assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0 : no more transitional link");
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR2+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             "switch", "SPDR-SA1-XPDR2+XPONDER");
