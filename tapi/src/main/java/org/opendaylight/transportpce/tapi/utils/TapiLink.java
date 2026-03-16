@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -25,7 +26,7 @@ public interface TapiLink {
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
             Set<String> transLayerNameList, Uuid tapiTopoUuid);
 
-    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+    Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
         Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
 
     AdministrativeState setTapiAdminState(String adminState);
