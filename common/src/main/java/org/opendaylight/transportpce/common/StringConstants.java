@@ -96,6 +96,8 @@ public final class StringConstants {
     public static final String TXRX = "TXRX";
     public static final String OPENROADM_MODE_PREFIX = "OR";
 
+    public static final String PHTNC_MEDIA_OTS = "PHOTONIC_MEDIA_OTS";
+
     /**
      * Defining string constants required for supporting Openconfig XPDRS.
      */
