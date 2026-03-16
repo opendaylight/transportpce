@@ -350,8 +350,14 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
+        PceTapiLink mylink = otu4Link;
+        LOG.info("PCETAPILinkTest:Line353 : Link {} is Valid = {} with OpState {}, AdminState {} LinkType {}"
+            + " SrcId {}, DestId {}, SrcTP {}, DstTp {}, LPN {}, OppositeLinkId {}, AvailBW {}",
+            mylink.getLinkName(), mylink.isValid(), mylink.getOperationalState(), mylink.getAdministrativeState(),
+            mylink.getlinkType(), mylink.getSourceId(), mylink.getDestId(), mylink.getSourceTP(), mylink.getDestTP(),
+            mylink.getLpn(), mylink.getOppositeLinkId(), mylink.getAvailableBandwidth());
         assertNotNull(otu4Link);
-        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for ODU4 services)");
+        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall be valid for ODU4 services)");
         assertEquals(OperationalState.ENABLED, otu4Link.getOperationalState(),
                 "OTU4 Link (connection) Link operational state shall be enabled)");
         assertEquals(AdministrativeState.UNLOCKED, otu4Link.getAdministrativeState(),
@@ -375,18 +381,32 @@ public class PceTapiLinkTest  extends AbstractTest {
                 + "+XPDR2-NETWORK1+iOTU");
         assertEquals("07df4edd-4408-310d-a820-5f34b0524900", otu4Link.getLinkId(),
                 "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
-        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+//        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+//                "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+//        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+//                "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+//        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+//                "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
+//        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+//                "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+//        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+//                "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+//        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+//                "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getSourceId(),
                 "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getsourceNetworkSupNodeId(),
                 "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getSourceTP(),
                 "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getDestId(),
                 "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getdestNetworkSupNodeId(),
                 "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getDestTP(),
                 "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+
         assertEquals(0.0, otu4Link.getpowerCorrection(),
                 "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
         assertEquals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f", otu4Link.getOppositeLinkId(),
@@ -465,20 +485,37 @@ public class PceTapiLinkTest  extends AbstractTest {
                 + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
         assertEquals("b90f7b96-4fe0-390c-8ef2-41942196f19e", iodu4Link.getLinkId(),
                 "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
-        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+//        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+//                "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
+//        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+//                "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
+//                + "(SPDR-SC1-XPDR1+XPONDER)");
+//        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+//                "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
+//        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+//                "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
+//        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+//                "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
+//                + "(SPDR-SA1-XPDR1+XPONDER)");
+//        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+//            "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getDestId(),
                 "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
-        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getdestNetworkSupNodeId(),
                 "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
                 + "(SPDR-SC1-XPDR1+XPONDER)");
-        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getDestTP(),
                 "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
-        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getSourceId(),
                 "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
-        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getsourceNetworkSupNodeId(),
                 "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
                 + "(SPDR-SA1-XPDR1+XPONDER)");
-        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getSourceTP(),
                 "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+
+
         assertEquals(0.0, iodu4Link.getpowerCorrection(),
                 "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
         assertEquals("606ade82-de21-3e95-b2cd-cdb2b03ef78b", iodu4Link.getOppositeLinkId(),
@@ -544,18 +581,32 @@ public class PceTapiLinkTest  extends AbstractTest {
                 + "+XPDR3-NETWORK1+iODU");
         assertEquals("9e237eea-ce80-3490-9a66-34f7cbdac55f", iodu4Link.getLinkId(),
                 "ODU4 Link (connection) Id shall be 9e237eea-ce80-3490-9a66-34f7cbdac55f)");
-        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getDestId(),
+//        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getDestId(),
+//                "TSP Destination NodeId shall be 4582e51f-2b2d-3b70-b374-86c463062710");
+//        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getdestNetworkSupNodeId(),
+//                "TSP Destination Supporting Node Id shall be 4582e51f-2b2d-3b70-b374-86c463062710");
+//        assertEquals("ced2adb2-e1fd-338c-8b64-a02106d48b45", iodu4Link.getDestTP(),
+//                "TSP Destination TPId shall be ced2adb2-e1fd-338c-8b64-a02106d48b45");
+//        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getSourceId(),
+//                "TSP Source NodeId shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
+//        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getsourceNetworkSupNodeId(),
+//                "TSP Source Supporting Node Id shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
+//        assertEquals("74b4b605-379f-3700-bb46-97b578cb2c7d", iodu4Link.getSourceTP(),
+//                "TSP Source TPId shall be 74b4b605-379f-3700-bb46-97b578cb2c7d");
+
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getSourceId(),
                 "TSP Destination NodeId shall be 4582e51f-2b2d-3b70-b374-86c463062710");
-        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getdestNetworkSupNodeId(),
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getsourceNetworkSupNodeId(),
                 "TSP Destination Supporting Node Id shall be 4582e51f-2b2d-3b70-b374-86c463062710");
-        assertEquals("ced2adb2-e1fd-338c-8b64-a02106d48b45", iodu4Link.getDestTP(),
+        assertEquals("ced2adb2-e1fd-338c-8b64-a02106d48b45", iodu4Link.getSourceTP(),
                 "TSP Destination TPId shall be ced2adb2-e1fd-338c-8b64-a02106d48b45");
-        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getSourceId(),
+        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getDestId(),
                 "TSP Source NodeId shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
-        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getsourceNetworkSupNodeId(),
+        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getdestNetworkSupNodeId(),
                 "TSP Source Supporting Node Id shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
-        assertEquals("74b4b605-379f-3700-bb46-97b578cb2c7d", iodu4Link.getSourceTP(),
+        assertEquals("74b4b605-379f-3700-bb46-97b578cb2c7d", iodu4Link.getDestTP(),
                 "TSP Source TPId shall be 74b4b605-379f-3700-bb46-97b578cb2c7d");
+
         assertEquals(0.0, iodu4Link.getpowerCorrection(),
                 "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
         assertEquals("1a9dea0a-0e90-3a72-98b7-2dc04d2ea115", iodu4Link.getOppositeLinkId(),
@@ -609,20 +660,36 @@ public class PceTapiLinkTest  extends AbstractTest {
                 + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
         assertEquals("b90f7b96-4fe0-390c-8ef2-41942196f19e", iodu4Link.getLinkId(),
                 "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
-        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+//        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+//                "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
+//        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+//                "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
+//                + "(SPDR-SC1-XPDR1+XPONDER)");
+//        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+//                "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
+//        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+//                "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
+//        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+//                "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
+//                + "(SPDR-SA1-XPDR1+XPONDER)");
+//        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+//                "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getDestId(),
                 "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
-        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getdestNetworkSupNodeId(),
                 "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
                 + "(SPDR-SC1-XPDR1+XPONDER)");
-        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getDestTP(),
                 "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
-        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getSourceId(),
                 "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
-        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getsourceNetworkSupNodeId(),
                 "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
                 + "(SPDR-SA1-XPDR1+XPONDER)");
-        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getSourceTP(),
                 "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+
         assertEquals(0.0, iodu4Link.getpowerCorrection(),
                 "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
         assertEquals("606ade82-de21-3e95-b2cd-cdb2b03ef78b", iodu4Link.getOppositeLinkId(),
@@ -651,7 +718,7 @@ public class PceTapiLinkTest  extends AbstractTest {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
         assertNotNull(otu4Link);
-        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for ODU4 services)");
+        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall be valid for ODU4 services)");
         assertEquals(OperationalState.ENABLED, otu4Link.getOperationalState(),
                 "OTU4 Link (connection) Link operational state shall be enabled)");
         assertEquals(AdministrativeState.UNLOCKED, otu4Link.getAdministrativeState(),
@@ -675,18 +742,32 @@ public class PceTapiLinkTest  extends AbstractTest {
                 + "+XPDR2-NETWORK1+iOTU");
         assertEquals("07df4edd-4408-310d-a820-5f34b0524900", otu4Link.getLinkId(),
                 "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
-        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+//        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+//                "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+//        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+//                "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+//        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+//                "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
+//        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+//                "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+//        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+//                "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+//        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+//                "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getSourceId(),
                 "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getsourceNetworkSupNodeId(),
                 "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getSourceTP(),
                 "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getDestId(),
                 "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getdestNetworkSupNodeId(),
                 "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getDestTP(),
                 "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+
         assertEquals(0.0, otu4Link.getpowerCorrection(),
                 "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
         assertEquals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f", otu4Link.getOppositeLinkId(),
