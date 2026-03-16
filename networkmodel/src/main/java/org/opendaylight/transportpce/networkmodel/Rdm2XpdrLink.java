@@ -72,12 +72,13 @@ final class Rdm2XpdrLink {
         String destTp;
         boolean isRdmTapiNode = false;
         if (linksInput.getRdmTopologyUuid() != null) {
-            rdmTp = OrdLink.addTpsToTapiExtNode(linksInput.getRdmNode() + "-" + linksInput.getTerminationPointNum(),
+            rdmTp = OrdLink.addTpsToTapiExtNode(linksInput.getTerminationPointNum(),
                 linksInput.getRdmNepUuid(), linksInput.getRdmNode(), linksInput.getRdmNodeUuid(),
                 linksInput.getRdmTopologyUuid(),
-                ("link from " + linksInput.getXpdrNode() + "to" + linksInput.getRdmNode()), dataBroker);
+                (linksInput.getXpdrNode() + "to" + "TAPI-SBI-ABS-NODE-" + linksInput.getTerminationPointNum()),
+                dataBroker);
             destNode = linksInput.getRdmNode();
-            destTp = (linksInput.getRdmNode() + "-" + linksInput.getTerminationPointNum());
+            destTp = (linksInput.getTerminationPointNum());
             isRdmTapiNode = true;
         } else {
             destNode =
@@ -130,12 +131,13 @@ final class Rdm2XpdrLink {
         String srcTp;
         boolean isRdmTapiNode = false;
         if (linksInput.getRdmTopologyUuid() != null) {
-            rdmTp = OrdLink.addTpsToTapiExtNode(linksInput.getRdmNode() + "-" + linksInput.getTerminationPointNum(),
+            rdmTp = OrdLink.addTpsToTapiExtNode(linksInput.getTerminationPointNum(),
                 linksInput.getRdmNepUuid(), linksInput.getRdmNode(), linksInput.getRdmNodeUuid(),
                 linksInput.getRdmTopologyUuid(),
-                ("link from " + linksInput.getRdmNode() + "to" + linksInput.getXpdrNode()), dataBroker);
+                ("TAPI-SBI-ABS-NODE-" + linksInput.getTerminationPointNum() + "to" + linksInput.getXpdrNode()),
+                dataBroker);
             srcNode = linksInput.getRdmNode();
-            srcTp = (linksInput.getRdmNode() + "-" + linksInput.getTerminationPointNum());
+            srcTp = (linksInput.getTerminationPointNum());
             isRdmTapiNode = true;
         } else {
             srcNode =
@@ -202,10 +204,16 @@ final class Rdm2XpdrLink {
         } else {
             nodeBldr.setNodeId(new NodeId(srcNode));
         }
-        LinkId oppositeLinkId = isRdmTapiNode
-            // ? LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp)
-            ? LinkIdUtil.buildLinkId("TAPI-SBI-ABS-NODE-" + destNode, destTp, srcNode, srcTp)
-            : LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp);
+        LinkId oppositeLinkId;
+        if (isRdmTapiNode) {
+            if (isXponderInput) {
+                oppositeLinkId = LinkIdUtil.buildLinkId(destNode, destTp, "TAPI-SBI-ABS-NODE", srcTp);
+            } else {
+                oppositeLinkId = LinkIdUtil.buildLinkId("TAPI-SBI-ABS-NODE", destTp, srcNode, srcTp);
+            }
+        } else {
+            oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp);
+        }
         Link1Builder lnk2bldr
             = new Link1Builder()
                 .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
