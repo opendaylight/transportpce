@@ -48,10 +48,9 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         'supporting-node': [{'network-ref': 'openroadm-network', 'node-ref': 'TAPI-SBI-ABS-NODE'}],
         'org-openroadm-clli-network:clli': 'TAPI-SBI-ABS-NODE',
         'org-openroadm-common-network:administrative-state': 'inService',
-        'org-openroadm-common-network:node-type': 'ROADM',
-        'ietf-network-topology:termination-point': [
+        'org-openroadm-common-network:node-type': 'ROADM', 'ietf-network-topology:termination-point': [
             {
-                'tp-id': 'ROADM-TA1-SRG1-PP1-TXRX',
+                'tp-id': 'ROADM-TA1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
                 'transportpce-or-network-augmentation:tp-uuid': '3c3c3679-ccd7-3343-9f36-bdb7bea11a84',
                 'org-openroadm-common-network:operational-state': 'inService',
                 'org-openroadm-common-network:administrative-state': 'inService',
@@ -60,8 +59,17 @@ class TestTransportPCETopoExtension(unittest.TestCase):
                     'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             },
             {
-                'tp-id': 'ROADM-TA1-DEG2-TTP-TXRX',
-                'transportpce-or-network-augmentation:tp-uuid': 'd42ed13c-d81f-3136-a7d8-b283681031d4',
+                'tp-id': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
+                'transportpce-or-network-augmentation:tp-uuid': 'e5a9d17d-40cd-3733-b736-cc787a876195',
+                'org-openroadm-common-network:operational-state': 'inService',
+                'org-openroadm-common-network:administrative-state': 'inService',
+                'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
+                'transportpce-or-network-augmentation:supporting-node-topology-uuid':
+                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
+            },
+            {
+                'tp-id': 'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
+                'transportpce-or-network-augmentation:tp-uuid': '21190688-06b5-32be-be30-c73c9199b603',
                 'org-openroadm-common-network:operational-state': 'inService',
                 'org-openroadm-common-network:administrative-state': 'inService',
                 'transportpce-or-network-augmentation:supporting-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43',
@@ -69,17 +77,8 @@ class TestTransportPCETopoExtension(unittest.TestCase):
                     'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             },
             {
-                'tp-id': 'ROADM-TC1-SRG1-PP1-TXRX',
-                'transportpce-or-network-augmentation:tp-uuid':
-                'e5a9d17d-40cd-3733-b736-cc787a876195', 'org-openroadm-common-network:operational-state': 'inService',
-                'org-openroadm-common-network:administrative-state': 'inService',
-                'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
-                'transportpce-or-network-augmentation:supporting-node-topology-uuid':
-                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
-            },
-            {
-                'tp-id': 'ROADM-TC1-DEG1-TTP-TXRX',
-                'transportpce-or-network-augmentation:tp-uuid': 'fb3a00c1-342f-3cdc-b83d-2c257de298c1',
+                'tp-id': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
+                'transportpce-or-network-augmentation:tp-uuid': '4085f64d-fc95-3e0b-845b-35ef5779bb25',
                 'org-openroadm-common-network:operational-state': 'inService',
                 'org-openroadm-common-network:administrative-state': 'inService',
                 'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
@@ -90,25 +89,25 @@ class TestTransportPCETopoExtension(unittest.TestCase):
     }
 
     CHECK_DICT_INTERDOMAIN_LINK_8 = {
-        'link-id': 'TAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX',
+        'link-id': 'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
         'org-openroadm-common-network:link-type': 'ROADM-TO-ROADM',
         'source': {
-            'source-node': 'TAPI-SBI-ABS-NODE',
-            'source-tp': 'ROADM-TC1-DEG1-TTP-TXRX'
+            'source-node': 'ROADM-C1-DEG2',
+            'source-tp': 'DEG2-TTP-TXRX'
         },
         'org-openroadm-common-network:operational-state': 'inService',
         'org-openroadm-common-network:opposite-link':
-            'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRX',
+            'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX',
         'destination': {
-            'dest-tp': 'DEG2-TTP-TXRX',
-            'dest-node': 'ROADM-C1-DEG2'
+            'dest-tp': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
+            'dest-node': 'TAPI-SBI-ABS-NODE'
         },
         'org-openroadm-common-network:administrative-state': 'inService',
         'transportpce-or-network-augmentation:link-class': 'inter-domain'
     }
 
     CHECK_DICT_ALIEN_TO_TAPI_LINK_14 = {
-        'link-id': 'SPDR-SC1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TC1-SRG1-PP1-TXRX',
+        'link-id': 'SPDR-SC1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
         'org-openroadm-common-network:link-type': 'XPONDER-OUTPUT',
         'source': {
             'source-node': 'SPDR-SC1-XPDR1',
@@ -116,9 +115,9 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         },
         'org-openroadm-common-network:operational-state': 'inService',
         'org-openroadm-common-network:opposite-link':
-            'TAPI-SBI-ABS-NODE-ROADM-TC1-ROADM-TC1-SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+            'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
         'destination': {
-            'dest-tp': 'ROADM-TC1-SRG1-PP1-TXRX',
+            'dest-tp': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
             'dest-node': 'TAPI-SBI-ABS-NODE'
         },
         'org-openroadm-common-network:administrative-state': 'inService',
@@ -190,7 +189,8 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'SPDR-SA1', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-TA1', 'termination-point-num': 'SRG1-PP1-TXRX',
+                             'rdm-node': 'ROADM-TA1+PHOTONIC_MEDIA',
+                             'termination-point-num': 'ROADM-TA1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
                              'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
                              'rdm-nep-uuid': '3c3c3679-ccd7-3343-9f36-bdb7bea11a84',
                              'rdm-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43'}})
@@ -202,7 +202,8 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'SPDR-SA1', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-TA1', 'termination-point-num': 'SRG1-PP1-TXRX',
+                             'rdm-node': 'ROADM-TA1+PHOTONIC_MEDIA',
+                             'termination-point-num': 'ROADM-TA1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
                              'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
                              'rdm-nep-uuid': '3c3c3679-ccd7-3343-9f36-bdb7bea11a84',
                              'rdm-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43'}})
@@ -214,7 +215,8 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'SPDR-SC1', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-TC1', 'termination-point-num': 'SRG1-PP1-TXRX',
+                             'rdm-node': 'ROADM-TC1+PHOTONIC_MEDIA',
+                             'termination-point-num': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
                              'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
                              'rdm-nep-uuid': 'e5a9d17d-40cd-3733-b736-cc787a876195',
                              'rdm-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670'}})
@@ -226,7 +228,8 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'SPDR-SC1', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-TC1', 'termination-point-num': 'SRG1-PP1-TXRX',
+                             'rdm-node': 'ROADM-TC1+PHOTONIC_MEDIA',
+                             'termination-point-num': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
                              'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
                              'rdm-nep-uuid': 'e5a9d17d-40cd-3733-b736-cc787a876195',
                              'rdm-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670'}})
@@ -253,9 +256,10 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-inter-domain-links',
             {'a-end': {'rdm-node': 'ROADM-A1', 'deg-num': '1', 'termination-point': 'DEG1-TTP-TXRX'},
-             'z-end': {'rdm-node': 'ROADM-TA1', 'deg-num': '2', 'termination-point': 'DEG2-TTP-TXRX',
-                       'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                       'rdm-nep-uuid': 'd42ed13c-d81f-3136-a7d8-b283681031d4',
+             'z-end': {'rdm-node': 'ROADM-TA1+PHOTONIC_MEDIA', 'deg-num': '1',
+                       'termination-point': 'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
+                       "rdm-topology-uuid": "a21e4756-4d70-3d40-95b6-f7f630b4a13b",
+                       'rdm-nep-uuid': '21190688-06b5-32be-be30-c73c9199b603',
                        'rdm-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         print(response['output']['result'])
@@ -265,9 +269,10 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-inter-domain-links',
             {'a-end': {'rdm-node': 'ROADM-C1', 'deg-num': '2', 'termination-point': 'DEG2-TTP-TXRX'},
-             'z-end': {'rdm-node': 'ROADM-TC1', 'deg-num': '1', 'termination-point': 'DEG1-TTP-TXRX',
+             'z-end': {'rdm-node': 'ROADM-TC1+PHOTONIC_MEDIA', 'deg-num': '2',
+                       'termination-point': 'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
                        'rdm-topology-uuid': 'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                       'rdm-nep-uuid': 'fb3a00c1-342f-3cdc-b83d-2c257de298c1',
+                       'rdm-nep-uuid': '4085f64d-fc95-3e0b-845b-35ef5779bb25',
                        'rdm-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         print(response['output']['result'])
@@ -281,16 +286,17 @@ class TestTransportPCETopoExtension(unittest.TestCase):
         # Tests related to links
         self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 26,
                          'There should be 26 openroadm links')
-        check_list = {'TAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX',
-                      'TAPI-SBI-ABS-NODE-ROADM-TA1-DEG2-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX',
-                      'TAPI-SBI-ABS-NODE-ROADM-TC1-SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
-                      'TAPI-SBI-ABS-NODE-ROADM-TA1-SRG1-PP1-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1',
-                      'SPDR-SC1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TC1-SRG1-PP1-TXRX',
-                      'SPDR-SA1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TA1-SRG1-PP1-TXRX',
-                      'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRX',
-                      'ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1-DEG2-TTP-TXRX'}
+        check_list = {'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX',
+                      'TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX',
+                      'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                      'TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1',
+                      'SPDR-SC1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
+                      'SPDR-SA1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
+                      'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
+                      'ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX'}
         interDomainLinkNber = 0
         alienToTapiLinkNber = 0
+        print(response['network'][0]['ietf-network-topology:link'])
         for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             linkType = link['org-openroadm-common-network:link-type']
