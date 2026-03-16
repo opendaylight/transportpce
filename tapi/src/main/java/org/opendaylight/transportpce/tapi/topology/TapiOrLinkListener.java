@@ -138,21 +138,20 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
 
             // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
             // through rpcs and do not contain characteristics subject to potential updates
-            if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-                && change.getRootNode().dataBefore() != null) {
-                continue;
-            }
+
+//            if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
+//                || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
+//                && change.getRootNode().dataBefore() != null) {
+//                continue;
+//            }
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiLink1 =
-                    this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
-                            linkType, getQual(srcNode), getQual(destNode),
-                            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-                            link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                            tapiTopoUuid);
-
+                this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
+                        linkType, getQual(srcNode), getQual(destNode),
+                        TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+                        link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
+                        Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                        tapiTopoUuid);
             logNewTapiLink(tapiLink1);
-
             putTapiLinkInTopology(tapiLink1);
         }
     }
@@ -257,19 +256,23 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         Uuid srcTopoUuid;
         Uuid dstTopoUuid;
         if (tapiSBIend.equals("Z")) {
-            srcTpUuid = new Uuid(
-                UUID.nameUUIDFromBytes(srcTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
-            srcNodeUuid = new Uuid(
-                UUID.nameUUIDFromBytes(srcNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            srcTpUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+",
+                    srcNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA_OTS, srcTpId.getValue())
+                .getBytes(StandardCharsets.UTF_8)).toString());
+            srcNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", srcNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
+                .getBytes(StandardCharsets.UTF_8)).toString());
             srcTopoUuid = this.tapiTopoUuid;
             dstTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             dstTpUuid = new Uuid(tapiTp.getTpUuid());
             dstNodeUuid = new Uuid(tapiTp.getSupportingNodeUuid());
         } else {
-            dstTpUuid = new Uuid(
-                UUID.nameUUIDFromBytes(dstTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
-            dstNodeUuid = new Uuid(
-                UUID.nameUUIDFromBytes(dstNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            dstTpUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+",
+                    dstNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA_OTS, dstTpId.getValue())
+                .getBytes(StandardCharsets.UTF_8)).toString());
+            dstNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", dstNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
+                .getBytes(StandardCharsets.UTF_8)).toString());
             dstTopoUuid = this.tapiTopoUuid;
             srcTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             srcTpUuid = new Uuid(tapiTp.getTpUuid());
@@ -277,11 +280,11 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         }
         return
                 putTapiInterDomainLinkInTopology(StringConstants.SBI_TAPI_TOPOLOGY_UUID,
-                    this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
+                    this.tapiLink.createInterDomainTapiLink(link.getLinkId(), String.join("to", aendName, zendName),
                         srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid))
                 &&
                 putTapiInterDomainLinkInTopology(StringConstants.T0_FULL_MULTILAYER_UUID,
-                    this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
+                    this.tapiLink.createInterDomainTapiLink(link.getLinkId(), String.join("to", aendName, zendName),
                         srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid));
     }
 

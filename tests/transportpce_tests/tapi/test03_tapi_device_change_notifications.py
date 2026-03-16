@@ -420,8 +420,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 1,
-                         "Only one xponder-output/input bidirectional link should have been modified")
+        self.assertEqual(nb_updated_link, 2,
+                         "xponder-output/input unidir link should have been modified")
         time.sleep(1)
 
     def test_19_check_update_service_Ethernet(self):
@@ -621,8 +621,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 1,
-                         "Only one xponder-output/input link should have been modified")
+        self.assertEqual(nb_updated_link, 2,
+                         "xponder-output/input links should have been modified")
         time.sleep(1)
 
     def test_33_check_update_service_Ethernet(self):

@@ -158,6 +158,8 @@ public class TapiLinkImpl implements TapiLink {
                 linkName
                     .setValueName("XPDR-RDM link name")
                     .setValue(linkKey);
+                LOG.debug("TAPILINKIMPL.createTapiLink : create TapiLInk {} with UUID {} ", linkKey,
+                    new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()));
                 break;
             case TapiConstants.OTN_XPDR_XPDR_LINK:
                 LOG.info("OTN Xpdr to roadm link");
@@ -230,26 +232,24 @@ public class TapiLinkImpl implements TapiLink {
             .build();
     }
 
-    public Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+    public Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
             Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid) {
-
-        NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(srcTapiTopoUuid)
-            .setNodeUuid(srcNodeUuid)
-            .setNodeEdgePointUuid(srcTpUuid)
-            .build();
-        NodeEdgePoint destNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(dstTapiTopoUuid)
-            .setNodeUuid(dstNodeUuid)
-            .setNodeEdgePointUuid(dstTpUuid)
-            .build();
 
         NameBuilder linkName = new NameBuilder();
         linkName
             .setValueName(TapiConstants.OTS_INTERDOMAIN_RDM_RDM_LINK)
-            .setValue(linkId);
+            .setValue(tapilinkId);
+        NameBuilder linkName2 = new NameBuilder();
+        linkName2
+            .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
+            .setValue(tapilinkId);
 
-        // Todo: common aspects of links and set all attributes
+        if (getORLinkFromLinkId(orlinkId) == null) {
+            LOG.error("unable to create Cep for link {} which was not found in OR Topology", orlinkId);
+            return null;
+        }
+        createCepForLink(getORLinkFromLinkId(orlinkId));
+
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
@@ -271,13 +271,25 @@ public class TapiLinkImpl implements TapiLink {
             .setValidationRobustness("validation robustness")
             .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
             .build();
+
+        NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
+            .setTopologyUuid(srcTapiTopoUuid)
+            .setNodeUuid(srcNodeUuid)
+            .setNodeEdgePointUuid(srcTpUuid)
+            .build();
+        NodeEdgePoint destNep = new NodeEdgePointBuilder()
+            .setTopologyUuid(dstTapiTopoUuid)
+            .setNodeUuid(dstNodeUuid)
+            .setNodeEdgePointUuid(dstTpUuid)
+            .build();
+
         return new LinkBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes(linkId.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setName(Map.of(linkName.build().key(), linkName.build()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(tapilinkId.getBytes(StandardCharsets.UTF_8)).toString()))
+            .setName(Map.of(linkName.build().key(), linkName.build(), linkName2.build().key(), linkName2.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
             // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
-            .setTransitionedLayerProtocolName(Set.of(TapiConstants.PHTNC_MEDIA_OTS))
+            .setTransitionedLayerProtocolName(Set.of(TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OMS))
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
             .setNodeEdgePoint(
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))

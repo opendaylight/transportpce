@@ -15,6 +15,7 @@
 # pylint: disable=invalid-name
 # pylint: disable=unused-import
 # pylint: disable=line-too-long
+# pylint: disable=consider-using-f-string
 import os
 import unittest
 import time
@@ -394,11 +395,11 @@ class TransportPCEtest(unittest.TestCase):
         tp_to_find = [self.nAX2OTS2, self.nZX2OTS2, 'cd2619fb-1ae0-3785-a6fd-2b71f468cb6c',
                       'b2a2185e-1bd8-3fc1-8083-b50d08a1f21f']
         self.assertTrue(self.find_resource_in_response(node_to_find, response),
-                        'Found expected OTN Nodes in PathDescription')
+                        'Found expected Nodes in PathDescription')
         self.assertTrue(self.find_resource_in_response(tp_to_find, response),
-                        'Found expected OTN tps in PathDescription')
+                        'Found expected tps in PathDescription')
         self.assertTrue(self.find_link_in_response(link_to_find, response),
-                        'Found expected OTN tps in PathDescription')
+                        'Found expected links in PathDescription')
         time.sleep(self.WAITING)
 
     def test_03_create_connectivity_service_PhotonicMedia(self):
@@ -469,13 +470,14 @@ class TransportPCEtest(unittest.TestCase):
         tp_to_find = ['b9dbee10-faa9-3947-94c1-3c023646a2df', 'bb58ebb0-ca7c-3518-8ffd-808abfca54e5']
         # client TP do not appear in path description : openROADM legacy
         # tp_to_find = [self.nAX2iODU1, self.nZX2iODU1]
-        link_to_find = ['07df4edd-4408-310d-a820-5f34b0524900', '021f6a20-c7fb-3937-8b9f-c8ba5121692e']
+        # link_to_find = ['07df4edd-4408-310d-a820-5f34b0524900', '021f6a20-c7fb-3937-8b9f-c8ba5121692e']
+        link_to_find = ['07df4edd-4408-310d-a820-5f34b0524900', '37475213-26ca-3bcd-a9f6-f2f4d8deec5f']
         self.assertTrue(self.find_resource_in_response(node_to_find, response),
                         'Found expected OTN Nodes in PathDescription')
         self.assertTrue(self.find_resource_in_response(tp_to_find, response),
                         'Found expected OTN tps in PathDescription')
         self.assertTrue(self.find_link_in_response(link_to_find, response),
-                        'Found expected OTN tps in PathDescription')
+                        'Found expected OTN links in PathDescription')
         time.sleep(self.WAITING)
 
     def test_06_create_connectivity_service_ODU4(self):
@@ -551,7 +553,8 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['output']['response-parameters']['path-description']['aToZ-direction']
                          ['modulation-format'], 'dp-qpsk')
         node_to_find = [self.s2Auuid, self.s2Cuuid]
-        link_to_find = ['021f6a20-c7fb-3937-8b9f-c8ba5121692e', '01ee8fe0-4819-3171-9220-483c95c469ef']
+        # link_to_find = ['021f6a20-c7fb-3937-8b9f-c8ba5121692e', '01ee8fe0-4819-3171-9220-483c95c469ef']
+        link_to_find = ['37475213-26ca-3bcd-a9f6-f2f4d8deec5f', '01ee8fe0-4819-3171-9220-483c95c469ef']
         # client TP do not appear in path description : openROADM legacy
         # tp_to_find = [self.nAX2DSR1, self.nZX2DSR1]
         tp_to_find = ['eb1dfceb-9b93-38a4-8e34-e176cf5f5bf0', '7500a338-8f63-3751-8b89-0a61876f9d9a']
@@ -604,7 +607,8 @@ class TransportPCEtest(unittest.TestCase):
         node_to_find = [self.s1Auuid, self.s1Cuuid, self.rSRG1Auuid, self.rDEG2Auuid, self.rSRG1Cuuid, self.rDEG1Cuuid]
         link_to_find = ['c72c7995-8f3a-30ee-940f-309880898d57', '7539f869-b93b-3371-8b5c-270717655db1',
                         'de09187f-5991-39c5-a43c-0f0aa83dcb99', 'ca501fad-f7a4-36dc-ab50-64c6a973e9b0',
-                        '2f9d34e5-de00-3992-b6fd-6ba5c0e46bef', '19b7f180-ea7c-3b78-9e75-5107029cbdf9',
+                        # '2f9d34e5-de00-3992-b6fd-6ba5c0e46bef', '19b7f180-ea7c-3b78-9e75-5107029cbdf9',
+                        '2f9d34e5-de00-3992-b6fd-6ba5c0e46bef', 'afdea5c5-bd86-3008-bd6e-d881f6770e6e',
                         'd5be9a99-6663-3894-b328-7e835cb2ba4f', '984c8390-962d-392f-9a3f-9d5da3d37666',
                         'dabb9270-1855-3776-ae53-358f1ef085ef', '3b7db097-6186-30a0-9aaa-e58f0bd5227f']
         # in TP to find, include SGR1-PP1 of both ROADM A & C
@@ -615,7 +619,7 @@ class TransportPCEtest(unittest.TestCase):
         self.assertTrue(self.find_resource_in_response(tp_to_find, response),
                         'Found expected OTN tps in PathDescription')
         self.assertTrue(self.find_link_in_response(link_to_find, response),
-                        'Found expected OTN tps in PathDescription')
+                        'Found expected OTN links in PathDescription')
         time.sleep(self.WAITING)
 
     def test_10_create_connectivity_service_PhotonicMedia2(self):
@@ -778,7 +782,8 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['output']['response-parameters']['path-description']['aToZ-direction']
                          ['modulation-format'], 'dp-qpsk')
         node_to_find = [self.s1Auuid, self.s1Cuuid]
-        link_to_find = ['b90f7b96-4fe0-390c-8ef2-41942196f19e', 'd011697a-5660-39e3-ab35-a53175a484d8']
+        # link_to_find = ['b90f7b96-4fe0-390c-8ef2-41942196f19e', 'd011697a-5660-39e3-ab35-a53175a484d8']
+        link_to_find = ['b90f7b96-4fe0-390c-8ef2-41942196f19e', '606ade82-de21-3e95-b2cd-cdb2b03ef78b']
         # client TP do not appear in path description : openROADM legacy
         # tp_to_find = [self.nAX2DSR1, self.nZX2DSR1]
         tp_to_find = ['a2f84255-2775-34c9-ab0a-7c17a4249703', 'd6e08276-b5a9-3960-a3e1-14f8f72c280b']
@@ -917,7 +922,8 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['output']['response-parameters']['path-description']['aToZ-direction']
                          ['modulation-format'], 'dp-qpsk')
         node_to_find = [self.s3Auuid, self.s3Cuuid]
-        link_to_find = ['59a78027-0c53-3a7e-aa15-c9258c637bc0', '9e237eea-ce80-3490-9a66-34f7cbdac55f']
+        # link_to_find = ['59a78027-0c53-3a7e-aa15-c9258c637bc0', '9e237eea-ce80-3490-9a66-34f7cbdac55f']
+        link_to_find = ['1a9dea0a-0e90-3a72-98b7-2dc04d2ea115', '9e237eea-ce80-3490-9a66-34f7cbdac55f']
         # client TP do not appear in path description : openROADM legacy
         tp_to_find = ['74b4b605-379f-3700-bb46-97b578cb2c7d', 'ced2adb2-e1fd-338c-8b64-a02106d48b45']
         self.assertTrue(self.find_resource_in_response(node_to_find, response),
@@ -1004,6 +1010,7 @@ class TransportPCEtest(unittest.TestCase):
                 result_list.append(True)
             else:
                 result_list.append(False)
+        print("Link Result List: {}".format(result_list))
         if False in result_list:
             return False
         return True

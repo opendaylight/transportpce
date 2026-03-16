@@ -689,7 +689,24 @@ public class PceCalculation {
         LOG.info("analyzeNw: allPceLinks {}",
             allPceLinks.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()).stream()
             .map(PceLink::toString).collect(Collectors.toList()));
-
+        String displayString = "";
+        for (Map.Entry<LinkId, PceLink> entry : allPceLinks.entrySet()) {
+            PceTapiLink link = (PceTapiLink)entry.getValue();
+            displayString = String.join(" || ", displayString, " Link: " + link.getLinkName().getValue() + " of UUid = "
+                + link.getLinkId() + "Valid = " + link.isValid() + " and opposite Link Id = " + link.getOppositeLinkId()
+                + " State = " + link.getAdministrativeState() + "OpState = " + link.getOperationalState()
+                + "type =" + link.getlinkType());
+        }
+        LOG.debug("PceCalculation:analyzeTapiNw : AllPceLinksAsFollow {}", displayString);
+        String nodedisplayString = "";
+        for (Map.Entry<NodeId, PceNode> entry : allPceNodes.entrySet()) {
+            PceNode node = entry.getValue();
+            nodedisplayString = String.join(" || ", nodedisplayString, " Node: " + node.getNodeId() + " of UUid = "
+                + node.getNodeUuid() + " outgoingLink = " + node.getOutgoingLinks()
+                + " State = " + node.getAdminState() + "OpState = " + node.getOperationalState()
+                + "type =" + node.getPceNodeType());
+        }
+        LOG.debug("PceCalculation:analyzeTapiNw : AllPceNodesAsFollow {}", nodedisplayString);
         if ((allPceNodes.size() == 0) || (allPceLinks.size() == 0)) {
             if (allPceNodes.size() == 0) {
                 subscriber.event(Level.ERROR, "No nodes found in network.");
@@ -768,15 +785,14 @@ public class PceCalculation {
     }
 
     private boolean filterdropTapiLinks(PceTapiLink pcelink) {
-        NodeId sourceNodeId = new NodeId(pcelink.getSourceId());
         NodeId destNodeId = new NodeId(pcelink.getDestId());
         // In TAPI, source & destination are not clearly identified. However they are processed to form PceTapiLink
         // that should have identified Source and Dest.
         if (azSrgs.contains(destNodeId)) {
             allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
             // Before as for OR added Outgoing link to dest nose but seems it should be on Source
-            //allPceNodes.get(destNodeId).addOutgoingLink(pcelink);
-            allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
+            allPceNodes.get(destNodeId).addOutgoingLink(pcelink);
+            //allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
             LOG.debug("PceCalculation:filterdropTapiLinks: Drop_LINK added to source and to allPceLinks {}",
                 pcelink.getLinkId());
             return true;
@@ -887,6 +903,7 @@ public class PceCalculation {
 
         PceNode source = allPceNodes.get(arbitrarySourceId);
         PceNode dest = allPceNodes.get(arbitraryDestId);
+
         OperationalState state = link.getOperationalState();
 
         if (source == null) {
@@ -895,7 +912,7 @@ public class PceCalculation {
             return false;
         }
         if (dest == null) {
-            LOG.info("PceCalculation:validateTapiLink : Link ignored as source node is rejected by node validation {}",
+            LOG.debug("PceCalculation:validateTapiLink : Link ignored as dest node is rejected by node validation {}",
                 mapNepParentNodeUuid.get(nepUuidList.get(1)).getValue());
             return false;
         }
@@ -905,9 +922,29 @@ public class PceCalculation {
                     link.getName(), OperationalState.DISABLED);
             return false;
         }
-        LOG.debug("PceCalculation:validateTapiLink: call process tapiLink({}, {}, {}, {})",
-            link.getName(),topoUuid, source, dest);
-        return processTapiLink(link, topoUuid, source, dest);
+        String srcNodeName = source.getNodeId().getValue().split("\\+")[0];
+        String dstNodeName = dest.getNodeId().getValue().split("\\+")[0];
+        String sourceNode = "NodeY";
+        String linkName = link.getName().values().stream()
+            .filter(name -> name.getValueName().equals("OMS link name")
+                || name.getValueName().equals("tapi-interdomain-link")
+                || name.getValueName().equals("XPDR-RDM link name"))
+            .map(Name::getValue)
+            .toList().stream().findFirst().orElseThrow();
+        // For interdomain link, the name of the OpenROADM Node is formated as per OpenROADM, so that the check must be
+        // done on both ends : only the name of TAPI Node belonging to SBI Topology can be find as is in the link name.
+        // (In the Link name, OR NodeName includes a "DEG" extension before "+[tp-name]", and no "+PHOTONIC..." term)
+        if (linkName != null && !linkName.isBlank() && linkName.split("to")[0].contains(srcNodeName)) {
+            sourceNode = "NodeX";
+        }
+        if (linkName != null && !linkName.isBlank() && linkName.split("to")[1].contains(dstNodeName)) {
+            sourceNode = "NodeX";
+        }
+        LOG.debug("PceCalculation:validateTapiLink call Process Tapi Link for link = {}, source = {}, dest = {} ",
+            link.getName(), source.getNodeId(), dest.getNodeId());
+        return processTapiLink(link, topoUuid,
+            sourceNode.equals("NodeX") ? source : dest,
+            sourceNode.equals("NodeX") ? dest : source);
     }
 
 
@@ -941,9 +978,24 @@ public class PceCalculation {
                     connection.getName(), OperationalState.DISABLED);
             return false;
         }
-        LOG.info("validateTapiCons: calling processPceTapiOtnLink for connection {}", connection.getName());
+        String srcNodeName = source.getNodeId().getValue().split("\\+")[0];
+        String dstNodeName = dest.getNodeId().getValue().split("\\+")[0];
+        String sourceNode = "NodeY";
+        String connectionName = connection.getName().values().stream()
+            .map(Name::getValue)
+            .toList().stream().findFirst().orElseThrow();
+        if (connectionName != null && !connectionName.isBlank()
+                && !isLinkNameReverted(srcNodeName, dstNodeName, connectionName)) {
+            sourceNode = "NodeX";
+        }
+
+        LOG.info("PceCalculation:validateTapiCons call Process Tapi Link for connection = {}, source = {}, dest = {} ",
+            connection.getName(), source.getNodeId(), dest.getNodeId());
         return processPceTapiOtnLink(new TopologyKey(connection.getConnectionEndPoint().entrySet().stream()
-                .findFirst().orElseThrow().getKey().getTopologyUuid()), connection, source, dest);
+                        .findFirst().orElseThrow().getKey().getTopologyUuid()),
+                    connection,
+                    sourceNode.equals("NodeX") ? source : dest,
+                    sourceNode.equals("NodeX") ? dest : source);
     }
 
     private void validateNode(Node node, Preference portPreference) {
@@ -1672,10 +1724,26 @@ public class PceCalculation {
         LinkId linkid = new LinkId(pceTapiLink.getLinkId());
         switch (pceTapiLink.getlinkType()) {
             case ROADMTOROADM:
+                allPceLinks.put(linkid, pceTapiLink);
+                if (source.getOutgoingLinks().stream()
+                        .filter(link -> link.getLinkId().equals(pceTapiLink.getLinkId())).toList().isEmpty()) {
+                    source.addOutgoingLink(pceTapiLink);
+                }
+                // For Roadm to Roadm we may consider adding outgoing link to destination PceNode, which we don't need
+                // to do for express Link which are created by controller, and are unidirectional.
+                if (dest.getOutgoingLinks().stream()
+                        .filter(link -> link.getLinkId().equals(pceTapiLink.getLinkId())).toList().isEmpty()) {
+                    dest.addOutgoingLink(pceTapiLink);
+                }
+                break;
             case EXPRESSLINK:
                 allPceLinks.put(linkid, pceTapiLink);
-                source.addOutgoingLink(pceTapiLink);
-                dest.addOutgoingLink(pceTapiLink);
+                if (source.getOutgoingLinks().stream()
+                        .filter(link -> link.getLinkId().equals(pceTapiLink.getLinkId())).toList().isEmpty()) {
+                    source.addOutgoingLink(pceTapiLink);
+                }
+//                source.addOutgoingLink(pceTapiLink);
+//                dest.addOutgoingLink(pceTapiLink);
                 LOG.debug("PceCalculation:processTapiLinkBasics : {}-LINK added to allPceLinks {}",
                     pceTapiLink.getlinkType(), pceTapiLink);
                 break;
@@ -1944,5 +2012,12 @@ public class PceCalculation {
             outUuid = new Uuid(UUID.nameUUIDFromBytes(inString.getBytes(StandardCharsets.UTF_8)).toString());
         }
         return outUuid;
+    }
+
+    private boolean isLinkNameReverted(String node1name, String node2name, String linkName) {
+        if (node1name != null && node2name != null) {
+            return linkName.indexOf(node1name) > linkName.indexOf(node2name) ? true : false;
+        }
+        return false;
     }
 }
