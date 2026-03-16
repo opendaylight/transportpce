@@ -15,6 +15,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoad
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -140,7 +141,6 @@ public interface TapiLink {
      * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(String)} instead.
      */
     @Deprecated(forRemoval = true)
-
     AdministrativeState setTapiAdminState(String adminState);
 
     /**
@@ -214,7 +214,9 @@ public interface TapiLink {
     Map<Map<String, String>, ConnectionEndPoint> getCepMap();
 
 
-    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
-            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
+//    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+//            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
 
+    Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
 }

@@ -149,35 +149,29 @@ final class OrdLink {
             srcTp = input.getAEnd().getTerminationPoint();
             rdmSrcTp = getTpofNode(srcNode, srcTp, dataBroker);
             destNode = "TAPI-SBI-ABS-NODE";
-            destTp = input.getZEnd().getRdmNode() + "-" + input.getZEnd().getTerminationPoint();
+            destTp = input.getZEnd().getTerminationPoint();
             linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
             oppLinkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
             orTpState = rdmSrcTp.augmentation(TerminationPoint1.class).getOperationalState();
             addTpsToTapiExtNode(destTp, input.getZEnd().getRdmNepUuid(), input.getZEnd().getRdmNode(),
                 input.getZEnd().getRdmNodeUuid(), input.getZEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
-//            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(srcNode, srcTp, destTp);
-//            oppLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(destTp, srcNode, srcTp);
         } else {
             destNode = new StringBuilder(input.getZEnd().getRdmNode()).append("-DEG")
                 .append(input.getZEnd().getDegNum()).toString();
             destTp = input.getZEnd().getTerminationPoint();
             rdmDestTp = getTpofNode(destNode, destTp, dataBroker);
             srcNode = "TAPI-SBI-ABS-NODE";
-            srcTp = input.getAEnd().getRdmNode() + "-" + input.getAEnd().getTerminationPoint();
+            srcTp = input.getAEnd().getTerminationPoint();
             oppLinkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
             linkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
             orTpState = rdmDestTp.augmentation(TerminationPoint1.class).getOperationalState();
             addTpsToTapiExtNode(srcTp, input.getAEnd().getRdmNepUuid(), input.getAEnd().getRdmNode(),
                 input.getAEnd().getRdmNodeUuid(), input.getAEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
-//            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(srcTp, destNode, destTp);
-//            oppLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(destNode, destTp, srcTp);
         }
         LOG.info("Handling InterdomainLink with linkId: {} ", linkId);
         // IETF link builder
 
         LinkBuilder linkBuilderFW = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null);
-//        LinkBuilder linkBuilderFW = TopologyUtils.createInterDomainLink(srcNode, destNode, srcTp, destTp,
-//            tapiDomainNode.equals("Z") ? "Dest" : "Source");
         LOG.info("Creating InterdomainLink with linkId: {} through TopologyUtils", linkId);
         LOG.info("InterdomainLink {} has LinkBuilder processed by TopologyUtils.createLink: {}", linkId, linkBuilderFW);
         linkBuilderFW.addAugmentation(
@@ -197,8 +191,6 @@ final class OrdLink {
         linkBuilderFW.addAugmentation(tpceAugmLink11Bd.build());
 
         LinkBuilder linkBuilderBW = TopologyUtils.createLink(destNode, srcNode, destTp, srcTp, null);
-        // LinkBuilder linkBuilderBW = TopologyUtils.createInterDomainLink(destNode, srcNode, destTp, srcTp,
-        //    tapiDomainNode.equals("Z") ? "Source" : "Dest");
         linkBuilderBW.addAugmentation(
                 new Link1Builder()
                     .setOppositeLink(linkId)
@@ -221,8 +213,8 @@ final class OrdLink {
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDFW, linkBuilderFW.build());
         try {
             writeTransaction.commit().get();
-            LOG.info("A new link with linkId: {} added into {} layer.",
-                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
+            LOG.info("InterdomainLink creation : A new link with linkId: {} added into {} layer. Link = {}",
+                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderFW.build());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
                 srcNode, srcTp, destNode, destTp, e);
@@ -237,8 +229,8 @@ final class OrdLink {
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDBW, linkBuilderBW.build());
         try {
             writeTransaction.commit().get();
-            LOG.info("A new link with linkId: {} added into {} layer.",
-                oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
+            LOG.info("InterdomainLink creation : A new link with linkId: {} added into {} layer. Link = {}",
+                oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderBW.build());
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
