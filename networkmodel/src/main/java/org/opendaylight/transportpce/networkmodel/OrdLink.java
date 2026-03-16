@@ -210,8 +210,8 @@ final class OrdLink {
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDFW, linkBuilderFW.build());
         try {
             writeTransaction.commit().get();
-            LOG.info("A new link with linkId: {} added into {} layer.",
-                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
+            LOG.info("InterdomainLink creation : A new link with linkId: {} added into {} layer. Link = {}",
+                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderFW.build());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
                 srcNode, srcTp, destNode, destTp, e);
@@ -226,8 +226,8 @@ final class OrdLink {
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDBW, linkBuilderBW.build());
         try {
             writeTransaction.commit().get();
-            LOG.info("A new link with linkId: {} added into {} layer.",
-                oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
+            LOG.info("InterdomainLink creation : A new link with linkId: {} added into {} layer. Link = {}",
+                oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderBW.build());
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",

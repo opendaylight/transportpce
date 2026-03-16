@@ -121,7 +121,8 @@ public class PceGraph {
         pceResult.error();
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
-            LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
+            LOG.info("validating path n° {} - Vertices : {}", entry.getKey(), path.getVertexList());
+            LOG.info("validating path n° {} - Edges : {}", entry.getKey(), path.getEdgeList());
             PostAlgoPathValidator papv = new PostAlgoPathValidator(
                     networkTransactionService,
                     spectrumConstraint,
@@ -294,7 +295,8 @@ public class PceGraph {
                 weightedGraph.addEdge(link.getSourceId(), link.getDestId(), graphLink);
 
                 weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
-                LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
+                LOG.info("In Graph populateWithLinks added Edge :  {}, source {}, dest {}", link.getLinkId(),
+                    link.getSourceId(), link.getDestId());
             }
         }
         return true;
