@@ -190,7 +190,6 @@ public class ConvertTopoORtoTapiAtInit {
         for (Map.Entry<Map<String, String>, ConnectionEndPoint> cepEntry : cepMap.entrySet()) {
             String nepNodeId = cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getValue();
             LOG.debug("CONVERTTOFULL165, Node UUID is {}", nepNodeId);
-            List<NodeKey> listKey = tapiNodes.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
             LOG.debug("CONVERTTOFULL168, TapiNode Keys are {}", tapiNodes
                 .entrySet().stream()
                 .map(Map.Entry::getKey)
@@ -199,9 +198,10 @@ public class ConvertTopoORtoTapiAtInit {
                 .entrySet().stream()
                 .map(nep -> nep.getValue().getName().toString())
                 .collect(Collectors.toList()));
-            if (!listKey.toString().contains(nepNodeId)) {
-                LOG.info("ConvertToFullLINE178, ListKey {} of TapiNodes does not contain NodeUuid {}",
-                    listKey, nepNodeId);
+            boolean nodeExists = tapiNodes.keySet().stream()
+                    .anyMatch(key -> key.getUuid().toString().equals(nepNodeId));
+            if (!nodeExists) {
+                LOG.info("TapiNodes does not contain NodeUuid {}", nepNodeId);
             }
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node = tapiNodes
                 .entrySet().stream()
