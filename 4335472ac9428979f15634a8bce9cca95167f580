@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8485cc4d_60f4313c",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-03-17T10:18:00Z",
+      "side": 1,
+      "message": "this will cause version convergence/integration problems due to daexim being an MSI project.",
+      "range": {
+        "startLine": 58,
+        "startChar": 20,
+        "endLine": 58,
+        "endChar": 36
+      },
+      "revId": "4335472ac9428979f15634a8bce9cca95167f580",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
