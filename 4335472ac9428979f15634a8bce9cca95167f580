@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e817f7d7_ca2b7869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-03-17T15:24:21Z",
+      "side": 1,
+      "message": "Thanks for your feedback Robert : Any suggestion on how to solve this ? (How being able to install for functional tests the daexim feature if it is not initially declared in the dependencies? )\nThanks",
+      "revId": "4335472ac9428979f15634a8bce9cca95167f580",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8485cc4d_60f4313c",
@@ -14,6 +31,30 @@
       "writtenOn": "2026-03-17T10:18:00Z",
       "side": 1,
       "message": "this will cause version convergence/integration problems due to daexim being an MSI project.",
+      "range": {
+        "startLine": 58,
+        "startChar": 20,
+        "endLine": 58,
+        "endChar": 36
+      },
+      "revId": "4335472ac9428979f15634a8bce9cca95167f580",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d49bcd56_a02796b2",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-03-17T15:24:21Z",
+      "side": 1,
+      "message": "Hi Robert,\nAfter a discussion with Gilles, I think  I get the point. \nDo you have any suggestion on how to solve this ? (How being able to install for functional tests the daexim feature if it is not initially declared in the dependencies? )\nThanks",
+      "parentUuid": "8485cc4d_60f4313c",
       "range": {
         "startLine": 58,
         "startChar": 20,
