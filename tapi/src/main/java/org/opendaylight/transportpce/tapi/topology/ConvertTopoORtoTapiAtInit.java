@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -28,8 +29,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -265,11 +268,23 @@ public class ConvertTopoORtoTapiAtInit {
         String ietfNodeId = roadm.getNodeId().getValue();
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
-            if (node.getSupportingNode().values().stream()
-                    .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
+
+            Collection<SupportingNode> supportingNodes = Optional.ofNullable(node.getSupportingNode())
+                    .orElse(Map.of())
+                    .values();
+
+            boolean isPartOfRoadm = supportingNodes
+                    .stream()
+                    .map(SupportingNode::getNodeRef)
+                    .filter(Objects::nonNull)
+                    .map(Uri::getValue)
+                    .anyMatch(ietfNodeId::equals);
+
+            if (!isPartOfRoadm) {
                 LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
                 continue;
             }
+
             var node1 = node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class);
             if (node.augmentation(Node1.class) == null && node1 == null) {
