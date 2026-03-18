@@ -10,9 +10,11 @@ package org.opendaylight.transportpce.tapi.topology;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -33,8 +35,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -60,6 +65,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
@@ -127,16 +133,32 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
-            var lnk1 = link.augmentation(Link1.class);
-            var lnk1OppLnk = lnk1.getOppositeLink();
+
+            Link1 lnk1 = link.augmentation(Link1.class);
+            if (lnk1 == null) {
+                LOG.warn("Link {} does not have OpenROADM link augmentation", link.getLinkId().getValue());
+                continue;
+            }
+
+            LinkId lnk1OppLnk = lnk1.getOppositeLink();
+            if (lnk1OppLnk == null) {
+                LOG.warn("Link {} does not have an opposite link", link.getLinkId().getValue());
+                continue;
+            }
+
             var oppositeLink = rdmTordmLinkList.stream()
                 .filter(l -> l.getLinkId().equals(lnk1OppLnk))
                 .findAny().orElse(null);
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
+                final Link1 oppositeLnk1 = oppositeLink.augmentation(Link1.class);
+                if (oppositeLnk1 == null) {
+                    LOG.warn("Opposite link {} does not have OpenROADM link augmentation", lnk1OppLnk.getValue());
+                } else {
+                    oppLnkAdmState = oppositeLnk1.getAdministrativeState();
+                    oppLnkOpState = oppositeLnk1.getOperationalState();
+                }
             }
             var lnkAdmState = lnk1.getAdministrativeState();
             var lnkOpState = lnk1.getOperationalState();
@@ -227,7 +249,9 @@ public class ConvertTopoORtoTapiAtInit {
                 .entrySet().stream()
                 .filter(theNode -> theNode.getKey().getUuid().toString().equals(nepNodeId))
                 .map(Map.Entry::getValue).findFirst().orElseThrow();
-            var onepMap = node.getOwnedNodeEdgePoint();
+            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>(
+                    Optional.ofNullable(node.getOwnedNodeEdgePoint()).orElse(Collections.emptyMap())
+            );
             OwnedNodeEdgePoint ownedNep = onepMap.entrySet().stream()
                 .filter(onep -> onep.getKey().getUuid().toString()
                     .equals(cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getKey()))
@@ -275,21 +299,50 @@ public class ConvertTopoORtoTapiAtInit {
         String ietfNodeId = roadm.getNodeId().getValue();
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
-            if (node.getSupportingNode().values().stream()
-                    .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
+
+            Collection<SupportingNode> supportingNodes = Optional.ofNullable(node.getSupportingNode())
+                    .orElse(Map.of())
+                    .values();
+
+            boolean isPartOfRoadm = supportingNodes
+                    .stream()
+                    .map(SupportingNode::getNodeRef)
+                    .filter(Objects::nonNull)
+                    .map(Uri::getValue)
+                    .anyMatch(ietfNodeId::equals);
+
+            if (!isPartOfRoadm) {
                 LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
                 continue;
             }
+
             var node1 = node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class);
-            if (node.augmentation(Node1.class) == null && node1 == null) {
-                LOG.warn("Abstracted node {} doesnt have type of node or is not disaggregated", nodeId);
+
+            if (node1 == null) {
+                LOG.warn("Abstracted node {} does not have IETF topology augmentation", nodeId);
                 continue;
             }
-            OpenroadmNodeType nodeType = node.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
-                .getNodeType();
-            var node1TpValues = node1.getTerminationPoint().values();
+
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 orNode1 =
+                    node.augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
+
+            if (orNode1 == null) {
+                LOG.warn("Abstracted node {} does not have OpenROADM node augmentation", nodeId);
+                continue;
+            }
+
+            OpenroadmNodeType nodeType = orNode1.getNodeType();
+            if (nodeType == null) {
+                LOG.warn("Abstracted node {} has null node type", nodeId);
+                continue;
+            }
+
+            Collection<TerminationPoint> node1TpValues = Optional.ofNullable(node1.getTerminationPoint())
+                    .orElse(Map.of())
+                    .values();
+
             logTerminationsPointIds(node1TpValues);
             String sietfNodeId = Optional.ofNullable(node.getSupportingNode())
                     .orElse(Map.of())
@@ -302,18 +355,16 @@ public class ConvertTopoORtoTapiAtInit {
             switch (nodeType.getIntValue()) {
                 case 11:
                     LOG.debug("Supported node {} is a Degree", nodeId);
-                    // Get only external TPs of the degree
-                    List<TerminationPoint> degPortList = node1TpValues.stream()
-                        .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREETXRXTTP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREERXTTP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREETXTTP.getIntValue())
-                        .collect(Collectors.toList());
-                    // Convert TP List in NEPs and put it in onepl
-                    LOG.debug("Degree port List: {}", degPortList.toString());
+
+                    final List<TerminationPoint> degPortList = node1TpValues
+                            .stream()
+                            .filter(tp -> isDegreeTp(getTpType(tp)))
+                            .collect(Collectors.toList());
+
+                    LOG.debug("Degree port List: {}", degPortList);
+
                     // TODO: deg port could be sip. e.g. MDONS
+                    // Convert TP List in NEPs and put it in onepl
                     oneplist.putAll(
                          populateNepsForRdmNode(false, sietfNodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
                     oneplist.putAll(
@@ -322,18 +373,18 @@ public class ConvertTopoORtoTapiAtInit {
                     break;
                 case 12:
                     LOG.debug("Supported node {} is a SRG", nodeId);
-                    // Get only external TPs of the srg
-                    List<TerminationPoint> srgPortList = node1TpValues.stream()
-                        .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGTXRXPP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGRXPP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGTXPP.getIntValue())
-                        .collect(Collectors.toList());
+
+                    final List<TerminationPoint> srgPortList = node1TpValues
+                            .stream()
+                            .filter(tp -> isSrgTp(getTpType(tp)))
+                            .collect(Collectors.toList());
+
+                    LOG.info("Srg port list: {}", srgPortList
+                            .stream()
+                            .map(tp -> tp.getTpId().getValue())
+                            .collect(Collectors.toSet()));
+
                     // Convert TP List in NEPs and put it in onepl
-                    LOG.info("Srg port List: {}", srgPortList.stream().map(srg ->
-                            srg.getTpId().getValue()).collect(Collectors.toSet()));
                     oneplist.putAll(
                         populateNepsForRdmNode(true, sietfNodeId, srgPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
 
@@ -348,24 +399,51 @@ public class ConvertTopoORtoTapiAtInit {
         // UUID
         String nodeIdPhMed = String.join("+", ietfNodeId, TapiConstants.PHTNC_MEDIA);
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
+
         LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", ietfNodeId, nodeUuid.getValue());
-        // Names
-        OpenroadmNodeType ietfNodeType = roadm.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
-                .getNodeType();
-        Name nodeNames =  new NameBuilder().setValueName("roadm node name").setValue(nodeIdPhMed).build();
-        Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(ietfNodeType.getName()).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 roadmOrNode1 =
+                roadm.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
+
+        OpenroadmNodeType ietfNodeType = null;
+        if (roadmOrNode1 != null) {
+            ietfNodeType = roadmOrNode1.getNodeType();
+        }
+
+        if (ietfNodeType == null) {
+            LOG.warn("ROADM node {} has no OpenROADM node type augmentation", ietfNodeId);
+            return Optional.empty();
+        }
+
+        Name nodeNames = new NameBuilder()
+                .setValueName("roadm node name")
+                .setValue(nodeIdPhMed)
+                .build();
+
+        Name nameNodeType = new NameBuilder()
+                .setValueName("Node Type")
+                .setValue(ietfNodeType.getName())
+                .build();
+
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
-        LOG.debug("CONVERTTOFULL SRG OTSNode of retrieved OnepMap {} ",
-            oneplist.entrySet().stream().filter(e -> e.getValue()
-                .getSupportedCepLayerProtocolQualifierInstances()
-                    .contains(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                        .setNumberOfCepInstances(Uint64.ONE)
-                        .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                    .build()))
-            .collect(Collectors.toList()).toString());
+
+        if (LOG.isDebugEnabled()) {
+            final SupportedCepLayerProtocolQualifierInstances otsQualifier =
+                    new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setNumberOfCepInstances(Uint64.ONE)
+                            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                            .build();
+
+            LOG.debug("Retrieved OTS NEPs: {}", oneplist.entrySet().stream()
+                    .filter(e -> {
+                        final var qualifiers = e.getValue().getSupportedCepLayerProtocolQualifierInstances();
+                        return qualifiers != null && qualifiers.contains(otsQualifier);
+                    })
+                    .collect(Collectors.toList()));
+        }
+
         //org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
         var roadmNode = createRoadmTapiNode(
                 nodeUuid,
@@ -374,17 +452,54 @@ public class ConvertTopoORtoTapiAtInit {
                 oneplist,
                 "Full",
                 ietfNodeId);
+
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNF)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNF)",
-            TapiConstants.RDM_INFRA,
-            roadmNode.nonnullOwnedNodeEdgePoint().values().size(),
-            roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
-                .filter(nep -> nep.getMappedServiceInterfacePoint() != null)
-                .count());
+                TapiConstants.RDM_INFRA,
+                roadmNode.nonnullOwnedNodeEdgePoint().size(),
+                roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
+                        .filter(nep -> nep.getMappedServiceInterfacePoint() != null)
+                        .count());
+
 
         LOG.info("{}: Full ROADM conversion complete.", ietfNodeId);
         return Optional.of(roadmNode);
+    }
+
+    /**
+     * Extracts the OpenROADM TP type from a termination point.
+     *
+     * @param tp the termination point
+     * @return the TP type, or {@code null} if the augmentation or type is missing
+     */
+    private static OpenroadmTpType getTpType(TerminationPoint tp) {
+        final TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
+        return tp1 != null ? tp1.getTpType() : null;
+    }
+
+    /**
+     * Checks whether the given TP type corresponds to a Degree port.
+     *
+     * @param tpType the termination point type
+     * @return {@code true} if the TP is a Degree TP, {@code false} otherwise
+     */
+    private static boolean isDegreeTp(OpenroadmTpType tpType) {
+        return tpType == OpenroadmTpType.DEGREETXRXTTP
+                || tpType == OpenroadmTpType.DEGREERXTTP
+                || tpType == OpenroadmTpType.DEGREETXTTP;
+    }
+
+    /**
+     * Checks whether the given TP type corresponds to an SRG port.
+     *
+     * @param tpType the termination point type
+     * @return {@code true} if the TP is an SRG TP, {@code false} otherwise
+     */
+    private static boolean isSrgTp(OpenroadmTpType tpType) {
+        return tpType == OpenroadmTpType.SRGTXRXPP
+                || tpType == OpenroadmTpType.SRGRXPP
+                || tpType == OpenroadmTpType.SRGTXPP;
     }
 
     /**
@@ -437,7 +552,7 @@ public class ConvertTopoORtoTapiAtInit {
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
-            if (node.getSupportingNode().values().stream()
+            if (node.nonnullSupportingNode().values().stream()
                     .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
                 LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
                 continue;
@@ -449,24 +564,28 @@ public class ConvertTopoORtoTapiAtInit {
                     node.getNodeId().getValue());
                 continue;
             }
-            OpenroadmNodeType nodeType = node.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev250110.Node1.class).getNodeType();
-            if (nodeType.getIntValue() != 11) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 node1Augmentation =
+                    node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                            .Node1.class);
+            if (node1Augmentation == null) {
+                continue;
+            }
+
+            OpenroadmNodeType nodeType = node1Augmentation.getNodeType();
+            if (nodeType != OpenroadmNodeType.SRG) {
                 // Only consider ROADMS SRG Nodes
                 continue;
             }
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
+            if (node1 == null) {
+                continue;
+            }
             LOG.debug("Handling SRG node in Topology abstraction {}", node.getNodeId().toString());
             // Get only external TPs of the srg
-            List<TerminationPoint> srgPortList = node1.getTerminationPoint().values().stream()
-                .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGTXRXPP.getIntValue()
-                    || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGRXPP.getIntValue()
-                    || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGTXPP.getIntValue())
+            List<TerminationPoint> srgPortList = node1.nonnullTerminationPoint().values().stream()
+                .filter(tp -> isSrgTp(getTpType(tp)))
                 .collect(Collectors.toList());
             // Convert TP List in NEPs and put it in onepl
             String sietfNodeId = Optional.ofNullable(node.getSupportingNode())
@@ -545,7 +664,19 @@ public class ConvertTopoORtoTapiAtInit {
                 nodeUuid, ietfNodeId, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
-            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
+            NodeRuleGroup nrg = nrgMapEntry.getValue();
+            if (nrg == null || nrg.getName() == null) {
+                throw new IllegalStateException(
+                        "NodeRuleGroup " + nrgMapEntry.getKey() + " has no name map");
+            }
+
+            Name nrgName = nrg.getName().get(new NameKey("nrg name"));
+            if (nrgName == null || nrgName.getValue() == null) {
+                throw new IllegalStateException(
+                        "NodeRuleGroup " + nrgMapEntry.getKey() + " is missing name 'nrg name'");
+            }
+
+            nrgMap.put(nrgMapEntry.getKey(), nrgName.getValue());
         }
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
             = tapiFactory.createInterRuleGroupForRdmNode(
@@ -614,15 +745,39 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
+
+            Link1 link1 = link.augmentation(Link1.class);
+            if (link1 == null) {
+                LOG.warn("Link {} does not have OpenROADM link augmentation",
+                        link.getLinkId().getValue());
+                continue;
+            }
+
+            LinkId oppositeLinkId = link1.getOppositeLink();
+            if (oppositeLinkId == null) {
+                LOG.warn("Link {} does not have an opposite link",
+                        link.getLinkId().getValue());
+                continue;
+            }
+
             var oppositeLink = xpdrRdmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(link.augmentation(Link1.class).getOppositeLink()))
-                .findAny().orElse(null);
+                .filter(l -> l.getLinkId().equals(oppositeLinkId))
+                .findAny()
+                .orElse(null);
+
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
+                Link1 oppositeLink1 = oppositeLink.augmentation(Link1.class);
+                if (oppositeLink1 == null) {
+                    LOG.warn("Opposite link {} does not have OpenROADM link augmentation",
+                            oppositeLink.getLinkId().getValue());
+                } else {
+                    oppLnkAdmState = oppositeLink1.getAdministrativeState();
+                    oppLnkOpState = oppositeLink1.getOperationalState();
+                }
             }
+
             String sourceNode =
                 link.getSource().getSourceNode().getValue().contains("ROADM")
                     ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
@@ -631,6 +786,10 @@ public class ConvertTopoORtoTapiAtInit {
                 link.getDestination().getDestNode().getValue().contains("ROADM")
                     ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
                     : link.getDestination().getDestNode().getValue();
+
+            AdminStates lnkAdmState = link1.getAdministrativeState();
+            State lnkOpState = link1.getOperationalState();
+
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode, link.getSource().getSourceTp().getValue(),
                 destNode, link.getDestination().getDestTp().getValue(),
@@ -639,18 +798,16 @@ public class ConvertTopoORtoTapiAtInit {
                 destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
                 TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
-                link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
-                    ? null
-                    : this.tapiLink.setTapiAdminState(
-                        link.augmentation(Link1.class).getAdministrativeState(), oppLnkAdmState).getName(),
+                lnkAdmState == null || oppLnkAdmState == null
+                        ? null
+                        : this.tapiLink.setTapiAdminState(lnkAdmState, oppLnkAdmState).getName(),
                 //operState,
-                link.augmentation(Link1.class).getOperationalState() == null || oppLnkOpState == null
-                    ? null
-                    : this.tapiLink.setTapiOperationalState(
-                        link.augmentation(Link1.class).getOperationalState(), oppLnkOpState).getName(),
+                lnkOpState == null || oppLnkOpState == null
+                        ? null
+                        : this.tapiLink.setTapiOperationalState(lnkOpState, oppLnkOpState).getName(),
                 Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                 this.tapiTopoUuid);
-            linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
+            linksToNotConvert.add(oppositeLinkId.getValue());
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
     }
