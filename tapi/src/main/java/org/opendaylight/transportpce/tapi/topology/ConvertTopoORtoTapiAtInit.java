@@ -368,13 +368,32 @@ public class ConvertTopoORtoTapiAtInit {
         // UUID
         String nodeIdPhMed = String.join("+", ietfNodeId, TapiConstants.PHTNC_MEDIA);
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
+
         LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", ietfNodeId, nodeUuid.getValue());
-        // Names
-        OpenroadmNodeType ietfNodeType = roadm.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
-                .getNodeType();
-        Name nodeNames =  new NameBuilder().setValueName("roadm node name").setValue(nodeIdPhMed).build();
-        Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(ietfNodeType.getName()).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 roadmOrNode1 =
+                roadm.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
+
+        OpenroadmNodeType ietfNodeType = null;
+        if (roadmOrNode1 != null) {
+            ietfNodeType = roadmOrNode1.getNodeType();
+        }
+
+        if (ietfNodeType == null) {
+            LOG.warn("ROADM node {} has no OpenROADM node type augmentation", ietfNodeId);
+            return Optional.empty();
+        }
+
+        Name nodeNames = new NameBuilder()
+                .setValueName("roadm node name")
+                .setValue(nodeIdPhMed)
+                .build();
+
+        Name nameNodeType = new NameBuilder()
+                .setValueName("Node Type")
+                .setValue(ietfNodeType.getName())
+                .build();
+
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
