@@ -153,11 +153,12 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                 switch (tpType) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
-                    case SRGRXPP:
-                    case SRGTXPP:
-                    case SRGTXRXPP:
+                    case SRGRXPP,
+                         SRGTXPP,
+                         SRGTXRXPP -> {
+
                         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1
-                                tp11 = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
+                            tp11 = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
                         if (tp11 != null) {
 
@@ -196,10 +197,11 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                                                 depth + 1));
                             }
                         }
-                        break;
-                    case DEGREERXTTP:
-                    case DEGREETXTTP:
-                    case DEGREETXRXTTP:
+                    }
+                    case DEGREERXTTP,
+                         DEGREETXTTP,
+                         DEGREETXRXTTP -> {
+
                         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1
                                 usedTp = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
@@ -210,9 +212,9 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                             usedFreqMap = degRanges.occupied();
                             availableFreqMap = degRanges.available();
                         }
-                        break;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
 
                 LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : calling add Photonic NEP spec for Roadm", depth);
