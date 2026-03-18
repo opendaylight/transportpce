@@ -58,6 +58,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
@@ -397,14 +398,22 @@ public class ConvertTopoORtoTapiAtInit {
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
-        LOG.debug("CONVERTTOFULL SRG OTSNode of retrieved OnepMap {} ",
-            oneplist.entrySet().stream().filter(e -> e.getValue()
-                .getSupportedCepLayerProtocolQualifierInstances()
-                    .contains(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                        .setNumberOfCepInstances(Uint64.ONE)
-                        .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                    .build()))
-            .collect(Collectors.toList()).toString());
+
+        if (LOG.isDebugEnabled()) {
+            final SupportedCepLayerProtocolQualifierInstances otsQualifier =
+                    new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setNumberOfCepInstances(Uint64.ONE)
+                            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                            .build();
+
+            LOG.debug("Retrieved OTS NEPs: {}", oneplist.entrySet().stream()
+                    .filter(e -> {
+                        final var qualifiers = e.getValue().getSupportedCepLayerProtocolQualifierInstances();
+                        return qualifiers != null && qualifiers.contains(otsQualifier);
+                    })
+                    .collect(Collectors.toList()));
+        }
+
         //org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
         var roadmNode = createRoadmTapiNode(
                 nodeUuid,
@@ -413,14 +422,16 @@ public class ConvertTopoORtoTapiAtInit {
                 oneplist,
                 "Full",
                 ietfNodeId);
+
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNF)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNF)",
-            TapiConstants.RDM_INFRA,
-            roadmNode.nonnullOwnedNodeEdgePoint().values().size(),
-            roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
-                .filter(nep -> nep.getMappedServiceInterfacePoint() != null)
-                .count());
+                TapiConstants.RDM_INFRA,
+                roadmNode.nonnullOwnedNodeEdgePoint().size(),
+                roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
+                        .filter(nep -> nep.getMappedServiceInterfacePoint() != null)
+                        .count());
+
 
         LOG.info("{}: Full ROADM conversion complete.", ietfNodeId);
         return Optional.of(roadmNode);
