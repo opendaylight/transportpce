@@ -324,18 +324,16 @@ public class ConvertTopoORtoTapiAtInit {
             switch (nodeType.getIntValue()) {
                 case 11:
                     LOG.debug("Supported node {} is a Degree", nodeId);
-                    // Get only external TPs of the degree
-                    List<TerminationPoint> degPortList = node1TpValues.stream()
-                        .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREETXRXTTP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREERXTTP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.DEGREETXTTP.getIntValue())
-                        .collect(Collectors.toList());
-                    // Convert TP List in NEPs and put it in onepl
-                    LOG.debug("Degree port List: {}", degPortList.toString());
+
+                    final List<TerminationPoint> degPortList = node1TpValues
+                            .stream()
+                            .filter(tp -> isDegreeTp(getTpType(tp)))
+                            .collect(Collectors.toList());
+
+                    LOG.debug("Degree port List: {}", degPortList);
+
                     // TODO: deg port could be sip. e.g. MDONS
+                    // Convert TP List in NEPs and put it in onepl
                     oneplist.putAll(
                          populateNepsForRdmNode(false, sietfNodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
                     oneplist.putAll(
@@ -344,18 +342,18 @@ public class ConvertTopoORtoTapiAtInit {
                     break;
                 case 12:
                     LOG.debug("Supported node {} is a SRG", nodeId);
-                    // Get only external TPs of the srg
-                    List<TerminationPoint> srgPortList = node1TpValues.stream()
-                        .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGTXRXPP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGRXPP.getIntValue()
-                            || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                                == OpenroadmTpType.SRGTXPP.getIntValue())
-                        .collect(Collectors.toList());
+
+                    final List<TerminationPoint> srgPortList = node1TpValues
+                            .stream()
+                            .filter(tp -> isSrgTp(getTpType(tp)))
+                            .collect(Collectors.toList());
+
+                    LOG.info("Srg port list: {}", srgPortList
+                            .stream()
+                            .map(tp -> tp.getTpId().getValue())
+                            .collect(Collectors.toSet()));
+
                     // Convert TP List in NEPs and put it in onepl
-                    LOG.info("Srg port List: {}", srgPortList.stream().map(srg ->
-                            srg.getTpId().getValue()).collect(Collectors.toSet()));
                     oneplist.putAll(
                         populateNepsForRdmNode(true, sietfNodeId, srgPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
 
@@ -407,6 +405,41 @@ public class ConvertTopoORtoTapiAtInit {
 
         LOG.info("{}: Full ROADM conversion complete.", ietfNodeId);
         return Optional.of(roadmNode);
+    }
+
+    /**
+     * Extracts the OpenROADM TP type from a termination point.
+     *
+     * @param tp the termination point
+     * @return the TP type, or {@code null} if the augmentation or type is missing
+     */
+    private static OpenroadmTpType getTpType(TerminationPoint tp) {
+        final TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
+        return tp1 != null ? tp1.getTpType() : null;
+    }
+
+    /**
+     * Checks whether the given TP type corresponds to a Degree port.
+     *
+     * @param tpType the termination point type
+     * @return {@code true} if the TP is a Degree TP, {@code false} otherwise
+     */
+    private static boolean isDegreeTp(OpenroadmTpType tpType) {
+        return tpType == OpenroadmTpType.DEGREETXRXTTP
+                || tpType == OpenroadmTpType.DEGREERXTTP
+                || tpType == OpenroadmTpType.DEGREETXTTP;
+    }
+
+    /**
+     * Checks whether the given TP type corresponds to an SRG port.
+     *
+     * @param tpType the termination point type
+     * @return {@code true} if the TP is an SRG TP, {@code false} otherwise
+     */
+    private static boolean isSrgTp(OpenroadmTpType tpType) {
+        return tpType == OpenroadmTpType.SRGTXRXPP
+                || tpType == OpenroadmTpType.SRGRXPP
+                || tpType == OpenroadmTpType.SRGTXPP;
     }
 
     /**
