@@ -108,7 +108,6 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
         for (TerminationPoint tp:tpList) {
             final String tpId = tp.getTpId().getValue();
             //final TerminationPoint1 tp1 = tp.getValue();
-            OpenroadmTpType tpType = tp.augmentation(TerminationPoint1.class).getTpType();
 
             // PHOTONIC MEDIA NEP
             final String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, tpId);
@@ -139,9 +138,21 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     break;
             }
 
-            List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
-
             OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
+            TerminationPoint1 terminationPoint1 = tp.augmentation(TerminationPoint1.class);
+            if (terminationPoint1 == null) {
+                LOG.warn("[depth={}] Missing TerminationPoint1 augmentation for node {} tp {}",
+                        depth,
+                        nodeId,
+                        tpId);
+            }
+
+            OpenroadmTpType tpType = null;
+            if (terminationPoint1 != null) {
+                tpType = terminationPoint1.getTpType();
+            }
+
+            List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
 
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
 
@@ -151,6 +162,13 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                 final TopologyNodeId nodeIdInTopology = TopologyNodeId.fromNodeAndTpId(nodeId, tpId);
 
                 switch (tpType) {
+                    case null -> {
+                        LOG.warn("[depth={}] cannot build used/available frequencies "
+                                        + "(tpType is null for node {} tp {})",
+                                depth,
+                                nodeId,
+                                tpId);
+                    }
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
                     case SRGRXPP,
@@ -231,9 +249,6 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     .setValue(nepNameValue)
                     .build();
 
-            AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
-            State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
-
             onepBd
                     .setUuid(new Uuid(nameUuid(nodeId, nepPhotonicSublayer, tpId)))
                     .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
@@ -241,9 +256,18 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
                     .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
                     .setDirection(Direction.BIDIRECTIONAL)
                     .setLinkPortRole(PortRole.SYMMETRIC)
-                    .setAdministrativeState(tapiLink.setTapiAdminState(admin.getName()))
-                    .setOperationalState(tapiLink.setTapiOperationalState(oper.getName()))
                     .setLifecycleState(LifecycleState.INSTALLED);
+
+            if (terminationPoint1 != null) {
+                AdminStates admin = terminationPoint1.getAdministrativeState();
+                if (admin != null) {
+                    onepBd.setAdministrativeState(tapiLink.setTapiAdminState(admin.getName()));
+                }
+                State oper = terminationPoint1.getOperationalState();
+                if (oper != null) {
+                    onepBd.setOperationalState(tapiLink.setTapiOperationalState(oper.getName()));
+                }
+            }
 
             //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
             //Identify that we have an SRG through withSip set to true only for SRG
