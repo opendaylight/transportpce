@@ -124,16 +124,32 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
+
             Link1 lnk1 = link.augmentation(Link1.class);
+            if (lnk1 == null) {
+                LOG.warn("Link {} does not have OpenROADM link augmentation", link.getLinkId().getValue());
+                continue;
+            }
+
             LinkId lnk1OppLnk = lnk1.getOppositeLink();
+            if (lnk1OppLnk == null) {
+                LOG.warn("Link {} does not have an opposite link", link.getLinkId().getValue());
+                continue;
+            }
+
             var oppositeLink = rdmTordmLinkList.stream()
                 .filter(l -> l.getLinkId().equals(lnk1OppLnk))
                 .findAny().orElse(null);
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
+                final Link1 oppositeLnk1 = oppositeLink.augmentation(Link1.class);
+                if (oppositeLnk1 == null) {
+                    LOG.warn("Opposite link {} does not have OpenROADM link augmentation", lnk1OppLnk.getValue());
+                } else {
+                    oppLnkAdmState = oppositeLnk1.getAdministrativeState();
+                    oppLnkOpState = oppositeLnk1.getOperationalState();
+                }
             }
             Source linkSrc = link.getSource();
             String linkSrcNodeValue = linkSrc.getSourceNode().getValue();
