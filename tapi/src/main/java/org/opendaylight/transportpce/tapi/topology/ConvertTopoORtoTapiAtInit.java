@@ -33,6 +33,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.Destination;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.Source;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -121,8 +124,8 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
-            var lnk1 = link.augmentation(Link1.class);
-            var lnk1OppLnk = lnk1.getOppositeLink();
+            Link1 lnk1 = link.augmentation(Link1.class);
+            LinkId lnk1OppLnk = lnk1.getOppositeLink();
             var oppositeLink = rdmTordmLinkList.stream()
                 .filter(l -> l.getLinkId().equals(lnk1OppLnk))
                 .findAny().orElse(null);
@@ -132,12 +135,12 @@ public class ConvertTopoORtoTapiAtInit {
                 oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
                 oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
             }
-            var linkSrc = link.getSource();
+            Source linkSrc = link.getSource();
             String linkSrcNodeValue = linkSrc.getSourceNode().getValue();
-            var linkDst = link.getDestination();
+            Destination linkDst = link.getDestination();
             String linkDstNodeValue = linkDst.getDestNode().getValue();
-            var lnkAdmState = lnk1.getAdministrativeState();
-            var lnkOpState = lnk1.getOperationalState();
+            AdminStates lnkAdmState = lnk1.getAdministrativeState();
+            State lnkOpState = lnk1.getOperationalState();
             Link tapLink = this.tapiLink.createTapiLink(
                 String.join("-", linkSrcNodeValue.split("-")[0], linkSrcNodeValue.split("-")[1]),
                 linkSrc.getSourceTp().getValue(),
