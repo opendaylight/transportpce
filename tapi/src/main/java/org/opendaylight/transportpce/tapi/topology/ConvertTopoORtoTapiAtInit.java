@@ -202,15 +202,12 @@ public class ConvertTopoORtoTapiAtInit {
 
         for (Map.Entry<Map<String, String>, ConnectionEndPoint> cepEntry : cepMap.entrySet()) {
             String nepNodeId = cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getValue();
-            LOG.debug("CONVERTTOFULL165, Node UUID is {}", nepNodeId);
-            LOG.debug("CONVERTTOFULL168, TapiNode Keys are {}", tapiNodes
-                .entrySet().stream()
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList()));
-            LOG.debug("CONVERTTOFULL172, TapiNode Keys are {}", tapiNodes
-                .entrySet().stream()
-                .map(nep -> nep.getValue().getName().toString())
-                .collect(Collectors.toList()));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Resolving node UUID {} among keys {}", nepNodeId, tapiNodes.keySet());
+                LOG.debug("Available TAPI node names: {}", tapiNodes.values().stream()
+                        .map(node -> String.valueOf(node.getName()))
+                        .collect(Collectors.toList()));
+            }
             boolean nodeExists = tapiNodes.keySet().stream()
                     .anyMatch(key -> key.getUuid().toString().equals(nepNodeId));
             if (!nodeExists) {
