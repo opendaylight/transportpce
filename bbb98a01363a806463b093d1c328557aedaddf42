@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1773827761 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1773827761-3BBE4428B1FD72A1B22E57BF1F376E9E285A52D5\n\n0000000000000000000000000000000000000000 dfd4d8853c8b59bcef570ecb903824aee331a1a4 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmm6drEACgkQX735uTFP\nrXFdQw/9EDW94iEtvxLrsZInNLr6PalEuznYQLq8KJqkAhLAnGm/+QQh8fg3c8oj\nkCLwwJ9Rug/vhUvLAjzccHztCX1fZg7xunCaajH283ck3Ef/JdbCu9tVI3EiRXZV\nOVK5mkWCymczsmsa2DlSJXmvl6cQUoDan7LnCAZy8CmKYvcnkrl1Jm+cGqyGOIFV\nOeOBIlruDYH+MQIt7+5YXuQbAesDdZd2mvzqeNURb+HA8l/l32We208TfCQmbdXg\nHfzN2MKR71EckfdYpCWtefWHxaRHVhx2a02t6eiae6NHfGW+69Onxj1/pxUQTrCj\n/JxrGytpNVqrXtYcrYBc4g61NeJWUFVD0LBNGX5AON4OSrULHT3M1Gob2XnKXu1G\n6r9duv8PVqy1oe6oXnt33Wx8g9Oi7F7wzxqn0i1pASCOUigRpJulS4SSi1SNeeMB\n1DkrVEKxaiTm/roC/0YqK5+bRn+1r+m0CozCdSgE788jlKX2OSKd8GtOKXEiLqrh\nFAzWIhOBJTkoQqD5cTZXfr3K8X3WaywQEk+w4whygMaQ27iVB9dSm1BqawD0RFL1\nNqyif9H1NgayA7Wcva6YYksteqBVXX64ZRUPu3pDIywL1MC3XbnH0cwkWXTBvx5m\nf11i8k1YyoqIPOmj/gLRB8tJzbzcRuP1oyBS8SRrW2r2H5FCko0\u003d\n\u003dOkpp\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2cd29c0_b11aea24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 67
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-03-18T14:36:37Z",
+      "side": 1,
+      "message": "If I am correct, did not change that much (except from the relation-chain bellow changes) from Patchset 50 on which I made a review. LGTM",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
