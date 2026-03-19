@@ -67,6 +67,23 @@
       "message": "stage-release",
       "revId": "33d0cc2080856b567b2ebcf546f582f07ac88681",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b49ef7a9_801f95ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2026-03-19T09:56:39Z",
+      "side": 1,
+      "message": "I\u0027m confused about the title as there is no Vanadium-SR1 release yet. Did you mean SR1 instead of SR2?",
+      "revId": "33d0cc2080856b567b2ebcf546f582f07ac88681",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ],
   "submitRequirementResults": [
