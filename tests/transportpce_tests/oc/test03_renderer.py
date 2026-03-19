@@ -34,7 +34,7 @@ class TestTransportPCERenderer(unittest.TestCase):
     def setUpClass(cls):
         cls.PATH_CREATE_CLIENT = None
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('oc-mpdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -62,7 +62,7 @@ class TestTransportPCERenderer(unittest.TestCase):
 
     def test_03_mpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-OC",
-                                           ('oc-mpdr', self.NODE_VERSION))
+                                           ('oc-mpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
