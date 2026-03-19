@@ -54,6 +54,10 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
       - name: Clear votes
         # yamllint disable-line rule:line-length
         uses: lfit/gerrit-review-action@9627b9a144f2a2cad70707ddfae87c87dce60729 # v0.8
