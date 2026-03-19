@@ -29,7 +29,7 @@ class TestTransportPCETopology(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('oc-mpdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
