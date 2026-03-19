@@ -33,17 +33,17 @@ class TestTransportPCERenderer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.PATH_CREATE_CLIENT = None
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
+#         cls.processes = test_utils.start_tpce()
+#         cls.processes = test_utils.start_sims([('oc-mpdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         test_utils_oc.del_metadata()
-        for process in cls.processes:
-            test_utils.shutdown_process(process)
-        print("all processes killed")
-        test_utils.copy_karaf_log(cls.__name__)
+#         for process in cls.processes:
+#             test_utils.shutdown_process(process)
+#         print("all processes killed")
+#         test_utils.copy_karaf_log(cls.__name__)
 
     def setUp(self):
         # pylint: disable=consider-using-f-string
@@ -62,7 +62,7 @@ class TestTransportPCERenderer(unittest.TestCase):
 
     def test_03_mpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-OC",
-                                           ('oc-mpdr', self.NODE_VERSION))
+                                           ('oc-mpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
