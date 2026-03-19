@@ -6900,10 +6900,10 @@
       <port>
         <optical-port xmlns="http://openconfig.net/yang/transport-line-common">
           <config>
-            <admin-state>ENABLED</admin-state>
+            <admin-state>DISABLED</admin-state>
           </config>
           <state>
-            <admin-state>ENABLED</admin-state>
+            <admin-state>DISABLED</admin-state>
             <optical-port-type xmlns:oc-opt-types="http://openconfig.net/yang/transport-types">oc-opt-types:TERMINAL_LINE</optical-port-type>
           </state>
         </optical-port>
