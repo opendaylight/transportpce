@@ -17,6 +17,46 @@
       "message": "LGTM. Thanks for the LOG improvements",
       "revId": "0750dd248504c2ef873c5263d45124345254416b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0455f6c6_14c28c19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T10:17:02Z",
+      "side": 1,
+      "message": "We need to go through the logs more but this is a good start!",
+      "revId": "0750dd248504c2ef873c5263d45124345254416b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8dba8db_2e5089b9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T10:17:02Z",
+      "side": 1,
+      "message": "why do we do this?",
+      "range": {
+        "startLine": 306,
+        "startChar": 5,
+        "endLine": 308,
+        "endChar": 9
+      },
+      "revId": "0750dd248504c2ef873c5263d45124345254416b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
