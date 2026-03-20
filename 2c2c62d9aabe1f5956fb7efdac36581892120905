@@ -89,6 +89,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "528b51b6_4e8cd057",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b6b0b56a_46c21d73",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d6aeb0e_2bd570d7",
@@ -137,6 +155,24 @@
       "writtenOn": "2025-07-18T13:40:10Z",
       "side": 1,
       "message": "Done",
+      "parentUuid": "cbd331f8_dd569943",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1194aa_fb71f2b3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Ack",
       "parentUuid": "cbd331f8_dd569943",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"

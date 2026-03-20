@@ -1,4 +1,107 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1773827761 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1773827761-3BBE4428B1FD72A1B22E57BF1F376E9E285A52D5\n\n0000000000000000000000000000000000000000 dfd4d8853c8b59bcef570ecb903824aee331a1a4 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmm6drEACgkQX735uTFP\nrXFdQw/9EDW94iEtvxLrsZInNLr6PalEuznYQLq8KJqkAhLAnGm/+QQh8fg3c8oj\nkCLwwJ9Rug/vhUvLAjzccHztCX1fZg7xunCaajH283ck3Ef/JdbCu9tVI3EiRXZV\nOVK5mkWCymczsmsa2DlSJXmvl6cQUoDan7LnCAZy8CmKYvcnkrl1Jm+cGqyGOIFV\nOeOBIlruDYH+MQIt7+5YXuQbAesDdZd2mvzqeNURb+HA8l/l32We208TfCQmbdXg\nHfzN2MKR71EckfdYpCWtefWHxaRHVhx2a02t6eiae6NHfGW+69Onxj1/pxUQTrCj\n/JxrGytpNVqrXtYcrYBc4g61NeJWUFVD0LBNGX5AON4OSrULHT3M1Gob2XnKXu1G\n6r9duv8PVqy1oe6oXnt33Wx8g9Oi7F7wzxqn0i1pASCOUigRpJulS4SSi1SNeeMB\n1DkrVEKxaiTm/roC/0YqK5+bRn+1r+m0CozCdSgE788jlKX2OSKd8GtOKXEiLqrh\nFAzWIhOBJTkoQqD5cTZXfr3K8X3WaywQEk+w4whygMaQ27iVB9dSm1BqawD0RFL1\nNqyif9H1NgayA7Wcva6YYksteqBVXX64ZRUPu3pDIywL1MC3XbnH0cwkWXTBvx5m\nf11i8k1YyoqIPOmj/gLRB8tJzbzcRuP1oyBS8SRrW2r2H5FCko0\u003d\n\u003dOkpp\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf142976_cc384177",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 75
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Overall good, minor issues.",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4f19416_ca3daf37",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "I dont see the use of this method, if all it does is return the result of another method with the exact same input arguments.\n\nWhy cant the files using this method call the factory directly instead?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3098d146_417c1ec3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "I dont see the use of of this method as well. Why cant other files not call the spectrumCapabilityPacs directly?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "238c4e9a_01d2cf67",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Would there be any gains in making the OwnedEdgePoint1Builder accept a null augment, and if so return the same builder as for the no argument?\n\nLike:\n```\nPublic OwnedNodeEdgepoint1Builder(Augment aug) {\n   this();\n   if(aug !\u003d null) {\n     //do Augment logic here\n   }\n}\n```\n\nOr chatGPT hinted of making a static .of construct:\n```\npublic static MyClass of(String arg) {\n        if (arg \u003d\u003d null) {\n            return new MyClass();\n        }\n        return new MyClass(arg);\n    }\n\nMyClass a \u003d MyClass.of(null);\nMyClass b \u003d MyClass.of(\"value\");\n```",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3805d9a_c2905e0e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopologyUpdateTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Are we checking somewhere that the copy was done correctly, and not just done?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b2a79a8_30f966e1",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImplTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T08:24:27Z",
+      "side": 1,
+      "message": "Maybe needs a better name?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
