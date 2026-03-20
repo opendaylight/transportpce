@@ -17,6 +17,57 @@
       "message": "If I am correct, did not change that much (except from the relation-chain bellow changes) from Patchset 50 on which I made a review. LGTM",
       "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4017deb1_3afca042",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 67
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T09:06:30Z",
+      "side": 1,
+      "message": "Looks goood! Had minor comments.",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60035863_942ed38c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 67
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T09:06:30Z",
+      "side": 1,
+      "message": "Very Minor: Maybe this can fail faster?",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f85dfc_e90f875c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 67
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T09:06:30Z",
+      "side": 1,
+      "message": "Minor: Maybe refactor out the second for into its own method? Readbility.",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
