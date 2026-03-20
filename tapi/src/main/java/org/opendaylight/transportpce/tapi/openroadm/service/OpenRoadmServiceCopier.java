@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.tapi.openroadm.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -100,14 +99,20 @@ public class OpenRoadmServiceCopier {
             String openRoadmServiceName,
             Map<ConnectivityServiceKey, ConnectivityService> connectivityServices) {
 
-        for (Map.Entry<ConnectivityServiceKey, ConnectivityService> entry : connectivityServices.entrySet()) {
-            for (Map.Entry<NameKey, Name> nme : Objects.requireNonNull(entry.getValue().getName()).entrySet()) {
-                if (serviceNameEqualsTapiServiceName(openRoadmServiceName, nme.getValue())) {
+        for (ConnectivityService service : connectivityServices.values()) {
+            Map<NameKey, Name> names = service.getName();
+            if (names == null) {
+                continue;
+            }
+
+            for (Name nme : names.values()) {
+                if (serviceNameEqualsTapiServiceName(openRoadmServiceName, nme)) {
                     LOG.info("Service {} already exists in TAPI", openRoadmServiceName);
                     return true;
                 }
             }
         }
+
         return false;
     }
 
