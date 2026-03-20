@@ -57,6 +57,30 @@
       },
       "revId": "0750dd248504c2ef873c5263d45124345254416b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ec87bc_3acf93a2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-20T14:06:34Z",
+      "side": 1,
+      "message": "I added the guard to avoid unnecessary work when debug logging is disabled. If I remember correctly, newCEP can be fairly large. That said, I’m happy to simplify this if we think the extra check isn’t needed.",
+      "parentUuid": "e8dba8db_2e5089b9",
+      "range": {
+        "startLine": 306,
+        "startChar": 5,
+        "endLine": 308,
+        "endChar": 9
+      },
+      "revId": "0750dd248504c2ef873c5263d45124345254416b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
