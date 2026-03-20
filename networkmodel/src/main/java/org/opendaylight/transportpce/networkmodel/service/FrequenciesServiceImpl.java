@@ -375,16 +375,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     .setTpId(idPair.getTpID())
                     .build();
             topologyChangesMap.put(topologyChanges.key(), topologyChanges);
-            DataObjectIdentifier<TerminationPoint1> networkTerminationPoint1IIDBuilder =
+
+            DataObjectIdentifier<TerminationPoint1> networkTerminationPointID =
                     InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(
                             idPair.getNodeID(),
-                            idPair.getTpID()
-            );
+                            idPair.getTpID());
+
             updateFrequenciesTransaction.put(
                     LogicalDatastoreType.CONFIGURATION,
-                    networkTerminationPoint1IIDBuilder,
-                    networkTerminationPointBuilder.build()
-            );
+                    networkTerminationPointID,
+                    networkTerminationPointBuilder.build());
         }
 
         try {
