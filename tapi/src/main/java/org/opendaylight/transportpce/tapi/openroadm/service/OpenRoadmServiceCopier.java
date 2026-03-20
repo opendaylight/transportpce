@@ -62,6 +62,13 @@ public class OpenRoadmServiceCopier {
     public boolean copyToTapi(String serviceName) {
         LOG.info("Starting to copy OpenROADM service {} to TAPI...", serviceName);
 
+        Map<ConnectivityServiceKey, ConnectivityService> connectivityServices =
+                Optional.ofNullable(tapiContext.getConnectivityServices()).orElse(new HashMap<>());
+
+        if (tapiServiceExists(serviceName, connectivityServices)) {
+            return false;
+        }
+
         TapiLink tapiLink = new TapiLinkImpl(this.networkTransactionService, tapiContext);
 
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
@@ -73,13 +80,6 @@ public class OpenRoadmServiceCopier {
                 this.networkTransactionService,
                 TapiProvider.TAPI_TOPO_UUID,
                 topologyUtils);
-
-        Map<ConnectivityServiceKey, ConnectivityService> connectivityServices =
-                Optional.ofNullable(tapiContext.getConnectivityServices()).orElse(new HashMap<>());
-
-        if (tapiServiceExists(serviceName, connectivityServices)) {
-            return false;
-        }
 
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(
                 topologyUtils,
