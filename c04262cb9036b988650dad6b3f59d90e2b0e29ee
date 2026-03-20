@@ -17,6 +17,46 @@
       "message": "LGTM, Thanks!",
       "revId": "c04262cb9036b988650dad6b3f59d90e2b0e29ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e96e7d_ce824d8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 50
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T10:09:34Z",
+      "side": 1,
+      "message": "One wierd variable and method name, otherwise it looks good!",
+      "revId": "c04262cb9036b988650dad6b3f59d90e2b0e29ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78dacb10_a33630a5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 50
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-20T10:09:34Z",
+      "side": 1,
+      "message": "Major:\nI\u0027m confused here. Is `networkTerminationPoint1IIDBuilder` a builder or a `DataObjectIdentifier\u003cTerminationPoint1\u003e`\n\nMaybe rename the variable and method?",
+      "range": {
+        "startLine": 378,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 14
+      },
+      "revId": "c04262cb9036b988650dad6b3f59d90e2b0e29ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
