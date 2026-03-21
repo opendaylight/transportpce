@@ -287,8 +287,9 @@ public class ConvertTopoORtoTapiAtInit {
 
             var node1 = node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class);
-            if (node.augmentation(Node1.class) == null && node1 == null) {
-                LOG.warn("Abstracted node {} doesnt have type of node or is not disaggregated", nodeId);
+
+            if (node1 == null) {
+                LOG.warn("Abstracted node {} does not have IETF topology augmentation", nodeId);
                 continue;
             }
 
@@ -307,7 +308,10 @@ public class ConvertTopoORtoTapiAtInit {
                 continue;
             }
 
-            var node1TpValues = node1.getTerminationPoint().values();
+            Collection<TerminationPoint> node1TpValues = Optional.ofNullable(node1.getTerminationPoint())
+                    .orElse(Map.of())
+                    .values();
+
             logTerminationsPointIds(node1TpValues);
             String sietfNodeId = Optional.ofNullable(node.getSupportingNode())
                     .orElse(Map.of())
