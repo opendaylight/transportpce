@@ -556,9 +556,15 @@ public class ConvertTopoORtoTapiAtInit {
                     node.getNodeId().getValue());
                 continue;
             }
-            OpenroadmNodeType nodeType = node.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev250110.Node1.class).getNodeType();
-            if (nodeType.getIntValue() != 11) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 node1Augmentation =
+                    node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                            .Node1.class);
+            if (node1Augmentation == null) {
+                continue;
+            }
+
+            OpenroadmNodeType nodeType = node1Augmentation.getNodeType();
+            if (nodeType != OpenroadmNodeType.SRG) {
                 // Only consider ROADMS SRG Nodes
                 continue;
             }
