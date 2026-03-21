@@ -775,6 +775,10 @@ public class ConvertTopoORtoTapiAtInit {
                 link.getDestination().getDestNode().getValue().contains("ROADM")
                     ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
                     : link.getDestination().getDestNode().getValue();
+
+            AdminStates lnkAdmState = link1.getAdministrativeState();
+            State lnkOpState = link1.getOperationalState();
+
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode, link.getSource().getSourceTp().getValue(),
                 destNode, link.getDestination().getDestTp().getValue(),
@@ -783,18 +787,16 @@ public class ConvertTopoORtoTapiAtInit {
                 destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
                 TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
-                link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
-                    ? null
-                    : this.tapiLink.setTapiAdminState(
-                        link.augmentation(Link1.class).getAdministrativeState(), oppLnkAdmState).getName(),
+                lnkAdmState == null || oppLnkAdmState == null
+                        ? null
+                        : this.tapiLink.setTapiAdminState(lnkAdmState, oppLnkAdmState).getName(),
                 //operState,
-                link.augmentation(Link1.class).getOperationalState() == null || oppLnkOpState == null
-                    ? null
-                    : this.tapiLink.setTapiOperationalState(
-                        link.augmentation(Link1.class).getOperationalState(), oppLnkOpState).getName(),
+                lnkOpState == null || oppLnkOpState == null
+                        ? null
+                        : this.tapiLink.setTapiOperationalState(lnkOpState, oppLnkOpState).getName(),
                 Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                 this.tapiTopoUuid);
-            linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
+            linksToNotConvert.add(oppositeLinkId.getValue());
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
     }
