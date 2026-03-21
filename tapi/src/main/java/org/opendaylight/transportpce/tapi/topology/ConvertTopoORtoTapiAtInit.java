@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.tapi.topology;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -240,7 +241,9 @@ public class ConvertTopoORtoTapiAtInit {
                 .entrySet().stream()
                 .filter(theNode -> theNode.getKey().getUuid().toString().equals(nepNodeId))
                 .map(Map.Entry::getValue).findFirst().orElseThrow();
-            var onepMap = node.getOwnedNodeEdgePoint();
+            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>(
+                    Optional.ofNullable(node.getOwnedNodeEdgePoint()).orElse(Collections.emptyMap())
+            );
             OwnedNodeEdgePoint ownedNep = onepMap.entrySet().stream()
                 .filter(onep -> onep.getKey().getUuid().toString()
                     .equals(cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getKey()))
