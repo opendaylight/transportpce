@@ -577,12 +577,7 @@ public class ConvertTopoORtoTapiAtInit {
             LOG.debug("Handling SRG node in Topology abstraction {}", node.getNodeId().toString());
             // Get only external TPs of the srg
             List<TerminationPoint> srgPortList = node1.nonnullTerminationPoint().values().stream()
-                .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGTXRXPP.getIntValue()
-                    || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGRXPP.getIntValue()
-                    || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                        == OpenroadmTpType.SRGTXPP.getIntValue())
+                .filter(tp -> isSrgTp(getTpType(tp)))
                 .collect(Collectors.toList());
             // Convert TP List in NEPs and put it in onepl
             String sietfNodeId = Optional.ofNullable(node.getSupportingNode())
