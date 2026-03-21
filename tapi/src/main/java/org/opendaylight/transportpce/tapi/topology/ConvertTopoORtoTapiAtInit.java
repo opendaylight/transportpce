@@ -291,9 +291,22 @@ public class ConvertTopoORtoTapiAtInit {
                 LOG.warn("Abstracted node {} doesnt have type of node or is not disaggregated", nodeId);
                 continue;
             }
-            OpenroadmNodeType nodeType = node.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
-                .getNodeType();
+
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 orNode1 =
+                    node.augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
+
+            if (orNode1 == null) {
+                LOG.warn("Abstracted node {} does not have OpenROADM node augmentation", nodeId);
+                continue;
+            }
+
+            OpenroadmNodeType nodeType = orNode1.getNodeType();
+            if (nodeType == null) {
+                LOG.warn("Abstracted node {} has null node type", nodeId);
+                continue;
+            }
+
             var node1TpValues = node1.getTerminationPoint().values();
             logTerminationsPointIds(node1TpValues);
             String sietfNodeId = Optional.ofNullable(node.getSupportingNode())
