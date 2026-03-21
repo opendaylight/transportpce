@@ -757,9 +757,16 @@ public class ConvertTopoORtoTapiAtInit {
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
+                Link1 oppositeLink1 = oppositeLink.augmentation(Link1.class);
+                if (oppositeLink1 == null) {
+                    LOG.warn("Opposite link {} does not have OpenROADM link augmentation",
+                            oppositeLink.getLinkId().getValue());
+                } else {
+                    oppLnkAdmState = oppositeLink1.getAdministrativeState();
+                    oppLnkOpState = oppositeLink1.getOperationalState();
+                }
             }
+
             String sourceNode =
                 link.getSource().getSourceNode().getValue().contains("ROADM")
                     ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
