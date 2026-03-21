@@ -544,7 +544,7 @@ public class ConvertTopoORtoTapiAtInit {
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
         for (Node node:nodeList) {
             String nodeId = node.getNodeId().getValue();
-            if (node.getSupportingNode().values().stream()
+            if (node.nonnullSupportingNode().values().stream()
                     .noneMatch(sp -> sp.getNodeRef().getValue().equals(ietfNodeId))) {
                 LOG.debug("Abstracted node {} is not part of {}", nodeId, ietfNodeId);
                 continue;
