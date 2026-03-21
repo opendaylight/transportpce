@@ -653,7 +653,19 @@ public class ConvertTopoORtoTapiAtInit {
                 nodeUuid, ietfNodeId, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
-            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
+            NodeRuleGroup nrg = nrgMapEntry.getValue();
+            if (nrg == null || nrg.getName() == null) {
+                throw new IllegalStateException(
+                        "NodeRuleGroup " + nrgMapEntry.getKey() + " has no name map");
+            }
+
+            Name nrgName = nrg.getName().get(new NameKey("nrg name"));
+            if (nrgName == null || nrgName.getValue() == null) {
+                throw new IllegalStateException(
+                        "NodeRuleGroup " + nrgMapEntry.getKey() + " is missing name 'nrg name'");
+            }
+
+            nrgMap.put(nrgMapEntry.getKey(), nrgName.getValue());
         }
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
             = tapiFactory.createInterRuleGroupForRdmNode(
