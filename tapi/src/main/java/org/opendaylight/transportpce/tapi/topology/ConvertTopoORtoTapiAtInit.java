@@ -571,9 +571,12 @@ public class ConvertTopoORtoTapiAtInit {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
+            if (node1 == null) {
+                continue;
+            }
             LOG.debug("Handling SRG node in Topology abstraction {}", node.getNodeId().toString());
             // Get only external TPs of the srg
-            List<TerminationPoint> srgPortList = node1.getTerminationPoint().values().stream()
+            List<TerminationPoint> srgPortList = node1.nonnullTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
                         == OpenroadmTpType.SRGTXRXPP.getIntValue()
                     || tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
