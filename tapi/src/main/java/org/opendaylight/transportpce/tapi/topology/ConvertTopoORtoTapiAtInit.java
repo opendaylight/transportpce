@@ -734,9 +734,26 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
+
+            Link1 link1 = link.augmentation(Link1.class);
+            if (link1 == null) {
+                LOG.warn("Link {} does not have OpenROADM link augmentation",
+                        link.getLinkId().getValue());
+                continue;
+            }
+
+            LinkId oppositeLinkId = link1.getOppositeLink();
+            if (oppositeLinkId == null) {
+                LOG.warn("Link {} does not have an opposite link",
+                        link.getLinkId().getValue());
+                continue;
+            }
+
             var oppositeLink = xpdrRdmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(link.augmentation(Link1.class).getOppositeLink()))
-                .findAny().orElse(null);
+                    .filter(l -> l.getLinkId().equals(oppositeLinkId))
+                    .findAny()
+                    .orElse(null);
+
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             if (oppositeLink != null) {
