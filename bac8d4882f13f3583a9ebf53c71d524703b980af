@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba8dd36_b85b79fb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:11:29Z",
+      "side": 1,
+      "message": "You\u0027re right, this method isn\u0027t strictly necessary. However, it saved me from having to line wrap line 105 and thus made the code in the method `copyToTAPI(...)` easier to read in the process.\n\ni.e., on line 105 I preferred\n \n```\ncreateMappings(topologyUpdateResult, openRoadmTopo);\n```\n\nover \n\n```\nterminationPointMappingFactory.create(topologyUpdateResult, openRoadmTopo);\n```",
+      "parentUuid": "b4f19416_ca3daf37",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3098d146_417c1ec3",
@@ -49,6 +67,24 @@
       "writtenOn": "2026-03-20T08:24:27Z",
       "side": 1,
       "message": "I dont see the use of of this method as well. Why cant other files not call the spectrumCapabilityPacs directly?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d68ff7d_0bc42090",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:11:29Z",
+      "side": 1,
+      "message": "This method saved me from line wrapping line 106 and made the code in the method `copyToTAPI(...)` easier to read in the process.\n\ni.e., on line 106, I preferred\n\n```\nbuildSpectrumCapabilities(mappings);\n```\n\nover\n\n```\n\rtopologyChangesExtractor.spectrumCapabilityPacs(mappings);\n\r```",
+      "parentUuid": "3098d146_417c1ec3",
       "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -87,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc2e9539_c9bb3992",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopologyUpdateTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:11:29Z",
+      "side": 1,
+      "message": "At the moment we’re only checking that the operation completes successfully.",
+      "parentUuid": "e3805d9a_c2905e0e",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b2a79a8_30f966e1",
@@ -100,6 +154,24 @@
       "writtenOn": "2026-03-20T08:24:27Z",
       "side": 1,
       "message": "Maybe needs a better name?",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0fb360e_53e2c08e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImplTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:11:29Z",
+      "side": 1,
+      "message": "Thanks for spotting this! This experimental method was accidentally left in and doesn’t contain any assertions. In addition, several helper methods related to this “test” aren’t used elsewhere in the class and should be removed as well.\n\nI’ll update the commit to clean this up, even though it means the integration tests will need to run again for the subsequent commits.",
+      "parentUuid": "9b2a79a8_30f966e1",
       "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
