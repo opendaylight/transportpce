@@ -36,6 +36,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d77a03b4_a8234fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 67
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:09:23Z",
+      "side": 1,
+      "message": "Thx Jimmi for the suggestions!",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60035863_942ed38c",
@@ -53,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4bed69_bd60bcb2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 67
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:09:23Z",
+      "side": 1,
+      "message": "Good point! I failed to recognise this check doesn\u0027t actually depend on the lines above it.\n\nI suggest adding this change as a follow-up to avoid having to restart all the integration tests: https://git.opendaylight.org/gerrit/c/transportpce/+/121862",
+      "parentUuid": "60035863_942ed38c",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92f85dfc_e90f875c",
@@ -66,6 +101,24 @@
       "writtenOn": "2026-03-20T09:06:30Z",
       "side": 1,
       "message": "Minor: Maybe refactor out the second for into its own method? Readbility.",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b17ea1e3_15ac839e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 67
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-23T08:09:23Z",
+      "side": 1,
+      "message": "I’m not so sure, to be honest. But I do agree this method is rather busy. How about a middle ground? Since I’m not using any keys, I don’t need to use entrySet, and Objects.requireNonNull doesn’t need to be used inline.\n\n```\nprivate boolean tapiServiceExists(\n        String openRoadmServiceName,\n        Map\u003cConnectivityServiceKey, ConnectivityService\u003e\n                connectivityServices) {\n\n    for (ConnectivityService service\n            : connectivityServices.values()) {\n\n        Map\u003cNameKey, Name\u003e names \u003d service.getName();\n        if (names \u003d\u003d null) {\n            continue;\n        }\n\n        for (Name nme : names.values()) {\n            if (serviceNameEqualsTapiServiceName(\n                    openRoadmServiceName, nme)) {\n\n                LOG.info(\"Service {} already exists in TAPI\",\n                        openRoadmServiceName);\n\n                return true;\n            }\n        }\n    }\n\n    return false;\n}\n```\n\nI suggest adding this change as a follow-up to avoid having to restart all the integration tests: https://git.opendaylight.org/gerrit/c/transportpce/+/121863",
+      "parentUuid": "92f85dfc_e90f875c",
       "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
