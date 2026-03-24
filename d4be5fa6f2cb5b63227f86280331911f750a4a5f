@@ -25,6 +25,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "264935fd_25ce792b",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/openroadm/topology/changes/TapiTopologyChangesExtractorTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-24T21:56:38Z",
+      "side": 1,
+      "message": "Well, yes:\n\n```\n    private OwnedNodeEdgePointName onep(String value, String valueName, ...) {\n        return new OwnedNodeEdgePointName(name(valueName, value), sublayer);\n    }\n```\n\nI’m not sure I fully understand your question. Are you suggesting we should swap how those are passed into onep()? Anyway, I swapped the order of the arguments.",
+      "parentUuid": "297b53b7_ad76770c",
+      "range": {
+        "startLine": 221,
+        "startChar": 41,
+        "endLine": 222,
+        "endChar": 72
+      },
+      "revId": "d4be5fa6f2cb5b63227f86280331911f750a4a5f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dce50e7_c8d4be6e",
@@ -38,6 +62,30 @@
       "writtenOn": "2026-03-24T16:58:15Z",
       "side": 1,
       "message": "Are these tests intentionally empty?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "d4be5fa6f2cb5b63227f86280331911f750a4a5f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc2fb95_a047d628",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/mapping/OwnedNodeEdgePointNameTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-03-24T21:56:38Z",
+      "side": 1,
+      "message": "No, my mistake. I\u0027ll remove them. Thanks!",
+      "parentUuid": "4dce50e7_c8d4be6e",
       "range": {
         "startLine": 32,
         "startChar": 0,
