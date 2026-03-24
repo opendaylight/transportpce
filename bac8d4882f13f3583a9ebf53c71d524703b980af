@@ -54,6 +54,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7264ce_4038d35d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-24T10:34:45Z",
+      "side": 1,
+      "message": "Right I got you.\n\nOften these things tend to point that the design is abit flawed, or maybe the class or variable names are bit too long.\n\nLeave it as is, but I think we should try to avoid making methods just to avoid linewraps. Or what do you think?",
+      "parentUuid": "2ba8dd36_b85b79fb",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3098d146_417c1ec3",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "This method saved me from line wrapping line 106 and made the code in the method `copyToTAPI(...)` easier to read in the process.\n\ni.e., on line 106, I preferred\n\n```\nbuildSpectrumCapabilities(mappings);\n```\n\nover\n\n```\n\rtopologyChangesExtractor.spectrumCapabilityPacs(mappings);\n\r```",
       "parentUuid": "3098d146_417c1ec3",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d04d53_bf702931",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/OpenRoadmTopologyUpdate.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-24T10:34:45Z",
+      "side": 1,
+      "message": "Right I got you.\n\nOften these things tend to point that the design is abit flawed, or maybe the class or variable names are bit too long.\n\nLeave it as is, but I think we should try to avoid making methods just to avoid linewraps. Or what do you think?",
+      "parentUuid": "2d68ff7d_0bc42090",
       "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -141,6 +177,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "863cfc42_4daa7497",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopologyUpdateTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-24T10:34:45Z",
+      "side": 1,
+      "message": "Right. Maybe later we should add a test that asserts that we copied it correctly?",
+      "parentUuid": "fc2e9539_c9bb3992",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b2a79a8_30f966e1",
@@ -172,6 +226,24 @@
       "side": 1,
       "message": "Thanks for spotting this! This experimental method was accidentally left in and doesn’t contain any assertions. In addition, several helper methods related to this “test” aren’t used elsewhere in the class and should be removed as well.\n\nI’ll update the commit to clean this up, even though it means the integration tests will need to run again for the subsequent commits.",
       "parentUuid": "9b2a79a8_30f966e1",
+      "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd9ac016_e60e84d6",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImplTest.java",
+        "patchSetId": 75
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-03-24T10:34:45Z",
+      "side": 1,
+      "message": "I do that too! :D",
+      "parentUuid": "e0fb360e_53e2c08e",
       "revId": "bac8d4882f13f3583a9ebf53c71d524703b980af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
