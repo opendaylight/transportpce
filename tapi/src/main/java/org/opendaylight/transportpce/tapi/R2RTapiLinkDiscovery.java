@@ -262,13 +262,8 @@ public class R2RTapiLinkDiscovery {
 
         // Create OMS Tapi Link
         LOG.debug("Tapi R2R Link Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , "
-            + "DestDegId: {}, DestTPId: {}",
-                nodeId.getValue(),
-                srcDegId,
-                srcTpTx,
-                destNodeId.getValue(),
-                destDegId,
-                destTpRx);
+            + "DestDegId: {}, DestTPId: {}", nodeId.getValue(), srcDegId, srcTpTx,
+            destNodeId.getValue(), destDegId, destTpRx);
         Link omsLink = this.tapiLink.createTapiLink(
                 nodeId.getValue() + "-DEG" + srcDegId,
                 srcTpTx,

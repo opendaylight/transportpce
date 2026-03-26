@@ -116,10 +116,17 @@ public class PceTapiLink implements Serializable, PceLink {
      */
     public PceTapiLink(TopologyKey topologyId, Link link, PceNode nodeX, PceNode nodeY) {
         this.linkId = link.getUuid().getValue();
-        this.linkName = link.getName().values().stream().findFirst().orElseThrow();
+        this.linkName = link.getName().values().stream()
+            .filter(name -> name.getValueName().equals("OMS link name")
+                || name.getValueName().equals("tapi-interdomain-link")
+                || name.getValueName().equals("roadm to xpdr link name")
+                || name.getValueName().equals("xpdr to roadm link name"))
+            .toList().stream().findFirst().orElseThrow();
+            //link.getName().values().stream().findFirst().orElseThrow();
         this.topoId = topologyId;
         this.direction = link.getDirection();
         this.nepMap = link.getNodeEdgePoint();
+
         boolean goodCandidate = retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
         LOG.info("PceTapiLInk : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {} for which goodCandidate = {}",
             link.getName(), sourceTpId, destTpId, goodCandidate);
@@ -136,7 +143,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             retrieveEndPointSpecs(nodeX, nodeY);
-            LOG.info("PCETAPILINK line 116 Calling QualifyLineLink");
+            LOG.debug("PCETAPILINK Calling QualifyLineLink");
             qualifyLineLink(link);
             this.valid = isPhyValid();
             this.srlgList = TapiMapUtils.getSRLG(link);
@@ -189,7 +196,7 @@ public class PceTapiLink implements Serializable, PceLink {
      * @param serviceType   The serviceType which is associated to a specific OTN-layer/LayerProtocolQualifier.
      */
     public PceTapiLink(TopologyKey topologyId, Connection conn, PceNode nodeX, PceNode nodeY, String serviceType) {
-        LOG.debug("PceTapiLink:  start ");
+        LOG.debug("PceTapiLink:  creation of PceTapiLink for connection {}", conn.getName());
         //This is the constructor for OTN Link which correspond to connections in T-API
         this.linkId = conn.getUuid().getValue();
         this.linkName = conn.getName().values().stream().findFirst().orElseThrow();
@@ -220,7 +227,7 @@ public class PceTapiLink implements Serializable, PceLink {
             this.valid = false;
             return;
         }
-        LOG.debug("PceTapiLInk : connection, Line221 , isValid = {}", valid);
+        LOG.debug("PceTapiLInk : connection, Line231 , isValid = {}", valid);
         this.cepMap = conn.getConnectionEndPoint();
         LOG.debug("PceTapiLink: serviceType {} line protocolqualifier of link {} is {}",
             serviceType, linkId, lpq);
@@ -528,7 +535,7 @@ public class PceTapiLink implements Serializable, PceLink {
                 return false;
             }
         }
-        LOG.debug("PceTapiLink Line 581 : qualifying link {}, sourceindex = {} sourceTPId = {} destTpId = {}",
+        LOG.debug("PceTapiLink : qualifying link {}, sourceindex = {} sourceTPId = {} destTpId = {}",
             linkName, sourceIndex, sourceTpId, destTpId);
         if (ForwardingDirection.BIDIRECTIONAL.equals(dir)) {
             this.oppositeLink = linkUuid.getValue();
