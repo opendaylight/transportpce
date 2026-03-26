@@ -116,12 +116,18 @@ public class PceTapiLink implements Serializable, PceLink {
      */
     public PceTapiLink(TopologyKey topologyId, Link link, PceNode nodeX, PceNode nodeY) {
         this.linkId = link.getUuid().getValue();
-        this.linkName = link.getName().values().stream().findFirst().orElseThrow();
+        this.linkName = link.getName().values().stream()
+            .filter(name -> name.getValueName().equals("OMS link name")
+                || name.getValueName().equals("tapi-interdomain-link")
+                || name.getValueName().equals("roadm to xpdr link name")
+                || name.getValueName().equals("xpdr to roadm link name"))
+            .toList().stream().findFirst().orElseThrow();
+            //link.getName().values().stream().findFirst().orElseThrow();
         this.topoId = topologyId;
         this.direction = link.getDirection();
         this.nepMap = link.getNodeEdgePoint();
         retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
-        LOG.info("PceTapiLInk Line 107 : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {}",
+        LOG.debug("PceTapiLink : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {}",
             link.getName(), sourceTpId, destTpId);
 
         this.adminStates = link.getAdministrativeState();
@@ -135,7 +141,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             retrieveEndPointSpecs(nodeX, nodeY);
-            LOG.info("PCETAPILINK line 116 Calling QualifyLineLink");
+            LOG.debug("PCETAPILINK Calling QualifyLineLink");
             qualifyLineLink(link);
             this.isValid = isPhyValid();
             this.srlgList = TapiMapUtils.getSRLG(link);
@@ -187,7 +193,7 @@ public class PceTapiLink implements Serializable, PceLink {
      * @param serviceType   The serviceType which is associated to a specific OTN-layer/LayerProtocolQualifier.
      */
     public PceTapiLink(TopologyKey topologyId, Connection conn, PceNode nodeX, PceNode nodeY, String serviceType) {
-        LOG.debug("PceTapiLink:  start ");
+        LOG.debug("PceTapiLink:  creation of PceTapiLink for connection {}", conn.getName());
         //This is the constructor for OTN Link which correspond to connections in T-API
         this.linkId = conn.getUuid().getValue();
         this.linkName = conn.getName().values().stream().findFirst().orElseThrow();
@@ -218,21 +224,21 @@ public class PceTapiLink implements Serializable, PceLink {
             this.isValid = false;
             return;
         }
-        LOG.debug("PceTapiLInk : connection, Line221 , isValid = {}", isValid);
+        LOG.debug("PceTapiLink : connection, isValid = {}", isValid);
         this.cepMap = conn.getConnectionEndPoint();
         LOG.debug("PceTapiLink: serviceType {} line protocolqualifier of link {} is {}",
             serviceType, linkId, lpq);
         LOG.debug("PceTapiLink: calling  retrieveSrcDestNodeIds for PceLink OTN {} ", linkName);
         retrieveSrcDestNodeIds(topoId, conn.getUuid(), conn.getDirection(), nodeX, nodeY, false);
-        LOG.debug("PceTapiLInk : connection, Line227 , isValid = {}", isValid);
+        LOG.debug("PceTapiLInk : connection isValid = {}", isValid);
         if (!isValid) {
             return;
         }
         calculateOtnBandwidth(nodeX, nodeY);
-        LOG.debug("PceTapiLInk : connection, Line232 , isValid = {}, CalculatedOTN BW = {}", isValid,
+        LOG.debug("PceTapiLink : connection isValid = {}, CalculatedOTN BW = {}", isValid,
             this.availableBandwidth);
         this.isValid = isOtnValid(serviceType);
-        LOG.debug("PceTapiLInk : connection, Line234 , isValid = {}", isValid);
+        LOG.debug("PceTapiLink : connection isValid = {}", isValid);
         if (!isValid) {
             return;
         }
@@ -578,7 +584,7 @@ public class PceTapiLink implements Serializable, PceLink {
                 return;
             }
         }
-        LOG.debug("PceTapiLink Line 581 : qualifying link {}, sourceindex = {} sourceTPId = {} destTpId = {}",
+        LOG.debug("PceTapiLink : qualifying link {}, sourceindex = {} sourceTPId = {} destTpId = {}",
             linkName, sourceIndex, sourceTpId, destTpId);
         if (ForwardingDirection.BIDIRECTIONAL.equals(dir)) {
             this.oppositeLink = linkUuid.getValue();

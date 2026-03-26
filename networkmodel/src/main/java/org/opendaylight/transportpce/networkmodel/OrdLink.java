@@ -162,8 +162,8 @@ final class OrdLink {
             rdmDestTp = getTpofNode(destNode, destTp, dataBroker);
             srcNode = "TAPI-SBI-ABS-NODE";
             srcTp = input.getAEnd().getTerminationPoint();
-            oppLinkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
-            linkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
+            linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
+            oppLinkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
             orTpState = rdmDestTp.augmentation(TerminationPoint1.class).getOperationalState();
             addTpsToTapiExtNode(srcTp, input.getAEnd().getRdmNepUuid(), input.getAEnd().getRdmNode(),
                 input.getAEnd().getRdmNodeUuid(), input.getAEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);

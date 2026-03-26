@@ -43,6 +43,9 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
         String sourceTp = input.getDegATp();
         String destNode = input.getRdmZNode();
         String destTp = input.getDegZTp();
+        String sourceNepKey = String.join("+", sourceNode, TapiConstants.PHTNC_MEDIA_OTS, sourceTp);
+        String destNepKey = String.join("+", destNode, TapiConstants.PHTNC_MEDIA_OTS, destTp);
+        String opplinkKey = String.join("to", destNepKey, sourceNepKey);
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
             TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
@@ -50,15 +53,24 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA),
             Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiTopoUuid);
-        if (link == null) {
+            tapiTopoUuid, opplinkKey);
+        String linkKey = String.join("to", sourceNepKey, destNepKey);
+        Link link2 = this.tapiLink.createTapiLink(destNode, destTp, sourceNode, sourceTp,
+            TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+            this.tapiLink.getAdminState(destNode, destTp, sourceNode, sourceTp),
+            this.tapiLink.getOperState(destNode, destTp, sourceNode, sourceTp),
+            Set.of(LayerProtocolName.PHOTONICMEDIA),
+            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+            tapiTopoUuid, linkKey);
+        if (link == null || link2 == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
         InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
-        if (putLinkInTopology(link)) {
+        if (putLinkInTopology(link) && putLinkInTopology(link2)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();

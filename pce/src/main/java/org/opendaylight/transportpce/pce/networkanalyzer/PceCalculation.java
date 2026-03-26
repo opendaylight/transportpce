@@ -291,7 +291,7 @@ public class PceCalculation {
 
     private boolean readMdSal(Subscriber subscriber) {
         DataObjectIdentifier<Network> nwInstanceIdentifier = null;
-        LOG.info("PceCalculation:ReadMdSal Line291, serviceType = {}", serviceType);
+        LOG.info("PceCalculation:ReadMdSal, serviceType = {}", serviceType);
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_400GE:
@@ -928,7 +928,8 @@ public class PceCalculation {
         String linkName = link.getName().values().stream()
             .filter(name -> name.getValueName().equals("OMS link name")
                 || name.getValueName().equals("tapi-interdomain-link")
-                || name.getValueName().equals("XPDR-RDM link name"))
+                || name.getValueName().equals("roadm to xpdr link name")
+                || name.getValueName().equals("xpdr to roadm link name"))
             .map(Name::getValue)
             .toList().stream().findFirst().orElseThrow();
         // For interdomain link, the name of the OpenROADM Node is formated as per OpenROADM, so that the check must be
@@ -1655,19 +1656,19 @@ public class PceCalculation {
                     break;
                 case REGENINPUT:
                     oppositeLinkType = OpenroadmLinkType.REGENOUTPUT;
-                    valueName = "XPDR-RDM link name";
+                    valueName = "roadm to xpdr link name";
                     break;
                 case XPONDERINPUT:
                     oppositeLinkType = OpenroadmLinkType.XPONDEROUTPUT;
-                    valueName = "XPDR-RDM link name";
+                    valueName = "roadm to xpdr link name";
                     break;
                 case REGENOUTPUT:
                     oppositeLinkType = OpenroadmLinkType.REGENINPUT;
-                    valueName = "XPDR-RDM link name";
+                    valueName = "xpdr to roadm link name";
                     break;
                 case XPONDEROUTPUT:
                     oppositeLinkType = OpenroadmLinkType.XPONDERINPUT;
-                    valueName = "XPDR-RDM link name";
+                    valueName = "xpdr to roadm link name";
                     break;
                 case ADDLINK:
                     oppositeLinkType = OpenroadmLinkType.DROPLINK;
@@ -1779,7 +1780,7 @@ public class PceCalculation {
                 LOG.debug("validateLink: DROP-LINK saved  {}", pceTapiLink);
                 break;
             case XPONDERINPUT:
-                LOG.info("PceCalculationLine1695, handling XPDRinputlink {}, with sourceTP {} and destTp {}",
+                LOG.debug("PceCalculation, handling XPDRinputlink {}, with sourceTP {} and destTp {}",
                     pceTapiLink.getLinkName(), pceTapiLink.getSourceTP(), pceTapiLink.getDestTP());
                 if (!dest.checkTP(pceTapiLink.getDestTP())) {
                     if (!source.checkTP(pceTapiLink.getSourceTP())) {

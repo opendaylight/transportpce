@@ -310,7 +310,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 .collect(Collectors.toList()),
                 openroadmNet);
         assertEquals(2, tapiFullFactory.getTapiNodes().size(), "Node list size should be 2");
-        assertEquals(1, tapiFullFactory.getTapiLinks().size(), "Link list size should be 1");
+        assertEquals(2, tapiFullFactory.getTapiLinks().size(), "Link list size should be 2");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
             tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());
         int myInt = -1;
@@ -372,8 +372,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 .collect(Collectors.toList()));
         assertEquals(2, tapiFullFactory.getTapiNodes().size(),
             "Node list size should be 2 (XPDR, DSR-ODU merged; ROADM)");
-        assertEquals(1, tapiFullFactory.getTapiLinks().size(),
-            "Link list size should be 1 : no more transitional link");
+        assertEquals(2, tapiFullFactory.getTapiLinks().size(),
+            "Link list size should be 2 : no more transitional link, but moved to unidirectional links");
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeMap =
                 tapiFactory.getTapiNodes();
@@ -392,7 +392,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
         String spdrSA1tpseed = spdrSA1seed + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1";
         String roadmA1tpseed = roadmA1seed + "_OTS+SRG1-PP2-TXRX";
-        String linkseed = spdrSA1tpseed + "to" + roadmA1tpseed;
+        String linkseed = roadmA1tpseed + "to" + spdrSA1tpseed;
         Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("{} UUID is {}",roadmA1seed, node2Uuid);
         checkXpdrRdmLink(
@@ -1047,7 +1047,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     private void checkXpdrRdmLink(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link,
             Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid, Uuid linkUuid, String linkName) {
-        assertEquals(linkName, link.getName().get(new NameKey("XPDR-RDM link name")).getValue(),
+        assertEquals(linkName, link.getName().get(new NameKey("roadm to xpdr link name")).getValue(),
             "bad name for the link");
         linkNepsCheck(link, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid);
     }
@@ -1060,8 +1060,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             LayerProtocolName.PHOTONICMEDIA.getName(),
             link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
             "oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA");
-        assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection(),
-            "otn tapi link should be BIDIRECTIONAL");
+        assertEquals(ForwardingDirection.UNIDIRECTIONAL, link.getDirection(),
+            "oms tapi link should be UNIDIRECTIONAL");
         var nodeEdgePointList = link.nonnullNodeEdgePoint().values().stream().collect(Collectors.toList());
         assertEquals(2 , nodeEdgePointList.size(), "oms link should be between 2 neps");
         var nep0 = nodeEdgePointList.get(0);
