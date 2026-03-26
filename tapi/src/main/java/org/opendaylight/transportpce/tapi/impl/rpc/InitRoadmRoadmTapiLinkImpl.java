@@ -50,7 +50,6 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
         String sourceTp = input.getDegATp();
         String destNode = input.getRdmZNode();
         String destTp = input.getDegZTp();
-
         // TODO: Use topology/port-mapping data to resolve DEG/topology node IDs instead of parsing strings.
         // Current approach depends on TP naming convention ("DEGx-...") and is fragile.
         String sourceTopologyNode = sourceNode + "-" + sourceTp.split("-")[0];
@@ -80,23 +79,25 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
                     .withError(ErrorType.RPC, "Failed to read topology from datastore; cannot create TAPI link")
                     .buildFuture();
         }
-
-        Link link = this.tapiLink.createTapiLink(
-                sourceNode,
-                sourceTopologyNode,
-                destNode,
-                destTopologyNode,
-                network,
-                tapiTopoUuid,
-                new OpenRoadmLinkResolver());
-        if (link == null) {
+        // Following is implementation proposed by SmartOptics (currently dis-activated)
+//        Link link = this.tapiLink.createTapiLink(sourceNode, sourceTopologyNode, destNode, destTopologyNode,
+//                network, tapiTopoUuid, new OpenRoadmLinkResolver());
+//        Link link2 = this.tapiLink.createTapiLink(destNode, destTopologyNode, sourceNode, sourceTopologyNode,
+//            network, tapiTopoUuid, new OpenRoadmLinkResolver());
+        // Following is regular implementation before modification by SmartOptics (currently activated)
+        // As implemented in Switching to UNIDIR Link (Change 121993)
+        Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destTopologyNode, destTp,
+            network, tapiTopoUuid, new OpenRoadmLinkResolver());
+        Link link2 = this.tapiLink.createTapiLink(destTopologyNode, destTp, sourceNode, sourceTp,
+            network, tapiTopoUuid, new OpenRoadmLinkResolver());
+        if (link == null || link2 == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
         InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
-        if (putLinkInTopology(link)) {
+        if (putLinkInTopology(link) && putLinkInTopology(link2)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
