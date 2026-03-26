@@ -216,8 +216,8 @@ public class PceTapiLinkTest  extends AbstractTest {
         assertEquals(rdm2rdmLink.getUsedBandwidth(), Long.valueOf(0), "RDM to RDM Link Used bandwidth shall be 0");
         assertEquals(0.0, rdm2rdmLink.getpowerCorrection(),
                 "RDM to RDM Link being by default G.652, Power correction shall be 0.0");
-        assertEquals("984c8390-962d-392f-9a3f-9d5da3d37666", rdm2rdmLink.getOppositeLinkId(),
-                "RDM to RDM Link opposite Link shall be 984c8390-962d-392f-9a3f-9d5da3d37666");
+        assertEquals("3584f282-8da1-3e66-8354-e8833cc71261", rdm2rdmLink.getOppositeLinkId(),
+                "RDM to RDM Link opposite Link shall be 3584f282-8da1-3e66-8354-e8833cc71261");
     }
 
 
@@ -297,8 +297,8 @@ public class PceTapiLinkTest  extends AbstractTest {
         assertNull(rdm2tspLink.getsrlgList(), "No SRLG declared for RDM to RDM )");
         assertEquals(OpenroadmLinkType.XPONDERINPUT, rdm2tspLink.getlinkType(),
                 "RDM to TSP Link link type shall be XPONDERINPUT)");
-        assertEquals("XPDR-RDM link name", rdm2tspLink.getLinkName().getValueName(),
-                "RDM to TSP Link Name (Value-name) shall be XPDR-RDM link name)");
+        assertEquals("roadm to xpdr link name", rdm2tspLink.getLinkName().getValueName(),
+                "RDM to TSP Link Name (Value-name) shall be roadm to xpdr link name)");
         assertEquals(
                 "ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2",
                 rdm2tspLink.getLinkName().getValue(),
@@ -321,8 +321,8 @@ public class PceTapiLinkTest  extends AbstractTest {
                 "RDM to TSP Link Available bandwidth shall be 1600.0");
         assertEquals(0.0, rdm2tspLink.getpowerCorrection(),
                 "RDM to TSP Link being by default G.652, Power correction shall be 0.0");
-        assertEquals("0f58cca7-87ac-368e-a526-49e47227b917", rdm2tspLink.getOppositeLinkId(),
-                "RDM to TSP Link opposite Link shall be 0f58cca7-87ac-368e-a526-49e47227b917");
+        assertEquals("99000caf-8388-3206-8529-c08a88403033", rdm2tspLink.getOppositeLinkId(),
+                "RDM to TSP Link opposite Link shall be 99000caf-8388-3206-8529-c08a88403033");
     }
 
     @Test

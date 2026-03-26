@@ -43,21 +43,32 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
         String destTp = input.getAddDropTp();
         String sourceNode = input.getXpdrNode();
         String sourceTp = input.getNetworkTp();
+        String sourceNepKey = String.join("+", sourceNode, TapiConstants.PHTNC_MEDIA_OTS, sourceTp);
+        String destNepKey = String.join("+", destNode, TapiConstants.PHTNC_MEDIA_OTS, destTp);
+        String opplinkKey = String.join("to", destNepKey, sourceNepKey);
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
-            TapiConstants.OMS_XPDR_RDM_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.OTS_XPDR_RDM_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiTopoUuid);
-        if (link == null) {
+            tapiTopoUuid, opplinkKey);
+        String linkKey = String.join("to", sourceNepKey, destNepKey);
+        Link link2 = this.tapiLink.createTapiLink(destNode, destTp, sourceNode, sourceTp,
+            TapiConstants.OTS_RDM_XPDR_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+            this.tapiLink.getAdminState(destNode, destTp, sourceNode, sourceTp),
+            this.tapiLink.getOperState(destNode, destTp, sourceNode, sourceTp),
+            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+            tapiTopoUuid, linkKey);
+        if (link == null || link2 == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
         InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
-        if (putLinkInTopology(link)) {
+        if (putLinkInTopology(link) && putLinkInTopology(link2)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
