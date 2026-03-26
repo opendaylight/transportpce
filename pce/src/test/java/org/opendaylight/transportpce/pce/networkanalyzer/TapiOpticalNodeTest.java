@@ -632,8 +632,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
         assertEquals(0, spdrAclientDsrNep.size(),
                 "SPDRAX1 shall have 0 Client port eligible since it does not correspond to NodeId");
         spdrAclientDsrNep = new ArrayList<>(tapiONspdrAx2.getClientDsrNep());
-        assertEquals(8, spdrAclientDsrNep.size(),
-                "SPDRAX2 shall have 8 ports equiped (OTS +OTU), and in visibility of the Network port");
+        assertEquals(12, spdrAclientDsrNep.size(),
+                "SPDRAX2 shall have 8 NEPs (4eODU + 4DSR) and 4 CEPs (4eODU), in visibility of the Network port");
         for (BasePceNep clientbpnNep : spdrAclientDsrNep) {
             testTransponderBpn(clientbpnNep, false);
         }
@@ -668,8 +668,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
         assertEquals(1, spdrAnwOTSNep.size(),
                 "SPDRAX2 shall have 1 NW ports and Neps (OTS) since N2 network port is not used");
         List<BasePceNep> spdrAclientDsrNep = new ArrayList<>(tapiONspdrAx2.getClientDsrNep());
-        assertEquals(8, spdrAclientDsrNep.size(),
-                "SPDRAX2 shall have 8 ports equiped (OTS +OTU), and in visibility of the Network port");
+        assertEquals(12, spdrAclientDsrNep.size(),
+                "SPDRAX2 shall have 8 NEPs (4eODU + 4DSR) and 4 CEPs (4eODU), in visibility of the Network port");
         for (BasePceNep clientbpnNep : spdrAclientDsrNep) {
             testTransponderBpn(clientbpnNep, false);
         }
@@ -703,12 +703,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
             + "is considered as valid as it is part of the intermediate path");
         assertFalse(tapiONspdrCx3.isValid());
         List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
-        assertEquals(4, spdrAoduNep.size(), "SPDRAX2 shall have 4 ODU ports and Neps (4 iODU network ports) available");
+        assertEquals(12, spdrAoduNep.size(),
+            "SPDRAX2 shall have 8 NEPs (4eODU + 4iODU) and 4 CEPs (4eODU), in visibility of the NW port available");
         for (BasePceNep bpnNep : spdrAoduNep) {
             testTransponderBpn(bpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
-        assertEquals(4, spdrAotuNep.size(), "SPDRAX2 shall have 4 iOTU port/Nep provisioned");
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOtuCepAndNep());
+        assertEquals(5, spdrAotuNep.size(), "SPDRAX2 shall have 4 iOTU NEP and 1 OTU CEP provisioned");
         for (BasePceNep bpnNep : spdrAotuNep) {
             testTransponderBpn(bpnNep, false);
         }
@@ -748,12 +749,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
                 "SPDRAX2 shall have 0 OTS NW ports and Neps available for an ODU service");
         assertFalse(tapiONspdrCx3.isValid());
         List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
-        assertEquals(4, spdrAoduNep.size(), "SPDRAX2 shall have 4 ODU ports and Neps (4 iODU network ports) available");
+        assertEquals(12, spdrAoduNep.size(),
+            "SPDRAX2 shall have 8 NEPs (4eODU + 4iODU) and 4 CEPs (4eODU), in visibility of the NW port available");
         for (BasePceNep clientbpnNep : spdrAoduNep) {
             testTransponderBpn(clientbpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
-        assertEquals(4, spdrAotuNep.size(), "SPDRAX2 shall have 4 iOTU port/Nep provisioned");
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOtuCepAndNep());
+        assertEquals(5, spdrAotuNep.size(), "SPDRAX2 shall have 4 iOTU NEP and 1 OTU CEP provisioned");
         for (BasePceNep clientbpnNep : spdrAotuNep) {
             testTransponderBpn(clientbpnNep, false);
         }
@@ -860,8 +862,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
         assertEquals(0, spdrAclientDsrNep.size(),
                 "SPDRAX1 shall have 0 Client port eligible since it does not correspond to NodeId");
         spdrAclientDsrNep = new ArrayList<>(tapiONspdrAx2.getClientDsrNep());
-        assertEquals(8, spdrAclientDsrNep.size(),
-                "SPDRAX2 shall have 8 Client port equiped (DSR + eODU), all validated as no a/z portId specified");
+        assertEquals(12, spdrAclientDsrNep.size(),
+                "SPDRAX2 shall have 8 NEP (DSR + eODU) and 4 CEP (eODU) all validated as no a/z portId specified");
         spdrAclientDsrNep = new ArrayList<>(tapiONspdrAx3.getClientDsrNep());
         assertEquals(0, spdrAclientDsrNep.size(),
                 "SPDRAX3 shall have 0 Client port eligible since it does not correspond to NodeId");

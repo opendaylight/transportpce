@@ -200,7 +200,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 "ROADM-C1",
                 "SRG1-PP1-TXRX",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 TapiConstants.XPDR,
                 TapiConstants.PHTNC_MEDIA,
                 TP_QUAL,
@@ -417,7 +417,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP4-TXRX",
                 "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK3",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -469,7 +469,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP1-TXRX",
                 "XPDR-A1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -540,7 +540,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP2-TXRX",
                 "SPDR-SA1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -576,7 +576,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP1-TXRX",
                 "XPDR-C1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -612,7 +612,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP3-TXRX",
                 "SPDR-SA1-XPDR2",
                 "XPDR2-NETWORK2",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -648,7 +648,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP2-TXRX",
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -684,7 +684,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP3-TXRX",
                 "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK2",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -720,7 +720,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP4-TXRX",
                 "SPDR-SA1-XPDR2",
                 "XPDR2-NETWORK3",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -828,7 +828,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 "ROADM-A1",
                 "SRG1-PP2-TXRX",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "XPONDER",
                 "PHOTONIC_MEDIA",
                 "PHOTONIC_MEDIA_OTS",
@@ -1025,7 +1025,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
 
         // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
-        doNothing().when(tapiLink).createCepForLink(any(), any());
+        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -1150,7 +1150,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiContext tapiContext = mock(TapiContext.class);
 
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
-        doNothing().when(tapiLink).createCepForLink(any(), any());
+        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
