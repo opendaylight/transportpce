@@ -38,11 +38,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
@@ -111,59 +108,32 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                         && tpceAugmLink1.getLinkClass().equals(LinkClassEnum.InterDomain)) {
                     LOG.info("{} post InterdomainLink {} in TAPI topology Datastores",
                         addInterdomainLinkToTapiTopologies(link) ? "Successfully" : "Did not succeed to",
-                            link.getLinkId());
+                        link.getLinkId());
                     continue;
                 }
+
 
                 if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
                         || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)
                         || link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))) {
+
                     // No creation of link for ADD/DROP/EXPRESS links
                     LOG.debug("TapiORLinkListener Line 82 Not triggering creation of link for type = {}, RtoR = {}",
                             link1.getLinkType().getName(), link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM));
                     continue;
                 }
 
-                if (link1.getOppositeLink() != null && !oppositeLinkExists(link1.getOppositeLink())) {
-                    LOG.debug("Opposite link {} doesn't exist. Not creating TAPI link", link1.getOppositeLink());
-                    return;
-                }
-                LOG.info("Opposite link {} already in datastore. Creating TAPI bidirectional link.",
-                        link1.getOppositeLink().getValue());
                 org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1 link11 = link
                         .augmentation(
                                 org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1.class);
                 if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
                         && link11.getOMSAttributes() != null) {
-                    LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());
+                    LOG.debug("TapiORLinkListener line 135 for link {} found an OMS attributes ", link.getLinkId());
                 }
-                String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
                 String srcTp = link.getSource().getSourceTp().getValue();
-                String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
                 String destTp = link.getDestination().getDestTp().getValue();
                 //Configuring link type to default OMS_XPDR-RDM
 
-                if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
-                    // For ROADM to ROADM link, only capture change on existing links to track change in OMS
-                    // Avoid creating 2 unidirectional links since these links are bidirectional in TAPI :
-                    // Links are created at initialization through a process that guarantees the creation of a unique
-                    // link. Thus check that the link already exist in Datastore to upgrade it rather than creating an
-                    // additional unidirectional link
-                    if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp, getQual(srcNode), getQual(destNode),
-                            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS))) {
-                        continue;
-                    }
-                    LOG.warn("Now triggering creation of link for type = {} to account for OMS change",
-                        link1.getLinkType().getName());
-                }
-
-                // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
-                // through rpcs and do not contain characteristics subject to potential updates
-                if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                        || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-                        && change.getRootNode().dataBefore() != null) {
-                    continue;
-                }
                 String sourceTopologyNode = link.getSource().getSourceNode().getValue();
                 String destTopologyNode = link.getDestination().getDestNode().getValue();
 
@@ -181,6 +151,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
 
                 putTapiLinkInTopology(tapiLink1);
             }
+
         }
     }
 
@@ -203,36 +174,12 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             names = Set.of("<unnamed>");
         }
 
-        LOG.info("TAPI link {} created.", String.join(", ", names));
+        LOG.info("TAPI link {} created with operationalSate = {}", String.join(", ", names),
+            tapiLink1.getOperationalState());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Link: {}", tapiLink1);
         }
-    }
-
-    private boolean linkExistInTopology(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId,
-            String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual) {
-        String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
-        String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
-        String linkKey = String.join("to", sourceNepKey, destNepKey);
-        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString());
-        DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
-                linkIID = DataObjectIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link.class,
-                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey(linkUuid))
-            .build();
-        try {
-            Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> optLink =
-                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, linkIID).get();
-            if (optLink.isEmpty()) {
-                return false;
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not read TAPI link in DataStore checking that rdm2rdm link is present", e);
-        }
-        return true;
     }
 
     private boolean addInterdomainLinkToTapiTopologies(Link link) {
@@ -289,6 +236,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             srcNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", srcNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
                 .getBytes(StandardCharsets.UTF_8)).toString());
+            // Source TopoUuid depends on the type of translation used for OR Topo to tapi (ML vs Full ML)
             srcTopoUuid = this.tapiTopoUuid;
             dstTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             dstTpUuid = new Uuid(tapiTp.getTpUuid());
@@ -300,6 +248,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             dstNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", dstNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
                 .getBytes(StandardCharsets.UTF_8)).toString());
+            // Dest TopoUuid depends on the type of translation used for OR Topo to tapi (ML vs Full ML)
             dstTopoUuid = this.tapiTopoUuid;
             srcTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             srcTpUuid = new Uuid(tapiTp.getTpUuid());
@@ -363,36 +312,4 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         return true;
     }
 
-    private String getQual(String node) {
-        return node.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR;
-    }
-
-    private boolean oppositeLinkExists(LinkId oppositeLink) {
-        try {
-            if (this.networkTransactionService
-                    .read(
-                        LogicalDatastoreType.CONFIGURATION,
-                        DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-                            .augmentation(Network1.class)
-                            .child(Link.class, new LinkKey(oppositeLink))
-                            .build())
-                    .get()
-                    .isEmpty()) {
-                LOG.warn("Opposite link not found in datastore {}. May correspond to an intermediate step",
-                    oppositeLink.getValue());
-                return false;
-            }
-            return true;
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Failed to read opposite link", e);
-            return false;
-        }
-    }
-
-    private String getRoadmOrXpdr(String node) {
-        return node.contains("ROADM")
-            ? String.join("-", node.split("-")[0], node.split("-")[1])
-            : node;
-    }
 }
