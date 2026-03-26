@@ -1198,7 +1198,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
 
     private void checkOtnLink(
             Link link, Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid, Uuid linkUuid, String linkName) {
-        assertEquals(linkName, link.getName().get(new NameKey("otn link name")).getValue(), "bad name for the link");
+        assertEquals(linkName, link.getName().get(new NameKey("OTN link name")).getValue(), "bad name for the link");
         assertEquals(linkUuid, link.getUuid(), "bad uuid for link");
         assertEquals(CAPACITYUNITGBPS.VALUE, link.getAvailableCapacity().getTotalSize().getUnit(),
             "Available capacity unit should be MBPS");

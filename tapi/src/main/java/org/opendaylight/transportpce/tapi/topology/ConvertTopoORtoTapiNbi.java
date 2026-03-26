@@ -152,7 +152,7 @@ public class ConvertTopoORtoTapiNbi {
                         otnlinkAug.getOperationalState(), oppLnkOpState).getName(),
                 Set.of(layerProtocolName),
                 Set.of(layerProtocolName.getName()),
-                this.tapiTopoUuid);
+                this.tapiTopoUuid, oppositeLinkId);
             linksToNotConvert.add(oppositeLinkId);
             tapiLinks.put(tapLink.key(), tapLink);
             LOG.debug("Links converted are as follow  {}", tapiLinks);
