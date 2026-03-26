@@ -413,14 +413,14 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
         for link in link_list:
-            if all(x in link['name'][0]['value'] for x in ['XPDR-C1-XPDR1', 'XPDR1-NETWORK1']):
+            if all(x in link['name'][1]['value'] for x in ['XPDR-C1-XPDR1', 'XPDR1-NETWORK1']):
                 self.assertEqual(link['operational-state'], 'DISABLED')
                 self.assertEqual(link['administrative-state'], 'LOCKED')
                 nb_updated_link += 1
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 1,
+        self.assertEqual(nb_updated_link, 2,
                          "Only one xponder-output/input bidirectional link should have been modified")
         time.sleep(1)
 
@@ -614,14 +614,14 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
         for link in link_list:
-            if all(x in link['name'][0]['value'] for x in ['ROADM-A1', 'SRG1-PP1-TXRX']):
+            if all(x in link['name'][1]['value'] for x in ['ROADM-A1', 'SRG1-PP1-TXRX']):
                 self.assertEqual(link['operational-state'], 'DISABLED')
                 self.assertEqual(link['administrative-state'], 'LOCKED')
                 nb_updated_link += 1
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 1,
+        self.assertEqual(nb_updated_link, 2,
                          "Only one xponder-output/input link should have been modified")
         time.sleep(1)
 
@@ -781,14 +781,14 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
         for link in link_list:
-            if all(x in link['name'][0]['value'] for x in ['ROADM-A1', 'DEG2-TTP-TXRX']):
+            if all(x in link['name'][1]['value'] for x in ['ROADM-A1', 'DEG2-TTP-TXRX']):
                 self.assertEqual(link['operational-state'], 'DISABLED')
                 self.assertEqual(link['administrative-state'], 'LOCKED')
                 nb_updated_link += 1
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 1,
+        self.assertEqual(nb_updated_link, 2,
                          "Only one rdm-rdm link should have been modified")
         time.sleep(1)
 

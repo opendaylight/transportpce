@@ -104,12 +104,13 @@ public class TapiLinkImpl implements TapiLink {
     public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
             String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid tapiTopoUuid) {
+            Set<String> transLayerNameList, Uuid tapiTopoUuid, String oppLinkName) {
 
         LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
+        String oppLinkKey = String.join("to", destNepKey, sourceNepKey);
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
             .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
@@ -127,6 +128,9 @@ public class TapiLinkImpl implements TapiLink {
                 new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NameBuilder linkName = new NameBuilder();
+        NameBuilder opplinkName = new NameBuilder().setValueName(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID)
+            .setValue(new Uuid(UUID.nameUUIDFromBytes(oppLinkKey.getBytes(StandardCharsets.UTF_8)).toString())
+                .getValue());
         // TODO: variables for each type
         switch (linkType) {
             case TapiConstants.OMS_RDM_RDM_LINK:
@@ -150,16 +154,18 @@ public class TapiLinkImpl implements TapiLink {
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
                 linkName
-                    .setValueName("transitional link name")
+                    .setValueName(TapiConstants.VALUE_NAME_TRANSITIONAL_LINK)
                     .setValue(linkKey);
                 break;
-            case TapiConstants.OMS_XPDR_RDM_LINK:
-                LOG.info(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
+            case TapiConstants.OTS_XPDR_RDM_LINK:
                 linkName
-                    .setValueName("XPDR-RDM link name")
+                    .setValueName(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK)
                     .setValue(linkKey);
-                LOG.debug("TAPILINKIMPL.createTapiLink : create TapiLInk {} with UUID {} ", linkKey,
-                    new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()));
+                break;
+            case TapiConstants.OTS_RDM_XPDR_LINK:
+                linkName
+                    .setValueName(TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK)
+                    .setValue(linkKey);
                 break;
             case TapiConstants.OTN_XPDR_XPDR_LINK:
                 LOG.info("OTN Xpdr to roadm link");
@@ -197,7 +203,7 @@ public class TapiLinkImpl implements TapiLink {
         return new LinkBuilder()
             .setUuid(new Uuid(
                 UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setName(Map.of(linkName.build().key(), linkName.build()))
+            .setName(Map.of(linkName.build().key(), linkName.build(), opplinkName.build().key(), opplinkName.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
             // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
@@ -206,7 +212,9 @@ public class TapiLinkImpl implements TapiLink {
             .setLayerProtocolName(layerProtoNameList)
             .setNodeEdgePoint(
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
-            .setDirection(ForwardingDirection.BIDIRECTIONAL)
+            .setDirection(linkType.equals(TapiConstants.OTN_XPDR_XPDR_LINK)
+                ? ForwardingDirection.BIDIRECTIONAL
+                : ForwardingDirection.UNIDIRECTIONAL)
             .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
                 .build())
@@ -238,7 +246,7 @@ public class TapiLinkImpl implements TapiLink {
         NameBuilder linkName = new NameBuilder();
         linkName
             .setValueName(TapiConstants.OTS_INTERDOMAIN_RDM_RDM_LINK)
-            .setValue(tapilinkId);
+            .setValue(orlinkId.getValue());
         NameBuilder linkName2 = new NameBuilder();
         linkName2
             .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
@@ -283,8 +291,12 @@ public class TapiLinkImpl implements TapiLink {
             .setNodeEdgePointUuid(dstTpUuid)
             .build();
 
+        LOG.info("creating linkBuilder for Interdomain Link {} of Uuid {}", orlinkId,
+            new Uuid(UUID.nameUUIDFromBytes(orlinkId.getValue().getBytes(StandardCharsets.UTF_8)).toString()));
+
         return new LinkBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes(tapilinkId.getBytes(StandardCharsets.UTF_8)).toString()))
+            // Set Uuid from Name in OpenROADM topology
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(orlinkId.getValue().getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(linkName.build().key(), linkName.build(), linkName2.build().key(), linkName2.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.

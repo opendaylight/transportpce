@@ -24,7 +24,7 @@ public interface TapiLink {
     Link createTapiLink(String srcNodeid, String srcTpId, String dstNodeId, String dstTpId, String linkType,
             String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid tapiTopoUuid);
+            Set<String> transLayerNameList, Uuid tapiTopoUuid, String oppositeLinkName);
 
     Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
         Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
