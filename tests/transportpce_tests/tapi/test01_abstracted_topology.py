@@ -492,8 +492,8 @@ class TestTransportPCEAbstractedTopology(unittest.TestCase):
         self.assertEqual(5, len(nodes), 'Topology should contain 5 nodes')
         self.assertEqual(5, len(links), 'Topology should contain 5 links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
-                         'Topology should contain 4 ots links')
-        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "otn link name"),
+                         'Topology should contain 8 ots links')
+        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "OTN link name"),
                          'Topology should contain 1 otn link')
         for link in links:
             if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
@@ -532,7 +532,7 @@ class TestTransportPCEAbstractedTopology(unittest.TestCase):
         self.assertEqual(6, len(links), 'Topology should contain 6 links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
                          'Topology should contain 4 ots links')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
+        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "OTN link name"),
                          'Topology should contain 2 otn links')
         for link in links:
             if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
@@ -579,7 +579,7 @@ class TestTransportPCEAbstractedTopology(unittest.TestCase):
                          'Topology should contain 6 otsi nodes')
         self.assertEqual(5, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
                          'Topology should contain 5 ots links')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
+        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "OTN link name"),
                          'Topology should contain 2 otn links')
         self.assertEqual(5, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
                          'Topology should contain 5 dsr nodes')

@@ -294,13 +294,13 @@ class TransportPCEtest(unittest.TestCase):
                 "SRLG-length": 1000,
                 "pmd": 0.01}]}}
         response = test_utils.add_oms_attr_request(
-            "ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
+            "TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
         if response.status_code != requests.codes.created:
             print("OMS attributes add on link ROADMA1-ROADMTA1 failed")
         else:
             print("OMS attributes added on link ROADMA1-ROADMTA1")
         response = test_utils.add_oms_attr_request(
-            "ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX", data)
+            "ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX", data)
         if response.status_code != requests.codes.created:
             print("OMS attributes add on link ROADMA1-ROADMTA1 failed")
         else:
@@ -309,44 +309,44 @@ class TransportPCEtest(unittest.TestCase):
 
     def test_05_get_tapi_link_details(self):
         response = test_utils.get_tapi_topology_link(
-            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "e75aa1cb-210e-35fa-bea8-0bcd72bc929e", "nonconfig")
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "56175211-d7b8-3cbd-9aea-9a349985d144", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-A1-DEG1+DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX')
+                         'ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link1(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "21ae9687-75d9-3421-9562-330f11c15d74", "nonconfig")
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "15c4ffad-b64f-3a25-85a4-7736599ad3f5", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1+DEG1-TTP-TXRX')
+                         'TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link1(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.SBI_TOPO_UUID, "e75aa1cb-210e-35fa-bea8-0bcd72bc929e", "nonconfig")
+            test_utils.SBI_TOPO_UUID, "56175211-d7b8-3cbd-9aea-9a349985d144", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-A1-DEG1+DEG1-TTP-TXRXtoROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX')
+                         'ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link1(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.SBI_TOPO_UUID, "21ae9687-75d9-3421-9562-330f11c15d74", "nonconfig")
+            test_utils.SBI_TOPO_UUID, "15c4ffad-b64f-3a25-85a4-7736599ad3f5", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1+DEG1-TTP-TXRX')
+                         'TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link1(response['link'][0])
 
     def test_06_get_openroadm_topology_link_details(self):
         response = test_utils.get_ietf_network_link_request('openroadm-topology',
-                                                            'ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX', 'config')
+                                                            'ROADM-A1-DEG1-DEG1-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX', 'config')
         time.sleep(2)
         self.assertEqual(response['link']['source']['source-node'], 'ROADM-A1-DEG1')
         self.assertEqual(response['link']['source']['source-tp'], 'DEG1-TTP-TXRX')
@@ -357,7 +357,7 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['link']['org-openroadm-common-network:link-type'], 'ROADM-TO-ROADM')
 
         response = test_utils.get_ietf_network_link_request('openroadm-topology',
-                                                            'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX', 'config')
+                                                            'TAPI-SBI-ABS-NODE-ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX', 'config')
         time.sleep(2)
         self.assertEqual(response['link']['source']['source-node'], 'TAPI-SBI-ABS-NODE')
         self.assertEqual(response['link']['source']['source-tp'], 'ROADM-TA1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX')
@@ -392,60 +392,60 @@ class TransportPCEtest(unittest.TestCase):
                 "SRLG-length": 1000,
                 "pmd": 0.01}]}}
         response = test_utils.add_oms_attr_request(
-            "ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
+            "TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
         if response.status_code != requests.codes.created:
             print("OMS attributes add on link ROADMC1-ROADMTC1 failed")
         else:
             print("OMS attributes added on link ROADMC1-ROADMTC1")
         response = test_utils.add_oms_attr_request(
-            "ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX", data)
+            "ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX", data)
         if response.status_code != requests.codes.created:
             print("OMS attributes add on link ROADMC1-ROADMTC1 failed")
         else:
             print("OMS attributes added on link ROADMC1-ROADMTC1")
         print("TIME TO UPLOAD FULL TOPOLOGY with Interdomain link in TAPI")
-        # time.sleep(50)
+        time.sleep(50)
 
     def test_08_get_tapi_link2_details(self):
         response = test_utils.get_tapi_topology_link(
-            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "792e8bd8-2a22-3507-991c-ad0d71e3cc42", "nonconfig")
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "2fbcfe28-6513-382a-9650-15ed08aaca08", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-C1-DEG2+DEG2-TTP-TXRXtoROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX')
+                         'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link2(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "7f673699-a153-3b3f-aa5e-50fbbbae7752", "nonconfig")
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "0fae8565-71ac-34c5-8279-60438dd03702", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2+DEG2-TTP-TXRX')
+                         'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link2(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.SBI_TOPO_UUID, "792e8bd8-2a22-3507-991c-ad0d71e3cc42", "nonconfig")
+            test_utils.SBI_TOPO_UUID, "2fbcfe28-6513-382a-9650-15ed08aaca08", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-C1-DEG2+DEG2-TTP-TXRXtoROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX')
+                         'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link2(response['link'][0])
 
         response = test_utils.get_tapi_topology_link(
-            test_utils.SBI_TOPO_UUID, "7f673699-a153-3b3f-aa5e-50fbbbae7752", "nonconfig")
+            test_utils.SBI_TOPO_UUID, "0fae8565-71ac-34c5-8279-60438dd03702", "nonconfig")
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link'][0]['name'][0]['value-name'], 'tapi-interdomain-link')
         self.assertEqual(response['link'][0]['name'][0]['value'],
-                         'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2+DEG2-TTP-TXRX')
+                         'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX')
         self.check_node_edge_point_inter_domain_link2(response['link'][0])
 
     def test_09_get_openroadm_topology_link2_details(self):
         response = test_utils.get_ietf_network_link_request('openroadm-topology',
-                                                            'ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX', 'config')
+                                                            'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX', 'config')
         time.sleep(2)
         self.assertEqual(response['link']['source']['source-node'], 'ROADM-C1-DEG2')
         self.assertEqual(response['link']['source']['source-tp'], 'DEG2-TTP-TXRX')
@@ -456,7 +456,7 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['link']['org-openroadm-common-network:link-type'], 'ROADM-TO-ROADM')
 
         response = test_utils.get_ietf_network_link_request('openroadm-topology',
-                                                            'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX', 'config')
+                                                            'TAPI-SBI-ABS-NODE-ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX', 'config')
         time.sleep(2)
         self.assertEqual(response['link']['source']['source-node'], 'TAPI-SBI-ABS-NODE')
         self.assertEqual(response['link']['source']['source-tp'], 'ROADM-TC1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX')
@@ -530,18 +530,13 @@ class TransportPCEtest(unittest.TestCase):
                          ['modulation-format'], 'dp-qpsk')
         node_to_find = [self.s2Auuid, self.s2Cuuid, self.rSRG1Auuid, self.rDEG1Auuid, self.rSRG1Cuuid, self.rDEG2Cuuid,
                         self.rDEG1TAuuid, self.rDEG2TAuuid, self.rDEG1TCuuid, self.rDEG2TCuuid]
-        link_to_find = ['79b23827-48eb-33ed-b110-fbeca32c4125', '0f58cca7-87ac-368e-a526-49e47227b917',
+        link_to_find = ['64207363-986f-3495-94c2-d2a3290ac8a2', '99000caf-8388-3206-8529-c08a88403033',
                         'a8163bcc-4c19-3173-b0f3-2e6212700b4e', '785ef191-05e8-35d2-8a09-07ba8f781364',
-                        'e75aa1cb-210e-35fa-bea8-0bcd72bc929e', '21ae9687-75d9-3421-9562-330f11c15d74',
+                        '56175211-d7b8-3cbd-9aea-9a349985d144', '15c4ffad-b64f-3a25-85a4-7736599ad3f5',
                         '3c74210a-e24c-3810-878f-d10dc26334d8', '319e2eac-1d45-3c37-bc49-8a2ac5995c5a',
-                        '64207363-986f-3495-94c2-d2a3290ac8a2', 'eee8d936-ec09-33ed-a349-6a724a543f13',
                         '8dcc68d4-4bf8-3294-b8f1-1af1fcb3e037', '8db52c4e-f7bd-36e1-9f26-cdcd8d9f95c5',
-                        '792e8bd8-2a22-3507-991c-ad0d71e3cc42', '7f673699-a153-3b3f-aa5e-50fbbbae7752',
-                        # The 2 following lines correspond to the Uuid computed for XponderInput and Xponder output Links to SPDR-SC1-XPDR2
-                        # For a still unexplained reason, depending on whether we start the Controller after a recompilation, or we restart it
-                        # the Uuid differs from one to another. Removed them from the tests
-                        # '32a5955e-8d3e-3c37-a77a-2f6d8a1291e6', '4172e87e-e7a7-31c1-aeff-c3601433345f'
-                        # '416324de-d212-3888-a845-885844d7663e', '89b18d8c-5fa4-3bad-8b62-dc18b6d6b6e1'
+                        '2fbcfe28-6513-382a-9650-15ed08aaca08', '0fae8565-71ac-34c5-8279-60438dd03702',
+                        'eee8d936-ec09-33ed-a349-6a724a543f13', '89b18d8c-5fa4-3bad-8b62-dc18b6d6b6e1',
                         '5b7bb978-e3f8-3fe7-8709-880f7c94c60f', 'b0cc503c-e25e-32c6-8956-1ad8729e6b57']
         tp_to_find = ['d55a3ea0-11e9-3f58-9f57-853ad07474a0', 'a1f8e632-7aa9-3669-96c2-a8c173b53c28',
                       '4085f64d-fc95-3e0b-845b-35ef5779bb25', 'cd2619fb-1ae0-3785-a6fd-2b71f468cb6c',
