@@ -98,13 +98,13 @@ class R2RTapiLinkDiscoveryTest extends AbstractTest {
         assertEquals(AdministrativeState.UNLOCKED, actual.getAdministrativeState());
         assertEquals(OperationalState.ENABLED, actual.getOperationalState());
         assertEquals(LifecycleState.INSTALLED, actual.getLifecycleState());
-        assertEquals(ForwardingDirection.BIDIRECTIONAL, actual.getDirection());
+        assertEquals(ForwardingDirection.UNIDIRECTIONAL, actual.getDirection());
 
         assertEquals(
                 uuidOf("ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"),
                 actual.getUuid().getValue());
 
-        assertEquals(1, actual.getName().size());
+        assertEquals(2, actual.getName().size());
         assertEquals(
                 "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
                 firstNameValue(actual));
@@ -148,6 +148,7 @@ class R2RTapiLinkDiscoveryTest extends AbstractTest {
 
     private static String firstNameValue(Link link) {
         return link.getName().values().stream()
+                .filter(name -> !name.getValueName().equals(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID))
                 .map(Name::getValue)
                 .findFirst()
                 .orElseThrow();

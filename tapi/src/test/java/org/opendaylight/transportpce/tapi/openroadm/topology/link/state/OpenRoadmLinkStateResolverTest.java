@@ -65,8 +65,12 @@ class OpenRoadmLinkStateResolverTest {
                 link,
                 topology(oppositeLink));
 
-        assertEquals(AdministrativeState.LOCKED, result.administrativeState());
-        assertEquals(OperationalState.DISABLED, result.operationalState());
+        // With UNIDIR Implementation, does not consider opposite link anymore
+        // Shall consider revising test name and remove commented line
+//        assertEquals(AdministrativeState.LOCKED, result.administrativeState());
+//        assertEquals(OperationalState.DISABLED, result.operationalState());
+        assertEquals(AdministrativeState.UNLOCKED, result.administrativeState());
+        assertEquals(OperationalState.ENABLED, result.operationalState());
     }
 
     @Test
@@ -80,9 +84,12 @@ class OpenRoadmLinkStateResolverTest {
         LinkStateAttributes result = resolver.resolve(
                 link,
                 topology());
-
-        assertNull(result.administrativeState());
-        assertNull(result.operationalState());
+        // With UNIDIR Implementation, does not consider opposite link anymore
+        // Shall consider revising test name and remove commented line
+//        assertNull(result.administrativeState());
+//        assertNull(result.operationalState());
+        assertEquals(AdministrativeState.UNLOCKED, result.administrativeState());
+        assertEquals(OperationalState.ENABLED, result.operationalState());
     }
 
     @Test
@@ -95,8 +102,12 @@ class OpenRoadmLinkStateResolverTest {
 
         LinkStateAttributes result = resolver.resolve(link, null);
 
-        assertNull(result.administrativeState());
-        assertNull(result.operationalState());
+        // With UNIDIR Implementation, does not consider opposite link anymore, meaning does need Topology
+        // Shall consider revising test name and remove commented line
+//        assertNull(result.administrativeState());
+//        assertNull(result.operationalState());
+        assertEquals(AdministrativeState.UNLOCKED, result.administrativeState());
+        assertEquals(OperationalState.ENABLED, result.operationalState());
     }
 
     @Test
@@ -115,9 +126,12 @@ class OpenRoadmLinkStateResolverTest {
         LinkStateAttributes result = resolver.resolve(
                 link,
                 topology(oppositeLinkWithoutAugmentation));
-
-        assertNull(result.administrativeState());
-        assertNull(result.operationalState());
+        // With UNIDIR Implementation, does not consider opposite link anymore
+        // Shall consider revising test name and remove commented line
+//        assertNull(result.administrativeState());
+//        assertNull(result.operationalState());
+        assertEquals(AdministrativeState.UNLOCKED, result.administrativeState());
+        assertEquals(OperationalState.ENABLED, result.operationalState());
     }
 
     @Test
