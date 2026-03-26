@@ -253,7 +253,7 @@ public final class TopologyUtils {
                                 .filter(OpenroadmLinkType.ROADMTOROADM::equals)
                                 .isPresent())
                         .collect(Collectors.toList());
-                tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
+                tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList, openroadmTopo);
             } else {
                 tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
                 this.tapiSips.putAll(tapiFullFactory.getTapiSips());

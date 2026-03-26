@@ -307,7 +307,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         tapiFullFactory.convertRdmToRdmLinks(
             ortopoLinks.values().stream()
                 .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()),
+                openroadmNet);
         assertEquals(2, tapiFullFactory.getTapiNodes().size(), "Node list size should be 2");
         assertEquals(1, tapiFullFactory.getTapiLinks().size(), "Link list size should be 1");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =

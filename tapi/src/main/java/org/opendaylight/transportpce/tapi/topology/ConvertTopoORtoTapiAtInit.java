@@ -22,6 +22,11 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
@@ -101,6 +106,7 @@ public class ConvertTopoORtoTapiAtInit {
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor =
             DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance();
+    private final LinkTerminationPointsFactory linkTerminationPointsFactory;
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
@@ -115,6 +121,8 @@ public class ConvertTopoORtoTapiAtInit {
         this.tapiSips = new HashMap<>();
         this.srgOtsCepMap = new HashMap<>();
         this.tapiLink = tapiLink;
+        linkTerminationPointsFactory = new OpenRoadmLinkTerminationPointsFactory(
+                new TopologyTerminationPointTypeResolver());
     }
 
     /**
@@ -123,7 +131,8 @@ public class ConvertTopoORtoTapiAtInit {
      */
     public void convertRdmToRdmLinks(
             List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .networks.network.Link> rdmTordmLinkList) {
+                .networks.network.Link> rdmTordmLinkList,
+                Network network) {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} roadm to roadm links", rdmTordmLinkList.size() / 2);
         for (var link : rdmTordmLinkList) {
@@ -141,17 +150,17 @@ public class ConvertTopoORtoTapiAtInit {
                 oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
                 oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
             }
-            var linkSrc = link.getSource();
-            String linkSrcNodeValue = linkSrc.getSourceNode().getValue();
-            var linkDst = link.getDestination();
-            String linkDstNodeValue = linkDst.getDestNode().getValue();
             var lnkAdmState = lnk1.getAdministrativeState();
             var lnkOpState = lnk1.getOperationalState();
+
+            LinkTerminationPoints linkTerminationPoints = linkTerminationPointsFactory.fromLink(link, network);
+            TerminationPointId source = linkTerminationPoints.source();
+            TerminationPointId destination = linkTerminationPoints.destination();
             Link tapLink = this.tapiLink.createTapiLink(
-                String.join("-", linkSrcNodeValue.split("-")[0], linkSrcNodeValue.split("-")[1]),
-                linkSrc.getSourceTp().getValue(),
-                String.join("-", linkDstNodeValue.split("-")[0], linkDstNodeValue.split("-")[1]),
-                linkDst.getDestTp().getValue(),
+                source.supportingNodeId(),
+                source.tpId(),
+                destination.supportingNodeId(),
+                destination.tpId(),
                 TapiConstants.OMS_RDM_RDM_LINK,
                 TapiConstants.PHTNC_MEDIA,
                 TapiConstants.PHTNC_MEDIA,
