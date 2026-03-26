@@ -333,14 +333,20 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
                 pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
-        assertEquals(10, pceONspdrSA2.getTotalListOfNep().size(),
-                "SPDR-SA1 has 9 NEPs (4 iODU + 4 iOTU + 1 OTS) and 1 CEP (iOTU N1) available");
+        assertEquals(18, pceONspdrSA2.getTotalListOfNep().size(),
+                "SPDR-SA1 has 13 NEPs (4 eODU + 4 iODU + 4 iOTU + 1 OTS) and 5 CEP (4 eODU+ 1 iOTU N1) available");
         assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
                 .filter(bpn -> bpn.getName().entrySet().stream()
                         .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
                 .toList()
                 .size(),
                 "SPDR-SA1 has 4 iODU NEPs (Network1/2/3/4)");
+        assertEquals(8, pceONspdrSA2.getTotalListOfNep().stream()
+            .filter(bpn -> bpn.getName().entrySet().stream()
+                    .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+            .toList()
+            .size(),
+            "SPDR-SA1 has 4 eODU NEPs and 4 eODU CEPs");
         assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream()
                 .filter(bpn -> bpn.getName().entrySet().stream()
                         .findFirst().orElseThrow().getValue().getValue().contains("iOTU"))
@@ -405,13 +411,19 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         LOG.info("TEST OTN Line 384 SPDR-SA1 has the following NEPS in list of NEp {} ",
                 pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
-        assertEquals(17, pceONspdrSA2.getTotalListOfNep().size(), "SPDR-SA1 has 17 NEPs prefiltered NEP");
+        assertEquals(25, pceONspdrSA2.getTotalListOfNep().size(), "SPDR-SA1 has 25 NEP");
         assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
                 .filter(bpn -> bpn.getName().entrySet().stream()
                         .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
                 .toList()
                 .size(),
                 "SPDR-SA1 has 4 iODU NEP (Network1/2/3/4)");
+        assertEquals(8, pceONspdrSA2.getTotalListOfNep().stream()
+            .filter(bpn -> bpn.getName().entrySet().stream()
+                    .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+            .toList()
+            .size(),
+            "SPDR-SA1 has 4 eODU NEP + 4eODU Cep has they are activated on NW port activation");
         assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream()
                 .filter(bpn -> bpn.getName().entrySet().stream()
                         .findFirst().orElseThrow().getValue().getValue().contains("iOTU"))
@@ -433,8 +445,8 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         // Check Valid (of Interest) NEP of the current Node
         LOG.info("TEST OTN Line 399 SPDR-SA1 has the following NEPS in list of NEp {} ",
                 pceONspdrSA2.getListOfNep().stream().map(BasePceNep::getName).toList());
-        assertEquals(9, pceONspdrSA2.getListOfNep().size(),
-                "SPDR-SA1 has 8 NEP (4 OTS + 4 iOTU) and 1 NEP (1 iOTU) at OTN level after Nep have been pruned");
+        assertEquals(17, pceONspdrSA2.getListOfNep().size(),
+                "SPDR-SA1 has 12 NEP (4 iODU + 4 eODU + 4 iOTU) and 5 CEP (4 eODU + 1 iOTU) at OTN level ");
     }
 
     @Test

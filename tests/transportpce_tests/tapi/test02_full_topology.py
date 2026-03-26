@@ -304,7 +304,7 @@ class TestTransportPCEFullTopology(unittest.TestCase):
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['output']['topology']['node']), 8, 'There should be 8 TAPI nodes')
-        self.assertEqual(len(response['output']['topology']['link']), 3, 'There should be 3 TAPI links')
+        self.assertEqual(len(response['output']['topology']['link']), 6, 'There should be 6 TAPI links')
         print(response['output']['topology']['node'][0])
         print(response['output']['topology']['node'][1])
         print(response['output']['topology']['node'][2])
