@@ -189,7 +189,7 @@ class TapiLinkImplTest extends AbstractTest {
                 TapiConstants.PHTNC_MEDIA,
                 TP_QUAL,
                 TP_QUAL,
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK,
                 ADMIN_STATE,
                 OPER_STATE,
                 LAYER_PROTOCOLS,
@@ -200,7 +200,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 "ROADM-C1",
                 "SRG1-PP1-TXRX",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 TapiConstants.XPDR,
                 TapiConstants.PHTNC_MEDIA,
                 TP_QUAL,
@@ -343,7 +343,7 @@ class TapiLinkImplTest extends AbstractTest {
                 TapiConstants.XPDR,
                 TapiConstants.ODU,
                 TapiConstants.ODU,
-                "otn link name",
+                TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK,
                 ADMIN_STATE,
                 OPER_STATE,
                 LAYER_PROTOCOLS,
@@ -406,7 +406,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -417,7 +417,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP4-TXRX",
                 "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK3",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -458,7 +458,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -469,7 +469,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP1-TXRX",
                 "XPDR-A1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -529,7 +529,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -540,7 +540,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP2-TXRX",
                 "SPDR-SA1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -565,7 +565,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -576,7 +576,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP1-TXRX",
                 "XPDR-C1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -601,7 +601,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -612,7 +612,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP3-TXRX",
                 "SPDR-SA1-XPDR2",
                 "XPDR2-NETWORK2",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -637,7 +637,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -648,7 +648,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP2-TXRX",
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -673,7 +673,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -684,7 +684,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP3-TXRX",
                 "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK2",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -709,7 +709,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -720,7 +720,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP4-TXRX",
                 "SPDR-SA1-XPDR2",
                 "XPDR2-NETWORK3",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_RDM_XPDR_LINK,
                 "PHOTONIC_MEDIA",
                 "XPONDER",
                 "PHOTONIC_MEDIA_OTS",
@@ -817,7 +817,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "PHOTONIC_MEDIA",
                 "PHOTONIC_MEDIA_OTS",
                 "PHOTONIC_MEDIA_OTS",
-                "XPDR-RDM link name",
+                TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK,
                 "UNLOCKED",
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
@@ -828,7 +828,7 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 "ROADM-A1",
                 "SRG1-PP2-TXRX",
-                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTS_XPDR_RDM_LINK,
                 "XPONDER",
                 "PHOTONIC_MEDIA",
                 "PHOTONIC_MEDIA_OTS",
@@ -905,6 +905,9 @@ class TapiLinkImplTest extends AbstractTest {
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
+        String oppLinkKey = UUID.nameUUIDFromBytes(
+            String.join("to", destNepKey, sourceNepKey).getBytes(StandardCharsets.UTF_8)).toString();
+
 
         NodeEdgePoint sourceNep = buildNodeEdgePoint(srcNodeId, srcNodeQual, sourceNepKey, topologyUuid);
         NodeEdgePoint destNep = buildNodeEdgePoint(dstNodeId, dstNodeQual, destNepKey, topologyUuid);
@@ -913,6 +916,10 @@ class TapiLinkImplTest extends AbstractTest {
                 .setValueName(valueName)
                 .setValue(linkKey)
                 .build();
+        Name oppLinkName = new NameBuilder()
+            .setValueName(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID)
+            .setValue(oppLinkKey)
+            .build();
 
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
                 .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -941,7 +948,7 @@ class TapiLinkImplTest extends AbstractTest {
 
         return new LinkBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
-                .setName(Map.of(linkName.key(), linkName))
+                .setName(Map.of(linkName.key(), linkName, oppLinkName.key(), oppLinkName))
                 .setTransitionedLayerProtocolName(Set.of(
                         TapiConstants.PHTNC_MEDIA_OMS,
                         TapiConstants.PHTNC_MEDIA_OTS))
@@ -949,7 +956,9 @@ class TapiLinkImplTest extends AbstractTest {
                 .setNodeEdgePoint(new HashMap<>(Map.of(
                         sourceNep.key(), sourceNep,
                         destNep.key(), destNep)))
-                .setDirection(ForwardingDirection.BIDIRECTIONAL)
+                .setDirection(valueName.equals(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
+                    ? ForwardingDirection.BIDIRECTIONAL
+                    : ForwardingDirection.UNIDIRECTIONAL)
                 .setAvailableCapacity(new AvailableCapacityBuilder()
                         .setTotalSize(new TotalSizeBuilder()
                                 .setUnit(CAPACITYUNITGBPS.VALUE)
@@ -1025,7 +1034,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
 
         // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
-        doNothing().when(tapiLink).createCepForLink(any(), any());
+        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -1066,7 +1075,7 @@ class TapiLinkImplTest extends AbstractTest {
         assertEquals(AdministrativeState.UNLOCKED, link.getAdministrativeState());
         assertEquals(OperationalState.ENABLED, link.getOperationalState());
         assertEquals(LifecycleState.INSTALLED, link.getLifecycleState());
-        assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection());
+        assertEquals(ForwardingDirection.UNIDIRECTIONAL, link.getDirection());
         assertEquals(Set.of(LayerProtocolName.PHOTONICMEDIA), link.getLayerProtocolName());
 
         // Ignored input parameter transLayerNameList; implementation hardcodes this instead
@@ -1077,14 +1086,18 @@ class TapiLinkImplTest extends AbstractTest {
 
         // Name
         assertNotNull(link.getName());
-        assertEquals(1, link.getName().size());
+        assertEquals(2, link.getName().size());
         assertEquals(
                 TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK,
-                link.getName().values().iterator().next().getValueName()
+                link.getName().values().stream()
+                    .filter(name -> !name.getValueName().equals(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID))
+                    .toList().iterator().next().getValueName()
         );
         assertEquals(
                 "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
-                link.getName().values().iterator().next().getValue()
+                link.getName().values().stream()
+                .filter(name -> !name.getValueName().equals(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID))
+                .toList().iterator().next().getValue()
         );
 
         // UUID
@@ -1150,7 +1163,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiContext tapiContext = mock(TapiContext.class);
 
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
-        doNothing().when(tapiLink).createCepForLink(any(), any());
+        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226

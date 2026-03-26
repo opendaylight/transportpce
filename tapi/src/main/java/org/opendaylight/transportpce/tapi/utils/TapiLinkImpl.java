@@ -186,6 +186,7 @@ public class TapiLinkImpl implements TapiLink {
         String sourceNepKey = String.join("+", srcNodeId, tapiLinkAttributes.sourceTpQualifier(), srcTpId);
         String destNepKey = String.join("+", dstNodeId, tapiLinkAttributes.destinationTpQualifier(), dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
+        String oppLinkKey = String.join("to", destNepKey, sourceNepKey);
 
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
@@ -206,6 +207,9 @@ public class TapiLinkImpl implements TapiLink {
                         new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
                 .build();
         NameBuilder linkName = new NameBuilder();
+        NameBuilder opplinkName = new NameBuilder().setValueName(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID)
+            .setValue(new Uuid(UUID.nameUUIDFromBytes(oppLinkKey.getBytes(StandardCharsets.UTF_8)).toString())
+                .getValue());
         // TODO: variables for each type
 
         switch (tapiLinkAttributes.tapiLinkType()) {
@@ -214,22 +218,28 @@ public class TapiLinkImpl implements TapiLink {
                 linkName
                         .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                         .setValue(linkKey);
-                createCepForLink(link, tapiTopoUuid);
+                createCepForLink(link, tapiTopoUuid, tapiTopoUuid);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
                 linkName
-                        .setValueName("transitional link name")
+                        .setValueName(TapiConstants.VALUE_NAME_TRANSITIONAL_LINK)
                         .setValue(linkKey);
                 break;
-            case TapiConstants.OMS_XPDR_RDM_LINK:
+            case TapiConstants.OTS_XPDR_RDM_LINK:
                 LOG.info(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
                 linkName
-                        .setValueName("XPDR-RDM link name")
+                        .setValueName(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK)
+                        .setValue(linkKey);
+                break;
+            case TapiConstants.OTS_RDM_XPDR_LINK:
+                LOG.info(TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK);
+                linkName
+                        .setValueName(TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK)
                         .setValue(linkKey);
                 break;
             case TapiConstants.OTN_XPDR_XPDR_LINK:
-                LOG.info("OTN Xpdr to roadm link");
+                LOG.info(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK);
                 linkName
                         .setValueName(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
                         .setValue(linkKey);
@@ -265,7 +275,8 @@ public class TapiLinkImpl implements TapiLink {
         return new LinkBuilder()
                 .setUuid(new Uuid(
                         UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
-                .setName(Map.of(linkName.build().key(), linkName.build()))
+                .setName(Map.of(linkName.build().key(), linkName.build(),
+                    opplinkName.build().key(), opplinkName.build()))
                 //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
                 // Additionally, the grouping defining it requires at least 2 elements.
                 // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
@@ -274,7 +285,9 @@ public class TapiLinkImpl implements TapiLink {
                 .setLayerProtocolName(Collections.singleton(tapiLinkAttributes.layerProtocolName()))
                 .setNodeEdgePoint(
                         new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
-                .setDirection(ForwardingDirection.BIDIRECTIONAL)
+                .setDirection(tapiLinkAttributes.tapiLinkType().equals(TapiConstants.OTN_XPDR_XPDR_LINK)
+                        ? ForwardingDirection.BIDIRECTIONAL
+                        : ForwardingDirection.UNIDIRECTIONAL)
                 .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                         new TotalSizeBuilder()
                                 .setUnit(CAPACITYUNITGBPS.VALUE)
@@ -326,6 +339,7 @@ public class TapiLinkImpl implements TapiLink {
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
+        String oppLinkKey = String.join("to", destNepKey, sourceNepKey);
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
             .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
@@ -343,6 +357,9 @@ public class TapiLinkImpl implements TapiLink {
                 new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NameBuilder linkName = new NameBuilder();
+        NameBuilder opplinkName = new NameBuilder().setValueName(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID)
+            .setValue(new Uuid(UUID.nameUUIDFromBytes(oppLinkKey.getBytes(StandardCharsets.UTF_8)).toString())
+                .getValue());
         // TODO: variables for each type
         switch (linkType) {
             case TapiConstants.OMS_RDM_RDM_LINK:
@@ -361,21 +378,23 @@ public class TapiLinkImpl implements TapiLink {
                     LOG.error("unable to create Cep for link {} which was not found in OR Topology", linkiid);
                     break;
                 }
-                createCepForLink(orLinkFromLinkId, tapiTopoUuid);
+                createCepForLink(orLinkFromLinkId, tapiTopoUuid, tapiTopoUuid);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
                 linkName
-                    .setValueName("transitional link name")
+                    .setValueName(TapiConstants.VALUE_NAME_TRANSITIONAL_LINK)
                     .setValue(linkKey);
                 break;
-            case TapiConstants.OMS_XPDR_RDM_LINK:
-                LOG.info(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
+            case TapiConstants.OTS_XPDR_RDM_LINK:
                 linkName
-                    .setValueName("XPDR-RDM link name")
+                    .setValueName(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK)
                     .setValue(linkKey);
-                LOG.debug("TAPILINKIMPL.createTapiLink : create TapiLInk {} with UUID {} ", linkKey,
-                    new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()));
+                break;
+            case TapiConstants.OTS_RDM_XPDR_LINK:
+                linkName
+                    .setValueName(TapiConstants.VALUE_NAME_OTS_RDM_XPDR_LINK)
+                    .setValue(linkKey);
                 break;
             case TapiConstants.OTN_XPDR_XPDR_LINK:
                 LOG.info("OTN Xpdr to roadm link");
@@ -413,7 +432,7 @@ public class TapiLinkImpl implements TapiLink {
         return new LinkBuilder()
             .setUuid(new Uuid(
                 UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setName(Map.of(linkName.build().key(), linkName.build()))
+            .setName(Map.of(linkName.build().key(), linkName.build(), opplinkName.build().key(), opplinkName.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
             // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
@@ -422,7 +441,9 @@ public class TapiLinkImpl implements TapiLink {
             .setLayerProtocolName(layerProtoNameList)
             .setNodeEdgePoint(
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
-            .setDirection(ForwardingDirection.BIDIRECTIONAL)
+            .setDirection(linkType.equals(TapiConstants.OTN_XPDR_XPDR_LINK)
+                ? ForwardingDirection.BIDIRECTIONAL
+                : ForwardingDirection.UNIDIRECTIONAL)
             .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf(7, 100)).build())
                 .build())
@@ -454,7 +475,7 @@ public class TapiLinkImpl implements TapiLink {
         NameBuilder linkName = new NameBuilder();
         linkName
             .setValueName(TapiConstants.OTS_INTERDOMAIN_RDM_RDM_LINK)
-            .setValue(tapilinkId);
+            .setValue(orlinkId.getValue());
         NameBuilder linkName2 = new NameBuilder();
         linkName2
             .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
@@ -464,7 +485,8 @@ public class TapiLinkImpl implements TapiLink {
             LOG.error("unable to create Cep for link {} which was not found in OR Topology", orlinkId);
             return null;
         }
-        createCepForLink(getORLinkFromLinkId(orlinkId), srcTapiTopoUuid);
+
+        createCepForLink(getORLinkFromLinkId(orlinkId), srcTapiTopoUuid, dstTapiTopoUuid);
 
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -499,8 +521,12 @@ public class TapiLinkImpl implements TapiLink {
             .setNodeEdgePointUuid(dstTpUuid)
             .build();
 
+        LOG.info("creating linkBuilder for Interdomain Link {} of Uuid {}", orlinkId,
+            new Uuid(UUID.nameUUIDFromBytes(orlinkId.getValue().getBytes(StandardCharsets.UTF_8)).toString()));
+
         return new LinkBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes(tapilinkId.getBytes(StandardCharsets.UTF_8)).toString()))
+            // Set Uuid from Name in OpenROADM topology
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(orlinkId.getValue().getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(linkName.build().key(), linkName.build(), linkName2.build().key(), linkName2.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
@@ -573,7 +599,7 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     public void createCepForLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-            .topology.rev180226.networks.network.Link link, Uuid topoUuid) {
+            .topology.rev180226.networks.network.Link link, Uuid nodeAtopoUuid, Uuid nodeZtopoUuid) {
         //Retrieve OMS from OR link for both end
         //Build OTS media connection End Point spec
         //Build Cep and put them in DataStore
@@ -689,7 +715,7 @@ public class TapiLinkImpl implements TapiLink {
             link.getLinkId(), otsMCCepSpecZ);
 
 
-        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topoUuid);
+        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(nodeAtopoUuid);
 
         String intermediateSupNodeId = getSupportingNodeFromNodeId(link.getSource().getSourceNode().getValue());
         String intermediateTp = link.getSource().getSourceTp().getValue();
@@ -701,27 +727,28 @@ public class TapiLinkImpl implements TapiLink {
         LOG.debug("TapiLinkImpl:createCepForLink Cep Node A OTS is {}", cepNodeAots);
 
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots, topoUuid);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots, nodeAtopoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms, topoUuid);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms, nodeAtopoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
+        tapiFactory = new ORtoTapiTopoConversionTools(nodeZtopoUuid);
         intermediateSupNodeId = getSupportingNodeFromNodeId(link.getDestination().getDestNode().getValue());
         intermediateTp = link.getDestination().getDestTp().getValue();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots, topoUuid);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots, nodeZtopoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms, topoUuid);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms, nodeZtopoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
 
     }

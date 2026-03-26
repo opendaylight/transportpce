@@ -213,10 +213,6 @@ public interface TapiLink {
      */
     Map<Map<String, String>, ConnectionEndPoint> getCepMap();
 
-
-//    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
-//            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
-
     Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
             Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
 }
