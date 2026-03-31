@@ -142,8 +142,10 @@ public class ConvertTopoORtoTapiNbi {
                 otnlinkDst.getDestTp().getValue(),
                 TapiConstants.OTN_XPDR_XPDR_LINK,
                 // nodesQual, nodesQual,
-                TapiConstants.XPDR, TapiConstants.XPDR,
-                tpsQual, tpsQual,
+                TapiConstants.XPDR,
+                TapiConstants.XPDR,
+                tpsQual,
+                tpsQual,
                 otnlinkAug.getAdministrativeState() == null || oppLnkAdmState == null ? null
                     : this.tapiLink.setTapiAdminState(
                         otnlinkAug.getAdministrativeState(), oppLnkAdmState).getName(),

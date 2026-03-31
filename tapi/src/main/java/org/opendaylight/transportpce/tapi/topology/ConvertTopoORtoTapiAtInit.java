@@ -817,12 +817,15 @@ public class ConvertTopoORtoTapiAtInit {
                     ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
                     : link.getDestination().getDestNode().getValue();
             Link tapLink = this.tapiLink.createTapiLink(
-                sourceNode, link.getSource().getSourceTp().getValue(),
-                destNode, link.getDestination().getDestTp().getValue(),
+                sourceNode,
+                link.getSource().getSourceTp().getValue(),
+                destNode,
+                link.getDestination().getDestTp().getValue(),
                 TapiConstants.OMS_XPDR_RDM_LINK,
                 sourceNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
                 destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
-                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
                 link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
                     ? null
