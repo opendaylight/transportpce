@@ -101,17 +101,32 @@ public class TapiLinkImpl implements TapiLink {
         this.cepMap = new HashMap<>();
     }
 
-    public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
-            String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
-            String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid topoUuid) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Link createTapiLink(
+            String srcNodeId,
+            String srcTpId,
+            String dstNodeId,
+            String dstTpId,
+            String linkType,
+            String srcNodeQual,
+            String dstNodeQual,
+            String srcTpQual,
+            String dstTpQual,
+            String adminState,
+            String operState,
+            Set<LayerProtocolName> layerProtoNameList,
+            Set<String> transLayerNameList,
+            Uuid tapiTopoUuid) {
 
         LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(topoUuid)
+            .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", srcNodeId, srcNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
@@ -119,7 +134,7 @@ public class TapiLinkImpl implements TapiLink {
                 new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NodeEdgePoint destNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(topoUuid)
+            .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", dstNodeId, dstNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
@@ -145,7 +160,7 @@ public class TapiLinkImpl implements TapiLink {
                     LOG.error("unable to create Cep for link {} which was not found in OR Topology", linkiid);
                     break;
                 }
-                createCepForLink(orLinkFromLinkId, topoUuid);
+                createCepForLink(orLinkFromLinkId, tapiTopoUuid);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
