@@ -43,14 +43,21 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
         String sourceTp = input.getDegATp();
         String destNode = input.getRdmZNode();
         String destTp = input.getDegZTp();
-        Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
-            TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
-            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-            this.tapiLink.getAdminState(sourceNode, destNode, sourceTp, destTp),
-            this.tapiLink.getOperState(sourceNode, destNode, sourceTp, destTp),
-            Set.of(LayerProtocolName.PHOTONICMEDIA),
-            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiTopoUuid);
+        Link link = this.tapiLink.createTapiLink(
+                sourceNode,
+                sourceTp,
+                destNode,
+                destTp,
+                TapiConstants.OMS_RDM_RDM_LINK,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                this.tapiLink.getAdminState(sourceNode, destNode, sourceTp, destTp),
+                this.tapiLink.getOperState(sourceNode, destNode, sourceTp, destTp),
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                tapiTopoUuid);
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
