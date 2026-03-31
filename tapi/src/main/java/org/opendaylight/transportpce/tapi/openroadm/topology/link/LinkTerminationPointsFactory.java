@@ -18,11 +18,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
  * {@link org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId}
  * instances from a network topology {@link Link}, using the provided {@link Network}
  * context.
- *
- * <p>Implementations may enrich the resulting {@link LinkTerminationPoints} with additional
- * metadata (such as administrative and operational state) if available. Missing or
- * incomplete augmentations (e.g. OpenROADM {@code Link1}) should be handled gracefully,
- * and must not prevent extraction of termination points.
  */
 public interface LinkTerminationPointsFactory {
 
@@ -32,7 +27,7 @@ public interface LinkTerminationPointsFactory {
      * @param link the topology link from which to extract termination points
      * @param network the network context used for resolving termination point types
      * @return a {@link LinkTerminationPoints} instance containing resolved source and
-     *         destination termination points, and optional link state information
+     *         destination termination points.
      */
     LinkTerminationPoints fromLink(Link link, Network network);
 

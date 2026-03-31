@@ -43,13 +43,21 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
         String destTp = input.getAddDropTp();
         String sourceNode = input.getXpdrNode();
         String sourceTp = input.getNetworkTp();
-        Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
-            TapiConstants.OMS_XPDR_RDM_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
-            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-            this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
-            this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
-            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiTopoUuid);
+        Link link = this.tapiLink.createTapiLink(
+                sourceNode,
+                sourceTp,
+                destNode,
+                destTp,
+                TapiConstants.OMS_XPDR_RDM_LINK,
+                TapiConstants.OTSI,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
+                this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                tapiTopoUuid);
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
