@@ -101,10 +101,25 @@ public class TapiLinkImpl implements TapiLink {
         this.cepMap = new HashMap<>();
     }
 
-    public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
-            String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
-            String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid tapiTopoUuid) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Link createTapiLink(
+            String srcNodeId,
+            String srcTpId,
+            String dstNodeId,
+            String dstTpId,
+            String linkType,
+            String srcNodeQual,
+            String dstNodeQual,
+            String srcTpQual,
+            String dstTpQual,
+            String adminState,
+            String operState,
+            Set<LayerProtocolName> layerProtoNameList,
+            Set<String> transLayerNameList,
+            Uuid tapiTopoUuid) {
 
         LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
