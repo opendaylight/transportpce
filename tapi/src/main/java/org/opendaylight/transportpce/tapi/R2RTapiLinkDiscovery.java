@@ -255,12 +255,21 @@ public class R2RTapiLinkDiscovery {
                 destNodeId.getValue(),
                 destDegId,
                 destTpRx);
-        Link omsLink = this.tapiLink.createTapiLink(nodeId.getValue(), srcTpTx, destNodeId.getValue(), destTpTx,
-            TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
-            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+        Link omsLink = this.tapiLink.createTapiLink(
+            nodeId.getValue(),
+            srcTpTx,
+            destNodeId.getValue(),
+            destTpTx,
+            TapiConstants.OMS_RDM_RDM_LINK,
+            TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS,
+            TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
-            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
+            Set.of(LayerProtocolName.PHOTONICMEDIA),
+            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+            tapiTopoUuid);
         logNewR2RLink(omsLink);
         LOG.debug("inputAdminstate= {}, inputoperstate = {}",
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),

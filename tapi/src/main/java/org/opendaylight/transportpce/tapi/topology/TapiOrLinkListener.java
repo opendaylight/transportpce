@@ -129,11 +129,20 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 continue;
             }
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiLink1 =
-                    this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
-                            linkType, getQual(srcNode), getQual(destNode),
-                            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-                            link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                    this.tapiLink.createTapiLink(
+                            srcNode,
+                            srcTp,
+                            destNode,
+                            destTp,
+                            linkType,
+                            getQual(srcNode),
+                            getQual(destNode),
+                            TapiConstants.PHTNC_MEDIA_OTS,
+                            TapiConstants.PHTNC_MEDIA_OTS,
+                            link1.getAdministrativeState().getName(),
+                            link1.getOperationalState().getName(),
+                            Set.of(LayerProtocolName.PHOTONICMEDIA),
+                            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                             tapiTopoUuid);
 
             logNewTapiLink(tapiLink1);
