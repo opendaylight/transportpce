@@ -4,7 +4,7 @@
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: '\.diff$|\.(xml|XML|yang|YANG|hex|HEX|json|JSON)$'
@@ -27,26 +27,26 @@ repos:
         stages: [manual]
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.5
+    rev: v1.5.6
     hooks:
       - id: remove-tabs
         stages: [pre-commit]
         exclude: '^(.git/|docs/make.bat|docs/Makefile/)|\.(xml|XML|yang|YANG|hex|HEX)$'
 
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.4
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.2
     hooks:
       - id: autopep8
-        args: ["--in-place", "--max-line-length=120"]
+        args: ["--in-place", "--max-line-length=120", "--recursive"]
 
   - repo: https://github.com/perltidy/perltidy
-    rev: "20240202.05"
+    rev: "20260204.02"
     hooks:
       - id: perltidy
         stages: [pre-commit]
 
   - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.10.0
+    rev: v0.11.0
     hooks:
       - id: shellcheck
         exclude: "^tests/|^karaf/|^lighty/"
@@ -58,7 +58,7 @@ repos:
         types_or: [yaml, markdown]
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         types: [yaml]
