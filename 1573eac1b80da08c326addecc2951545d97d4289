@@ -51,6 +51,23 @@
       "message": "recheck",
       "revId": "1573eac1b80da08c326addecc2951545d97d4289",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b45a08_a6936b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-04-02T08:28:58Z",
+      "side": 1,
+      "message": "Hi Joakim.\nYou did a huge refactoring which will certainly harden transportPCE Code. Thanks for this. Really appreciate your initiative. On the other hand, to be honest, I find it a bit complex in the fact that this adds a lot of interfaces, records and classes.\nIn comparison with what you did to handle frequencies in the PCE, my feeling is that the name of the classes and interfaces look more appropriate, with much less probability to make confusions between objects associated with original models and objects associated with these new classes. \nFor you, as developer of these classes, everything is certainly clear. For us, this represents a deep refactoring. \nI support this change which LGTM, but to make it clear, I\u0027m not 100% sure I\u0027ll still be able to maintain/develop/debug new functionalities associated with tapi topology and spectrum management, fully in line with this new approach (as this is the case today for all what is associated with spectrum management in the PCE). Thus, I would appreciate your help in case we encounter some issues in future implementation of all of this!",
+      "revId": "1573eac1b80da08c326addecc2951545d97d4289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
