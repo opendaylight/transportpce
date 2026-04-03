@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5848bec2_ee107e71",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-03T14:15:03Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d602e380_50731a6d",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc344f1f_b56790cc",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-04-03T12:49:54Z",
       "side": 0,
       "message": "have you tried 2.1.0 or above here ?",
+      "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2d7e6d6_d4ef49d0",
+        "filename": ".pre-commit-config.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-03T14:15:03Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "cc344f1f_b56790cc",
       "revId": "bbb98a01363a806463b093d1c328557aedaddf42",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

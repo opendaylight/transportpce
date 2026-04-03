@@ -34,6 +34,24 @@
       "parentUuid": "e51a8d18_ffc2d6b7",
       "revId": "3cd21c6c2ced774ab2569a5b8e49d72f7499da86",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afbad93_9009dccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-03T14:15:03Z",
+      "side": 1,
+      "message": "Thank you so much, Guillaume, for your analysis and insightful advice. I had indeed tried the new URL, but I hadn\u0027t noticed that there were more recent versions.\nHappy to see it solves our CI issue.",
+      "parentUuid": "22f6b278_ad496729",
+      "revId": "3cd21c6c2ced774ab2569a5b8e49d72f7499da86",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
