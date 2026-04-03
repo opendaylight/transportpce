@@ -16,6 +16,24 @@
       "message": "Hello @Guillaume,\nIf you have an idea why autopep8 of pre-commit fails on GHA...",
       "revId": "3cd21c6c2ced774ab2569a5b8e49d72f7499da86",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22f6b278_ad496729",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2026-04-03T12:49:54Z",
+      "side": 1,
+      "message": "Hello\nThis is both a GHA minion setup issue and a pre-commit config issue.\nfor pre-commit issues cf other comments\n\nfor minion issue cf below\n\nI can read in the related logs\n\nRun actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405\n  with:\n    python-version: 3.11\n[...]\nModuleNotFoundError: No module named \u0027lib2to3\u0027\n\n\nSo lib2to3 module is invoked by autopep8 on python v3.11\nAccording to comments in the related autopep8 tracker https://github.com/hhatto/autopep8/issues/581\n\"PendingDeprecationWarning: lib2to3 package is deprecated and may not be able to parse Python 3.10+\"\nand the lib2to3 dependency was removed from autopep8 v2.1.0\n\nIf you can\u0027t force a version above on the precommit config file,\nyou may ask the minion admin to use either:\n- a previous version of python\nor preferably\n- a more recent one to have a dependency resolution that allows pre-commit to use a more recent versions of autopep8\n\nhope this helps",
+      "parentUuid": "e51a8d18_ffc2d6b7",
+      "revId": "3cd21c6c2ced774ab2569a5b8e49d72f7499da86",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
