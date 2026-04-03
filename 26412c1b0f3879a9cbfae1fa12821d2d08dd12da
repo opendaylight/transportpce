@@ -16,6 +16,58 @@
       "message": "Pushing netconf-proxy tool in Java.",
       "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6adaa965_0dd5656e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2026-04-03T13:06:58Z",
+      "side": 1,
+      "message": "Hi Roshan\nhere is my feedback.\nHave a nice day\nGuillaume",
+      "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e91c8ac0_7a994345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2026-04-03T13:06:58Z",
+      "side": 1,
+      "message": "Interesting. Many thanks for the proposal.\n\\+ Gilles I am not sure this is built in CI. May it deserve a subproject ?",
+      "parentUuid": "04f5ed11_8cc59df6",
+      "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79cb5d95_c52186e4",
+        "filename": "debug_tools/netconf_proxy/run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2026-04-03T13:06:58Z",
+      "side": 1,
+      "message": "do we really need bash ?\nWe have a few MAC OS X and BSD users.\nWon\u0027t an old good POSIX  portable /bin/sh be sufficient here ?",
+      "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
