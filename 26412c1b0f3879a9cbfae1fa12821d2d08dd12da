@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1cb30a0_21fe756f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-07T08:57:57Z",
+      "side": 1,
+      "message": "Thank you Guillaume for your feedback. No, this netconf_proy is not built on the CI, and I don\u0027t think it\u0027s necessary. I think this code is intended to be downloaded, build and run locally for specific uses with real equipment.",
+      "parentUuid": "e91c8ac0_7a994345",
+      "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79cb5d95_c52186e4",
         "filename": "debug_tools/netconf_proxy/run.sh",
         "patchSetId": 1
