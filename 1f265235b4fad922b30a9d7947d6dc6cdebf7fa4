@@ -51,6 +51,24 @@
       "parentUuid": "d12a8ceb_f936328b",
       "revId": "1f265235b4fad922b30a9d7947d6dc6cdebf7fa4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5439a9b4_83ee8b6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-07T08:49:59Z",
+      "side": 1,
+      "message": "Yes, the rest is OK. At first glance, the sequence diagrams seem correct, but I haven\u0027t reread all the code to verify their accuracy. \nIn any case, if we detect a misalignment at some point it will be easy to correct and update with the plantuml code of the diagrams.",
+      "parentUuid": "13e63363_67f73f70",
+      "revId": "1f265235b4fad922b30a9d7947d6dc6cdebf7fa4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
