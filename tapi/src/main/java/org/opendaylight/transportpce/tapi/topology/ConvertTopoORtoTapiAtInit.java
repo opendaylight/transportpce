@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
@@ -810,14 +811,23 @@ public class ConvertTopoORtoTapiAtInit {
             }
             String sourceNode = link.getSource().getSourceNode().getValue();
             String destNode = link.getDestination().getDestNode().getValue();
+            Link1 link1 = link.augmentationOrElseThrow(Link1.class);
+            String sourceNodeQualifier = TapiConstants.PHTNC_MEDIA;
+            String destNodeQualifier = TapiConstants.PHTNC_MEDIA;
+            if (link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)) {
+                sourceNodeQualifier = TapiConstants.XPDR;
+            }
+            if (link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)) {
+                destNodeQualifier = TapiConstants.XPDR;
+            }
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode,
                 link.getSource().getSourceTp().getValue(),
                 destNode,
                 link.getDestination().getDestTp().getValue(),
                 TapiConstants.OMS_XPDR_RDM_LINK,
-                sourceNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
-                destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
+                sourceNodeQualifier,
+                destNodeQualifier,
                 TapiConstants.PHTNC_MEDIA_OTS,
                 TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
