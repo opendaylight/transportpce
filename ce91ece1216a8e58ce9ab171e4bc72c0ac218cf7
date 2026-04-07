@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d755eec0_6b23b354",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-07T14:55:58Z",
+      "side": 1,
+      "message": "Your PS17 collided with my PS16 which was sent just before...\nSent it again.",
+      "revId": "ce91ece1216a8e58ce9ab171e4bc72c0ac218cf7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
