@@ -33,6 +33,24 @@
       "message": "Thanks Jimmi for your change and especially for your effort in clarifying the various notification processes between TPCE bundles with diagrams. The developer guide is clearly improved.\nHowever, I would like TPCE to follow the same rules as all other ODL community projects. Also, I don\u0027t think it\u0027s useful to add a docs directory to the different TPCE sub-projects. This scatters the documentation when the logic is to concentrate everything in each project under a single dedicated docs directory.\nSimilarly to how images are located (under docs/images), the Plantuml code could simply be under transportpce/docs/plantuml.\nThank you for your understanding.",
       "revId": "1f265235b4fad922b30a9d7947d6dc6cdebf7fa4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13e63363_67f73f70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-04-07T06:37:38Z",
+      "side": 1,
+      "message": "Alright. So remove the docs from under TPCS then, but the rest is good?\n\nAlso, are the flows verified? I\u0027m not 100% that I got everything right?",
+      "parentUuid": "d12a8ceb_f936328b",
+      "revId": "1f265235b4fad922b30a9d7947d6dc6cdebf7fa4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
