@@ -808,14 +808,8 @@ public class ConvertTopoORtoTapiAtInit {
                 oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
                 oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
             }
-            String sourceNode =
-                link.getSource().getSourceNode().getValue().contains("ROADM")
-                    ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
-                    : link.getSource().getSourceNode().getValue();
-            String destNode =
-                link.getDestination().getDestNode().getValue().contains("ROADM")
-                    ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
-                    : link.getDestination().getDestNode().getValue();
+            String sourceNode = link.getSource().getSourceNode().getValue();
+            String destNode = link.getDestination().getDestNode().getValue();
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode,
                 link.getSource().getSourceTp().getValue(),
@@ -841,10 +835,6 @@ public class ConvertTopoORtoTapiAtInit {
             linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
-    }
-
-    public String getIdBasedOnModelVersion(String linknodeid) {
-        return linknodeid.substring(0, linknodeid.lastIndexOf("-"));
     }
 
     public void setTapiNodes(Map<NodeKey,
