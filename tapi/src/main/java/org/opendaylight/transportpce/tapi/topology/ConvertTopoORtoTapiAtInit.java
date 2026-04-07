@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
@@ -808,22 +809,33 @@ public class ConvertTopoORtoTapiAtInit {
                 oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
                 oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
             }
-            String sourceNode =
-                link.getSource().getSourceNode().getValue().contains("ROADM")
-                    ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
-                    : link.getSource().getSourceNode().getValue();
-            String destNode =
-                link.getDestination().getDestNode().getValue().contains("ROADM")
-                    ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
-                    : link.getDestination().getDestNode().getValue();
+            Link1 link1 = link.augmentation(Link1.class);
+            if (link1 == null) {
+                LOG.warn("Skipping link {} because OpenROADM Link1 augmentation is missing", link.getLinkId());
+                continue;
+            }
+            String sourceNode = getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue());
+            String destNode = getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue());
+
+            String sourceNodeQualifier = TapiConstants.PHTNC_MEDIA;
+            String destNodeQualifier = TapiConstants.PHTNC_MEDIA;
+
+            if (OpenroadmLinkType.XPONDEROUTPUT.equals(link1.getLinkType())) {
+                sourceNodeQualifier = TapiConstants.XPDR;
+                sourceNode = link.getSource().getSourceNode().getValue();
+            }
+            if (OpenroadmLinkType.XPONDERINPUT.equals(link1.getLinkType())) {
+                destNodeQualifier = TapiConstants.XPDR;
+                destNode = link.getDestination().getDestNode().getValue();
+            }
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode,
                 link.getSource().getSourceTp().getValue(),
                 destNode,
                 link.getDestination().getDestTp().getValue(),
                 TapiConstants.OMS_XPDR_RDM_LINK,
-                sourceNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
-                destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
+                sourceNodeQualifier,
+                destNodeQualifier,
                 TapiConstants.PHTNC_MEDIA_OTS,
                 TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
