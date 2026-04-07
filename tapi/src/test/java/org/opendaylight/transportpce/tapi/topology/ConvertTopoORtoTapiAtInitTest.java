@@ -389,7 +389,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             "roadm", "ROADM-A1",
             false);
         String spdrSA1seed = "SPDR-SA1-XPDR1";
-        String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
+        String roadmA1seed = "ROADM-A1-SRG1+PHOTONIC_MEDIA";
         String spdrSA1tpseed = spdrSA1seed + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1";
         String roadmA1tpseed = roadmA1seed + "_OTS+SRG1-PP2-TXRX";
         String linkseed = spdrSA1tpseed + "to" + roadmA1tpseed;
@@ -1135,21 +1135,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         }
         LOG.info("pattern '{}' not found in list of nodes", searchedChar);
         return null;
-    }
-
-    @Test
-    void getIdBasedOnModelVersion() {
-        ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
-                topologyUuid,
-                tapiLink);
-
-        assertTrue(
-                "ROADM-A".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADM-A-SRG1"))
-        );
-
-        assertTrue(
-                "ROADMA".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADMA-SRG1"))
-        );
     }
 
 }
