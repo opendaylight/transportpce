@@ -158,7 +158,7 @@ class TapiLinkImplTest extends AbstractTest {
         Link expected = buildExpectedLink(
                 "ROADM-C1",
                 "SRG1-PP4-TXRX",
-                "SPDR-SC1-XPDR2",
+                "SPDR-SC1",
                 "XPDR2-NETWORK3",
                 "PHOTONIC_MEDIA",
                 "XPONDER",
@@ -173,7 +173,7 @@ class TapiLinkImplTest extends AbstractTest {
         Link actual = createTapiLink(
                 "ROADM-C1",
                 "SRG1-PP4-TXRX",
-                "SPDR-SC1-XPDR2",
+                "SPDR-SC1",
                 "XPDR2-NETWORK3",
                 TapiConstants.OMS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
