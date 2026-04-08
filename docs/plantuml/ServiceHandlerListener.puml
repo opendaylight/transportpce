@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+NotificationService -> ServiceHandlerListener:onServiceRpcResultSh()
+== Case NotificationType ==\nServiceCreateResult\nServiceReconfigreResult\nServiceRestorationResult ==
+ServiceHandlerListener -> FrequenciesService:allocateFrequencies(AtoZ,ZtoA)
+
+
+@enduml
