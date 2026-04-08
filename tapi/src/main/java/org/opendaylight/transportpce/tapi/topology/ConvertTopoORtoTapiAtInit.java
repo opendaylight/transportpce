@@ -35,7 +35,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
@@ -787,12 +786,15 @@ public class ConvertTopoORtoTapiAtInit {
     }
 
     /**
-     * Adds to tapiLinkMap the links connecting Xponders to ROADM.
-     * @param xpdrRdmLinkList A list of OpenROADM link connecting ROADMs to Xponders.
+     * Adds links connecting XPDRs to ROADMs to the TAPI link map.
+     *
+     * @param xpdrRdmLinkList OpenROADM links connecting ROADMs to XPDRs
+     * @param network OpenROADM topology
      */
     public void convertXpdrToRdmLinks(
             List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .networks.network.Link> xpdrRdmLinkList) {
+                .networks.network.Link> xpdrRdmLinkList,
+            Network network) {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} xpdr to roadm links", xpdrRdmLinkList.size() / 2);
         LOG.debug("Link list = {}", xpdrRdmLinkList);
@@ -800,63 +802,30 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
-            var oppositeLink = xpdrRdmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(link.augmentation(Link1.class).getOppositeLink()))
-                .findAny().orElse(null);
-            AdminStates oppLnkAdmState = null;
-            State oppLnkOpState = null;
-            if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
-            }
+
             Link1 link1 = link.augmentation(Link1.class);
             if (link1 == null) {
                 LOG.warn("Skipping link {} because OpenROADM Link1 augmentation is missing", link.getLinkId());
                 continue;
             }
-            String sourceNode = getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue());
-            String destNode = getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue());
 
-            String sourceNodeQualifier = TapiConstants.PHTNC_MEDIA;
-            String destNodeQualifier = TapiConstants.PHTNC_MEDIA;
-
-            if (OpenroadmLinkType.XPONDEROUTPUT.equals(link1.getLinkType())) {
-                sourceNodeQualifier = TapiConstants.XPDR;
-                sourceNode = link.getSource().getSourceNode().getValue();
-            }
-            if (OpenroadmLinkType.XPONDERINPUT.equals(link1.getLinkType())) {
-                destNodeQualifier = TapiConstants.XPDR;
-                destNode = link.getDestination().getDestNode().getValue();
-            }
             Link tapLink = this.tapiLink.createTapiLink(
-                sourceNode,
-                link.getSource().getSourceTp().getValue(),
-                destNode,
-                link.getDestination().getDestTp().getValue(),
-                TapiConstants.OMS_XPDR_RDM_LINK,
-                sourceNodeQualifier,
-                destNodeQualifier,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                //adminState,
-                link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
-                    ? null
-                    : this.tapiLink.setTapiAdminState(
-                        link.augmentation(Link1.class).getAdministrativeState(), oppLnkAdmState).getName(),
-                //operState,
-                link.augmentation(Link1.class).getOperationalState() == null || oppLnkOpState == null
-                    ? null
-                    : this.tapiLink.setTapiOperationalState(
-                        link.augmentation(Link1.class).getOperationalState(), oppLnkOpState).getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                this.tapiTopoUuid);
-            linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
+                    link,
+                    network,
+                    this.tapiTopoUuid,
+                    linkTerminationPointsFactory);
+
+            if (tapLink == null) {
+                LOG.warn("Skipping link {} because TAPI link creation failed", link.getLinkId());
+                continue;
+            }
+
+            if (link1.getOppositeLink() != null) {
+                linksToNotConvert.add(link1.getOppositeLink().getValue());
+            }
+
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
-    }
-
-    public String getIdBasedOnModelVersion(String linknodeid) {
-        return linknodeid.substring(0, linknodeid.lastIndexOf("-"));
     }
 
     public void setTapiNodes(Map<NodeKey,
