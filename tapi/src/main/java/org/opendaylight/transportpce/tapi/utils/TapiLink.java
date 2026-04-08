@@ -9,9 +9,11 @@ package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.Map;
 import java.util.Set;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -31,6 +33,27 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
  * </ul>
  */
 public interface TapiLink {
+
+
+    /**
+     * Creates a TAPI link between a source and destination termination point.
+     *
+     * <p>The link is built from the supplied openroadm link,
+     * and the UUID of the target TAPI topology.
+     *
+     * @param openRoadmLink The openroadm link being translated into a TAPI link
+     * @param network OpenROADM topology
+     * @param tapiTopoUuid UUID of the TAPI topology that will contain the link
+     * @param linkTerminationPointsFactory Primarily used to validate the given link against the topology.
+     * @return the created TAPI link, or {@code null} if the link type is not recognized
+     *         or the link cannot be created
+     */
+    Link createTapiLink(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .networks.network.Link openRoadmLink,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkTerminationPointsFactory linkTerminationPointsFactory);
 
     /**
      * Creates a TAPI link between a source and destination termination point.
