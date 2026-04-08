@@ -24,9 +24,12 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.TapiLinkAttributes;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -105,6 +108,30 @@ public class TapiLinkImpl implements TapiLink {
         this.networkTransactionService = networkTransactionService;
         this.tapiContext = tapiContext;
         this.cepMap = new HashMap<>();
+    }
+
+    @Override
+    public Link createTapiLink(
+            String srcOpenRoadmTopologyNodeId,
+            String srcOpenRoadmTopologyTerminationPointId,
+            String destOpenRoadmTopologyNodeId,
+            String destOpenRoadmTopologyTerminationPointId,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkResolver linkResolver) {
+
+        return createTapiLink(
+                linkResolver.resolveLink(
+                        srcOpenRoadmTopologyNodeId,
+                        srcOpenRoadmTopologyTerminationPointId,
+                        destOpenRoadmTopologyNodeId,
+                        destOpenRoadmTopologyTerminationPointId,
+                        network
+                ),
+                network,
+                tapiTopoUuid,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
     }
 
     /**
