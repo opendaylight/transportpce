@@ -11,15 +11,19 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.cp.to.degree.CpToDegree;
@@ -34,7 +38,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.conta
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfName;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.Direction;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
@@ -50,12 +53,18 @@ public class R2RTapiLinkDiscovery {
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
     private final TapiLink tapiLink;
+    private final TopologyUtils topologyUtils;
+    private final LinkResolver linkResolver = new OpenRoadmLinkResolver();
 
     public R2RTapiLinkDiscovery(NetworkTransactionService networkTransactionService,
             DeviceTransactionManager deviceTransactionManager, TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
         this.deviceTransactionManager = deviceTransactionManager;
         this.tapiLink = tapiLink;
+        this.topologyUtils = new TopologyUtils(
+                networkTransactionService,
+                networkTransactionService.getDataBroker(),
+                tapiLink);
     }
 
     public Map<LinkKey, Link> readLLDP(NodeId nodeId, int nodeVersion, Uuid tapiTopoUuid) {
@@ -255,21 +264,20 @@ public class R2RTapiLinkDiscovery {
                 destNodeId.getValue(),
                 destDegId,
                 destTpRx);
-        Link omsLink = this.tapiLink.createTapiLink(
-            nodeId.getValue(),
-            srcTpTx,
-            destNodeId.getValue(),
-            destTpTx,
-            TapiConstants.OMS_RDM_RDM_LINK,
-            TapiConstants.PHTNC_MEDIA,
-            TapiConstants.PHTNC_MEDIA,
-            TapiConstants.PHTNC_MEDIA_OTS,
-            TapiConstants.PHTNC_MEDIA_OTS,
-            this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
-            this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
-            Set.of(LayerProtocolName.PHOTONICMEDIA),
-            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiTopoUuid);
+        Link omsLink;
+        try {
+            omsLink = this.tapiLink.createTapiLink(
+                nodeId.getValue(),
+                srcTpTx,
+                destNodeId.getValue(),
+                destTpTx,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II),
+                tapiTopoUuid,
+                linkResolver
+            );
+        } catch (TapiTopologyException e) {
+            throw new RuntimeException(e);
+        }
         logNewR2RLink(omsLink);
         LOG.debug("inputAdminstate= {}, inputoperstate = {}",
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
