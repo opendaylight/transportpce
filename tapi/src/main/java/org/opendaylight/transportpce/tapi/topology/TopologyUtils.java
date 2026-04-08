@@ -263,7 +263,7 @@ public final class TopologyUtils {
         }
         // map xpdr_input to roadm and xpdr_output to roadm links.
         xponderInLinkList.addAll(xponderOutLinkList);
-        tapiFullFactory.convertXpdrToRdmLinks(xponderInLinkList);
+        tapiFullFactory.convertXpdrToRdmLinks(xponderInLinkList, openroadmTopo);
         tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
         // Retrieve created sips map in TapiFactory when mapping all the nodes
         this.tapiSips.putAll(tapiFullFactory.getTapiSips());
