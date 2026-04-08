@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
@@ -107,6 +108,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
     private static Node roadmA;
     private static Node roadmC;
     private static Network openroadmNet;
+    private static Network openroadmTop;
     private static Map<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
         .networks.network.Link> ortopoLinks;
     private static Uuid topologyUuid;
@@ -198,6 +200,14 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                     .build())
             .get().orElseThrow();
 
+        openroadmTop = dataBroker.newReadOnlyTransaction()
+                .read(
+                        LogicalDatastoreType.CONFIGURATION,
+                        DataObjectIdentifier
+                                .builder(Networks.class)
+                                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
+                                .build())
+                .get().orElseThrow();
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(
                 TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
@@ -369,7 +379,9 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                         || lk1.getSource().getSourceNode().getValue().contains(roadmA.getNodeId().getValue()))
                     && (lk1.getDestination().getDestNode().equals(otnMuxA.getNodeId())
                         || lk1.getDestination().getDestNode().getValue().contains(roadmA.getNodeId().getValue()))))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()),
+                openroadmTop
+        );
         assertEquals(2, tapiFullFactory.getTapiNodes().size(),
             "Node list size should be 2 (XPDR, DSR-ODU merged; ROADM)");
         assertEquals(1, tapiFullFactory.getTapiLinks().size(),

@@ -35,7 +35,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
@@ -792,7 +791,8 @@ public class ConvertTopoORtoTapiAtInit {
      */
     public void convertXpdrToRdmLinks(
             List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .networks.network.Link> xpdrRdmLinkList) {
+                .networks.network.Link> xpdrRdmLinkList,
+            Network network) {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} xpdr to roadm links", xpdrRdmLinkList.size() / 2);
         LOG.debug("Link list = {}", xpdrRdmLinkList);
@@ -800,48 +800,11 @@ public class ConvertTopoORtoTapiAtInit {
             if (linksToNotConvert.contains(link.getLinkId().getValue())) {
                 continue;
             }
-            var oppositeLink = xpdrRdmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(link.augmentation(Link1.class).getOppositeLink()))
-                .findAny().orElse(null);
-            AdminStates oppLnkAdmState = null;
-            State oppLnkOpState = null;
-            if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
-            }
-            String sourceNode = link.getSource().getSourceNode().getValue();
-            String destNode = link.getDestination().getDestNode().getValue();
-            Link1 link1 = link.augmentationOrElseThrow(Link1.class);
-            String sourceNodeQualifier = TapiConstants.PHTNC_MEDIA;
-            String destNodeQualifier = TapiConstants.PHTNC_MEDIA;
-            if (link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)) {
-                sourceNodeQualifier = TapiConstants.XPDR;
-            }
-            if (link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)) {
-                destNodeQualifier = TapiConstants.XPDR;
-            }
             Link tapLink = this.tapiLink.createTapiLink(
-                sourceNode,
-                link.getSource().getSourceTp().getValue(),
-                destNode,
-                link.getDestination().getDestTp().getValue(),
-                TapiConstants.OMS_XPDR_RDM_LINK,
-                sourceNodeQualifier,
-                destNodeQualifier,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                //adminState,
-                link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
-                    ? null
-                    : this.tapiLink.setTapiAdminState(
-                        link.augmentation(Link1.class).getAdministrativeState(), oppLnkAdmState).getName(),
-                //operState,
-                link.augmentation(Link1.class).getOperationalState() == null || oppLnkOpState == null
-                    ? null
-                    : this.tapiLink.setTapiOperationalState(
-                        link.augmentation(Link1.class).getOperationalState(), oppLnkOpState).getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                this.tapiTopoUuid);
+                    link,
+                    network,
+                    this.tapiTopoUuid,
+                    linkTerminationPointsFactory);
             linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
