@@ -34,10 +34,24 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
@@ -90,6 +104,7 @@ class TapiLinkImplTest extends AbstractTest {
 
     private NetworkTransactionService networkTransactionService;
     private TapiLinkImpl tapiLinkImpl;
+    private TopologyUtils topologyUtils;
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
@@ -116,6 +131,8 @@ class TapiLinkImplTest extends AbstractTest {
         tapiLinkImpl = new TapiLinkImpl(
                 networkTransactionService,
                 new TapiContext(networkTransactionService));
+
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLinkImpl);
     }
 
     @Test
@@ -135,6 +152,21 @@ class TapiLinkImplTest extends AbstractTest {
                 TapiConstants.OMS_RDM_RDM_LINK);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-C1-DEG1",
+                "DEG1-TTP-TXRX",
+                "ROADM-A1-DEG2",
+                "DEG2-TTP-TXRX",
+                OpenroadmLinkType.ROADMTOROADM);
+
+        assertEquals(
+                tapiLinkImpl.createTapiLink(
+                        equivalentInput,
+                        readOpenRoadmTopology(),
+                        TOPOLOGY_UUID,
+                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())),
+                actual);
     }
 
     @Test
@@ -171,6 +203,21 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "XPDR-C1-XPDR1",
+                "XPDR1-NETWORK1",
+                "ROADM-C1-SRG1",
+                "SRG1-PP1-TXRX",
+                OpenroadmLinkType.XPONDEROUTPUT);
+
+        assertEquals(
+                tapiLinkImpl.createTapiLink(
+                        equivalentInput,
+                        readOpenRoadmTopology(),
+                        TOPOLOGY_UUID,
+                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())),
+                actual);
     }
 
     @Test
@@ -207,6 +254,21 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orOTNLink(
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.OTNLINK);
+
+        assertEquals(
+                expected,
+                tapiLinkImpl.createTapiLink(
+                        equivalentInput,
+                        readOTNTopology(),
+                        TOPOLOGY_UUID,
+                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
     }
 
     @Test
@@ -243,6 +305,21 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orOTU4Link(
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.OTNLINK);
+
+        assertEquals(
+                expected,
+                tapiLinkImpl.createTapiLink(
+                        equivalentInput,
+                        readOTNTopology(),
+                        TOPOLOGY_UUID,
+                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
     }
 
     @Test
@@ -280,6 +357,21 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orODTU4Link(
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.OTNLINK);
+
+        assertEquals(
+                expected,
+                tapiLinkImpl.createTapiLink(
+                        equivalentInput,
+                        readOTNTopology(),
+                        TOPOLOGY_UUID,
+                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
     }
 
     @Test
@@ -327,7 +419,21 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of("PHOTONIC_MEDIA"),
                 TOPOLOGY_UUID);
 
-        assertEquals(expected, actual);
+        var equivalentInput = orLink(
+                "ROADM-C1-SRG1",
+                "SRG1-PP4-TXRX",
+                "SPDR-SC1-XPDR2",
+                "XPDR2-NETWORK3",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -364,6 +470,41 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        LinkId linkId = new LinkId("ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1");
+        LinkKey linkKey = new LinkKey(linkId);
+        var link = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .networks.network.LinkBuilder()
+                .withKey(linkKey)
+                .setLinkId(linkId)
+                .setSource(
+                        new SourceBuilder()
+                                .setSourceNode(new NodeId("ROADM-A1-SRG1"))
+                                .setSourceTp(new TpId("SRG1-PP1-TXRX"))
+                                .build())
+                .setDestination(
+                        new DestinationBuilder()
+                                .setDestNode(new NodeId("XPDR-A1-XPDR1"))
+                                .setDestTp(new TpId("XPDR1-NETWORK1"))
+                                .build())
+                .addAugmentation(
+                        new Link1Builder()
+                                .setLinkType(OpenroadmLinkType.XPONDERINPUT)
+                                .setOppositeLink(
+                                        new LinkId("XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX"))
+                                .setOperationalState(State.InService)
+                                .setAdministrativeState(AdminStates.InService)
+                                .build()
+                ).build();
+
+        Link actualTwo = tapiLinkImpl.createTapiLink(
+                link,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualTwo);
     }
 
     @Test
@@ -1019,5 +1160,174 @@ class TapiLinkImplTest extends AbstractTest {
     @Test
     void setTapiOperationalState_shouldReturnNullWhenSecondEndpointStateIsNull() {
         assertNull(tapiLinkImpl.setTapiOperationalState(State.InService, null));
+    }
+
+
+    private Network readOpenRoadmTopology() {
+        Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            throw new IllegalStateException("Failed to read OpenROADM topology", e);
+        }
+
+        if (openroadmTopo == null) {
+            throw new IllegalStateException("OpenROADM topology could not be retrieved from datastore");
+        }
+
+        return openroadmTopo;
+    }
+
+    private Network readOTNTopology() {
+        Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OTN_NETWORK_II);
+        } catch (TapiTopologyException e) {
+            throw new IllegalStateException("Failed to read OTN topology", e);
+        }
+
+        if (openroadmTopo == null) {
+            throw new IllegalStateException("OTN topology could not be retrieved from datastore");
+        }
+
+        return openroadmTopo;
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link orOTU4Link(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType) {
+
+        LinkId srcLinkId = new LinkId("OTU4-%s-%sto%s-%s".formatted(srcNodeId, srcTpId, destNodeId, destTpId));
+        LinkId oppLinkId = new LinkId("OTU4-%s-%sto%s-%s".formatted(destNodeId, destTpId, srcNodeId, srcTpId));
+
+        var otuLink = orLinkBuilder(srcNodeId, srcTpId, destNodeId, destTpId, linkType, srcLinkId, oppLinkId);
+        otuLink.addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
+                        .Link1Builder()
+                        .setOtnLinkType(OtnLinkType.OTU4)
+                        .build()
+        );
+
+        return otuLink.build();
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link orODTU4Link(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType) {
+
+        LinkId srcLinkId = new LinkId("ODTU4-%s-%sto%s-%s".formatted(srcNodeId, srcTpId, destNodeId, destTpId));
+        LinkId oppLinkId = new LinkId("ODTU4-%s-%sto%s-%s".formatted(destNodeId, destTpId, srcNodeId, srcTpId));
+
+        var otuLink = orLinkBuilder(srcNodeId, srcTpId, destNodeId, destTpId, linkType, srcLinkId, oppLinkId);
+        otuLink.addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
+                        .Link1Builder()
+                        .setOtnLinkType(OtnLinkType.ODTU4)
+                        .build()
+        );
+
+        return otuLink.build();
+    }
+
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link orOTNLink(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType) {
+
+        LinkId srcLinkId = new LinkId("OTU4-%s-%sto%s-%s".formatted(srcNodeId, srcTpId, destNodeId, destTpId));
+        LinkId oppLinkId = new LinkId("OTU4-%s-%sto%s-%s".formatted(destNodeId, destTpId, srcNodeId, srcTpId));
+
+        var otnLink = orLinkBuilder(srcNodeId, srcTpId, destNodeId, destTpId, linkType, srcLinkId, oppLinkId);
+        otnLink.addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
+                        .Link1Builder()
+                        .setOtnLinkType(OtnLinkType.ODU0)
+                        .build()
+        );
+
+        return otnLink.build();
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link orLink(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType) {
+
+        LinkId srcLinkId = new LinkId("%s-%sto%s-%s".formatted(srcNodeId, srcTpId, destNodeId, destTpId));
+        LinkId oppLinkId = new LinkId("%s-%sto%s-%s".formatted(destNodeId, destTpId, srcNodeId, srcTpId));
+
+        return orLink(srcNodeId, srcTpId, destNodeId, destTpId, linkType, srcLinkId, oppLinkId);
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link orLink(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType,
+            LinkId srcLinkId,
+            LinkId oppLinkId) {
+
+        return orLinkBuilder(
+                srcNodeId,
+                srcTpId,
+                destNodeId,
+                destTpId,
+                linkType,
+                srcLinkId,
+                oppLinkId
+        ).build();
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .LinkBuilder orLinkBuilder(
+            String srcNodeId,
+            String srcTpId,
+            String destNodeId,
+            String destTpId,
+            OpenroadmLinkType linkType,
+            LinkId srcLinkId,
+            LinkId oppLinkId) {
+
+        LinkKey srcLinkKey = new LinkKey(srcLinkId);
+
+        return new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .networks.network.LinkBuilder()
+                .withKey(srcLinkKey)
+                .setLinkId(srcLinkId)
+                .setSource(
+                        new SourceBuilder()
+                                .setSourceNode(new NodeId(srcNodeId))
+                                .setSourceTp(new TpId(srcTpId))
+                                .build())
+                .setDestination(
+                        new DestinationBuilder()
+                                .setDestNode(new NodeId(destNodeId))
+                                .setDestTp(new TpId(destTpId))
+                                .build())
+                .addAugmentation(
+                        new Link1Builder()
+                                .setLinkType(linkType)
+                                .setOppositeLink(oppLinkId)
+                                .setOperationalState(State.InService)
+                                .setAdministrativeState(AdminStates.InService)
+                                .build()
+                );
     }
 }

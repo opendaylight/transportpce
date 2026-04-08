@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.tapi.utils;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +24,23 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.link.LinkEndpointNormalizer;
+import org.opendaylight.transportpce.tapi.link.LinkEndpoints;
+import org.opendaylight.transportpce.tapi.link.LinkTerminationPointNormalizer;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.TapiLinkAttributes;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateAttributes;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
@@ -91,20 +104,181 @@ public class TapiLinkImpl implements TapiLink {
     private final NetworkTransactionService networkTransactionService;
     private final TapiContext tapiContext;
     private Map<Map<String, String>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list
-        .ConnectionEndPoint> cepMap;
+        .ConnectionEndPoint> cepMap = new HashMap<>();
+    private final LinkStateResolver linkStateResolver;
 
     @Activate
     public TapiLinkImpl(@Reference NetworkTransactionService networkTransactionService,
             @Reference TapiContext tapiContext) {
+
+        this(
+                networkTransactionService,
+                tapiContext,
+                new OpenRoadmLinkStateResolver(new OpenRoadmLinkStateMapper())
+        );
+    }
+
+    public TapiLinkImpl(
+            NetworkTransactionService networkTransactionService,
+            TapiContext tapiContext,
+            LinkStateResolver linkStateResolver) {
         this.networkTransactionService = networkTransactionService;
         this.tapiContext = tapiContext;
-        this.cepMap = new HashMap<>();
+        this.linkStateResolver = linkStateResolver;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public Link createTapiLink(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .networks.network.Link link,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkTerminationPointsFactory linkTerminationPointsFactory) {
+
+        Link1 link1 = link.augmentation(Link1.class);
+        if (link1 == null) {
+            throw new IllegalArgumentException("Can't process a link without a type");
+        }
+
+        LinkTerminationPoints linkTerminationPoints = linkTerminationPointsFactory.fromLink(link, network);
+        LinkEndpointNormalizer linkEndpointNormalizer = new LinkTerminationPointNormalizer();
+        LinkEndpoints linkEndpoints = linkEndpointNormalizer.normalize(linkTerminationPoints);
+
+        String srcNodeId = linkEndpoints.srcNodeId();
+        String srcTpId = linkEndpoints.srcTpId();
+        String dstNodeId = linkEndpoints.dstNodeId();
+        String dstTpId = linkEndpoints.dstTpId();
+
+        TapiLinkAttributes tapiLinkAttributes = TapiLinkAttributes.fromOpenRoadmLink(link);
+
+        LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
+
+        String sourceNepKey = String.join("+", srcNodeId, tapiLinkAttributes.sourceTpQualifier(), srcTpId);
+        String destNepKey = String.join("+", dstNodeId, tapiLinkAttributes.destinationTpQualifier(), dstTpId);
+        String linkKey = String.join("to", sourceNepKey, destNepKey);
+
+        NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
+                .setTopologyUuid(tapiTopoUuid)
+                .setNodeUuid(
+                        new Uuid(UUID.nameUUIDFromBytes(
+                                String.join("+", srcNodeId, tapiLinkAttributes.sourceNodeQualifier())
+                                        .getBytes(StandardCharsets.UTF_8)).toString()))
+                .setNodeEdgePointUuid(
+                        new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
+                .build();
+        NodeEdgePoint destNep = new NodeEdgePointBuilder()
+                .setTopologyUuid(tapiTopoUuid)
+                .setNodeUuid(
+                        new Uuid(UUID.nameUUIDFromBytes(
+                                String.join("+", dstNodeId, tapiLinkAttributes.destinationNodeQualifier())
+                                        .getBytes(StandardCharsets.UTF_8)).toString()))
+                .setNodeEdgePointUuid(
+                        new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
+                .build();
+        NameBuilder linkName = new NameBuilder();
+        // TODO: variables for each type
+
+        switch (tapiLinkAttributes.tapiLinkType()) {
+            case TapiConstants.OMS_RDM_RDM_LINK:
+                LOG.debug("Roadm to roadm link");
+                linkName
+                        .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
+                        .setValue(linkKey);
+                createCepForLink(link);
+                break;
+            case TapiConstants.TRANSITIONAL_LINK:
+                LOG.info("Transitional link");
+                linkName
+                        .setValueName("transitional link name")
+                        .setValue(linkKey);
+                break;
+            case TapiConstants.OMS_XPDR_RDM_LINK:
+                LOG.info(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
+                linkName
+                        .setValueName("XPDR-RDM link name")
+                        .setValue(linkKey);
+                break;
+            case TapiConstants.OTN_XPDR_XPDR_LINK:
+                LOG.info("OTN Xpdr to roadm link");
+                linkName
+                        .setValueName(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
+                        .setValue(linkKey);
+                break;
+            default:
+                LOG.warn("Type {} not recognized", tapiLinkAttributes.tapiLinkType());
+                return null;
+        }
+        // Todo: common aspects of links and set all attributes
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                .setCostAlgorithm("Restricted Shortest Path - RSP")
+                .setCostName("HOP_COUNT")
+                .setCostValue(TapiConstants.COST_HOP_VALUE)
+                .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+                .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+                .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+                .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+                .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+                .setTrafficPropertyName("FIXED_LATENCY")
+                .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+                .setRiskCharacteristicName("risk characteristic")
+                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+                .build();
+        ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
+                .setValidationMechanism("validation mechanism")
+                .setValidationRobustness("validation robustness")
+                .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
+                .build();
+        LOG.debug("Successfully created tapiLink {} of type {}", linkKey, tapiLinkAttributes.tapiLinkType());
+        LinkStateAttributes linkStateAttributes = linkStateResolver.resolve(link, network);
+        return new LinkBuilder()
+                .setUuid(new Uuid(
+                        UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
+                .setName(Map.of(linkName.build().key(), linkName.build()))
+                //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
+                // Additionally, the grouping defining it requires at least 2 elements.
+                // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
+                .setTransitionedLayerProtocolName(Set.of(TapiConstants.PHTNC_MEDIA_OMS,
+                        TapiConstants.PHTNC_MEDIA_OTS))
+                .setLayerProtocolName(Collections.singleton(tapiLinkAttributes.layerProtocolName()))
+                .setNodeEdgePoint(
+                        new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
+                .setDirection(ForwardingDirection.BIDIRECTIONAL)
+                .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                        new TotalSizeBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf("100"))
+                                .build())
+                        .build())
+                .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTION)
+                        .setRestorationPolicy(RestorationPolicy.NA)
+                        .build())
+                .setAdministrativeState(linkStateAttributes.administrativeState())
+                .setOperationalState(linkStateAttributes.operationalState())
+                .setLifecycleState(LifecycleState.INSTALLED)
+                .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                        new TotalSizeBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf("100"))
+                                .build())
+                        .build())
+                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .setErrorCharacteristic("error")
+                .setLossCharacteristic("loss")
+                .setRepeatDeliveryCharacteristic("repeat delivery")
+                .setDeliveryOrderCharacteristic("delivery order")
+                .setUnavailableTimeCharacteristic("unavailable time")
+                .setServerIntegrityProcessCharacteristic("server integrity process")
+                .setValidationMechanism(Map.of(validationMechanism.key(), validationMechanism))
+                .build();
+    }
+
     public Link createTapiLink(
             String srcNodeId,
             String srcTpId,
