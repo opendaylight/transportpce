@@ -16,6 +16,24 @@
       "message": "Your PS17 collided with my PS16 which was sent just before...\nSent it again.",
       "revId": "ce91ece1216a8e58ce9ab171e4bc72c0ac218cf7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27abebcb_8986e970",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-04-08T08:41:36Z",
+      "side": 1,
+      "message": "Hmm this caused me a great deal of confusion :D\n\nThe last patch set goes through, but I think I undid your changes?\nI will not touch this again, please go ahead and redo your changes.",
+      "parentUuid": "d755eec0_6b23b354",
+      "revId": "ce91ece1216a8e58ce9ab171e4bc72c0ac218cf7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
