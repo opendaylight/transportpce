@@ -8,16 +8,18 @@
 package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.Set;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
 import org.opendaylight.transportpce.tapi.topology.AbstractTapiNetworkUtil;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLinkOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -30,10 +32,15 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
 
     private static final Logger LOG = LoggerFactory.getLogger(InitXpdrRdmTapiLinkImpl.class);
     private TapiLink tapiLink;
+    private final TopologyUtils topologyUtils;
 
-    public InitXpdrRdmTapiLinkImpl(TapiLink tapiLink, NetworkTransactionService networkTransactionService) {
+    public InitXpdrRdmTapiLinkImpl(
+            TapiLink tapiLink,
+            NetworkTransactionService networkTransactionService,
+            TopologyUtils topologyUtils) {
         super(networkTransactionService);
         this.tapiLink = tapiLink;
+        this.topologyUtils = topologyUtils;
     }
 
     @Override
@@ -43,21 +50,40 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
         String destTp = input.getAddDropTp();
         String sourceNode = input.getXpdrNode();
         String sourceTp = input.getNetworkTp();
+
+        // TODO: Use topology/port-mapping data to resolve SRG topology node IDs instead of parsing strings.
+        // Current approach depends on TP naming convention ("SRGx-...") and is fragile.
+        String destTopologyNode = destNode + "-" + destTp.split("-")[0];
+        LOG.debug("Derived OpenROADM topology node id '{}' from '{}' and TP '{}'",
+                destTopologyNode, destNode, destTp);
+
+        Network network;
+        try {
+            network = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            LOG.error(
+                    "Failed to read topology '{}' from datastore."
+                            + " Cannot create TAPI link from {}:{} to {}:{}. Aborting.",
+                    InstanceIdentifiers.OPENROADM_TOPOLOGY_II,
+                    sourceNode,
+                    sourceTp,
+                    destTopologyNode,
+                    destTp,
+                    e
+            );
+            return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to read topology from datastore; cannot create TAPI link")
+                    .buildFuture();
+        }
+
         Link link = this.tapiLink.createTapiLink(
                 sourceNode,
                 sourceTp,
-                destNode,
+                destTopologyNode,
                 destTp,
-                TapiConstants.OMS_XPDR_RDM_LINK,
-                TapiConstants.OTSI,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                this.tapiLink.getAdminState(sourceNode, destNode, sourceTp, destTp),
-                this.tapiLink.getOperState(sourceNode, destNode, sourceTp, destTp),
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                tapiTopoUuid);
+                network,
+                tapiTopoUuid,
+                new OpenRoadmLinkResolver());
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
