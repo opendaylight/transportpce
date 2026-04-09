@@ -9,22 +9,49 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
@@ -82,6 +109,7 @@ class TapiLinkImplTest extends AbstractTest {
 
     private NetworkTransactionService networkTransactionService;
     private TapiLinkImpl tapiLinkImpl;
+    private TopologyUtils topologyUtils;
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
@@ -108,6 +136,8 @@ class TapiLinkImplTest extends AbstractTest {
         tapiLinkImpl = new TapiLinkImpl(
                 networkTransactionService,
                 new TapiContext(networkTransactionService));
+
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLinkImpl);
     }
 
     @Test
@@ -158,7 +188,7 @@ class TapiLinkImplTest extends AbstractTest {
         Link expected = buildExpectedLink(
                 "ROADM-C1",
                 "SRG1-PP4-TXRX",
-                "SPDR-SC1",
+                "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK3",
                 "PHOTONIC_MEDIA",
                 "XPONDER",
@@ -173,7 +203,7 @@ class TapiLinkImplTest extends AbstractTest {
         Link actual = createTapiLink(
                 "ROADM-C1",
                 "SRG1-PP4-TXRX",
-                "SPDR-SC1",
+                "SPDR-SC1-XPDR2",
                 "XPDR2-NETWORK3",
                 TapiConstants.OMS_XPDR_RDM_LINK,
                 "PHOTONIC_MEDIA",
@@ -187,6 +217,41 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        LinkId linkId = new LinkId("ROADM-C1-SRG1-SRG1-PP4-TXRXtoSPDR-SC1-XPDR2-XPDR2-NETWORK3");
+        LinkKey linkKey = new LinkKey(linkId);
+        var link = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .networks.network.LinkBuilder()
+                .withKey(linkKey)
+                .setLinkId(linkId)
+                .setSource(
+                        new SourceBuilder()
+                                .setSourceNode(new NodeId("ROADM-C1-SRG1"))
+                                .setSourceTp(new TpId("SRG1-PP4-TXRX"))
+                                .build())
+                .setDestination(
+                        new DestinationBuilder()
+                                .setDestNode(new NodeId("SPDR-SC1-XPDR2"))
+                                .setDestTp(new TpId("XPDR2-NETWORK3"))
+                                .build())
+                .addAugmentation(
+                        new Link1Builder()
+                                .setLinkType(OpenroadmLinkType.XPONDERINPUT)
+                                .setOppositeLink(
+                                        new LinkId("SPDR-SC1-XPDR2-XPDR2-NETWORK3toROADM-C1-SRG1-SRG1-PP4-TXRX"))
+                                .setOperationalState(State.InService)
+                                .setAdministrativeState(AdminStates.InService)
+                                .build()
+                ).build();
+
+        Link actualTwo = tapiLinkImpl.createTapiLink(
+                link,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualTwo);
     }
 
     @Test
@@ -223,6 +288,41 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        LinkId linkId = new LinkId("ROADM-A1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1");
+        LinkKey linkKey = new LinkKey(linkId);
+        var link = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .networks.network.LinkBuilder()
+                .withKey(linkKey)
+                .setLinkId(linkId)
+                .setSource(
+                        new SourceBuilder()
+                                .setSourceNode(new NodeId("ROADM-A1-SRG1"))
+                                .setSourceTp(new TpId("SRG1-PP1-TXRX"))
+                                .build())
+                .setDestination(
+                        new DestinationBuilder()
+                                .setDestNode(new NodeId("XPDR-A1-XPDR1"))
+                                .setDestTp(new TpId("XPDR1-NETWORK1"))
+                                .build())
+                .addAugmentation(
+                        new Link1Builder()
+                                .setLinkType(OpenroadmLinkType.XPONDERINPUT)
+                                .setOppositeLink(
+                                        new LinkId("XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-PP1-TXRX"))
+                                .setOperationalState(State.InService)
+                                .setAdministrativeState(AdminStates.InService)
+                                .build()
+                ).build();
+
+        Link actualTwo = tapiLinkImpl.createTapiLink(
+                link,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualTwo);
     }
 
     @Test
@@ -732,5 +832,248 @@ class TapiLinkImplTest extends AbstractTest {
                 OPER_STATE,
                 LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void createTapiLink_shouldBuildExpectedOmsRoadmRoadmLink() throws Exception {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+
+        TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
+
+        // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
+        doNothing().when(tapiLink).createCepForLink(any());
+
+        var orLink = mock(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link.class
+        );
+
+
+        FluentFuture<Optional<
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link>> future =
+                (FluentFuture<Optional<
+                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                .networks.network.Link>>) mock(FluentFuture.class);
+
+        when(future.get()).thenReturn(Optional.of(orLink));
+        doReturn(future).when(nts).read(eq(LogicalDatastoreType.CONFIGURATION), any());
+
+        Link link = tapiLink.createTapiLink(
+                "ROADM-C1",
+                "DEG1-TTP-TXRX",
+                "ROADM-A1",
+                "DEG2-TTP-TXRX",
+                TapiConstants.OMS_RDM_RDM_LINK,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                "UNLOCKED",
+                "ENABLED",
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                TapiConstants.T0_FULL_MULTILAYER_UUID
+        );
+
+        assertNotNull(link);
+
+        // Stable scalar fields
+        assertEquals(AdministrativeState.UNLOCKED, link.getAdministrativeState());
+        assertEquals(OperationalState.ENABLED, link.getOperationalState());
+        assertEquals(LifecycleState.INSTALLED, link.getLifecycleState());
+        assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection());
+        assertEquals(Set.of(LayerProtocolName.PHOTONICMEDIA), link.getLayerProtocolName());
+
+        // Ignored input parameter transLayerNameList; implementation hardcodes this instead
+        assertEquals(
+                Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
+                link.getTransitionedLayerProtocolName()
+        );
+
+        // Name
+        assertNotNull(link.getName());
+        assertEquals(1, link.getName().size());
+        assertEquals(
+                TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK,
+                link.getName().values().iterator().next().getValueName()
+        );
+        assertEquals(
+                "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                link.getName().values().iterator().next().getValue()
+        );
+
+        // UUID
+        assertEquals(
+                new Uuid(uuidOf(
+                        "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"
+                )),
+                link.getUuid()
+        );
+        assertEquals(link.getUuid(), link.key().getUuid());
+
+        // NodeEdgePoints
+        assertNotNull(link.getNodeEdgePoint());
+        assertEquals(2, link.getNodeEdgePoint().size());
+
+        Map<?, NodeEdgePoint> neps = link.getNodeEdgePoint();
+
+        assertTrue(neps.values().stream().anyMatch(nep ->
+                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
+                        && new Uuid("4986dca9-2d59-3d79-b306-e11802bcf1e6").equals(nep.getNodeUuid())
+                        && new Uuid("15a1c5e3-b9bb-38e1-aac0-c28f554fa433").equals(nep.getNodeEdgePointUuid())
+        ));
+
+        assertTrue(neps.values().stream().anyMatch(nep ->
+                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
+                        && new Uuid("3b726367-6f2d-3e3f-9033-d99b61459075").equals(nep.getNodeUuid())
+                        && new Uuid("d2902a80-c8e5-39f1-b470-9c34f7afdc99").equals(nep.getNodeEdgePointUuid())
+        ));
+
+        // Fixed text fields
+        assertEquals("error", link.getErrorCharacteristic());
+        assertEquals("loss", link.getLossCharacteristic());
+        assertEquals("repeat delivery", link.getRepeatDeliveryCharacteristic());
+        assertEquals("delivery order", link.getDeliveryOrderCharacteristic());
+        assertEquals("unavailable time", link.getUnavailableTimeCharacteristic());
+        assertEquals("server integrity process", link.getServerIntegrityProcessCharacteristic());
+
+        // Fixed capacities
+        assertNotNull(link.getAvailableCapacity());
+        assertNotNull(link.getTotalPotentialCapacity());
+        assertEquals("100.0", link.getAvailableCapacity().getTotalSize().getValue().toString());
+        assertEquals("100.0", link.getTotalPotentialCapacity().getTotalSize().getValue().toString());
+
+        // Single-entry maps
+        assertNotNull(link.getCostCharacteristic());
+        assertEquals(1, link.getCostCharacteristic().size());
+
+        assertNotNull(link.getLatencyCharacteristic());
+        assertEquals(1, link.getLatencyCharacteristic().size());
+
+        assertNotNull(link.getRiskCharacteristic());
+        assertEquals(1, link.getRiskCharacteristic().size());
+
+        assertNotNull(link.getValidationMechanism());
+        assertEquals(1, link.getValidationMechanism().size());
+    }
+
+    @Test
+    void createTapiLink_shouldIgnoreTransLayerNameInput() throws Exception {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+
+        TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
+        doNothing().when(tapiLink).createCepForLink(any());
+
+        var orLink = mock(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link.class
+        );
+
+        @SuppressWarnings("unchecked")
+        FluentFuture<Optional<
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link>> future =
+                (FluentFuture<Optional<
+                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                .networks.network.Link>>) mock(FluentFuture.class);
+
+        when(future.get()).thenReturn(Optional.of(orLink));
+        doReturn(future).when(nts).read(eq(LogicalDatastoreType.CONFIGURATION), any());
+
+        Link link = tapiLink.createTapiLink(
+                "ROADM-C1",
+                "DEG1-TTP-TXRX",
+                "ROADM-A1",
+                "DEG2-TTP-TXRX",
+                TapiConstants.OMS_RDM_RDM_LINK,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                "UNLOCKED",
+                "ENABLED",
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of("SOMETHING_ELSE_ENTIRELY"),
+                TapiConstants.T0_FULL_MULTILAYER_UUID
+        );
+
+        assertNotNull(link);
+        assertEquals(
+                Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
+                link.getTransitionedLayerProtocolName()
+        );
+    }
+
+    @Test
+    void createTapiLink_shouldReturnNullWhenLinkTypeUnknown() {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+        TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
+
+        Link link = tapiLink.createTapiLink(
+                "ROADM-C1",
+                "DEG1-TTP-TXRX",
+                "ROADM-A1",
+                "DEG2-TTP-TXRX",
+                "unknown-link-type",
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                "UNLOCKED",
+                "ENABLED",
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                TapiConstants.T0_FULL_MULTILAYER_UUID
+        );
+
+        assertNull(link);
+    }
+
+    @Test
+    void setTapiAdminState_shouldMapStringsCorrectly() {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+        TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
+
+        assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("UNLOCKED"));
+        assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("inService"));
+        assertEquals(AdministrativeState.LOCKED, tapiLink.setTapiAdminState("LOCKED"));
+        assertNull(tapiLink.setTapiAdminState((String) null));
+    }
+
+    @Test
+    void setTapiOperationalState_shouldMapStringsCorrectly() {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+        TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
+
+        assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("ENABLED"));
+        assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("inService"));
+        assertEquals(OperationalState.DISABLED, tapiLink.setTapiOperationalState("DISABLED"));
+        assertNull(tapiLink.setTapiOperationalState((String) null));
+    }
+
+    private static String uuidOf(String input) {
+        return UUID.nameUUIDFromBytes(input.getBytes(StandardCharsets.UTF_8)).toString();
+    }
+
+    private Network readOpenRoadmTopology() {
+        Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            throw new IllegalStateException("Failed to read OpenROADM topology", e);
+        }
+
+        if (openroadmTopo == null) {
+            throw new IllegalStateException("OpenROADM topology could not be retrieved from datastore");
+        }
+
+        return openroadmTopo;
     }
 }
