@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.tapi.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -418,6 +419,8 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 Set.of("PHOTONIC_MEDIA"),
                 TOPOLOGY_UUID);
+
+        assertEquals(expected, actual);
 
         var equivalentInput = orLink(
                 "ROADM-C1-SRG1",
@@ -1028,6 +1031,134 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    void createTapiLink_shouldBuildExpectedOmsRoadmRoadmLink() throws Exception {
+        NetworkTransactionService nts = mock(NetworkTransactionService.class);
+        TapiContext tapiContext = mock(TapiContext.class);
+
+        TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
+
+        // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
+        doNothing().when(tapiLink).createCepForLink(any());
+
+        var orLink = mock(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link.class
+        );
+
+
+        FluentFuture<Optional<
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link>> future =
+                (FluentFuture<Optional<
+                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                .networks.network.Link>>) mock(FluentFuture.class);
+
+        when(future.get()).thenReturn(Optional.of(orLink));
+        doReturn(future).when(nts).read(eq(LogicalDatastoreType.CONFIGURATION), any());
+
+        Link link = tapiLink.createTapiLink(
+                "ROADM-C1",
+                "DEG1-TTP-TXRX",
+                "ROADM-A1",
+                "DEG2-TTP-TXRX",
+                TapiConstants.OMS_RDM_RDM_LINK,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                "UNLOCKED",
+                "ENABLED",
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                TapiConstants.T0_FULL_MULTILAYER_UUID
+        );
+
+        assertNotNull(link);
+
+        // Stable scalar fields
+        assertEquals(AdministrativeState.UNLOCKED, link.getAdministrativeState());
+        assertEquals(OperationalState.ENABLED, link.getOperationalState());
+        assertEquals(LifecycleState.INSTALLED, link.getLifecycleState());
+        assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection());
+        assertEquals(Set.of(LayerProtocolName.PHOTONICMEDIA), link.getLayerProtocolName());
+
+        // Ignored input parameter transLayerNameList; implementation hardcodes this instead
+        assertEquals(
+                Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
+                link.getTransitionedLayerProtocolName()
+        );
+
+        // Name
+        assertNotNull(link.getName());
+        assertEquals(1, link.getName().size());
+        assertEquals(
+                TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK,
+                link.getName().values().iterator().next().getValueName()
+        );
+        assertEquals(
+                "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                link.getName().values().iterator().next().getValue()
+        );
+
+        // UUID
+        assertEquals(
+                new Uuid(uuidOf(
+                        "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"
+                )),
+                link.getUuid()
+        );
+        assertEquals(link.getUuid(), link.key().getUuid());
+
+        // NodeEdgePoints
+        assertNotNull(link.getNodeEdgePoint());
+        assertEquals(2, link.getNodeEdgePoint().size());
+
+        Map<?, NodeEdgePoint> neps = link.getNodeEdgePoint();
+
+        assertTrue(neps.values().stream().anyMatch(nep ->
+                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
+                        && new Uuid(uuidOf("ROADM-C1+PHOTONIC_MEDIA")).equals(nep.getNodeUuid())
+                        && new Uuid(uuidOf("ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX"))
+                        .equals(nep.getNodeEdgePointUuid())
+        ));
+
+        assertTrue(neps.values().stream().anyMatch(nep ->
+                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
+                        && new Uuid(uuidOf("ROADM-A1+PHOTONIC_MEDIA")).equals(nep.getNodeUuid())
+                        && new Uuid(uuidOf("ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"))
+                        .equals(nep.getNodeEdgePointUuid())
+        ));
+
+        // Fixed text fields
+        assertEquals("error", link.getErrorCharacteristic());
+        assertEquals("loss", link.getLossCharacteristic());
+        assertEquals("repeat delivery", link.getRepeatDeliveryCharacteristic());
+        assertEquals("delivery order", link.getDeliveryOrderCharacteristic());
+        assertEquals("unavailable time", link.getUnavailableTimeCharacteristic());
+        assertEquals("server integrity process", link.getServerIntegrityProcessCharacteristic());
+
+        // Fixed capacities
+        assertNotNull(link.getAvailableCapacity());
+        assertNotNull(link.getTotalPotentialCapacity());
+        assertEquals("100.0", link.getAvailableCapacity().getTotalSize().getValue().toString());
+        assertEquals("100.0", link.getTotalPotentialCapacity().getTotalSize().getValue().toString());
+
+        // Single-entry maps
+        assertNotNull(link.getCostCharacteristic());
+        assertEquals(1, link.getCostCharacteristic().size());
+
+        assertNotNull(link.getLatencyCharacteristic());
+        assertEquals(1, link.getLatencyCharacteristic().size());
+
+        assertNotNull(link.getRiskCharacteristic());
+        assertEquals(1, link.getRiskCharacteristic().size());
+
+        assertNotNull(link.getValidationMechanism());
+        assertEquals(1, link.getValidationMechanism().size());
+    }
+
     @Test
     void createTapiLink_shouldUseHardcodedTransitionedLayerProtocols() throws Exception {
         NetworkTransactionService nts = mock(NetworkTransactionService.class);
@@ -1162,6 +1293,9 @@ class TapiLinkImplTest extends AbstractTest {
         assertNull(tapiLinkImpl.setTapiOperationalState(State.InService, null));
     }
 
+    private static String uuidOf(String input) {
+        return UUID.nameUUIDFromBytes(input.getBytes(StandardCharsets.UTF_8)).toString();
+    }
 
     private Network readOpenRoadmTopology() {
         Network openroadmTopo;

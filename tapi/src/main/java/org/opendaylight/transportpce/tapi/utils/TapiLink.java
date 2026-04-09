@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.Map;
 import java.util.Set;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -32,8 +33,35 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
  *   <li>expose the map of generated TAPI connection end points (CEPs).</li>
  * </ul>
  */
+@SuppressWarnings("checkstyle:LineLength")
 public interface TapiLink {
 
+    /**
+     * Creates a TAPI link between a source and destination termination point.
+     *
+     * @param srcOpenRoadmTopologyNodeId node id (e.g. ROADM-A1-SRG1)
+     * @param srcOpenRoadmTopologyTerminationPointId Relative to srcOpenRoadmTopologyNodeId (e.g. SRG1-PP2-TXRX)
+     * @param destOpenRoadmTopologyNodeId node id (ROADM-B1-SRG2)
+     * @param destOpenRoadmTopologyTerminationPointId Relative to destOpenRoadmTopologyNodeId (e.g. SRG2-PP3-TXRX)
+     * @param network OpenROADM topology (i.e. openroadm-topology)
+     * @param tapiTopoUuid UUID of the TAPI topology that will contain the link
+     * @param linkResolver resolver used to find the OpenROADM link in the topology
+     * @return the created TAPI link, or {@code null} if the link type is not recognized
+     *         or the link cannot be created
+     * @see #createTapiLink(
+     *     org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link,
+     *     Network,
+     *     Uuid,
+     *     LinkTerminationPointsFactory)
+     */
+    Link createTapiLink(
+            String srcOpenRoadmTopologyNodeId,
+            String srcOpenRoadmTopologyTerminationPointId,
+            String destOpenRoadmTopologyNodeId,
+            String destOpenRoadmTopologyTerminationPointId,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkResolver linkResolver);
 
     /**
      * Creates a TAPI link between a source and destination termination point.
@@ -78,7 +106,15 @@ public interface TapiLink {
      * @param tapiTopoUuid UUID of the TAPI topology that will contain the link
      * @return the created TAPI link, or {@code null} if the link type is not recognized
      *         or the link cannot be created
+     * @deprecated use one of the other two alternatives instead
+     * @see #createTapiLink(String, String, String, String, Network, Uuid, LinkResolver)
+     * @see #createTapiLink(
+     *     org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link,
+     *     Network,
+     *     Uuid,
+     *     LinkTerminationPointsFactory)
      */
+    @Deprecated(forRemoval = true)
     Link createTapiLink(
             String srcNodeId,
             String srcTpId,
