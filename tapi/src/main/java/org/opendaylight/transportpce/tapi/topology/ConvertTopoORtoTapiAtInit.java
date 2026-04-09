@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
-import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
-import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
@@ -135,46 +133,17 @@ public class ConvertTopoORtoTapiAtInit {
                 Network network) {
         LOG.info("creation of {} roadm to roadm links", rdmTordmLinkList.size() / 2);
         for (var link : rdmTordmLinkList) {
-            var lnk1 = link.augmentation(Link1.class);
-            var lnk1OppLnk = lnk1.getOppositeLink();
-            var oppositeLink = rdmTordmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(lnk1OppLnk))
-                .findAny().orElse(null);
-            AdminStates oppLnkAdmState = null;
-            State oppLnkOpState = null;
-            //String oppLinkName = null;
-            if (oppositeLink != null) {
-                oppLnkAdmState = oppositeLink.augmentation(Link1.class).getAdministrativeState();
-                oppLnkOpState = oppositeLink.augmentation(Link1.class).getOperationalState();
-                // oppLinkName = oppositeLink.getLinkId().getValue();
-            }
-            var lnkAdmState = lnk1.getAdministrativeState();
-            var lnkOpState = lnk1.getOperationalState();
 
-            LinkTerminationPoints linkTerminationPoints = linkTerminationPointsFactory.fromLink(link, network);
-            TerminationPointId source = linkTerminationPoints.source();
-            TerminationPointId destination = linkTerminationPoints.destination();
             Link tapLink = this.tapiLink.createTapiLink(
-                source.supportingNodeId(),
-                source.tpId(),
-                destination.supportingNodeId(),
-                destination.tpId(),
-                TapiConstants.OMS_RDM_RDM_LINK,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                //adminState,
-                lnkAdmState == null || oppLnkAdmState == null
-                    ? null : this.tapiLink.setTapiAdminState(lnkAdmState, oppLnkAdmState).getName(),
-                //operState,
-                lnkOpState == null || oppLnkOpState == null
-                    ? null : this.tapiLink.setTapiOperationalState(lnkOpState, oppLnkOpState).getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                this.tapiTopoUuid
-                //, oppLinkName
-                );
+                link,
+                network,
+                this.tapiTopoUuid,
+                linkTerminationPointsFactory);
+            if (tapLink == null) {
+                LOG.warn("Skipping OpenROADM link {} because TAPI link creation failed", link.getLinkId());
+                continue;
+            }
+
             tapiLinks.put(tapLink.key(), tapLink);
             Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
             LOG.debug("CONVERTTOFULL147, cepMap is {}", cepMap);
