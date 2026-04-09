@@ -168,7 +168,7 @@ public class TapiProvider {
 
         this.listeners = new ArrayList<>();
         TapiNetconfTopologyListener topologyListener = new TapiNetconfTopologyListener(tapiNetworkModelServiceImpl);
-        TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransactionService);
+        TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransactionService, topologyUtils);
         TapiPortMappingListener tapiPortMappingListener = new TapiPortMappingListener(tapiNetworkModelServiceImpl,
                 networkTransactionService);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, LINK_II,
