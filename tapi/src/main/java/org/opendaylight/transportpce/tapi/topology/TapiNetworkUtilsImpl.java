@@ -31,7 +31,13 @@ public class TapiNetworkUtilsImpl {
     public TapiNetworkUtilsImpl(@Reference RpcProviderService rpcProviderService,
             @Reference NetworkTransactionService networkTransactionService, @Reference TapiLink tapiLink) {
         this.reg = rpcProviderService.registerRpcImplementations(
-                new InitRoadmRoadmTapiLinkImpl(tapiLink, networkTransactionService),
+                new InitRoadmRoadmTapiLinkImpl(
+                        tapiLink,
+                        networkTransactionService,
+                        new TopologyUtils(
+                                networkTransactionService,
+                                networkTransactionService.getDataBroker(),
+                                tapiLink)),
                 new InitXpdrRdmTapiLinkImpl(tapiLink, networkTransactionService),
                 new DeleteTapiLinkImpl(networkTransactionService));
         LOG.info("TapiNetworkUtilsImpl instantiated");
