@@ -20,9 +20,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
@@ -35,7 +37,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
@@ -54,15 +55,35 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     private final NetworkTransactionService networkTransactionService;
     private final Uuid tapiTopoUuid = new Uuid(
             UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+    private final TopologyUtils topologyUtils;
 
-    public TapiOrLinkListener(final TapiLink tapiLink, final NetworkTransactionService networkTransactionService) {
+    public TapiOrLinkListener(
+            final TapiLink tapiLink,
+            final NetworkTransactionService networkTransactionService,
+            final TopologyUtils topologyUtils) {
         this.tapiLink = tapiLink;
         this.networkTransactionService = networkTransactionService;
+        this.topologyUtils = topologyUtils;
     }
 
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Link>> changes) {
         LOG.info("onDataTreeChanged - {} changes - {}", changes.size(), this.getClass().getSimpleName());
+
+        Network network;
+        try {
+            network = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            LOG.error(
+                    "Failed to read topology '{}' from datastore. Cannot process {} data tree changes. Aborting.",
+                    InstanceIdentifiers.OPENROADM_TOPOLOGY_II,
+                    changes.size(),
+                    e
+            );
+            return;
+        }
+
+        OpenRoadmLinkResolver linkResolver = new OpenRoadmLinkResolver();
         for (DataTreeModification<Link> change : changes) {
 
             Link link = change.getRootNode().dataAfter();
@@ -104,7 +125,6 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
             String destTp = link.getDestination().getDestTp().getValue();
             //Configuring link type to default OMS_XPDR-RDM
-            String linkType = TapiConstants.OMS_XPDR_RDM_LINK;
 
             if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
                 // For ROADM to ROADM link, only capture change on existing links to track change in OMS
@@ -118,7 +138,6 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 }
                 LOG.warn("Now triggering creation of link for type = {} to account for OMS change",
                     link1.getLinkType().getName());
-                linkType = TapiConstants.OMS_RDM_RDM_LINK;
             }
 
             // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
@@ -134,16 +153,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                             srcTp,
                             destNode,
                             destTp,
-                            linkType,
-                            getQual(srcNode),
-                            getQual(destNode),
-                            TapiConstants.PHTNC_MEDIA_OTS,
-                            TapiConstants.PHTNC_MEDIA_OTS,
-                            link1.getAdministrativeState().getName(),
-                            link1.getOperationalState().getName(),
-                            Set.of(LayerProtocolName.PHOTONICMEDIA),
-                            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                            tapiTopoUuid);
+                            network,
+                            tapiTopoUuid,
+                            linkResolver);
 
             logNewTapiLink(tapiLink1);
 
