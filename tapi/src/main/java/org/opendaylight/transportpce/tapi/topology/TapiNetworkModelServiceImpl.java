@@ -70,6 +70,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.Supp
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -232,7 +233,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     @Override
-    public void createTapiNode(String orNodeId, Nodes node) {
+    public void createTapiNode(String orNodeId, Nodes node, Network network) {
         // TODO -> Implementation with PortMappingListener
         // check if port mapping exists or not...
         if (node.getMapping() == null) {
@@ -311,7 +312,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     this.linkDiscovery.readLLDP(
                         new NodeId(orNodeId),
                         node.getNodeInfo().getOpenroadmVersion().getIntValue(),
-                        this.tapiTopoUuid);
+                        this.tapiTopoUuid,
+                        network);
                 if (!rdm2rdmLinks.isEmpty()) {
                     Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
                     addCepToOnep(onepMap, cepMap);

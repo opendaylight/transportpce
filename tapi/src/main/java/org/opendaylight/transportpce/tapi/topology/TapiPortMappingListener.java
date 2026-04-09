@@ -12,9 +12,11 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +26,28 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
 
     private final TapiNetworkModelService tapiNetworkModelService;
 
-    public TapiPortMappingListener(TapiNetworkModelService tapiNetworkModelService) {
+    private final TopologyUtils topologyUtils;
+
+    public TapiPortMappingListener(TapiNetworkModelService tapiNetworkModelService, TopologyUtils topologyUtils) {
         this.tapiNetworkModelService = tapiNetworkModelService;
+        this.topologyUtils = topologyUtils;
     }
 
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Nodes>> changes) {
         LOG.info("TAPI - received {} changes in data tree", changes.size());
+        Network networkTopology;
+        try {
+            networkTopology = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            LOG.error(
+                    "Failed to read topology '{}' from datastore. Cannot process {} data tree changes. Aborting.",
+                    InstanceIdentifiers.OPENROADM_TOPOLOGY_II,
+                    changes.size(),
+                    e
+            );
+            return;
+        }
         for (DataTreeModification<Nodes> change : changes) {
             LOG.debug("TAPI module: Change in Node = {}", change.getRootNode());
             // Data before needs to be not null
@@ -53,7 +70,7 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                     LOG.debug("New mapping for node {} = {}", nodeId, mappingAft);
                     LOG.info("As the mapping is now created for the first time, "
                         + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
-                    this.tapiNetworkModelService.createTapiNode(nodeId, nodesAft);
+                    this.tapiNetworkModelService.createTapiNode(nodeId, nodesAft, networkTopology);
                 } else {
                     for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
                         Mapping oldMapping = mappingBef.get(entry.getKey());
@@ -69,7 +86,7 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                 }
             } else if (change.getRootNode().dataAfter() != null && change.getRootNode().dataBefore() == null) {
                 Nodes nodesAft = change.getRootNode().dataAfter();
-                this.tapiNetworkModelService.createTapiNode(nodesAft.getNodeId(), nodesAft);
+                this.tapiNetworkModelService.createTapiNode(nodesAft.getNodeId(), nodesAft, networkTopology);
             }
         }
         LOG.info("TAPI - done processing {} changes in data tree", changes.size());
