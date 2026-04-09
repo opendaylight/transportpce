@@ -16,14 +16,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
-import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
-import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.cp.to.degree.CpToDegree;
@@ -53,7 +50,6 @@ public class R2RTapiLinkDiscovery {
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
     private final TapiLink tapiLink;
-    private final TopologyUtils topologyUtils;
     private final LinkResolver linkResolver = new OpenRoadmLinkResolver();
 
     public R2RTapiLinkDiscovery(NetworkTransactionService networkTransactionService,
@@ -61,13 +57,10 @@ public class R2RTapiLinkDiscovery {
         this.networkTransactionService = networkTransactionService;
         this.deviceTransactionManager = deviceTransactionManager;
         this.tapiLink = tapiLink;
-        this.topologyUtils = new TopologyUtils(
-                networkTransactionService,
-                networkTransactionService.getDataBroker(),
-                tapiLink);
     }
 
-    public Map<LinkKey, Link> readLLDP(NodeId nodeId, int nodeVersion, Uuid tapiTopoUuid) {
+    public Map<LinkKey, Link> readLLDP(NodeId nodeId, int nodeVersion, Uuid tapiTopoUuid,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network) {
         LOG.info("Read from device {} R2R Link Node version = {}", nodeId, nodeVersion);
         // TODO -> waiting for device 7.1 in network model to change this to a switch statement and include
         //  support for 7.1 devices
@@ -90,7 +83,7 @@ public class R2RTapiLinkDiscovery {
                     .getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr121List.getIfName().size());
                 // try to create rdm2rdm link
-                return rdm2rdmLinkCreatev121(nodeId, tapiTopoUuid, nbr121List);
+                return rdm2rdmLinkCreatev121(nodeId, tapiTopoUuid, nbr121List, network);
             case 2:
                 // 2.2.1
                 DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
@@ -114,7 +107,7 @@ public class R2RTapiLinkDiscovery {
                         org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
                     .getLldp().getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr221List.getIfName().size());
-                return rdm2rdmLinkCreatev221(nodeId, tapiTopoUuid, nbr221List);
+                return rdm2rdmLinkCreatev221(nodeId, tapiTopoUuid, nbr221List, network);
             case 3:
                 // 7.1.0
                 LOG.info("Not yet supported?");
@@ -147,7 +140,8 @@ public class R2RTapiLinkDiscovery {
     }
 
     private Map<LinkKey, Link> rdm2rdmLinkCreatev221(NodeId nodeId, Uuid tapiTopoUuid,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.NbrList nbrList) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.NbrList nbrList,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network) {
         Map<LinkKey, Link> linkMap = new HashMap<>();
         for (org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.nbr.list.IfName
                 ifName : nbrList.nonnullIfName().values()) {
@@ -165,7 +159,7 @@ public class R2RTapiLinkDiscovery {
                 continue;
             }
             Link omsLink = createR2RTapiLink(nodeId, ifName.getIfName(), ifName.getRemoteSysName(),
-                ifName.getRemotePortId(), tapiTopoUuid);
+                ifName.getRemotePortId(), tapiTopoUuid, network);
             if (omsLink != null) {
                 linkMap.put(omsLink.key(), omsLink);
             } else {
@@ -175,7 +169,8 @@ public class R2RTapiLinkDiscovery {
         return linkMap;
     }
 
-    private Map<LinkKey, Link> rdm2rdmLinkCreatev121(NodeId nodeId, Uuid tapiTopoUuid, NbrList nbrList) {
+    private Map<LinkKey, Link> rdm2rdmLinkCreatev121(NodeId nodeId, Uuid tapiTopoUuid, NbrList nbrList,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network) {
         Map<LinkKey, Link> linkMap = new HashMap<>();
         for (IfName ifName : nbrList.nonnullIfName().values()) {
             if (ifName.getRemoteSysName() == null) {
@@ -193,7 +188,7 @@ public class R2RTapiLinkDiscovery {
                 continue;
             }
             Link omsLink = createR2RTapiLink(nodeId, ifName.getIfName(), ifName.getRemoteSysName(),
-                ifName.getRemotePortId(), tapiTopoUuid);
+                ifName.getRemotePortId(), tapiTopoUuid, network);
             if (omsLink != null) {
                 linkMap.put(omsLink.key(), omsLink);
             } else {
@@ -203,8 +198,14 @@ public class R2RTapiLinkDiscovery {
         return linkMap;
     }
 
-    public Link createR2RTapiLink(NodeId nodeId, String interfaceName, String remoteSystemName,
-                                 String remoteInterfaceName, Uuid tapiTopoUuid) {
+    public Link createR2RTapiLink(
+            NodeId nodeId,
+            String interfaceName,
+            String remoteSystemName,
+            String remoteInterfaceName,
+            Uuid tapiTopoUuid,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network) {
+
         String srcTpTx = null;
         String srcTpRx = null;
         // Find which degree is associated with ethernet interface
@@ -264,20 +265,15 @@ public class R2RTapiLinkDiscovery {
                 destNodeId.getValue(),
                 destDegId,
                 destTpRx);
-        Link omsLink;
-        try {
-            omsLink = this.tapiLink.createTapiLink(
+        Link omsLink = this.tapiLink.createTapiLink(
                 nodeId.getValue(),
                 srcTpTx,
                 destNodeId.getValue(),
                 destTpTx,
-                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II),
+                network,
                 tapiTopoUuid,
                 linkResolver
             );
-        } catch (TapiTopologyException e) {
-            throw new RuntimeException(e);
-        }
         logNewR2RLink(omsLink);
         LOG.debug("inputAdminstate= {}, inputoperstate = {}",
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
