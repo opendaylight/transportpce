@@ -21,17 +21,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
-import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
-import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.nep.RoadmNepFactory;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.Node1;
@@ -39,7 +35,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -117,60 +112,16 @@ public class ConvertTopoORtoTapiAtInit {
 
         LOG.info("creation of {} roadm to roadm links", rdmTordmLinkList.size() / 2);
         for (var link : rdmTordmLinkList) {
-            Link1 lnk1 = link.augmentation(Link1.class);
-            if (lnk1 == null) {
-                LOG.warn("Link {} does not have OpenROADM link augmentation", link.getLinkId().getValue());
-                continue;
-            }
-
-            LinkId lnk1OppLnk = lnk1.getOppositeLink();
-            if (lnk1OppLnk == null) {
-                LOG.warn("Link {} does not have an opposite link", link.getLinkId().getValue());
-                continue;
-            }
-
-            var oppositeLink = rdmTordmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(lnk1OppLnk))
-                .findAny().orElse(null);
-            AdminStates oppLnkAdmState = null;
-            State oppLnkOpState = null;
-            //String oppLinkName = null;
-            if (oppositeLink != null) {
-                final Link1 oppositeLnk1 = oppositeLink.augmentation(Link1.class);
-                if (oppositeLnk1 == null) {
-                    LOG.warn("Opposite link {} does not have OpenROADM link augmentation", lnk1OppLnk.getValue());
-                } else {
-                    oppLnkAdmState = oppositeLnk1.getAdministrativeState();
-                    oppLnkOpState = oppositeLnk1.getOperationalState();
-                }
-            }
-            var lnkAdmState = lnk1.getAdministrativeState();
-            var lnkOpState = lnk1.getOperationalState();
-
-            LinkTerminationPoints linkTerminationPoints = linkTerminationPointsFactory.fromLink(link, network);
-            TerminationPointId source = linkTerminationPoints.source();
-            TerminationPointId destination = linkTerminationPoints.destination();
             Link tapLink = this.tapiLink.createTapiLink(
-                source.supportingNodeId(),
-                source.tpId(),
-                destination.supportingNodeId(),
-                destination.tpId(),
-                TapiConstants.OMS_RDM_RDM_LINK,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                //adminState,
-                lnkAdmState == null || oppLnkAdmState == null
-                    ? null : this.tapiLink.setTapiAdminState(lnkAdmState, oppLnkAdmState).getName(),
-                //operState,
-                lnkOpState == null || oppLnkOpState == null
-                    ? null : this.tapiLink.setTapiOperationalState(lnkOpState, oppLnkOpState).getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                this.tapiTopoUuid
-                //, oppLinkName
-                );
+                link,
+                network,
+                this.tapiTopoUuid,
+                linkTerminationPointsFactory);
+            if (tapLink == null) {
+                LOG.warn("Skipping OpenROADM link {} because TAPI link creation failed", link.getLinkId());
+                continue;
+            }
+
             tapiLinks.put(tapLink.key(), tapLink);
             Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
             LOG.debug("CONVERTTOFULL147, cepMap is {}", cepMap);
