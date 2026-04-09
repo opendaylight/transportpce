@@ -341,8 +341,8 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 .toString()),
             "roadm", "ROADM-A1",
             true);
-        String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
-        String roadmC1seed = "ROADM-C1+PHOTONIC_MEDIA";
+        String roadmA1seed = "ROADM-A1-DEG2+PHOTONIC_MEDIA";
+        String roadmC1seed = "ROADM-C1-DEG1+PHOTONIC_MEDIA";
         String roadmA1deg2seed = roadmA1seed + "_OTS+DEG2-TTP-TXRX";
         String roadmC1deg1seed = roadmC1seed + "_OTS+DEG1-TTP-TXRX";
         String linkseed = roadmC1deg1seed + "to" + roadmA1deg2seed;
