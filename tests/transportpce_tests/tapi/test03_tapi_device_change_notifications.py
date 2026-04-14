@@ -145,6 +145,209 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     WAITING = 25  # nominal value is 300
     NODE_VERSION_221 = '2.2.1'
 
+    DEFAULT_WAIT_TIMEOUT = int(os.environ.get("TPCE_WAIT_TIMEOUT", "90"))
+    DEFAULT_WAIT_INTERVAL = float(os.environ.get("TPCE_WAIT_INTERVAL", "2"))
+
+    def _wait_until(self, fetch_fn, predicate, timeout=None, interval=None, description="condition"):
+        timeout = self.DEFAULT_WAIT_TIMEOUT if timeout is None else timeout
+        interval = self.DEFAULT_WAIT_INTERVAL if interval is None else interval
+        deadline = time.time() + timeout
+        last_value = None
+        last_error = None
+
+        while time.time() < deadline:
+            try:
+                last_value = fetch_fn()
+                if predicate(last_value):
+                    return last_value
+            except Exception as exc:  # pylint: disable=broad-except
+                last_error = exc
+            time.sleep(interval)
+
+        details = []
+        if last_error is not None:
+            details.append(f"last_error={last_error!r}")
+        if last_value is not None:
+            details.append(f"last_value={last_value!r}")
+        suffix = ""
+        if details:
+            suffix = " | " + " | ".join(details)
+        self.fail(f"Timed out after {timeout}s waiting for {description}{suffix}")
+
+    def _wait_for_ordm_service_state(self, service_name, admin=None, oper=None, lifecycle=None,
+                                     timeout=None, interval=None):
+        def fetch():
+            return test_utils.get_ordm_serv_list_attr_request("services", service_name)
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            services = response.get('services', [])
+            if not services:
+                return False
+            service = services[0]
+            if admin is not None and service.get('administrative-state') != admin:
+                return False
+            if oper is not None and service.get('operational-state') != oper:
+                return False
+            if lifecycle is not None and service.get('lifecycle-state') != lifecycle:
+                return False
+            return True
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"ORDM service {service_name}"
+        )
+
+    def _wait_for_tapi_service_state(self, uuid_value, admin=None, oper=None, lifecycle=None,
+                                     timeout=None, interval=None):
+        def fetch():
+            return test_utils.transportpce_api_rpc_request(
+                'tapi-connectivity', 'get-connectivity-service-details', {"uuid": str(uuid_value)}
+            )
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            service = response['output']['service']
+            if admin is not None and service.get('administrative-state') != admin:
+                return False
+            if oper is not None and service.get('operational-state') != oper:
+                return False
+            if lifecycle is not None and service.get('lifecycle-state') != lifecycle:
+                return False
+            return True
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"TAPI service {uuid_value}"
+        )
+
+    def _wait_for_portmapping_lcp_state(self, node_name, logical_connection_point, expected_state,
+                                        timeout=None, interval=None):
+        def fetch():
+            return test_utils.get_portmapping_node_attr(node_name, None, None)
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            mappings = response.get('nodes', [{}])[0].get('mapping', [])
+            for mapping in mappings:
+                if mapping.get('logical-connection-point') == logical_connection_point:
+                    return (
+                            mapping.get('port-oper-state') == expected_state and
+                            mapping.get('port-admin-state') == expected_state
+                    )
+            return False
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"portmapping {node_name}/{logical_connection_point} -> {expected_state}"
+        )
+
+    def _wait_for_openroadm_tp_state(self, node_id, tp_id, expected_state,
+                                     timeout=None, interval=None):
+        def fetch():
+            return test_utils.get_ietf_network_request('openroadm-topology', 'config')
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            for node in response['network'][0].get('node', []):
+                if node.get('node-id') != node_id:
+                    continue
+                for tp in node.get('ietf-network-topology:termination-point', []):
+                    if tp.get('tp-id') == tp_id:
+                        return (
+                                tp.get('org-openroadm-common-network:operational-state') == expected_state and
+                                tp.get('org-openroadm-common-network:administrative-state') == expected_state
+                        )
+            return False
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"OpenROADM TP {node_id}/{tp_id} -> {expected_state}"
+        )
+
+    def _wait_for_tapi_nep_state(self, node_id, name_fragment, expected_oper, expected_admin,
+                                 timeout=None, interval=None):
+        def fetch():
+            return test_utils.transportpce_api_rpc_request(
+                'tapi-topology', 'get-node-details',
+                {"topology-id": test_utils.T0_FULL_MULTILAYER_TOPO_UUID, "node-id": node_id}
+            )
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            for nep in response['output']['node'].get('owned-node-edge-point', []):
+                names = nep.get('name', [])
+                value = names[0].get('value', '') if names else ''
+                if name_fragment in value:
+                    return (
+                            nep.get('operational-state') == expected_oper and
+                            nep.get('administrative-state') == expected_admin
+                    )
+            return False
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"TAPI NEP {node_id} containing {name_fragment} -> {expected_oper}/{expected_admin}"
+        )
+
+    def _wait_for_topology_cleared(self, topology_name, timeout=None, interval=None):
+        def fetch():
+            return test_utils.get_ietf_network_request(topology_name, 'config')
+
+        def matches(response):
+            if response['status_code'] != requests.codes.ok:
+                return False
+            network = response['network'][0]
+            return 'node' not in network and 'ietf-network-topology:link' not in network
+
+        return self._wait_until(
+            fetch, matches, timeout=timeout, interval=interval,
+            description=f"{topology_name} to be cleared"
+        )
+
+
+    @staticmethod
+    def _json_default(obj):
+        if isinstance(obj, Path):
+            return str(obj)
+        if isinstance(obj, bytes):
+            return obj.decode("utf-8", errors="replace")
+        if hasattr(obj, "__dict__"):
+            return obj.__dict__
+        return repr(obj)
+
+    @classmethod
+    def _serialize_response(cls, response):
+        if isinstance(response, requests.Response):
+            try:
+                body = response.json()
+            except Exception:  # pylint: disable=broad-except
+                body = response.text
+            return {
+                "response_type": "requests.Response",
+                "status_code": response.status_code,
+                "reason": response.reason,
+                "url": response.url,
+                "headers": dict(response.headers),
+                "body": body
+            }
+
+        if isinstance(response, dict):
+            return response
+
+        if isinstance(response, (list, tuple, str, int, float, bool)) or response is None:
+            return response
+
+        return {
+            "response_type": type(response).__name__,
+            "repr": repr(response)
+        }
+
     @classmethod
     def setUpClass(cls):
         # pylint: disable=unsubscriptable-object
@@ -178,7 +381,104 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     def setUp(self):  # instruction executed before each test method
         # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
-        time.sleep(1)
+
+
+    def _assert_ordm_service_planned(self):
+        response = self._wait_for_ordm_service_state(
+            "serviceEthernet-1", admin='inService', lifecycle='planned', timeout=60
+        )
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
+        self.assertEqual(response['services'][0]['service-name'], "serviceEthernet-1")
+        self.assertEqual(response['services'][0]['connection-type'], 'service')
+        self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
+        return response
+
+    def _assert_tapi_service_installed(self):
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
+
+        response = self._wait_for_tapi_service_state(
+            self.uuid_services.eth, admin='UNLOCKED', oper='ENABLED', lifecycle='INSTALLED', timeout=60
+        )
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['output']['service']['operational-state'], 'ENABLED')
+        self.assertEqual(response['output']['service']['name'][0]['value'], "serviceEthernet-1")
+        self.assertEqual(response['output']['service']['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['output']['service']['lifecycle-state'], 'INSTALLED')
+        return response
+
+    def _assert_service_degraded(self):
+        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceEthernet-1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['services'][0]['operational-state'], 'outOfService')
+        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
+        return response
+
+    def _assert_tapi_service_degraded(self):
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
+        response = test_utils.transportpce_api_rpc_request(
+            'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['output']['service']['operational-state'], 'DISABLED')
+        self.assertEqual(response['output']['service']['administrative-state'], 'LOCKED')
+        return response
+
+    def _assert_portmapping_all_in_service(self, node_name):
+        response = test_utils.get_portmapping_node_attr(node_name, None, None)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        mapping_list = response['nodes'][0]['mapping']
+        for mapping in mapping_list:
+            self.assertEqual(mapping['port-oper-state'], 'InService',
+                             "Operational State should be 'InService'")
+            self.assertEqual(mapping['port-admin-state'], 'InService',
+                             "Administrative State should be 'InService'")
+        return response
+
+    def _assert_openroadm_topology_all_in_service(self):
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        node_list = response['network'][0]['node']
+        for node in node_list:
+            node_map_id = node['node-id'].split("-")[0]
+            if node_map_id == 'TAPI':
+                continue
+            self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
+            self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            tp_list = node['ietf-network-topology:termination-point']
+            for tp in tp_list:
+                self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'inService')
+                self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'inService')
+
+        link_list = response['network'][0]['ietf-network-topology:link']
+        for link in link_list:
+            self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
+            self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
+        return response
+
+    def _assert_roadm_a_photonic_media_neps_enabled(self):
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
+        response = test_utils.transportpce_api_rpc_request(
+            'tapi-topology', 'get-node-details', self.node_details)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        nep_list = response['output']['node']['owned-node-edge-point']
+        for nep in nep_list:
+            self.assertEqual(nep['operational-state'], 'ENABLED',
+                             "Operational State should be 'ENABLED'")
+            self.assertEqual(nep['administrative-state'], 'UNLOCKED',
+                             "Administrative State should be 'UNLOCKED'")
+        return response
+
+    def _assert_tapi_links_all_enabled(self):
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        response = test_utils.transportpce_api_rpc_request(
+            'tapi-topology', 'get-topology-details', self.tapi_topo)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        link_list = response['output']['topology']['link']
+        for link in link_list:
+            self.assertEqual(link['operational-state'], 'ENABLED')
+            self.assertEqual(link['administrative-state'], 'UNLOCKED')
+        return response
 
     def test_01_connect_xpdrA(self):
         response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION_221))
@@ -268,8 +568,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     def test_11_create_connectivity_service_Ethernet(self):
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'create-connectivity-service', self.cr_serv_input_data)
-        time.sleep(self.WAITING)
+
         self.uuid_services.eth = response['output']['service']['uuid']
+        self._wait_for_tapi_service_state(
+            self.uuid_services.eth,
+            admin='UNLOCKED', oper='ENABLED', lifecycle='INSTALLED',
+            timeout=max(self.WAITING, 60)
+        )
         # pylint: disable=consider-using-f-string
 
         input_dict_1 = {'administrative-state': 'LOCKED',
@@ -296,23 +601,11 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 #        time.sleep(self.WAITING)
 
     def test_12_get_service_Ethernet(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceEthernet-1")
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], "serviceEthernet-1")
-        self.assertEqual(response['services'][0]['connection-type'], 'service')
-        self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(1)
+        self._assert_ordm_service_planned()
+
 
     def test_13_get_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['output']['service']['operational-state'], 'ENABLED')
-        self.assertEqual(response['output']['service']['name'][0]['value'], "serviceEthernet-1")
-        self.assertEqual(response['output']['service']['administrative-state'], 'UNLOCKED')
-        self.assertEqual(response['output']['service']['lifecycle-state'], 'INSTALLED')
+        self._assert_tapi_service_installed()
 
     def test_14_change_status_line_port_xpdrc(self):
         self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
@@ -322,7 +615,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "xpdr-network"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('XPDR-C1', 'XPDR1-NETWORK1', 'OutOfService', timeout=30)
 
     def test_15_check_update_portmapping(self):
         response = test_utils.get_portmapping_node_attr("XPDR-C1", None, None)
@@ -339,7 +632,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                                  "Operational State should be 'InService'")
                 self.assertEqual(mapping['port-admin-state'], 'InService',
                                  "Administrative State should be 'InService'")
-        time.sleep(1)
+
 
     def test_16_check_update_openroadm_topo(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -377,7 +670,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
                 self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
-        time.sleep(10)
+        self._wait_for_tapi_nep_state('1770bea4-b1da-3b20-abce-7d182c0ec0df', 'XPDR1-NETWORK1', 'DISABLED', 'LOCKED', timeout=45)
 
     def test_17_check_update_tapi_neps(self):
         self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -402,13 +695,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                                  "Administrative State should be 'UNLOCKED'")
         self.node_details["node-id"] = "XPDR-C1-XPDR1+DSR"
         self.assertEqual(nb_updated_neps, 4, "4 xponder neps (OTS, OTSI_MC, iOTU, eODU) should have been modified")
-        time.sleep(1)
+
 
     def test_18_check_update_tapi_links(self):
         self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
-        time.sleep(2)
+
         self.assertEqual(response['status_code'], requests.codes.ok)
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
@@ -422,22 +715,14 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
         self.assertEqual(nb_updated_link, 1,
                          "Only one xponder-output/input bidirectional link should have been modified")
-        time.sleep(1)
+
 
     def test_19_check_update_service_Ethernet(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceEthernet-1")
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['services'][0]['operational-state'], 'outOfService')
-        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
+        self._assert_service_degraded()
 
     def test_20_check_update_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['output']['service']['operational-state'], 'DISABLED')
-        self.assertEqual(response['output']['service']['administrative-state'], 'LOCKED')
-        time.sleep(1)
+        self._assert_tapi_service_degraded()
+
 
     def test_21_restore_status_line_port_xpdrc(self):
         self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
@@ -447,39 +732,15 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "xpdr-network"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('XPDR-C1', 'XPDR1-NETWORK1', 'InService', timeout=30)
 
     def test_22_check_update_portmapping_ok(self):
-        response = test_utils.get_portmapping_node_attr("XPDR-C1", None, None)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        mapping_list = response['nodes'][0]['mapping']
-        for mapping in mapping_list:
-            self.assertEqual(mapping['port-oper-state'], 'InService',
-                             "Operational State should be 'InService'")
-            self.assertEqual(mapping['port-admin-state'], 'InService',
-                             "Administrative State should be 'InService'")
-        time.sleep(1)
+        self._assert_portmapping_all_in_service("XPDR-C1")
+
 
     def test_23_check_update_openroadm_topo_ok(self):
-        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        node_list = response['network'][0]['node']
-        for node in node_list:
-            nodeMapId = node['node-id'].split("-")[0]
-            if nodeMapId == 'TAPI':
-                continue
-            self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
-            self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
-            tp_list = node['ietf-network-topology:termination-point']
-            for tp in tp_list:
-                self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'inService')
-                self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'inService')
+        self._assert_openroadm_topology_all_in_service()
 
-        link_list = response['network'][0]['ietf-network-topology:link']
-        for link in link_list:
-            self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
-            self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
-        time.sleep(1)
 
     def test_24_check_update_tapi_neps_ok(self):
         self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -494,26 +755,21 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                              "Operational State should be 'ENABLED'")
             self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                              "Administrative State should be 'UNLOCKED'")
-        time.sleep(1)
+
 
     def test_25_check_update_tapi_links_ok(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-topology', 'get-topology-details', self.tapi_topo)
-        time.sleep(2)
-        link_list = response['output']['topology']['link']
-        for link in link_list:
-            self.assertEqual(link['operational-state'], 'ENABLED')
-            self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        time.sleep(1)
+        self._assert_tapi_links_all_enabled()
+
 
     def test_26_check_update_service1_ok(self):
-        self.test_12_get_service_Ethernet()
+        self._assert_ordm_service_planned()
 
     def test_27_check_update_connectivity_service_Ethernet_ok(self):
-        time.sleep(10)
+        self._wait_for_tapi_service_state(
+            self.uuid_services.eth, admin='UNLOCKED', oper='ENABLED', lifecycle='INSTALLED', timeout=60
+        )
         print(format(self.uuid_services.eth))
-        self.test_13_get_connectivity_service_Ethernet()
+        self._assert_tapi_service_installed()
 
     def test_28_change_status_port_roadma_srg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
@@ -525,7 +781,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('ROADM-A1', 'SRG1-PP1-TXRX', 'OutOfService', timeout=30)
 
     def test_29_check_update_portmapping(self):
         response = test_utils.get_portmapping_node_attr("ROADM-A1", None, None)
@@ -542,7 +798,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                                  "Operational State should be 'InService'")
                 self.assertEqual(mapping['port-admin-state'], 'InService',
                                  "Administrative State should be 'InService'")
-        time.sleep(1)
+
 
     def test_30_check_update_openroadm_topo(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -580,7 +836,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
                 self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
-        time.sleep(1)
+
 
     def test_31_check_update_tapi_neps(self):
         self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -604,13 +860,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
         self.assertEqual(nb_updated_neps, 2, "Only 2 roadm SRG-PP nep (OTS/MC)should have been modified")
-        time.sleep(1)
+
 
     def test_32_check_update_tapi_links(self):
         self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
-        time.sleep(2)
+
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
         for link in link_list:
@@ -623,13 +879,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
         self.assertEqual(nb_updated_link, 1,
                          "Only one xponder-output/input link should have been modified")
-        time.sleep(1)
+
 
     def test_33_check_update_service_Ethernet(self):
-        self.test_19_check_update_service_Ethernet()
+        self._assert_service_degraded()
 
     def test_34_check_update_connectivity_service_Ethernet(self):
-        self.test_20_check_update_connectivity_service_Ethernet()
+        self._assert_tapi_service_degraded()
 
     def test_35_restore_status_port_roadma_srg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
@@ -641,46 +897,27 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('ROADM-A1', 'SRG1-PP1-TXRX', 'InService', timeout=30)
 
     def test_36_check_update_portmapping_ok(self):
-        response = test_utils.get_portmapping_node_attr("ROADM-A1", None, None)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        mapping_list = response['nodes'][0]['mapping']
-        for mapping in mapping_list:
-            self.assertEqual(mapping['port-oper-state'], 'InService',
-                             "Operational State should be 'InService'")
-            self.assertEqual(mapping['port-admin-state'], 'InService',
-                             "Administrative State should be 'InService'")
-        time.sleep(1)
+        self._assert_portmapping_all_in_service("ROADM-A1")
+
 
     def test_37_check_update_openroadm_topo_ok(self):
-        self.test_23_check_update_openroadm_topo_ok()
+        self._assert_openroadm_topology_all_in_service()
 
     def test_38_check_update_tapi_neps_ok(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
-#        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
-        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-topology', 'get-node-details', self.node_details)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        nep_list = response['output']['node']['owned-node-edge-point']
-        for nep in nep_list:
-            self.assertEqual(nep['operational-state'], 'ENABLED',
-                             "Operational State should be 'ENABLED'")
-            self.assertEqual(nep['administrative-state'], 'UNLOCKED',
-                             "Administrative State should be 'UNLOCKED'")
+        self._assert_roadm_a_photonic_media_neps_enabled()
 
-        time.sleep(1)
 
     def test_39_check_update_tapi_links_ok(self):
-        self.test_25_check_update_tapi_links_ok()
+        self._assert_tapi_links_all_enabled()
 
     def test_40_check_update_service1_ok(self):
-        self.test_12_get_service_Ethernet()
+        self._assert_ordm_service_planned()
 
     def test_41_check_update_connectivity_service_Ethernet_ok(self):
-        self.test_13_get_connectivity_service_Ethernet()
+        self._assert_tapi_service_installed()
 
     def test_42_change_status_line_port_roadma_deg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2/0', 'L1',
@@ -692,7 +929,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('ROADM-A1', 'DEG2-TTP-TXRX', 'OutOfService', timeout=30)
 
     def test_43_check_update_portmapping(self):
         response = test_utils.get_portmapping_node_attr("ROADM-A1", None, None)
@@ -709,7 +946,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                                  "Operational State should be 'InService'")
                 self.assertEqual(mapping['port-admin-state'], 'InService',
                                  "Administrative State should be 'InService'")
-        time.sleep(1)
+
 
     def test_44_check_update_openroadm_topo(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -746,7 +983,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
                 self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
-        time.sleep(1)
+
 
     def test_45_check_update_tapi_neps(self):
         self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -770,13 +1007,18 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
         self.assertEqual(nb_updated_neps, 4, "4 roadm NEPS should have been modified (OTS/OMS/MC/OTSI_MC")
-        time.sleep(1)
+
 
     def test_46_check_update_tapi_links(self):
         self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
-        time.sleep(5)
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-topology', 'get-topology-details', self.tapi_topo)
+
+
+        response = self._wait_until(
+            lambda: test_utils.transportpce_api_rpc_request('tapi-topology', 'get-topology-details', self.tapi_topo),
+            lambda r: r['status_code'] == requests.codes.ok,
+            timeout=45,
+            description='TAPI topology details to be available'
+        )
         self.assertEqual(response['status_code'], requests.codes.ok)
         link_list = response['output']['topology']['link']
         nb_updated_link = 0
@@ -790,13 +1032,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
         self.assertEqual(nb_updated_link, 1,
                          "Only one rdm-rdm link should have been modified")
-        time.sleep(1)
+
 
     def test_47_check_update_service_Ethernet(self):
-        self.test_19_check_update_service_Ethernet()
+        self._assert_service_degraded()
 
     def test_48_check_update_connectivity_service_Ethernet(self):
-        self.test_20_check_update_connectivity_service_Ethernet()
+        self._assert_tapi_service_degraded()
 
     def test_49_restore_status_line_port_roadma_deg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2/0', 'L1',
@@ -808,25 +1050,25 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('ROADM-A1', 'DEG2-TTP-TXRX', 'InService', timeout=30)
 
     def test_50_check_update_portmapping_ok(self):
-        self.test_36_check_update_portmapping_ok()
+        self._assert_portmapping_all_in_service("ROADM-A1")
 
     def test_51_check_update_openroadm_topo_ok(self):
-        self.test_23_check_update_openroadm_topo_ok()
+        self._assert_openroadm_topology_all_in_service()
 
     def test_52_check_update_tapi_neps_ok(self):
-        self.test_38_check_update_tapi_neps_ok()
+        self._assert_roadm_a_photonic_media_neps_enabled()
 
     def test_53_check_update_tapi_links_ok(self):
-        self.test_25_check_update_tapi_links_ok()
+        self._assert_tapi_links_all_enabled()
 
     def test_54_check_update_service1_ok(self):
-        self.test_12_get_service_Ethernet()
+        self._assert_ordm_service_planned()
 
     def test_55_check_update_connectivity_service_Ethernet_ok(self):
-        self.test_13_get_connectivity_service_Ethernet()
+        self._assert_tapi_service_installed()
 
     def test_56_change_status_port_roadma_srg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C2',
@@ -838,7 +1080,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        self._wait_for_portmapping_lcp_state('ROADM-A1', 'SRG1-PP2-TXRX', 'OutOfService', timeout=30)
 
     def test_57_check_update_portmapping(self):
         response = test_utils.get_portmapping_node_attr("ROADM-A1", None, None)
@@ -855,7 +1097,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                                  "Operational State should be 'InService'")
                 self.assertEqual(mapping['port-admin-state'], 'InService',
                                  "Administrative State should be 'InService'")
-        time.sleep(1)
+
 
     def test_58_check_update_openroadm_topo(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -880,12 +1122,15 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         self.assertEqual(nb_updated_tp, 1, "Only one termination-point should have been modified")
 
         link_list = response['network'][0]['ietf-network-topology:link']
-        nb_updated_link = 0
+        affected_links = [
+            link for link in link_list
+            if 'SRG1-PP2-TXRX' in link['link-id']
+        ]
+        self.assertEqual(len(affected_links), 0, "No OpenROADM links should have been modified for SRG1-PP2-TXRX")
         for link in link_list:
             self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
-        self.assertEqual(nb_updated_link, 0, "No link should have been modified")
-        time.sleep(1)
+
 
     def test_59_check_update_tapi_neps(self):
         self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -909,7 +1154,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
         self.assertEqual(nb_updated_neps, 1, "Only 1 roadm neps OTS should have been modified for SRG2PP")
-        time.sleep(1)
+
 
     def test_60_check_update_tapi_links(self):
         self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
@@ -918,31 +1163,30 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         link_list = response['output']['topology']['link']
-        nb_updated_link = 0
+        affected_links = [
+            link for link in link_list
+            if all(x in link['name'][0]['value'] for x in ['ROADM-A1', 'SRG1-PP2-TXRX'])
+        ]
+        self.assertEqual(len(affected_links), 0, "No TAPI link should have been modified")
         for link in link_list:
-            if all(x in link['name'][0]['value'] for x in ['ROADM-A1', 'SRG1-PP2-TXRX']):
-                self.assertEqual(link['operational-state'], 'DISABLED')
-                self.assertEqual(link['administrative-state'], 'LOCKED')
-                nb_updated_link += 1
-            else:
-                self.assertEqual(link['operational-state'], 'ENABLED')
-                self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 0,
-                         "No link should have been modified")
-        time.sleep(1)
+            self.assertEqual(link['operational-state'], 'ENABLED')
+            self.assertEqual(link['administrative-state'], 'UNLOCKED')
+
 
     def test_61_check_update_service1_ok(self):
-        self.test_12_get_service_Ethernet()
+        self._assert_ordm_service_planned()
 
     def test_62_check_update_connectivity_service_Ethernet_ok(self):
-        self.test_13_get_connectivity_service_Ethernet()
+        self._assert_tapi_service_installed()
 
     def test_63_delete_connectivity_service_Ethernet(self):
         self.del_serv_input_data["uuid"] = str(self.uuid_services.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.del_serv_input_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
-        time.sleep(self.WAITING)
+
+        self._wait_for_tapi_service_absent(self.uuid_services.eth, timeout=max(self.WAITING, 60))
+        self._wait_for_ordm_service_absent("serviceEthernet-1", timeout=max(self.WAITING, 60))
 
     def test_64_disconnect_xponders_from_roadm(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -980,7 +1224,6 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
 
     def test_70_clean_openroadm_topology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
@@ -993,7 +1236,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 
     def test_71_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
-        time.sleep(40)
+        self._wait_for_topology_cleared('otn-topology', timeout=90, interval=3)
+        self._wait_for_topology_cleared('openroadm-topology', timeout=90, interval=3)
         print("Tapi Feature uninstalled")
 
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
@@ -1007,6 +1251,118 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
         print("Confirm Tapi Feature correctly uninstalled")
 
+    def _wait_for_ordm_service_absent(self, service_name, timeout=None, interval=None):
+        """
+        Poll the ORDM service API until the named service is no longer present.
+
+        A service is considered absent when:
+        - the API returns HTTP 404 or 409
+        - the API returns HTTP 200 with an empty service list
+        - the API returns HTTP 200 and none of the returned services match
+          the requested service name
+
+        Any other response means the service is still considered present or
+        not yet safely confirmed absent, so polling continues until timeout.
+
+        Args:
+            service_name: ORDM service name to wait for disappearance of.
+            timeout: Maximum number of seconds to wait.
+            interval: Delay in seconds between polling attempts.
+
+        Returns:
+            The last API response that satisfied the "absent" condition.
+
+        Fails:
+            The test fails if the service does not disappear before timeout.
+        """
+        def fetch():
+            return test_utils.get_ordm_serv_list_attr_request("services", service_name)
+
+        def matches(response):
+            status_code = response.get('status_code')
+
+            if status_code in (requests.codes.not_found, requests.codes.conflict):
+                return True
+
+            if status_code != requests.codes.ok:
+                return False
+
+            services = response.get('services', [])
+            if not services:
+                return True
+
+            return all(service.get('service-name') != service_name for service in services)
+
+        return self._wait_until(
+            fetch,
+            matches,
+            timeout=timeout,
+            interval=interval,
+            description=f"ORDM service {service_name} to disappear"
+        )
+
+    def _wait_for_tapi_service_absent(self, uuid_value, timeout=None, interval=None):
+        """
+        Poll the TAPI connectivity-service API until the service UUID is gone.
+
+        A service is considered absent when:
+        - the API returns HTTP 404 or 409
+        - the API returns HTTP 500 with an error message indicating the service
+          does not exist in the datastore
+        - the API returns HTTP 200 but no service object is present
+        - the API returns HTTP 200 and the returned service UUID does not match
+          the requested UUID
+
+        This special handling exists because the TAPI API may report a deleted
+        service as an internal server error instead of a normal 404.
+
+        Args:
+            uuid_value: UUID of the TAPI service to wait for disappearance of.
+            timeout: Maximum number of seconds to wait.
+            interval: Delay in seconds between polling attempts.
+
+        Returns:
+            The last API response that satisfied the "absent" condition.
+
+        Fails:
+            The test fails if the service does not disappear before timeout.
+        """
+        def fetch():
+            return test_utils.transportpce_api_rpc_request(
+                'tapi-connectivity',
+                'get-connectivity-service-details',
+                {"uuid": str(uuid_value)}
+            )
+
+        def matches(response):
+            status_code = response.get('status_code')
+
+            if status_code in (requests.codes.not_found, requests.codes.conflict):
+                return True
+
+            if status_code == requests.codes.internal_server_error:
+                errors = response.get('output', {}).get('errors', {}).get('error', [])
+                for error in errors:
+                    if 'doesnt exist in datastore' in error.get('error-message', '').lower():
+                        return True
+                return False
+
+            if status_code != requests.codes.ok:
+                return False
+
+            service = response.get('output', {}).get('service')
+            if not service:
+                return True
+
+            return service.get('uuid') != str(uuid_value)
+
+        return self._wait_until(
+            fetch,
+            matches,
+            timeout=timeout,
+            interval=interval,
+            description=f"TAPI service {uuid_value} to disappear"
+        )
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
