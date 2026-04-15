@@ -41,6 +41,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>pce</module>
     <module>servicehandler</module>
     <module>tapi</module>
+    <module>tapisbi</module>
     <module>nbinotifications</module>
     <module>dmaap-client</module>
     <module>features</module>
