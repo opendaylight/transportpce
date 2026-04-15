@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTopologyRepository;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 
@@ -20,7 +21,7 @@ public interface TapiNetworkModelService {
      * @param node
      *     OpenRoadm node
      */
-    void createTapiNode(String orNodeId, Nodes node);
+    void createTapiNode(String orNodeId, Nodes node, OpenRoadmTopologyRepository topologyRepository);
 
     /**
      * Delete TAPI node in topologies and update corresponding TAPI context objects.
