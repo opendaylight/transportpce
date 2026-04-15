@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.tapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
 import java.nio.charset.StandardCharsets;
@@ -24,15 +23,18 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTopologyRepository;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
@@ -88,12 +90,13 @@ class R2RTapiLinkDiscoveryTest extends AbstractTest {
                 "1GE-interface-1",
                 "ROADM-A1",
                 "1GE-interface-2",
-                TOPOLOGY_UUID);
+                TOPOLOGY_UUID,
+                new MdSalOpenRoadmTopologyRepository(networkTransactionService));
 
         assertNotNull(actual);
 
-        assertNull(actual.getAdministrativeState());
-        assertNull(actual.getOperationalState());
+        assertEquals(AdministrativeState.UNLOCKED, actual.getAdministrativeState());
+        assertEquals(OperationalState.ENABLED, actual.getOperationalState());
         assertEquals(LifecycleState.INSTALLED, actual.getLifecycleState());
         assertEquals(ForwardingDirection.BIDIRECTIONAL, actual.getDirection());
 
