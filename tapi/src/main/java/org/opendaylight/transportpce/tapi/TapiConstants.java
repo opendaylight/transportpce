@@ -50,6 +50,10 @@ public final class TapiConstants {
     // ALIEN_XPDR_TAPI_TOPOLOGY_UUID = "4aedacb6-f830-3b3d-983a-a2de06bc373b"
     public static final Uuid ALIEN_XPDR_TAPI_TOPOLOGY_UUID = new Uuid(UUID.nameUUIDFromBytes(
         TapiConstants.ALIEN_XPDR_TAPI_TOPOLOGY.getBytes(Charset.forName("UTF-8"))).toString());
+    public static final Uuid SBISERVICENOTIFICATIONUUID = new Uuid(UUID.nameUUIDFromBytes(
+        "SBIServiceNotificationUuid".getBytes(Charset.forName("UTF-8"))).toString());
+    public static final Uuid SBINETWORKNOTIFICATIONUUID = new Uuid(UUID.nameUUIDFromBytes(
+        "SBINetworkNotificationUuid".getBytes(Charset.forName("UTF-8"))).toString());
 
     public static final String TPDR_100G = "Transponder 100GE";
     public static final String DSR = "DSR";
