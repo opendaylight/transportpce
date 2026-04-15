@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a441b1a6_dd2aa43e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-15T10:03:48Z",
+      "side": 1,
+      "message": "Thank you for this new functional test suite. We are testing here that our openroadm servicehandler works correctly, but I don\u0027t see anything that check that the oc-renderer did something in the OC devices.\nI think that at least one oc-device configuration check is missing.",
+      "revId": "e211c49070ec96f47ff0c7db3d98768ad26da197",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
