@@ -73,6 +73,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>transportpce-tapisbi</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>transportpce-nbinotifications</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -104,6 +109,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>odl-transportpce-tapi</artifactId>
+        <version>${project.version}</version>
+        <type>xml</type>
+        <classifier>features</classifier>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>odl-transportpce-tapisbi</artifactId>
         <version>${project.version}</version>
         <type>xml</type>
         <classifier>features</classifier>
