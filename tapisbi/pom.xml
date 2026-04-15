@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!--
+Copyright © 2026 Orange and others. All rights reserved.
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.mdsal</groupId>
+    <artifactId>binding-parent</artifactId>
+    <version>15.0.2</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.opendaylight.transportpce</groupId>
+  <artifactId>transportpce-tapisbi</artifactId>
+  <version>13.0.0-SNAPSHOT</version>
+  <name>tapisbi</name>
+  <description>Tapi South Bound Interface</description>
+  <packaging>bundle</packaging>
+
+  <properties>
+    <transportpce.models.version>23.0.1</transportpce.models.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.transportpce.models</groupId>
+        <artifactId>transportpce-models-artifacts</artifactId>
+        <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.netconf</groupId>
+        <artifactId>netconf-artifacts</artifactId>
+        <version>10.0.2</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-13.1.1</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-network-13.1.1</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-service-13.1.1</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>tapi-2.4.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-tapi</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>concepts</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>ietf-topology</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.ietf.model</groupId>
+      <artifactId>rfc6991-ietf-yang-types</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.ietf.model</groupId>
+      <artifactId>rfc8345-ietf-network</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.ietf.model</groupId>
+      <artifactId>rfc8345-ietf-network-topology</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-common-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>netconf-topology</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>netconf-client-mdsal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.service.component.annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+    </dependency>
+    <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>test-common</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-pce</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-generator</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
