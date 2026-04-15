@@ -1,0 +1,214 @@
+module transportpce-tapi-sbi {
+  yang-version 1.1;
+  namespace "http://org/opendaylight/transportpce/tapisbi";
+  prefix org-opendaylight-transportpce-tapisbi;
+
+  import org-openroadm-common-service-types {
+    prefix org-openroadm-common-service-types;
+  }
+  import transportpce-common-service-path-types {
+    prefix tcspt;
+  }
+  import org-openroadm-topology {
+    prefix org-openroadm-topology;
+  }
+  import transportpce-pathDescription {
+    prefix transportpce-pathDescription;
+  }
+  import transportpce-common-types {
+      prefix org-transportpce-common-types;
+    }
+  import tapi-common {
+    prefix tapi-common;
+    revision-date 2022-11-21;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of C interface (transportPCE). Adapted from service definition (openroadm)
+     Copyright © 2026 Orange, Inc. and others.  All rights reserved.
+
+     openroadm copyright:
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      AT&T Intellectual Property.  All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2026-04-10 {
+      description
+        "Initial revision of tapisbi model version 1.6.5";
+  }
+
+  grouping link-for-notif {
+    description
+      "In most of the cases, only 2 link-termination-points exists.
+       It reveals that the service is supported by a single otn-link
+       to configure. Its properties can be easily transmited by this way.";
+    container a-termination {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
+    }
+    container z-termination {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
+    }
+  }
+
+  rpc tapi-sbi-service-implementation-request {
+    input {
+      leaf service-name {
+        type string;
+        mandatory false;
+        description
+          "Identifier for the service to be created in the ROADM network, e.g., CLFI, CLCI, etc.
+            This is reported against the service, but may not get reflected in the service in the network.";
+      }
+      leaf service-uuid {
+        type tapi-common:uuid;
+        mandatory true;
+        description
+          "Unique Service Identifier for tapi";
+      }
+      leaf connection-type {
+        type org-openroadm-common-service-types:connection-type;
+      }
+      uses tcspt:service-handler-header;
+      container service-a-end {
+        leaf node-uuid {
+          type tapi-common:uuid;
+        }
+        leaf service-interface-point-uuid {
+          type tapi-common:uuid;
+        }
+        uses tcspt:service-endpoint-sp {
+          augment "tx-direction" {
+            description
+              "Add NepUuid to the service-end Tx direction";
+            leaf node-edge-point-uuid {
+              type tapi-common:uuid;
+            }
+          }
+          augment "rx-direction" {
+            description
+              "Add NepUuid to the service-end Rx direction";
+            leaf node-edge-point-uuid {
+              type tapi-common:uuid;
+            }
+          }
+        }
+      }
+      container service-z-end {
+        leaf node-uuid {
+          type tapi-common:uuid;
+        }
+        leaf service-interface-point-uuid {
+          type tapi-common:uuid;
+        }
+        uses tcspt:service-endpoint-sp {
+          augment "tx-direction" {
+            description
+              "Add NepUuid to the service-end Tx direction";
+            leaf node-edge-point-uuid {
+              type tapi-common:uuid;
+            }
+          }
+          augment "rx-direction" {
+            description
+              "Add NepUuid to the service-end Rx direction";
+            leaf node-edge-point-uuid {
+              type tapi-common:uuid;
+            }
+          }
+        }
+      }
+      container path-description {
+        uses transportpce-pathDescription:path-description;
+      }
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
+  }
+
+  rpc tapi-sbi-service-delete {
+    input {
+      leaf service-name {
+        type string;
+        mandatory false;
+        description
+          "Identifier for the service to be created in the ROADM network, e.g., CLFI, CLCI, etc.
+            This is reported against the service, but may not get reflected in the service in the network.";
+      }
+      leaf service-uuid {
+        type tapi-common:uuid;
+        mandatory true;
+        description
+          "Unique Service Identifier for tapi";
+      }
+      uses tcspt:service-handler-header;
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
+  }
+
+  notification tapi-sbi-renderer-rpc-result-sp {
+    description
+      "This Notification indicates result of tapi SBI dedicated renderer RPC and provides the topology";
+    leaf notification-type {
+      type tcspt:service-path-notification-types;
+    }
+    container path-topology {
+      uses org-openroadm-topology:topology;
+    }
+    uses transportpce-pathDescription:path-description;
+    uses tcspt:rpc-response-status-ex;
+    uses org-openroadm-common-service-types:service-notification-result;
+    container link-or-connection {
+      uses link-for-notif;
+    }
+    leaf-list link-or-connection-id {
+      type string;
+      description
+        "when more than 2 link-termination-points exists,
+         it reveals that the service is supported by multiple
+         links (typically, OTU4). In such a case, it is more appropriated
+         to transmit the list of supported links with their link-id";
+    }
+    leaf service-type {
+        type string;
+    }
+  }
+}
