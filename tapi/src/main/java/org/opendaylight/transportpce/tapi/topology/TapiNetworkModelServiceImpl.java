@@ -43,6 +43,7 @@ import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTopologyRepository;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
@@ -232,7 +233,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     @Override
-    public void createTapiNode(String orNodeId, Nodes node) {
+    public void createTapiNode(String orNodeId, Nodes node, OpenRoadmTopologyRepository topologyRepository) {
         // TODO -> Implementation with PortMappingListener
         // check if port mapping exists or not...
         if (node.getMapping() == null) {
@@ -311,7 +312,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     this.linkDiscovery.readLLDP(
                         new NodeId(orNodeId),
                         node.getNodeInfo().getOpenroadmVersion().getIntValue(),
-                        this.tapiTopoUuid);
+                        this.tapiTopoUuid,
+                        topologyRepository);
                 if (!rdm2rdmLinks.isEmpty()) {
                     Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
                     addCepToOnep(onepMap, cepMap);
