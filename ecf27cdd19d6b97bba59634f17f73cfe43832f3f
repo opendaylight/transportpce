@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "ecf27cdd19d6b97bba59634f17f73cfe43832f3f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e246128e_3e195c98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-15T12:36:39Z",
+      "side": 1,
+      "message": "This change now systematically causes our CI to fail.\nSee as an example: https://github.com/opendaylight/transportpce/actions/runs/24450331450/job/71437361628\nI need to revert it.",
+      "revId": "ecf27cdd19d6b97bba59634f17f73cfe43832f3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ],
   "submitRequirementResults": [
