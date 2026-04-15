@@ -1025,7 +1025,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
 
         // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
-        doNothing().when(tapiLink).createCepForLink(any());
+        doNothing().when(tapiLink).createCepForLink(any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -1150,7 +1150,7 @@ class TapiLinkImplTest extends AbstractTest {
         TapiContext tapiContext = mock(TapiContext.class);
 
         TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
-        doNothing().when(tapiLink).createCepForLink(any());
+        doNothing().when(tapiLink).createCepForLink(any(), any());
 
         var orLink = mock(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226

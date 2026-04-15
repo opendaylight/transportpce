@@ -214,7 +214,7 @@ public class TapiLinkImpl implements TapiLink {
                 linkName
                         .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                         .setValue(linkKey);
-                createCepForLink(link);
+                createCepForLink(link, tapiTopoUuid);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
