@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1776250083 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1776250083-982A1E762E6FC477657518263694856126F52720\n\n0000000000000000000000000000000000000000 34a78ca2712d327a146695e7f1b381ff46355615 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmnfbOMACgkQX735uTFP\nrXGiwg//bTfv+KZjUC0CklMTtr1QTIwiMJXD1CVAvc/u6ioqzHfTjlD0AWyQuaFl\njmmJh3TPj3AgwJyaHXWaKLewi8Aaho9kQAo+DTfwiczqX9udIozxvzQF1sOT8+14\nPYfqT9aX5EZZH7wIbfbXgnRwmmwi97nUnjlY+zRDeTQQlH5NUwEbxtrAg+Cox56+\n0ijAhLhRr5oWKrlETfabWcW/Ky9dG7kop+OA1ptMH9Asr4QhCVT5keiD6jUxVSWZ\nOzr4t8BT4qZgBwKJmnw2XwcPXoVi7Z+jPV6hjs2wlGMlMM6BP2/HY9b/0DnWa4sa\naDCU/p57618+DPDc8CaPmKN5lRnQo6PpquJi1lbq2AdyD9MJeQdlvq/hF0pMcSmm\ng7kytkmJg54D9V0biv4bELhx2Vdxjm7eKgjUfk2b89mUvhESsJFsjizwWm0ZkMkT\n6YierT8WlqOUOa3H6mHT0SDRTSUoIfetFZM2G5yQf4UITRsV0FXnIPTVHc2B1rv8\nVH/+kZ0QLyWUNywKHD0VWKqHlo5BIGyYHL2C2qM+1RZ3NAA3QI6y9/g2oGwjkEs9\nflsophrh/ioNe2rrzuor7zlYpqGKQeWGVHCKWhlNtq8F7haAW7F0tSMAajeQAwpO\nNjuWzIL2EE7qwEvwSvCEC2Q++Du82HZMEjKdNwTQbcdNXpeH0tM\u003d\n\u003dgOVz\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01febc7c_d3d0b244",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-04-15T16:19:04Z",
+      "side": 1,
+      "message": "Hi Joakim.\nThanks for your contribution. I fully agree with the fact that TAPI code would benefit from a refactoring, and that some choices regarding the way we build nodes or links names is questionable. \nHowever I am a bit concerned about this change. TAPI tests are weak and have very limited coverage. So, providing test for TapiLinkImpl definitely goes in the right direction. But you test here that your changes are in line with what you expect them to do. The impact of changing link name is probably only tested here.\n\nBehind that, the TAPI PCE needs to route over these links and nodes, and you can’t see the real impact of your changes on the behavior of the PCE because the Unit tests of the TAPI PCE runs over a preloaded topology (if you remember I referred to this issue in some of my comments on change 116656). \nThus, to see the real impact of your changes in this relation chain, we would need to regenerate the topology used for some of the unit tests (pce -\u003e src/test/resources/topologyData/refTopoTapiFull.xml) after all the changes have been applied, and check that Junit test based on it still pass…\n\nWe can discuss this during next tpce meeting. On my side I use a specific python file (derived from a functional test) which starts ROADM and XPONDER simulators to regenerate the tapi topology context from OR topology, retrieving the topology from the openapi. The test also creates a number of services at different levels so that we can have different example of CEP and NEP created on the different ports. I can share this file. \nThe process is complex and long, but this is a way to have end2end test in Junit tests. In the functional test, it is easier since we can regenerate dynamically the topology in the setup of the python-based tests.",
+      "revId": "6ca524d2d28a3f808986357bef31d67e72910ee3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
