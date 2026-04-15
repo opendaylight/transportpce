@@ -49,6 +49,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>odl-transportpce-tapisbi</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>odl-transportpce-nbinotifications</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
