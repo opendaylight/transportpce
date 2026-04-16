@@ -16,6 +16,23 @@
       "message": "Hi guys,\nIs it normal I don\u0027t have the button to merge this Revert?\nSomeone could merge it for me?",
       "revId": "956042219de2919f774d66d92c171a473f6ae1b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "674be76b_09d7bd4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8144
+      },
+      "writtenOn": "2026-04-16T16:30:48Z",
+      "side": 1,
+      "message": "missing signed off by",
+      "revId": "956042219de2919f774d66d92c171a473f6ae1b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
