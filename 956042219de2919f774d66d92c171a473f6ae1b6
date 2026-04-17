@@ -33,6 +33,24 @@
       "message": "missing signed off by",
       "revId": "956042219de2919f774d66d92c171a473f6ae1b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b763d383_6353af9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-17T07:26:36Z",
+      "side": 1,
+      "message": "thank you Ivan for the tip!",
+      "parentUuid": "674be76b_09d7bd4f",
+      "revId": "956042219de2919f774d66d92c171a473f6ae1b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
