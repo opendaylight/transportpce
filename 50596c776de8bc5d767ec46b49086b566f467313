@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a02c27_f55735f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-17T10:22:46Z",
+      "side": 1,
+      "message": "Hello Akashkumar,\nI checked your change. Locally, tapi functional tests are OK.\nHowever, there\u0027s a problem with the functional tests tests71. Locally, I get the same result as on the CI for test03_renderer_or_modes, with tests 32 and 33 failing.\nWe need to determine if the test itself needs to be adapted, or if the new code introduces a regression.",
+      "revId": "50596c776de8bc5d767ec46b49086b566f467313",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
