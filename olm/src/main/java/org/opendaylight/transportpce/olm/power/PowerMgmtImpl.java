@@ -250,7 +250,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         );
                         return false;
                     }
-                    Decimal64 powerValue = Decimal64.valueOf(getRdmPowerValue(spanLossTx, input));
+                    Decimal64 powerValue = Decimal64.valueOf(getRdmPowerValue(spanLossTx, input)).scaleTo(2);
                     try {
                         if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), powerValue,
                                 connectionNumber)) {

@@ -46,9 +46,10 @@ public final class GridUtils {
         Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
                 .setFreqMapGranularity(
-                    new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.GRANULARITY))))
+                    new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.GRANULARITY)).scaleTo(5)))
                 .setStartEdgeFreq(
-                    new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY_THZ))))
+                    new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY_THZ))
+                            .scaleTo(8)))
                 .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();
@@ -138,7 +139,7 @@ public final class GridUtils {
      * @return central frequency in THz compatible with models 10.1
      */
     public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
-        return new FrequencyTHz(Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)));
+        return new FrequencyTHz(Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)).scaleTo(8));
     }
 
     /**
@@ -152,8 +153,9 @@ public final class GridUtils {
         getCentralFrequencyWithPrecision(BigDecimal minFrequency,
             BigDecimal maxFrequency, int precision) {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
-                Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)
-                    .setScale(precision, RoundingMode.HALF_EVEN)));
+                Decimal64.valueOf(
+                        computeCentralFrequency(minFrequency, maxFrequency).setScale(precision, RoundingMode.HALF_EVEN))
+                        .scaleTo(8));
     }
 
     /**

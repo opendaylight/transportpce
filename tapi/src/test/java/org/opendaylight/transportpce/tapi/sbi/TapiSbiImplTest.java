@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +68,7 @@ public class TapiSbiImplTest extends AbstractTest {
     }
 
     @Test
-    void saveTapiContextToFile() throws InterruptedException, ExecutionException {
+    void saveTapiContextToFile() throws InterruptedException, ExecutionException, IOException, YangParserException {
         LOG.info("test save Tapi Topology to JSON file");
         final Path filePath = Path.of("testSerializeContextToJSONFile.json");
         JsonDataConverter converter = new JsonDataConverter(null);

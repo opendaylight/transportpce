@@ -166,7 +166,7 @@ public final class PowerMgmtVersion221 {
                 new InterfaceBuilder(interfaceObj);
         OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.augmentation(
                 Interface1.class).getOch());
-        ochBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)));
+        ochBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower).scaleTo(2)));
         ochInterfaceBuilder.addAugmentation(new Interface1Builder().setOch(ochBuilder.build()).build());
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
@@ -230,7 +230,7 @@ public final class PowerMgmtVersion221 {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
-                rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
+                rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue).scaleTo(2)));
             }
             RoadmConnections newRdmConn = rdmConnBldr.build();
             Future<Optional<DeviceTransaction>> deviceTxFuture =
