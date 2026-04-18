@@ -1054,8 +1054,8 @@ public class PceCalculation {
                 new Uuid(getUuidFromInput(anodeId)), new Uuid(getUuidFromInput(znodeId)),
                 aportUuid, zportUuid, new NodeMcCapability(new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(node.getName().entrySet().iterator().next().getValue().getValue()))
-                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25))))
-                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5))))
+                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25)).scaleTo(5)))
+                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5)).scaleTo(5)))
                     .setMaxSlots(Uint32.valueOf(768))
                     .build()));
         ton.initialize();
@@ -1240,8 +1240,8 @@ public class PceCalculation {
                 new Uuid(getUuidFromInput(znodeId)), aportUuid, zportUuid,
                 new NodeMcCapability(new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(node.getName().entrySet().iterator().next().getValue().getValue()))
-                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
-                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
+                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0)).scaleTo(5)))
+                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0)).scaleTo(5)))
                     .setMaxSlots(Uint32.valueOf(768))
                     .build()));
         ton.initialize();

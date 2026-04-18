@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -52,7 +53,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void serializeOrgOpenroadmDeviceTest() {
+    void serializeOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             assertEquals(
@@ -69,7 +70,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void serializeOrgOpenroadmDeviceToFileTest() {
+    void serializeOrgOpenroadmDeviceToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeDeviceToXmlFile.xml");
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
@@ -92,7 +93,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void deserializeXmlToOrgOpenroadmDeviceTest() {
+    void deserializeXmlToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -108,7 +109,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void deserializeXmlReaderToOrgOpenroadmDeviceTest() {
+    void deserializeXmlReaderToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -124,7 +125,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void serializeContextTest() {
+    void serializeContextTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             String actualXml = converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context);
@@ -147,7 +148,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void serializeContextToFileTest() {
+    void serializeContextToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeContextToXmlFile.xml");
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
@@ -165,7 +166,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void deserializeXmlToContextTest() {
+    void deserializeXmlToContextTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(
@@ -180,7 +181,7 @@ class XmlDataConverterTest {
     }
 
     @Test
-    void deserializeXmlReaderToContextTest() {
+    void deserializeXmlReaderToContextTest() throws IOException, YangParserException {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(

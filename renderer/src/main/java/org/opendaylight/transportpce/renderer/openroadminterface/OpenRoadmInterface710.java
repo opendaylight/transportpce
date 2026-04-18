@@ -190,8 +190,10 @@ public class OpenRoadmInterface710 {
                             .Interface1Builder()
                         .setMcTtp(
                             new McTtpBuilder()
-                                .setMinFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMinFrequency())))
-                                .setMaxFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMaxFrequency())))
+                                .setMinFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMinFrequency())
+                                        .scaleTo(8)))
+                                .setMaxFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMaxFrequency())
+                                        .scaleTo(8)))
                                 .build())
                             .build());
         // Post interface on the device
@@ -222,8 +224,9 @@ public class OpenRoadmInterface710 {
                 .Interface1Builder()
                 .setNmcCtp(
                     new NmcCtpBuilder()
-                        .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
-                        .setWidth(new FrequencyGHz(Decimal64.valueOf(spectrumInformation.getWidth())))
+                        .setFrequency(
+                            new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency()).scaleTo(8)))
+                        .setWidth(new FrequencyGHz(Decimal64.valueOf(spectrumInformation.getWidth()).scaleTo(5)))
                         .build())
                 .build());
         // Post interface on the device
@@ -255,10 +258,10 @@ public class OpenRoadmInterface710 {
                         .setOch(
                             // OCH interface specific data
                             new OchBuilder()
-                                .setFrequency(
-                                    new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
+                                .setFrequency(new FrequencyTHz(
+                                        Decimal64.valueOf(spectrumInformation.getCenterFrequency()).scaleTo(8)))
                                 .setRate(R100G.VALUE)
-                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5").scaleTo(2)))
                                 .setModulationFormat(modulationFormat)
                                 .build())
                         .build());
@@ -280,8 +283,8 @@ public class OpenRoadmInterface710 {
         }
         // OTSI interface specific data
         OtsiBuilder otsiBuilder = new OtsiBuilder()
-            .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
-            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
+            .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency()).scaleTo(8)))
+            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5").scaleTo(2)))
             .setProvisionMode(ProvisionModeType.Explicit)
             .setFec(Ofec.VALUE)
             .setModulationFormat(modulationFormat);

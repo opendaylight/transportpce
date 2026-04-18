@@ -94,9 +94,10 @@ public final class ModelMappingUtils {
             // Set the MC-width for the OLM
             if (atoZDirection.getAToZMaxFrequency() != null || atoZDirection.getAToZMinFrequency() != null) {
                 olmSetupBldr.setMcWidth(new FrequencyGHz(Decimal64.valueOf(
-                        atoZDirection.getAToZMaxFrequency().getValue().decimalValue()
+                            atoZDirection.getAToZMaxFrequency().getValue().decimalValue()
                                 .subtract(atoZDirection.getAToZMinFrequency().getValue().decimalValue())
-                                .multiply(new BigDecimal(1000)))));
+                                .multiply(new BigDecimal(1000)))
+                        .scaleTo(5)));
             }
         }
         return olmSetupBldr.build();
@@ -143,10 +144,11 @@ public final class ModelMappingUtils {
             .setTargetOutputPower(atoZDirection.getTargetOutputPower())
             .setNodes(nodeLists.getRendererNodeList());
         if (atoZDirection.getAToZMaxFrequency() != null || atoZDirection.getAToZMinFrequency() != null) {
-            servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)));
+            servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)));
             servicePathInputBuilder.setMcWidth(new FrequencyGHz(Decimal64.valueOf(
-                    pathDescription.getAToZDirection().getAToZMaxFrequency().getValue().decimalValue()
-                    .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue().decimalValue()))));
+                        pathDescription.getAToZDirection().getAToZMaxFrequency().getValue().decimalValue()
+                        .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue().decimalValue()))
+                    .scaleTo(5)));
         }
         if (atoZDirection.getAToZWavelengthNumber() != null) {
             servicePathInputBuilder
@@ -157,13 +159,15 @@ public final class ModelMappingUtils {
             }
         }
         if (atoZDirection.getAToZMinFrequency() != null) {
-            servicePathInputBuilder.setMinFreq(new FrequencyTHz(atoZDirection.getAToZMinFrequency().getValue()));
+            servicePathInputBuilder
+                    .setMinFreq(new FrequencyTHz(atoZDirection.getAToZMinFrequency().getValue().scaleTo(8)));
             servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
                     .valueOf(GridUtils
                             .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
         }
         if (atoZDirection.getAToZMaxFrequency() != null) {
-            servicePathInputBuilder.setMaxFreq(new FrequencyTHz(atoZDirection.getAToZMaxFrequency().getValue()));
+            servicePathInputBuilder.setMaxFreq(
+                    new FrequencyTHz(atoZDirection.getAToZMaxFrequency().getValue().scaleTo(8)));
             servicePathInputBuilder.setHigherSpectralSlotNumber(
                     Uint32.valueOf(GridUtils
                             .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
@@ -213,13 +217,14 @@ public final class ModelMappingUtils {
             .setTargetOutputPower(ztoADirection.getTargetOutputPower())
             .setNodes(nodeLists.getRendererNodeList());
         if (ztoADirection.getZToAMaxFrequency() != null || ztoADirection.getZToAMinFrequency() != null) {
-            servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)));
+            servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)));
             /*servicePathInputBuilder.setMcWidth(new FrequencyGHz(Decimal64.valueOf(
                     pathDescription.getAToZDirection().getAToZMaxFrequency().getValue().decimalValue()
                     .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue().decimalValue()))));*/
             servicePathInputBuilder.setMcWidth(new FrequencyGHz(Decimal64.valueOf(
-                    ztoADirection.getZToAMaxFrequency().getValue().decimalValue()
-                            .subtract(ztoADirection.getZToAMinFrequency().getValue().decimalValue()))));
+                        ztoADirection.getZToAMaxFrequency().getValue().decimalValue()
+                            .subtract(ztoADirection.getZToAMinFrequency().getValue().decimalValue()))
+                    .scaleTo(5)));
         }
         if (ztoADirection.getZToAWavelengthNumber() != null) {
             servicePathInputBuilder
@@ -231,13 +236,15 @@ public final class ModelMappingUtils {
             }
         }
         if (ztoADirection.getZToAMinFrequency() != null) {
-            servicePathInputBuilder.setMinFreq(new FrequencyTHz(ztoADirection.getZToAMinFrequency().getValue()));
+            servicePathInputBuilder
+                    .setMinFreq(new FrequencyTHz(ztoADirection.getZToAMinFrequency().getValue().scaleTo(8)));
             servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
                     .valueOf(GridUtils
                             .getLowerSpectralIndexFromFrequency(ztoADirection.getZToAMinFrequency().getValue())));
         }
         if (ztoADirection.getZToAMaxFrequency() != null) {
-            servicePathInputBuilder.setMaxFreq(new FrequencyTHz(ztoADirection.getZToAMaxFrequency().getValue()));
+            servicePathInputBuilder
+                    .setMaxFreq(new FrequencyTHz(ztoADirection.getZToAMaxFrequency().getValue().scaleTo(8)));
             servicePathInputBuilder.setHigherSpectralSlotNumber(
                     Uint32.valueOf(GridUtils
                             .getHigherSpectralIndexFromFrequency(ztoADirection.getZToAMaxFrequency().getValue())));

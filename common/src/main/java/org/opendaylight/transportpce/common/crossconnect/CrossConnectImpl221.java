@@ -232,7 +232,7 @@ public class CrossConnectImpl221 {
                     .build()
                 : new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow())
                     .setOpticalControlMode(mode)
-                    .setTargetOutputPower(new PowerDBm(powerValue))
+                    .setTargetOutputPower(new PowerDBm(powerValue.scaleTo(2)))
                     .build();
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;

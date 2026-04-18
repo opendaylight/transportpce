@@ -91,7 +91,7 @@ public class GridUtilsTest {
     @Test
     void getWidthFromRateAndModulationFormatTest() {
         assertEquals(
-            new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_75)),
+            new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_75).scaleTo(5)),
             GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16),
             "Width should be 75");
     }
@@ -99,7 +99,7 @@ public class GridUtilsTest {
     @Test
     void getWidthFromRateAndModulationFormatNotFoundTest() {
         assertEquals(
-            new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)),
+            new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)),
             GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_100, ModulationFormat.DpQam16),
             "As not found width should be 40");
     }
@@ -107,7 +107,7 @@ public class GridUtilsTest {
     @Test
     void getCentralFrequencyTest() {
         assertEquals(
-            new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(191.35).setScale(3))),
+            new FrequencyTHz(Decimal64.valueOf("191.35").scaleTo(8)),
             GridUtils.getCentralFrequency(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375)),
             "Central frequency should be 191.350");
     }
@@ -116,7 +116,7 @@ public class GridUtilsTest {
     void getCentralFrequencyWithPrecisionTest() {
         assertEquals(
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
-                    Decimal64.valueOf(BigDecimal.valueOf(191.35).setScale(4))),
+                    Decimal64.valueOf("191.35").scaleTo(8)),
             GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375), 4),
             "Central frequency should be 191.3500");
     }
@@ -125,7 +125,7 @@ public class GridUtilsTest {
     void getCentralFrequencyWithPrecisionAndRoundTest() {
         assertEquals(
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
-                    Decimal64.valueOf("191.3499")),
+                    Decimal64.valueOf("191.3499").scaleTo(8)),
             GridUtils.getCentralFrequencyWithPrecision(
                     BigDecimal.valueOf(191.3244445), BigDecimal.valueOf(191.3754457788), 4),
             "Central frequency should be 191.3499");
@@ -136,15 +136,15 @@ public class GridUtilsTest {
         ServicePathInput input = new ServicePathInputBuilder()
                 .setWaveNumber(Uint32.ONE)
                 .setCenterFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyTHz(Decimal64.valueOf("196.1")))
+                        .FrequencyTHz(Decimal64.valueOf("196.1").scaleTo(8)))
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
                 .setMaxFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyTHz(Decimal64.valueOf("196.125")))
+                        .FrequencyTHz(Decimal64.valueOf("196.125").scaleTo(8)))
                 .setMinFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyTHz(Decimal64.valueOf("196.075")))
+                        .FrequencyTHz(Decimal64.valueOf("196.075").scaleTo(8)))
                 .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)))
+                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");
@@ -166,11 +166,11 @@ public class GridUtilsTest {
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
                 .setMaxFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyTHz(Decimal64.valueOf("196.125")))
+                        .FrequencyTHz(Decimal64.valueOf("196.125").scaleTo(8)))
                 .setMinFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyTHz(Decimal64.valueOf("196.075")))
+                        .FrequencyTHz(Decimal64.valueOf("196.075").scaleTo(8)))
                 .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)))
+                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");
@@ -192,7 +192,7 @@ public class GridUtilsTest {
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
                 .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
-                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)))
+                        .FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40).scaleTo(5)))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");

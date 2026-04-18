@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -43,7 +44,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void serializeOrgOpenroadmDeviceTest() {
+    void serializeOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             assertEquals(
@@ -61,7 +62,7 @@ class JsonDataConverterTest {
 
 
     @Test
-    void serializeOrgOpenroadmDeviceToFileTest() {
+    void serializeOrgOpenroadmDeviceToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeToJSONFile.json");
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
@@ -83,7 +84,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonToOrgOpenroadmDeviceTest() {
+    void deserializeJsonToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -97,7 +98,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonReaderToOrgOpenroadmDeviceTest() {
+    void deserializeJsonReaderToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -112,7 +113,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void serializeContextTest() throws JSONException {
+    void serializeContextTest() throws JSONException, IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             String expectedJson = Files.readString(Path.of("src/test/resources/context.json"));
@@ -128,7 +129,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void serializeContextToFileTest() {
+    void serializeContextToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeContextToJSONFile.json");
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
@@ -146,7 +147,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonToContextTest() {
+    void deserializeJsonToContextTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(
@@ -160,7 +161,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonReaderToContextTest() {
+    void deserializeJsonReaderToContextTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(
