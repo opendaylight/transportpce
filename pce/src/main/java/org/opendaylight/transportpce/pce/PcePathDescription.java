@@ -107,8 +107,8 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
                 atoZDirectionBldr
-                        .setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())))
-                        .setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())))
+                        .setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq()).scaleTo(8)))
+                        .setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq()).scaleTo(8)))
                         .setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         // Used precision 5 to get the exact decimal values of the frequency
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
@@ -176,8 +176,8 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
                 ztoADirectionBldr
-                        .setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())))
-                        .setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())))
+                        .setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq()).scaleTo(8)))
+                        .setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq()).scaleTo(8)))
                         .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
@@ -190,8 +190,8 @@ public class PcePathDescription {
                 FrequencyGHz width = FrequencyGHz.getDefaultInstance(rc.getMaxFreq().subtract(rc.getMinFreq())
                         .multiply(BigDecimal.valueOf(1000)).subtract(BigDecimal.valueOf(8.0)).toPlainString());
                 ztoADirectionBldr
-                        .setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())))
-                        .setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())))
+                        .setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq()).scaleTo(8)))
+                        .setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq()).scaleTo(8)))
                         .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))

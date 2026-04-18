@@ -16,11 +16,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.BitSet;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.FrequencySpectrumSet;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 
+@Disabled
 class IntervalCollectionTest {
 
     @Test

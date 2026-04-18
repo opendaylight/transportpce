@@ -10,9 +10,7 @@ package org.opendaylight.transportpce.olm.service;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -110,8 +108,8 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
             .thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
         Ots otsValue = new OtsBuilder()
-            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("25")))
-            .setSpanLossReceive(new RatioDB(Decimal64.valueOf("25")))
+            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("25").scaleTo(3)))
+            .setSpanLossReceive(new RatioDB(Decimal64.valueOf("25").scaleTo(3)))
             .build();
         Interface1 ots = new Interface1Builder().setOts(otsValue).build();
         Interface interA = new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").setType(OpticalTransport.VALUE)
@@ -122,9 +120,6 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         Optional<Interface> interOptC = Optional.of(interC);
         when(this.openRoadmInterfacesImpl221.getInterface("ROADM-A1", "OTS-DEG2-TTP-TXRX")).thenReturn(interOptA);
         when(this.openRoadmInterfacesImpl221.getInterface("ROADM-C1", "OTS-DEG1-TTP-TXRX")).thenReturn(interOptC);
-
-        doNothing().when(this.openRoadmInterfacesImpl221).postInterface(anyString(), any());
-
     }
 
     @Test

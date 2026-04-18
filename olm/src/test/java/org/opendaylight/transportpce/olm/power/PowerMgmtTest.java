@@ -109,7 +109,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6").scaleTo(3)))
                                         .build())
                                 .build())
                 .build();
@@ -154,7 +154,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
-                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6").scaleTo(3)))
                             .build())
                     .build())
                 .build();
@@ -212,7 +212,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6").scaleTo(3)))
                                         .build())
                                 .build())
                 .build();
@@ -262,7 +262,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6").scaleTo(3)))
                                         .build())
                                 .build())
                 .build();
@@ -354,7 +354,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
-                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6").scaleTo(3)))
                             .build())
                     .build())
                 .build();

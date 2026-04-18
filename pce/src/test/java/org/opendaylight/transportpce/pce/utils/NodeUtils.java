@@ -104,7 +104,7 @@ public final class NodeUtils {
                             new OMSAttributesBuilder()
                                 .setSpan(
                                     new SpanBuilder()
-                                        .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("20")))
+                                        .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("20").scaleTo(3)))
                                         .setLinkConcatenation(Map.of(linkConcatenation.key(), linkConcatenation))
                                         .build())
                                 .build())
