@@ -257,7 +257,7 @@ public class OpenRoadmInterface121 {
                                 .setWavelengthNumber(spectrumInformation.getWaveLength())
                                 .setModulationFormat(modulationFormat)
                                 .setRate(R100G.VALUE)
-                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5").scaleTo(2)))
                                 .build())
                         .build());
         // Post interface on the device

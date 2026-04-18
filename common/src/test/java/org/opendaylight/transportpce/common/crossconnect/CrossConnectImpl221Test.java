@@ -108,7 +108,8 @@ public class CrossConnectImpl221Test {
         when(deviceTransactionManager.getDeviceTransaction("deviceId"))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
         doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
-        crossConnectImpl221.setPowerLevel("deviceId", OpticalControlMode.GainLoss, Decimal64.valueOf("100"), "1");
+        crossConnectImpl221.setPowerLevel("deviceId", OpticalControlMode.GainLoss, Decimal64.valueOf("100").scaleTo(2),
+                "1");
         assertTrue(true, "set Level should be true");
     }
 

@@ -425,17 +425,17 @@ final class OlmUtils121 {
                     spanLossRx = ots.getSpanLossReceive();
                     spanLossTx = ots.getSpanLossTransmit();
                 } else {
-                    spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss));
-                    spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss));
+                    spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3));
+                    spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3));
                 }
                 Interface1Builder intf1Builder = new Interface1Builder();
                 if (direction.equals(TX)) {
-                    otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss)));
+                    otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3)));
                     otsBuilder.setSpanLossReceive(spanLossRx);
                 } else {
                     otsBuilder
                             .setSpanLossTransmit(spanLossTx)
-                            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(spanLoss)));
+                            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3)));
                 }
                 interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                 openRoadmInterfaces.postInterface(realNodeId, interfaceBuilder);
