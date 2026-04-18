@@ -65,6 +65,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +105,7 @@ public class OpenRoadmOtnTopologyTest {
             LOG.info("tpdr portMapping = {}", this.portMappingTpdr.toString());
             LOG.info("spdr portMapping = {}", this.portMappingSpdr.toString());
             LOG.info("ila portMapping = {}", this.portMappingBad.toString());
-        } catch (IOException e) {
+        } catch (IOException | YangParserException e) {
             LOG.error("Cannot init OpenRoadmOtnTopologyTest ", e);
             fail("Cannot init OpenRoadmOtnTopologyTest ");
         }

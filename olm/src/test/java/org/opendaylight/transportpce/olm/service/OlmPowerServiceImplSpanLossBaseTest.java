@@ -10,9 +10,7 @@ package org.opendaylight.transportpce.olm.service;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -122,9 +120,6 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         Optional<Interface> interOptC = Optional.of(interC);
         when(this.openRoadmInterfacesImpl221.getInterface("ROADM-A1", "OTS-DEG2-TTP-TXRX")).thenReturn(interOptA);
         when(this.openRoadmInterfacesImpl221.getInterface("ROADM-C1", "OTS-DEG1-TTP-TXRX")).thenReturn(interOptC);
-
-        doNothing().when(this.openRoadmInterfacesImpl221).postInterface(anyString(), any());
-
     }
 
     @Test
