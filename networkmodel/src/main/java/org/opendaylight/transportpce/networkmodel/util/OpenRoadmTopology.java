@@ -295,7 +295,7 @@ public final class OpenRoadmTopology {
                         new OperationalModeBuilder()
                             .setModeId(opMode)
                             //TODO : fill SpectralWidth with from Catalog
-                            .setSpectralWidth(new FrequencyGHz(Decimal64.valueOf(0.0, RoundingMode.DOWN)))
+                            .setSpectralWidth(new FrequencyGHz(Decimal64.valueOf(0.0, RoundingMode.DOWN).scaleTo(5)))
                             .build());
                 }
                 XpdrNetworkAttributes xna = new XpdrNetworkAttributesBuilder()

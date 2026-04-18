@@ -338,8 +338,8 @@ public class GnpyTopoImpl {
     private Elements createElementsFiber(double latitude, double longitude, String region, String city, String uidFiber,
             double length, double attIn, double lossCoef, double connIn, double connOut, String typeVariety) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
-        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)).scaleTo(6));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)).scaleTo(6));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
@@ -364,8 +364,8 @@ public class GnpyTopoImpl {
     private Elements createElementsEdfa(double latitude, double longitude, String region, String city,
             BigDecimal gainTarget, BigDecimal tiltTarget, BigDecimal outVoa, String typeVariety, String uidEdfa) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
-        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)).scaleTo(6));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)).scaleTo(6));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
@@ -386,8 +386,8 @@ public class GnpyTopoImpl {
      */
     private Elements createElementsRoadm(double latitude, double longitude, String region, String city,
             double targetPchOutDb, String uidRoadm) {
-        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
-        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)).scaleTo(6));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)).scaleTo(6));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
@@ -405,8 +405,8 @@ public class GnpyTopoImpl {
      */
     private Elements createElementsTransceiver(double latitude, double longitude, String region, String city,
             String uidTrans) {
-        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
-        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)).scaleTo(6));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)).scaleTo(6));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();

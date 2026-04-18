@@ -41,6 +41,7 @@ import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeS
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizationResultHolder;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack.Inference;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class XmlDataConverter extends AbstractDataConverter<DataObject> {
     private final XmlCodecFactory codecFactory;
     private final ConstantAdapterContext codec;
 
-    public XmlDataConverter(Set<YangModuleInfo> models) {
+    public XmlDataConverter(Set<YangModuleInfo> models) throws IOException, YangParserException {
         super(models);
         this.codecFactory = XmlCodecFactory.create(runtimeContext.modelContext());
         this.codec = new ConstantAdapterContext(bindingCodecContext);

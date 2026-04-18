@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -43,25 +44,21 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void serializeOrgOpenroadmDeviceTest() {
+    void serializeOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
-        try {
-            assertEquals(
-                    Files.readString(Path.of("src/test/resources/device.json")),
-                    converter.serialize(
-                            DataObjectIdentifier
-                                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-                                .build(),
-                            device),
-                    "OrgOpenroadmDevice should be   as in the device.json file");
-        } catch (IOException e1) {
-            fail("Cannot load json file with expected result");
-        }
+        assertEquals(
+                Files.readString(Path.of("src/test/resources/device.json")),
+                converter.serialize(
+                        DataObjectIdentifier
+                            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                            .build(),
+                        device),
+                "OrgOpenroadmDevice should be   as in the device.json file");
     }
 
 
     @Test
-    void serializeOrgOpenroadmDeviceToFileTest() {
+    void serializeOrgOpenroadmDeviceToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeToJSONFile.json");
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
@@ -83,7 +80,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonToOrgOpenroadmDeviceTest() {
+    void deserializeJsonToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -91,13 +88,11 @@ class JsonDataConverterTest {
             assertEquals(this.device, deserializedDevice);
         } catch (ProcessingException e) {
             fail("Error deserializing json to OrgOpenroadmDevice object");
-        } catch (IOException e) {
-            fail("Cannot load json file with input json data");
         }
     }
 
     @Test
-    void deserializeJsonReaderToOrgOpenroadmDeviceTest() {
+    void deserializeJsonReaderToOrgOpenroadmDeviceTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
@@ -106,29 +101,23 @@ class JsonDataConverterTest {
             assertEquals(this.device, deserializedDevice);
         } catch (ProcessingException e) {
             fail("Error deserializing json to OrgOpenroadmDevice object");
-        } catch (IOException e) {
-            fail("Cannot load json file with input json data");
         }
     }
 
     @Test
-    void serializeContextTest() throws JSONException {
+    void serializeContextTest() throws JSONException, IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
-        try {
-            String expectedJson = Files.readString(Path.of("src/test/resources/context.json"));
-            // Use of JSONAssert here because we have a list with several items whose order is not under control. So we
-            // check that all items are present regardless of their order in the list.
-            JSONAssert.assertEquals(
-                    new ObjectMapper().readValue(expectedJson, JsonNode.class).toString(),
-                    converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context),
-                    false);
-        } catch (IOException e1) {
-            fail("Cannot load json file with expected result");
-        }
+        String expectedJson = Files.readString(Path.of("src/test/resources/context.json"));
+        // Use of JSONAssert here because we have a list with several items whose order is not under control. So we
+        // check that all items are present regardless of their order in the list.
+        JSONAssert.assertEquals(
+                new ObjectMapper().readValue(expectedJson, JsonNode.class).toString(),
+                converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context),
+                false);
     }
 
     @Test
-    void serializeContextToFileTest() {
+    void serializeContextToFileTest() throws IOException, YangParserException {
         final Path filePath = Path.of("testSerializeContextToJSONFile.json");
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
@@ -146,7 +135,7 @@ class JsonDataConverterTest {
     }
 
     @Test
-    void deserializeJsonToContextTest() {
+    void deserializeJsonToContextTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(
@@ -154,13 +143,11 @@ class JsonDataConverterTest {
             assertEquals(this.context, deserializedContext);
         } catch (ProcessingException e) {
             fail("Error deserializing json to OrgOpenroadmDevice object");
-        } catch (IOException e) {
-            fail("Cannot load json file with input json data");
         }
     }
 
     @Test
-    void deserializeJsonReaderToContextTest() {
+    void deserializeJsonReaderToContextTest() throws IOException, YangParserException {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             Context deserializedContext = (Context) converter.deserialize(
@@ -169,8 +156,6 @@ class JsonDataConverterTest {
             assertEquals(this.context, deserializedContext);
         } catch (ProcessingException e) {
             fail("Error deserializing json to OrgOpenroadmDevice object");
-        } catch (IOException e) {
-            fail("Cannot load json file with input json data");
         }
     }
 }

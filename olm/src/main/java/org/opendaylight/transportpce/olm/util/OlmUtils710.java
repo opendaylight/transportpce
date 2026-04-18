@@ -172,20 +172,20 @@ final class OlmUtils710 {
                     spanLossRx = ots.getSpanLossReceive();
                     spanLossTx = ots.getSpanLossTransmit();
                 } else {
-                    spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss));
-                    spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss));
+                    spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3));
+                    spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3));
                 }
                 org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
                         .rev200529.Interface1Builder intf1Builder =
                         new Interface1Builder();
                 if (direction.equals(TX)) {
-                    otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss)));
+                    otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3)));
                     otsBuilder.setSpanLossReceive(spanLossRx);
                 } else {
                     otsBuilder
                             .setSpanLossTransmit(spanLossTx)
                             .setSpanLossReceive(
-                                    new RatioDB(Decimal64.valueOf(spanLoss)));
+                                    new RatioDB(Decimal64.valueOf(spanLoss).scaleTo(3)));
                 }
                 interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                 openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);

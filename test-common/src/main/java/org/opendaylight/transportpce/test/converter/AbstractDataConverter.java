@@ -7,7 +7,9 @@
  */
 package org.opendaylight.transportpce.test.converter;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import org.opendaylight.yangtools.binding.DataObject;
@@ -18,10 +20,9 @@ import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
 import org.opendaylight.yangtools.binding.runtime.api.AbstractBindingRuntimeContext;
 import org.opendaylight.yangtools.binding.runtime.api.BindingRuntimeGenerator;
 import org.opendaylight.yangtools.binding.runtime.api.DefaultBindingRuntimeContext;
-import org.opendaylight.yangtools.binding.runtime.spi.ModuleInfoSnapshotResolver;
-import org.opendaylight.yangtools.yang.parser.impl.DefaultYangParserFactory;
-import org.opendaylight.yangtools.yang.xpath.api.YangXPathParserFactory;
-import org.opendaylight.yangtools.yang.xpath.impl.AntlrXPathParserFactory;
+import org.opendaylight.yangtools.binding.runtime.spi.ModuleInfoSnapshotBuilder;
+import org.opendaylight.yangtools.dagger.yang.parser.DaggerDefaultYangParserComponent;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public abstract class AbstractDataConverter<T extends DataObject> implements Dat
     protected final BindingCodecContext bindingCodecContext;
 
 
-    protected AbstractDataConverter(Set<YangModuleInfo> models) {
+    protected AbstractDataConverter(Set<YangModuleInfo> models) throws IOException, YangParserException {
         this.runtimeContext = createBindingRuntimeContext(models);
         this.bindingCodecContext = new BindingCodecContext(runtimeContext);
     }
@@ -66,16 +67,15 @@ public abstract class AbstractDataConverter<T extends DataObject> implements Dat
      * Helper method to create a {@link BindingCodecContext}.
      * @return {@link BindingCodecContext} of loaded {@link YangModuleInfo}
      */
-    private AbstractBindingRuntimeContext createBindingRuntimeContext(Set<YangModuleInfo> models) {
-        final YangXPathParserFactory xpathFactory = new AntlrXPathParserFactory();
-        DefaultYangParserFactory yangParserFactory = new DefaultYangParserFactory(xpathFactory);
-        var snapshotResolver = new ModuleInfoSnapshotResolver("binding-dom-codec", yangParserFactory);
-        snapshotResolver.registerModuleInfos(loadModuleInfos(models));
-        var moduleInfoSnapshot = snapshotResolver.takeSnapshot();
+    private AbstractBindingRuntimeContext createBindingRuntimeContext(Set<YangModuleInfo> models)
+            throws IOException, YangParserException {
+        var snapshotBuilder = new ModuleInfoSnapshotBuilder(DaggerDefaultYangParserComponent.create().parserFactory());
+        snapshotBuilder.add(loadModuleInfos(models));
+        var snapshot = snapshotBuilder.build();
+        var modelContext = snapshot.modelContext();
         final BindingRuntimeGenerator bindingRuntimeGenerator = new DefaultBindingRuntimeGenerator();
-        final var bindingRuntimeTypes = bindingRuntimeGenerator
-                .generateTypeMapping(moduleInfoSnapshot.modelContext());
-        return new DefaultBindingRuntimeContext(bindingRuntimeTypes, moduleInfoSnapshot);
+        final var bindingRuntimeTypes = bindingRuntimeGenerator.generateTypeMapping(modelContext);
+        return new DefaultBindingRuntimeContext(bindingRuntimeTypes, snapshot);
     }
 
 }

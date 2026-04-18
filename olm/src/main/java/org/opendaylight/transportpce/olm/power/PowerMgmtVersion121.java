@@ -164,7 +164,7 @@ public final class PowerMgmtVersion121 {
         OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                         .Interface1.class).getOch());
-        ochBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)));
+        ochBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower).scaleTo(2)));
         ochInterfaceBuilder.addAugmentation(new Interface1Builder().setOch(ochBuilder.build()).build());
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
@@ -229,7 +229,7 @@ public final class PowerMgmtVersion121 {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
-                rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
+                rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue).scaleTo(2)));
             }
             RoadmConnections newRdmConn = rdmConnBldr.build();
             Future<Optional<DeviceTransaction>> deviceTxFuture =

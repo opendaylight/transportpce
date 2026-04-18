@@ -47,6 +47,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
 import org.opendaylight.yangtools.yang.data.api.schema.MapEntryNode;
 import org.opendaylight.yangtools.yang.data.api.schema.MapNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +95,7 @@ public final class PceTestUtils {
             saveOpenRoadmNetwork(networkMap.get(0), StringConstants.OPENROADM_NETWORK, dataBroker);
             networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo,  Networks.QNAME);
             saveOpenRoadmNetwork(networkMap.get(0), StringConstants.OPENROADM_NETWORK, dataBroker);
-        } catch (IOException | ExecutionException | InterruptedException e) {
+        } catch (IOException | ExecutionException | InterruptedException | YangParserException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
         }

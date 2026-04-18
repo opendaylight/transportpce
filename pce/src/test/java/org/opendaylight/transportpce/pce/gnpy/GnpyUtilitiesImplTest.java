@@ -59,6 +59,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +105,9 @@ class GnpyUtilitiesImplTest extends AbstractTest {
             fail("Cannot init test ");
         } catch (IOException e) {
             LOG.warn("Cannot close reader ", e);
+        } catch (YangParserException e) {
+            LOG.error("Cannot parse input file ", e);
+            throw new RuntimeException(e);
         }
     }
 

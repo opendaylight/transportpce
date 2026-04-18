@@ -106,6 +106,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
+import org.opendaylight.yangtools.yang.parser.api.YangParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -218,7 +219,7 @@ public class PceGraphTest extends AbstractTest {
                     StandardCharsets.UTF_8);
             networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);
-        } catch (IOException | InterruptedException | ExecutionException e) {
+        } catch (IOException | InterruptedException | ExecutionException | YangParserException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
         }

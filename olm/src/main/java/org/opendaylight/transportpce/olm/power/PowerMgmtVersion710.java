@@ -178,7 +178,7 @@ public final class PowerMgmtVersion710 {
                                         .augmentation(org.opendaylight.yang.gen.v1.http
                                             .org.openroadm.optical.channel.interfaces.rev200529.Interface1.class)
                                         .getOch())
-                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)))
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower).scaleTo(2)))
                                 .build())
                         .build());
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
@@ -187,7 +187,7 @@ public final class PowerMgmtVersion710 {
                     new Interface1Builder()
                         .setOtsi(
                             new OtsiBuilder(ochOtsiInterfaceBuilder.augmentation(Interface1.class).getOtsi())
-                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)))
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower).scaleTo(2)))
                                 .build())
                         .build());
         }
@@ -253,7 +253,7 @@ public final class PowerMgmtVersion710 {
         RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
         rdmConnBldr.setOpticalControlMode(mode);
         if (powerValue != null) {
-            rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
+            rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue).scaleTo(2)));
         }
         RoadmConnections newRdmConn = rdmConnBldr.build();
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);

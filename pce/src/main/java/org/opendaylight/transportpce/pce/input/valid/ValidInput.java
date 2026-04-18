@@ -82,17 +82,16 @@ public class ValidInput implements Valid {
         if (frequencySlot != null) {
             SlotWidthFrequencyGHz slotWidth = frequencySlot.getSlotWidth();
             FrequencyTHz centerFrequency = frequencySlot.getCenterFrequency();
-
             if (centerFrequency != null && slotWidth != null) {
                 return slot.isValidSlot(
-                        centerFrequency.getValue().decimalValue(),
-                        slotWidth.getValue().decimalValue(),
+                        centerFrequency.getValue().scaleTo(8).decimalValue(),
+                        slotWidth.getValue().scaleTo(5).decimalValue(),
                         this
                 );
             } else if (centerFrequency != null) {
-                return slot.isValidCenterFrequency(centerFrequency.getValue().decimalValue(), this);
+                return slot.isValidCenterFrequency(centerFrequency.getValue().scaleTo(8).decimalValue(), this);
             } else if (slotWidth != null) {
-                return slot.isValidSlotWidth(slotWidth.getValue().decimalValue(), this);
+                return slot.isValidSlotWidth(slotWidth.getValue().scaleTo(5).decimalValue(), this);
             }
         }
 
