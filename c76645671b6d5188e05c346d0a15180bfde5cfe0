@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba0b3c6_1fa35ed4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-04-21T12:09:28Z",
+      "side": 1,
+      "message": "Hello Joakim,\nI\u0027ve started the migration to Cr. Unfortunately, two unit test classes you developed are no longer working, and I haven\u0027t had time to investigate why. I\u0027ll be unavailable for the rest of the week. Could you fix them, please? I\u0027ll finish the migration next week.\nThankfully, I am relieved to see that the functional tests seem to be OK again...",
+      "revId": "c76645671b6d5188e05c346d0a15180bfde5cfe0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
