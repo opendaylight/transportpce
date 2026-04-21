@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa86cec_d8b29955",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/XmlDataConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-04-21T11:10:39Z",
+      "side": 1,
+      "message": "note: there is nothing wrong with \u0027throws Exception\u0027 ...",
+      "range": {
+        "startLine": 56,
+        "startChar": 43,
+        "endLine": 56,
+        "endChar": 82
+      },
+      "revId": "1174589d6b2cf1700cb6b2e3b6f6b5d6b3b3d3ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e61a0f8_6a2ab1bf",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/XmlDataConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-04-21T11:10:39Z",
+      "side": 1,
+      "message": "and not have these sorts of catch blocks, which actually hide the underlying cause",
+      "range": {
+        "startLine": 67,
+        "startChar": 10,
+        "endLine": 67,
+        "endChar": 32
+      },
+      "revId": "1174589d6b2cf1700cb6b2e3b6f6b5d6b3b3d3ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
