@@ -15,6 +15,8 @@ import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -41,7 +43,7 @@ class ValidInputTest {
     @Test
     void assertEmptyPCRIisValid() {
         ValidInput validateInput = new ValidInput(mock(Slot.class), mock(Format.class));
-        assertTrue(validateInput.isValid(mock(PathComputationRequestInput.class)));
+        assertTrue(validateInput.isValid(new PathComputationRequestInputBuilder().build()));
     }
 
     @Test
@@ -72,29 +74,56 @@ class ValidInputTest {
         )).thenReturn(true);
 
         assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+
+        verify(mock).isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput
+        );
+        verify(mock, never()).isValidCenterFrequency(any(), any());
+        verify(mock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
-    void inValidZEndSlot() {
+    void invalidZEndSlot_callsIsValidSlotAndReturnsFalse() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+        SlotWidthFrequencyGHz slotWidth = SlotWidthFrequencyGHz.getDefaultInstance("50");
+
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setCenterFrequency(centerFrequency)
+                .setSlotWidth(slotWidth)
                 .build();
-        ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
-                .setFrequencySlot(frequencySlot)
-                .build();
+
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .addAugmentation(serviceZEnd1)
+                .addAugmentation(new ServiceZEnd1Builder()
+                        .setFrequencySlot(frequencySlot)
+                        .build())
                 .build();
-        PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
-                new PathComputationRequestInputBuilder();
-        pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-        Slot mock = mock(Slot.class);
-        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
-        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
+
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceZEnd(serviceZEnd)
+                .build();
+
+        Slot slotMock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+
+        // Format must pass, otherwise slot is never called
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
+
+        ValidInput validateInput = new ValidInput(slotMock, formatMock);
+
+        BigDecimal center = centerFrequency.getValue().decimalValue();
+        BigDecimal width = slotWidth.getValue().decimalValue();
+
+        when(slotMock.isValidSlot(center, width, validateInput))
                 .thenReturn(false);
 
-        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(input));
+
+        verify(slotMock).isValidSlot(center, width, validateInput);
+
+        verify(slotMock, never()).isValidCenterFrequency(any(), any());
+        verify(slotMock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
@@ -125,95 +154,157 @@ class ValidInputTest {
         )).thenReturn(true);
 
         assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+
+        verify(mock).isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput
+        );
+        verify(mock, never()).isValidCenterFrequency(any(), any());
+        verify(mock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
-    void inValidAEndSlot() {
+    void invalidAEndSlot_callsIsValidSlotAndReturnsFalse() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+        SlotWidthFrequencyGHz slotWidth = SlotWidthFrequencyGHz.getDefaultInstance("50");
+
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setCenterFrequency(centerFrequency)
+                .setSlotWidth(slotWidth)
                 .build();
-        ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
-                .setFrequencySlot(frequencySlot)
-                .build();
+
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .addAugmentation(serviceAEnd1)
+                .addAugmentation(new ServiceAEnd1Builder()
+                        .setFrequencySlot(frequencySlot)
+                        .build())
                 .build();
-        PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
-                new PathComputationRequestInputBuilder();
-        pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-        Slot mock = mock(Slot.class);
-        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
-        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
-                .thenReturn(false);
 
-        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceAEnd(serviceAEnd)
+                .build();
+
+        Slot slotMock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
+
+        ValidInput validateInput = new ValidInput(slotMock, formatMock);
+
+        BigDecimal center = centerFrequency.getValue().decimalValue();
+        BigDecimal width = slotWidth.getValue().decimalValue();
+
+        when(slotMock.isValidSlot(center, width, validateInput)).thenReturn(false);
+
+        assertFalse(validateInput.isValid(input));
+
+        verify(slotMock).isValidSlot(center, width, validateInput);
+        verify(slotMock, never()).isValidCenterFrequency(any(), any());
+        verify(slotMock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
-    void inValidAEndCenterFrequency() {
+    void invalidAEndCenterFrequency_callsIsValidCenterFrequencyAndReturnsFalse() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
+                .setCenterFrequency(centerFrequency)
                 .build();
-        ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
-                .setFrequencySlot(frequencySlot)
-                .build();
+
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .addAugmentation(serviceAEnd1)
+                .addAugmentation(new ServiceAEnd1Builder()
+                        .setFrequencySlot(frequencySlot)
+                        .build())
                 .build();
-        PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
-                new PathComputationRequestInputBuilder();
-        pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-        Slot mock = mock(Slot.class);
-        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
-        when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
-                .thenReturn(false);
 
-        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceAEnd(serviceAEnd)
+                .build();
+
+        Slot slotMock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
+
+        ValidInput validateInput = new ValidInput(slotMock, formatMock);
+
+        BigDecimal center = centerFrequency.getValue().decimalValue();
+
+        when(slotMock.isValidCenterFrequency(center, validateInput)).thenReturn(false);
+
+        assertFalse(validateInput.isValid(input));
+
+        verify(slotMock).isValidCenterFrequency(center, validateInput);
+        verify(slotMock, never()).isValidSlot(any(), any(), any());
+        verify(slotMock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
-    void inValidZEndCenterFrequency() {
+    void invalidZEndCenterFrequency_callsIsValidCenterFrequencyAndReturnsFalse() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
+                .setCenterFrequency(centerFrequency)
                 .build();
-        ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
-                .setFrequencySlot(frequencySlot)
-                .build();
+
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .addAugmentation(serviceZEnd1)
+                .addAugmentation(new ServiceZEnd1Builder()
+                        .setFrequencySlot(frequencySlot)
+                        .build())
                 .build();
-        PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
-                new PathComputationRequestInputBuilder();
-        pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-        Slot mock = mock(Slot.class);
-        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
-        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
-                .thenReturn(false);
 
-        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceZEnd(serviceZEnd)
+                .build();
+
+        Slot slotMock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
+
+        ValidInput validateInput = new ValidInput(slotMock, formatMock);
+
+        BigDecimal center = centerFrequency.getValue().decimalValue();
+
+        when(slotMock.isValidCenterFrequency(center, validateInput)).thenReturn(false);
+
+        assertFalse(validateInput.isValid(input));
+
+        verify(slotMock).isValidCenterFrequency(center, validateInput);
+        verify(slotMock, never()).isValidSlot(any(), any(), any());
+        verify(slotMock, never()).isValidSlotWidth(any(), any());
     }
 
     @Test
-    void inValidAEndSlotWidth() {
-        FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
-                .build();
-        ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
-                .setFrequencySlot(frequencySlot)
-                .build();
-        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .addAugmentation(serviceAEnd1)
-                .build();
-        PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
-                new PathComputationRequestInputBuilder();
-        pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-        Slot mock = mock(Slot.class);
-        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
-        when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
-                .thenReturn(false);
+    void invalidAEndSlotWidth_callsIsValidSlotWidthAndReturnsFalse() {
+        SlotWidthFrequencyGHz slotWidth = SlotWidthFrequencyGHz.getDefaultInstance("50");
 
-        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        FrequencySlot frequencySlot = new FrequencySlotBuilder()
+                .setSlotWidth(slotWidth)
+                .build();
+
+        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
+                .addAugmentation(new ServiceAEnd1Builder()
+                        .setFrequencySlot(frequencySlot)
+                        .build())
+                .build();
+
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceAEnd(serviceAEnd)
+                .build();
+
+        Slot slotMock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
+
+        ValidInput validateInput = new ValidInput(slotMock, formatMock);
+
+        BigDecimal width = slotWidth.getValue().decimalValue();
+
+        when(slotMock.isValidSlotWidth(width, validateInput)).thenReturn(false);
+
+        assertFalse(validateInput.isValid(input));
+
+        verify(slotMock).isValidSlotWidth(width, validateInput);
+        verify(slotMock, never()).isValidCenterFrequency(any(), any());
+        verify(slotMock, never()).isValidSlot(any(), any(), any());
     }
 
     /**
@@ -263,6 +354,14 @@ class ValidInputTest {
 
         //Assert the error message is available in the observer object.
         assertEquals("An error occurred", validateInput.lastErrorMessage());
+
+        verify(slot).isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput
+        );
+        verify(slot, never()).isValidCenterFrequency(any(), any());
+        verify(slot, never()).isValidSlotWidth(any(), any());
     }
 
     /**
@@ -392,6 +491,11 @@ class ValidInputTest {
 
         //Assert the error message is available in the observer object.
         assertEquals("An error occurred", validateInput.lastErrorMessage());
+
+        verify(formatMock).isValidFormat(null, frequencySlot, validateInput);
+        verify(slot, never()).isValidSlot(any(), any(), any());
+        verify(slot, never()).isValidCenterFrequency(any(), any());
+        verify(slot, never()).isValidSlotWidth(any(), any());
     }
 
     /**
