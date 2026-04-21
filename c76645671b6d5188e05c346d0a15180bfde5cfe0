@@ -18,6 +18,29 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f856aaa6_779834ff",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-04-21T15:34:42Z",
+      "side": 1,
+      "message": "oh, so GRANULARITY is a float here and we do not have a nice valueOf() for that -- I\u0027ll cook something up in https://lf-opendaylight.atlassian.net/browse/YANGTOOLS-1867",
+      "range": {
+        "startLine": 49,
+        "startChar": 37,
+        "endLine": 49,
+        "endChar": 112
+      },
+      "revId": "c76645671b6d5188e05c346d0a15180bfde5cfe0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2be4947f_89f9b8a9",
