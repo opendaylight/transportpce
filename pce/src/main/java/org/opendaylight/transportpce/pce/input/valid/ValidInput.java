@@ -84,14 +84,14 @@ public class ValidInput implements Valid {
             FrequencyTHz centerFrequency = frequencySlot.getCenterFrequency();
             if (centerFrequency != null && slotWidth != null) {
                 return slot.isValidSlot(
-                        centerFrequency.getValue().scaleTo(8).decimalValue(),
-                        slotWidth.getValue().scaleTo(5).decimalValue(),
+                        centerFrequency.getValue().decimalValue(),
+                        slotWidth.getValue().decimalValue(),
                         this
                 );
             } else if (centerFrequency != null) {
-                return slot.isValidCenterFrequency(centerFrequency.getValue().scaleTo(8).decimalValue(), this);
+                return slot.isValidCenterFrequency(centerFrequency.getValue().decimalValue(), this);
             } else if (slotWidth != null) {
-                return slot.isValidSlotWidth(slotWidth.getValue().scaleTo(5).decimalValue(), this);
+                return slot.isValidSlotWidth(slotWidth.getValue().decimalValue(), this);
             }
         }
 
