@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ca7dfefd_a59331c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-04-21T17:18:02Z",
+      "side": 1,
+      "message": "Hello Gilles,\n\nI\u0027ve attempted to fix the failing unit tests you mentioned in these changes:\n- IntervalCollectionTest.java: https://git.opendaylight.org/gerrit/c/transportpce/+/122479\n- ValidInputTest.java: https://git.opendaylight.org/gerrit/c/transportpce/+/122480\n\nI also decided to tighten some of the unit tests in a separate commit. Additionally, a few of the existing tests were quite weak and contained some  mistakes that had gone unnoticed, so I tried to correct them as well in the same commit: https://git.opendaylight.org/gerrit/c/transportpce/+/122481\n\nNot sure if those changes are relevant to the issue at hand, though. Perhaps that change should be rebased on master?",
+      "parentUuid": "3ba0b3c6_1fa35ed4",
+      "revId": "c76645671b6d5188e05c346d0a15180bfde5cfe0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f856aaa6_779834ff",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
         "patchSetId": 3
