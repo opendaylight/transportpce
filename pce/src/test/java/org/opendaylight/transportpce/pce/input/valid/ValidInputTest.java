@@ -18,7 +18,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
@@ -37,7 +36,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.s
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.spectrum.allocation.FrequencySlotBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 
-@Disabled
 class ValidInputTest {
 
     @Test
@@ -48,9 +46,11 @@ class ValidInputTest {
 
     @Test
     void isValidZEndSlot() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+        SlotWidthFrequencyGHz slotWidthFrequencyGHz = SlotWidthFrequencyGHz.getDefaultInstance("50");
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setCenterFrequency(centerFrequency)
+                .setSlotWidth(slotWidthFrequencyGHz)
                 .build();
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlot)
@@ -65,8 +65,11 @@ class ValidInputTest {
         Format formatMock = mock(Format.class);
         when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
         ValidInput validateInput = new ValidInput(mock, formatMock);
-        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
-                .thenReturn(true);
+        when(mock.isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput
+        )).thenReturn(true);
 
         assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
@@ -96,9 +99,11 @@ class ValidInputTest {
 
     @Test
     void isValidAEndSlot() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+        SlotWidthFrequencyGHz slotWidthFrequencyGHz = SlotWidthFrequencyGHz.getDefaultInstance("50");
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setCenterFrequency(centerFrequency)
+                .setSlotWidth(slotWidthFrequencyGHz)
                 .build();
         ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
                 .setFrequencySlot(frequencySlot)
@@ -113,8 +118,11 @@ class ValidInputTest {
         Format formatMock = mock(Format.class);
         when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
         ValidInput validateInput = new ValidInput(mock, formatMock);
-        when(mock.isValidSlot(BigDecimal.valueOf(191.33125000), BigDecimal.valueOf(50.00000), validateInput))
-                .thenReturn(true);
+        when(mock.isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput
+        )).thenReturn(true);
 
         assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
@@ -215,9 +223,11 @@ class ValidInputTest {
      */
     @Test
     void assertSlotErrorMessageIsPassedUpTheCallStack() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
+        SlotWidthFrequencyGHz slotWidthFrequencyGHz = SlotWidthFrequencyGHz.getDefaultInstance("50");
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setCenterFrequency(centerFrequency)
+                .setSlotWidth(slotWidthFrequencyGHz)
                 .build();
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlot)
@@ -244,7 +254,10 @@ class ValidInputTest {
                 argument2.error("An error occurred");
                 return false;
             }
-        })).when(slot).isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput);
+        })).when(slot).isValidSlot(
+                centerFrequency.getValue().decimalValue(),
+                slotWidthFrequencyGHz.getValue().decimalValue(),
+                validateInput);
 
         assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
@@ -259,8 +272,9 @@ class ValidInputTest {
      */
     @Test
     void assertCenterFrequencyErrorMessageIsPassedUpTheCallStack() {
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
+                .setCenterFrequency(centerFrequency)
                 .build();
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlot)
@@ -287,7 +301,7 @@ class ValidInputTest {
                 argument1.error("An error occurred");
                 return false;
             }
-        })).when(slot).isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput);
+        })).when(slot).isValidCenterFrequency(centerFrequency.getValue().decimalValue(), validateInput);
 
         assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
@@ -302,8 +316,9 @@ class ValidInputTest {
      */
     @Test
     void assertSlotWidthErrorMessageIsPassedUpTheCallStack() {
+        SlotWidthFrequencyGHz slotWidthFrequencyGHz = SlotWidthFrequencyGHz.getDefaultInstance("50");
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
-                .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                .setSlotWidth(slotWidthFrequencyGHz)
                 .build();
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlot)
@@ -330,7 +345,7 @@ class ValidInputTest {
                 argument1.error("An error occurred");
                 return false;
             }
-        })).when(slot).isValidSlotWidth(BigDecimal.valueOf(50.0), validateInput);
+        })).when(slot).isValidSlotWidth(slotWidthFrequencyGHz.getValue().decimalValue(), validateInput);
 
         assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
@@ -393,7 +408,7 @@ class ValidInputTest {
         //validateInput is an observer that should receive any error message
         //from the instance of Slot.
         ValidInput validateInput = new ValidInput(slot, formatMock);
-
+        SlotWidthFrequencyGHz slotWidthFrequencyGHz = SlotWidthFrequencyGHz.getDefaultInstance("50.0");
         //This mocked response will simulate a failed slot width validation and pass an error
         //message to the observer (argument1, i.e. validateInput). Note the value '50.0'.
         doAnswer(answer(new Answer2<Boolean, BigDecimal, Observer>() {
@@ -402,35 +417,37 @@ class ValidInputTest {
                 argument1.error("An error occurred");
                 return false;
             }
-        })).when(slot).isValidSlotWidth(BigDecimal.valueOf(50.0), validateInput);
+        })).when(slot).isValidSlotWidth(slotWidthFrequencyGHz.getValue().decimalValue(), validateInput);
 
         // This input matches the mocked response above, meaning this input together with the mock is set up to
         // produce an input validation error. Note the value '50'.
+
         PathComputationRequestInput pathComputationRequestInput1 = new PathComputationRequestInputBuilder()
                 .setServiceZEnd(new ServiceZEndBuilder()
                         .addAugmentation(new ServiceZEnd1Builder()
                                 .setFrequencySlot(new FrequencySlotBuilder()
-                                        .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                                        .setSlotWidth(slotWidthFrequencyGHz)
                                         .build())
                                 .build())
                         .build())
                 .build();
-
+        FrequencyTHz centerFrequency = FrequencyTHz.getDefaultInstance("191.33125");
         //This mocked response will simulate a successful validation, i.e. no error message, note the value '191.33125'.
         doAnswer(answer(new Answer2<Boolean, BigDecimal, Observer>() {
             @Override
             public Boolean answer(BigDecimal argument0, Observer argument1) throws Throwable {
                 return true;
             }
-        })).when(slot).isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput);
+        })).when(slot).isValidCenterFrequency(centerFrequency.getValue().decimalValue(), validateInput);
 
         // Build a second input. Unlike pathComputationRequestInput1, this is set up to pass validation, note the value
         // 191.33125
+
         PathComputationRequestInput pathComputationRequestInput2 = new PathComputationRequestInputBuilder()
                 .setServiceZEnd(new ServiceZEndBuilder()
                         .addAugmentation(new ServiceZEnd1Builder()
                                 .setFrequencySlot(new FrequencySlotBuilder()
-                                        .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
+                                        .setCenterFrequency(centerFrequency)
                                         .build())
                                 .build())
                         .build())
