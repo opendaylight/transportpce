@@ -38,6 +38,10 @@ Notes:
   When using tox, arguments must be passed after '--':
     tox -e tests_tapi -- <args>
 
+  Invalid suite names cause the script to list available suites.
+  Invalid test names cause the script to list available tests in the
+  selected suite.
+
   Although this script can be executed directly, some tests may require
   additional resources or environment setup to function properly.
 
@@ -55,6 +59,15 @@ Examples:
     tox -e tests_tapi -- abstracted_topology \
       --stop-at test_12_connect_roadma_pp1_to_xpdra_n1
 EOF
+}
+
+list_available_suites() {
+    ls -1 transportpce_tests 2>/dev/null | sed 's/^/  - /'
+}
+
+list_available_tests() {
+    ls "$test_suite_dir"/test[0-9][0-9]_*.py 2>/dev/null \
+        | sed -E 's#.*/test[0-9][0-9]_([^/]+)\.py#  - \1#'
 }
 
 if [ -n "$USE_ODL_ALT_KARAF_ENV" ]; then
@@ -106,12 +119,34 @@ if [ -z "$test_suite" ]; then
     exit 1
 fi
 
+test_suite_dir="transportpce_tests/$test_suite"
+
+if [ ! -d "$test_suite_dir" ]; then
+    echo "Error: test suite '$test_suite' does not exist." >&2
+    echo "" >&2
+    echo "Available test suites:" >&2
+    list_available_suites >&2
+    exit 1
+fi
+
 scriptlist=""
 if [ -z "$arglist" ]; then
-    scriptlist="transportpce_tests/$test_suite/test[0-9][0-9]_*.py"
+    scriptlist="$test_suite_dir/test[0-9][0-9]_*.py"
 else
     for test_name in $arglist; do
-        scriptlist="$scriptlist transportpce_tests/$test_suite/test[0-9][0-9]_$test_name.py"
+        pattern="$test_suite_dir/test[0-9][0-9]_$test_name.py"
+        script=$(ls $pattern 2>/dev/null)
+
+        if [ -z "$script" ]; then
+            echo "Error: no matching test file found for test '$test_name' in '$test_suite_dir'." >&2
+            echo "Tried: $pattern" >&2
+            echo "" >&2
+            echo "Available tests:" >&2
+            list_available_tests >&2
+            exit 1
+        fi
+
+        scriptlist="$scriptlist $script"
     done
 fi
 
@@ -135,9 +170,8 @@ fi
 # run one file at a time and print one command per file.
 if [ -z "$stop_at" ]; then
     for script in $scriptlist; do
-        resolved_script=$(ls $script 2>/dev/null) || exit 1
-        echo $LAUNCHER $resolved_script
-        $LAUNCHER $resolved_script || exit 1
+        echo $LAUNCHER $script
+        $LAUNCHER $script || exit 1
     done
     exit 0
 fi
@@ -146,9 +180,7 @@ selected_tests=""
 stop_reached=0
 
 for script in $scriptlist; do
-    resolved_script=$(ls $script 2>/dev/null) || exit 1
-
-    collected=$($LAUNCHER --collect-only "$resolved_script" 2>/dev/null) || exit 1
+    collected=$($LAUNCHER --collect-only "$script" 2>/dev/null) || exit 1
 
     old_ifs=$IFS
     IFS='
