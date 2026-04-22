@@ -1,0 +1,392 @@
+module transportpce-pathDescription {
+  namespace "http://org/transportpce/B-C-interface/pathDescription";
+  prefix transportpce-pathDescription;
+
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+  }
+  import org-openroadm-common-state-types {
+    prefix org-openroadm-common-state-types;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-common-link-types {
+      prefix org-openroadm-common-link-types;
+  }
+  import transportpce-common-types {
+    prefix transportpce-common-types;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of B interface (transportPCE). Adapted from service definition (openroadm)
+     Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+
+     openroadm copyright:
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      AT&T Intellectual Property.  All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2026-04-22 {
+      description
+        "Version 1.8. Add service breakdown attributes to handle services spanning across TAPI domain
+         handled through TAPI-SBI.";
+  }
+  revision 2023-05-01 {
+      description
+        "Version 1.7. Add central frequency and spectral width parameters";
+  }
+  revision 2021-07-05 {
+    description
+      "Version 1.6.4. To add a list of trib-slots and complex-trib-slots
+      to be compliant with transportpce-device-renderer yang model";
+  }
+  revision 2020-12-10 {
+    description
+      "Version 1.6.3. To add states in path description elements";
+  }
+  revision 2020-11-26 {
+    description
+      "Version 1.6.2. To manage flexgrid";
+  }
+  revision 2020-06-29 {
+    description
+      "Version 1.6.1. To manage otn services";
+  }
+  revision 2017-10-17 {
+    description
+      "Version 1.6";
+  }
+  revision 2017-04-26 {
+    description
+      "Version 1.5";
+  }
+
+  grouping PCE-resource {
+    description
+      "This resource identifier is intended to provide a generic identifer
+       for any resource that can be used without specific knowledge of
+       the resource.";
+    container resource {
+      choice resource {
+        case termination-point {
+          leaf tp-id {
+            type string;
+            //to be clarified with topology model
+          }
+          leaf tp-node-id {
+            type string;
+            //to be clarified with topology model
+          }
+        }
+        case link {
+          leaf link-id {
+            type string;
+            //to be clarified with topology model
+          }
+        }
+        case node {
+          leaf node-id {
+            type string;
+            // to be clarified with topology model
+          }
+        }
+      }
+      leaf state {
+        type org-openroadm-common-state-types:state;
+        mandatory true;
+        description "Operational state of pce-resource";
+      }
+    }
+  }
+
+  grouping path-description {
+    description
+      "Topology reports the individual hops along the service in the A to Z direction and Z to A directions. This
+       includes both ports internal to a device and those at its edge that are available for externally connections.
+       It includes both physical and logical ports.
+       Physical ports are ordered with the logical ports that run over them as follows:
+       a.\tOn ingress to a node/card, physical then logical
+       b.\tOn egress to a node/card, logical then physical";
+    leaf service-breakdown {
+        type boolean;
+        description
+          "Optional attribute set to true if the service spans across TAPI-ABS-NODE abstracting an OLS domain handled
+           through a NMS connected to TransportPCE via the TAPI-SBI";
+    }
+    container broken-down-service {
+      when "../service-breakdown = 'true'";
+          description
+            "If the service of service-creation request spans across several domains, it needs to be broken down.
+             This container contains information on sub-services/broken-down-services associated with the service.";
+          uses broken-down-service-attributes;
+    }
+    container aToZ-direction {
+      leaf aToZ-wavelength-number {
+        type uint32;
+      }
+      leaf aToZ-min-frequency {
+         type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Minimum frequency in THz.";
+      }
+      leaf aToZ-max-frequency {
+           type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Maximum frequency in THz.";
+      }
+      uses transportpce-common-types:service-result-rpc-common-parameters;
+      list aToZ {
+        key "id";
+        leaf id {
+          type string;
+          description
+            "Unique identifier for this topology component within this service";
+        }
+        uses hop;
+      }
+    }
+    container zToA-direction {
+      leaf zToA-wavelength-number {
+        type uint32;
+      }
+      leaf zToA-min-frequency {
+         type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Minimum frequency in THz.";
+      }
+      leaf zToA-max-frequency {
+           type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Maximum frequency in THz.";
+      }
+      uses transportpce-common-types:service-result-rpc-common-parameters;
+      list zToA {
+        key "id";
+        leaf id {
+          type string;
+          description
+            "Unique identifier for this topology component within this service";
+        }
+        uses hop;
+      }
+    }
+  }
+
+  grouping hop {
+    uses PCE-resource;
+  }
+
+  typedef domain-type-enum {
+    type enumeration {
+      enum openroadm {
+        value 1;
+        description
+          "OpenROADM domain where equipment is handled directly through NETCONF/OR";
+      }
+      enum tapi-sbi {
+        value 2;
+        description
+          "Tapi domain where equipment are handled indirectly through a RESTCONF/TAPI SBI";
+      }
+    }
+    description
+      "Enumeration that describe the domain-type";
+  }
+
+  grouping impairment-params {
+    description
+      "Grouping defining the parameters to be stored when impairments can be evaluated on section of the path
+       corresponding to a broken-down service";
+    leaf accumulated-cd {
+      type uint32;
+      description
+        "Chromatic dispersion accumulated on the section of the path in ps/nm";
+    }
+    leaf accumulated-pmd2 {
+      type uint32;
+      description
+        "Polarization Mode Dispersion accumulated on the section of the path";
+    }
+    leaf latency {
+      type decimal64 {
+        fraction-digits 3;
+        }
+        units "milliseconds";
+        description
+        "latency accumulated on the section of the path in milliseconds";
+    }
+    leaf osnr-contribution {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "osnr contribution on the section of the path in dB";
+    }
+    leaf target-rx-osnr {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "the target osnr at the receiver side (if it makes sense : RX side) in dB";
+    }
+    leaf section-available-freq-map {
+      type binary;
+      description
+        "bitmap providing spectrum availability on the section of the broken-down service";
+    }
+  }
+
+  grouping broken-down-service-attributes {
+    description
+      "When a service spans across a TAPI domain handled through a TAPI SBI, the service creation request needs to
+       be handled through several steps, separating the part of the service that is routed over OpenRoadm domains
+       from the part of the service that is routed over the TAPI domains.
+       - A trace of the calculated impairments associated with the OpenROADM domains needs to be stored.
+       - The enpoints corresponding to IN and OUT of the TAPI-SBI-ABS node need to be extracted so that the information
+       can be reused while launching a tapi-sbi-service-implementation-request, and also during the TAPI rendering
+       process where a connectivity service corresponding to an OLS tunnel is created through the south bound NMS.";
+     leaf initial-service-name-or-common-id {
+       type string;
+       description
+         "The service name as provided in the service-create RPCs, or the common-id as provided in the
+          temp-service-create RPCs, that will be used in either the broken-down-service container of the
+          path-description or in the broken-down-service-list as an identifier of the service";
+     }
+     list bd-services {
+       key "bd-service-id";
+       description
+         "A list of sub-services that compose the service, all being at the same layer, corresponding to the different
+          sections/domains the service is routed over.";
+       leaf bd-service-id {
+         type uint8;
+         description
+           "unique identifier of the broken-down-service/sub-service corresponding to one domain. A [service-name] is
+           composed of several (N) [service-name]-[bd-service-id]. The value of bd-service-id corresponds to the order
+           of the sub-service across the path in A to Z direction: service-name-0 precedes service-name-1 ...
+           which precedes service-name-N routed over domain-O then domain-1, ...and ultimately domain-N.";
+        }
+        leaf topology-domain {
+          type domain-type-enum;
+          description
+            "Enumeration that describe the domain-type";
+        }
+        leaf calculated-impairments {
+          type boolean;
+          description
+            "Set to true if the osnr degradation can be evaluated";
+        }
+        container impairment-parameters {
+          when "../calculated-impairments = 'true'";
+          description
+            "If impairments can be evaluated, the attributes of this container allow storing parameters qualifying the
+             accumulated degradations on the path of the broken down service";
+          uses impairment-params;
+        }
+        container source {
+          description
+            "Contains information on the Source Node for the sub-service";
+          leaf src-node-id {
+            type string;
+            description
+              "the source node id used for OpenRoadm domain, as it appears in the topology";
+          }
+          leaf src-tp-id {
+            type string;
+            description
+              "the source tp id (logical-connection-point) used for OpenRoadm domain, as it appears in the topology";
+          }
+          leaf src-sup-node-uuid {
+            type string;
+            description
+              "the source supporting node uuid used for TAPI domain, as it appears in the topology TAPI-SBI-ABS-NODE";
+          }
+          leaf src-tp-uuid {
+            type string;
+            description
+              "the source tp uuid used for TAPI domain, as it appears in the topology TAPI-SBI-ABS-NODE";
+          }
+          leaf src-topo-uuid {
+            type string;
+            description
+              "the source supporting-node-topo-uuid used for TAPI domain, as it appears in the topology
+              TAPI-SBI-ABS-NODE";
+          }
+          leaf src-supporting-node-name {
+            type string;
+            description
+              "the source supporting-node-name used for TAPI domain, as it appears in the topology TAPI-SBI-ABS-NODE
+               used mainly for simplified LOG processing";
+          }
+        }
+        container destination {
+          description
+            "Contains information on the Source Node for the sub-service";
+          leaf dest-node-id {
+            type string;
+            description
+              "the destination node id used for OpenRoadm domain, as it appears in the topology";
+          }
+          leaf dest-tp-id {
+            type string;
+            description
+              "the destination tp id (logical-connection-point) used for OpenRoadm domain, as it appears in the
+               topology";
+          }
+          leaf dest-sup-node-uuid {
+            type string;
+            description
+              "the destination supporting node uuid used for TAPI domain, as it appears in the topology
+               TAPI-SBI-ABS-NODE";
+          }
+          leaf dest-tp-uuid {
+            type string;
+            description
+              "the destination tp uuid used for TAPI domain, as it appears in the topology TAPI-SBI-ABS-NODE";
+          }
+          leaf dest-topo-uuid {
+            type string;
+            description
+              "the destination supporting-node-topo-uuid used for TAPI domain, as it appears in the topology
+              TAPI-SBI-ABS-NODE";
+          }
+          leaf dest-supporting-node-name {
+            type string;
+            description
+              "the source supporting-node-name used for TAPI domain, as it appears in the topology TAPI-SBI-ABS-NODE
+               used mainly for simplified LOG processing";
+          }
+        }
+     }
+  }
+
+  list broken-down-services {
+    key "initial-service-name-or-common-id";
+      description
+        "A list of services that have been broken down because they span across several topological domains.
+         In addition to storing the parameters of subservices in the path of the service, we keep here information
+         about the way the service has been split into several sub-services so that necessary information is available
+         to all modules implicated in the orchestration of the service creation (PCE/Renderer).";
+      uses broken-down-service-attributes;
+  }
+}
