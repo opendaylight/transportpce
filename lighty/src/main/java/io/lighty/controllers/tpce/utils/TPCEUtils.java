@@ -279,9 +279,9 @@ public final class TPCEUtils {
             org.opendaylight.yang.svc.v1.gnpy.gnpy.network.topology.rev220615.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.path.rev220615.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev250905
-                    .YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
-                    .YangModuleInfoImpl.INSTANCE,
+                    .YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422
+                    .YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.YangModuleInfoImpl
