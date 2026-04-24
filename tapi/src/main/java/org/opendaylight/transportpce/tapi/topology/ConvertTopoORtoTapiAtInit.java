@@ -24,6 +24,9 @@ import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
@@ -105,6 +108,7 @@ public class ConvertTopoORtoTapiAtInit {
     private OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor =
             DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance();
     private final LinkTerminationPointsFactory linkTerminationPointsFactory;
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
@@ -148,7 +152,8 @@ public class ConvertTopoORtoTapiAtInit {
                 link,
                 network,
                 this.tapiTopoUuid,
-                linkTerminationPointsFactory);
+                linkTerminationPointsFactory,
+                new OpenRoadmLinkStateResolver(linkStateMapper));
             if (tapLink == null) {
                 LOG.warn("Skipping OpenROADM link {} because TAPI link creation failed", link.getLinkId());
                 continue;
@@ -578,8 +583,8 @@ public class ConvertTopoORtoTapiAtInit {
                     new ArrayList<>(List.of(sclpqiBd.build())))
                 .setDirection(Direction.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
-                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
+                .setAdministrativeState(linkStateMapper.toTapiAdminState(admin.getName()))
+                .setOperationalState(linkStateMapper.toTapiOperationalState(oper.getName()))
                 .setLifecycleState(LifecycleState.INSTALLED);
 
             ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
