@@ -38,6 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.O
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
@@ -370,6 +371,8 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setName(Map.of(nodeEdgePointName.key(), nodeEdgePointName))
                 .setSupportedCepLayerProtocolQualifierInstances(List.of(supportedCepLayerProtocolQualifierInstances))
+                .setAdministrativeState(AdministrativeState.UNLOCKED)
+                .setOperationalState(OperationalState.ENABLED)
                 .addAugmentation(photonicMediaAugmentation)
                 .addAugmentation(cepListAugmentation).build();
     }

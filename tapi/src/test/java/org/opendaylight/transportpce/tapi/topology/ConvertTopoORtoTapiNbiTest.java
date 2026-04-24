@@ -1399,16 +1399,10 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
     }
 
     private Network otnTopology() {
-        return topologyRepository.read(
-                LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifiers.OTN_NETWORK_II
-        ).orElseThrow(() -> new IllegalStateException(
-                String.format(
-                        "OpenROADM OTN topology is missing: datastore=%s, iid=%s",
-                        LogicalDatastoreType.CONFIGURATION,
-                        InstanceIdentifiers.OTN_NETWORK_II
-                )
-        ));
+        return topologyRepository.read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OTN_NETWORK_II)
+                .orElseThrow(() -> new IllegalStateException(
+                        "OpenROADM OTN topology is missing: datastore=%s, iid=%s"
+                                .formatted(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OTN_NETWORK_II)));
     }
 
 

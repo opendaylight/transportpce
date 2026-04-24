@@ -44,6 +44,8 @@ import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTopologyRepository;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.topology.nep.DefaultRoadmNepFactory;
@@ -199,6 +201,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
     private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
     private final RoadmNepFactory roadmNepFactory;
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     @Activate
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
