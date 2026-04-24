@@ -351,10 +351,12 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         List<Link> tapiLinks = tapiAbsFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        assertNull(tapiLinks.get(1).getAdministrativeState(), "Administrative State should not be present");
+        assertEquals(AdministrativeState.UNLOCKED, tapiLinks.get(1).getAdministrativeState(),
+                "Administrative State should be UNLOCKED");
         assertEquals(AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState(),
             "Administrative state should be UNLOCKED");
-        assertNull(tapiLinks.get(1).getOperationalState(), "Operational State should not be present");
+        assertEquals(OperationalState.ENABLED, tapiLinks.get(1).getOperationalState(),
+                "Operational State should be ENABLED");
         assertEquals(OperationalState.ENABLED, tapiLinks.get(0).getOperationalState(),
             "Operational state should be ENABLED");
     }
@@ -493,11 +495,11 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         List<Link> tapiLinks = tapiAbsFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        assertEquals(AdministrativeState.LOCKED, tapiLinks.get(1).getAdministrativeState(),
+        assertEquals(AdministrativeState.UNLOCKED, tapiLinks.get(1).getAdministrativeState(),
             "Administrative state should be LOCKED");
         assertEquals(AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState(),
             "Administrative state should be UNLOCKED");
-        assertEquals(OperationalState.DISABLED, tapiLinks.get(1).getOperationalState(),
+        assertEquals(OperationalState.ENABLED, tapiLinks.get(1).getOperationalState(),
             "Operational state should be DISABLED");
         assertEquals(OperationalState.ENABLED, tapiLinks.get(0).getOperationalState(),
             "Operational state should be ENABLED");
