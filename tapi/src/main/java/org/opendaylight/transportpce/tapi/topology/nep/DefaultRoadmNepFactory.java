@@ -19,6 +19,8 @@ import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
@@ -62,6 +64,8 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
     private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
 
     private final ORtoTapiTopoConversionTools tapiFactory;
+
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     public DefaultRoadmNepFactory(
             OpenRoadmTerminationPointReader openRoadmTerminationPointReader,
@@ -261,13 +265,13 @@ public class DefaultRoadmNepFactory implements RoadmNepFactory {
             if (terminationPoint1 != null) {
                 AdminStates admin = terminationPoint1.getAdministrativeState();
                 if (admin != null) {
-                    onepBd.setAdministrativeState(tapiLink.setTapiAdminState(admin.getName()));
+                    onepBd.setAdministrativeState(linkStateMapper.toTapiAdminState(admin.getName()));
                 } else {
                     LOG.warn("[depth={}] Missing administrative state for node {} tp {}", depth, nodeId, tpId);
                 }
                 State oper = terminationPoint1.getOperationalState();
                 if (oper != null) {
-                    onepBd.setOperationalState(tapiLink.setTapiOperationalState(oper.getName()));
+                    onepBd.setOperationalState(linkStateMapper.toTapiOperationalState(oper.getName()));
                 } else {
                     LOG.warn("[depth={}] Missing operational state for node {} tp {}", depth, nodeId, tpId);
                 }

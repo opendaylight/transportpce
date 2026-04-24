@@ -23,6 +23,9 @@ import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.nep.RoadmNepFactory;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
@@ -77,6 +80,7 @@ public class ConvertTopoORtoTapiAtInit {
     private final LinkTerminationPointsFactory linkTerminationPointsFactory;
     private final RoadmNepFactory roadmNepFactory;
     private final ORtoTapiTopoConversionTools tapiFactory;
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
@@ -116,7 +120,8 @@ public class ConvertTopoORtoTapiAtInit {
                 link,
                 network,
                 this.tapiTopoUuid,
-                linkTerminationPointsFactory);
+                linkTerminationPointsFactory,
+                new OpenRoadmLinkStateResolver(linkStateMapper));
             if (tapLink == null) {
                 LOG.warn("Skipping OpenROADM link {} because TAPI link creation failed", link.getLinkId());
                 continue;
