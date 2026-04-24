@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.Map;
 import java.util.Set;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -77,7 +78,9 @@ public interface TapiLink {
      * @param adminState administrative state expressed as a string
      * @return {@link AdministrativeState#UNLOCKED}, {@link AdministrativeState#LOCKED},
      *         or {@code null} if the input is {@code null}
+     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(String)} instead.
      */
+    @Deprecated(forRemoval = true)
     AdministrativeState setTapiAdminState(String adminState);
 
     /**
@@ -89,7 +92,9 @@ public interface TapiLink {
      * @param adminState2 administrative state of the second endpoint
      * @return {@link AdministrativeState#UNLOCKED} when both endpoints are in service,
      *         otherwise {@link AdministrativeState#LOCKED}; {@code null} if either input is {@code null}
+     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(AdminStates, AdminStates)} instead.
      */
+    @Deprecated(forRemoval = true)
     AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2);
 
     /**
@@ -98,7 +103,9 @@ public interface TapiLink {
      * @param operState operational state expressed as a string
      * @return {@link OperationalState#ENABLED}, {@link OperationalState#DISABLED},
      *         or {@code null} if the input is {@code null}
+     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiOperationalState(String)} instead.
      */
+    @Deprecated(forRemoval = true)
     OperationalState setTapiOperationalState(String operState);
 
     /**
@@ -110,7 +117,9 @@ public interface TapiLink {
      * @param operState2 operational state of the second endpoint
      * @return {@link OperationalState#ENABLED} when both endpoints are in service,
      *         otherwise {@link OperationalState#DISABLED}; {@code null} if either input is {@code null}
+     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiOperationalState(State, State)} instead.
      */
+    @Deprecated(forRemoval = true)
     OperationalState setTapiOperationalState(State operState1, State operState2);
 
     /**
