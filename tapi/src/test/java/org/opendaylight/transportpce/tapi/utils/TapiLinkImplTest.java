@@ -36,6 +36,8 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
@@ -106,6 +108,7 @@ class TapiLinkImplTest extends AbstractTest {
     private NetworkTransactionService networkTransactionService;
     private TapiLinkImpl tapiLinkImpl;
     private TopologyUtils topologyUtils;
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
@@ -1342,10 +1345,10 @@ class TapiLinkImplTest extends AbstractTest {
         TapiContext tapiContext = mock(TapiContext.class);
         TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
 
-        assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("UNLOCKED"));
-        assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("inService"));
-        assertEquals(AdministrativeState.LOCKED, tapiLink.setTapiAdminState("LOCKED"));
-        assertNull(tapiLink.setTapiAdminState((String)null));
+        assertEquals(AdministrativeState.UNLOCKED, linkStateMapper.toTapiAdminState("UNLOCKED"));
+        assertEquals(AdministrativeState.UNLOCKED, linkStateMapper.toTapiAdminState("inService"));
+        assertEquals(AdministrativeState.LOCKED, linkStateMapper.toTapiAdminState("LOCKED"));
+        assertNull(linkStateMapper.toTapiAdminState((String)null));
     }
 
     @Test
@@ -1354,72 +1357,72 @@ class TapiLinkImplTest extends AbstractTest {
         TapiContext tapiContext = mock(TapiContext.class);
         TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
 
-        assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("ENABLED"));
-        assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("inService"));
-        assertEquals(OperationalState.DISABLED, tapiLink.setTapiOperationalState("DISABLED"));
-        assertNull(tapiLink.setTapiOperationalState((String)null));
+        assertEquals(OperationalState.ENABLED, linkStateMapper.toTapiOperationalState("ENABLED"));
+        assertEquals(OperationalState.ENABLED, linkStateMapper.toTapiOperationalState("inService"));
+        assertEquals(OperationalState.DISABLED, linkStateMapper.toTapiOperationalState("DISABLED"));
+        assertNull(linkStateMapper.toTapiOperationalState((String)null));
     }
 
     @Test
     void setTapiAdminState_shouldReturnUnlockedWhenBothEndpointsInService() {
         assertEquals(
                 AdministrativeState.UNLOCKED,
-                tapiLinkImpl.setTapiAdminState(AdminStates.InService, AdminStates.InService));
+                linkStateMapper.toTapiAdminState(AdminStates.InService, AdminStates.InService));
     }
 
     @Test
     void setTapiAdminState_shouldReturnLockedWhenBothEndpointsOutOfService() {
         assertEquals(
                 AdministrativeState.LOCKED,
-                tapiLinkImpl.setTapiAdminState(AdminStates.OutOfService, AdminStates.OutOfService));
+                linkStateMapper.toTapiAdminState(AdminStates.OutOfService, AdminStates.OutOfService));
     }
 
     @Test
     void setTapiAdminState_shouldReturnLockedWhenEndpointStatesDiffer() {
         assertEquals(
                 AdministrativeState.LOCKED,
-                tapiLinkImpl.setTapiAdminState(AdminStates.InService, AdminStates.OutOfService));
+                linkStateMapper.toTapiAdminState(AdminStates.InService, AdminStates.OutOfService));
     }
 
     @Test
     void setTapiAdminState_shouldReturnNullWhenFirstEndpointStateIsNull() {
-        assertNull(tapiLinkImpl.setTapiAdminState(null, AdminStates.InService));
+        assertNull(linkStateMapper.toTapiAdminState(null, AdminStates.InService));
     }
 
     @Test
     void setTapiAdminState_shouldReturnNullWhenSecondEndpointStateIsNull() {
-        assertNull(tapiLinkImpl.setTapiAdminState(AdminStates.InService, null));
+        assertNull(linkStateMapper.toTapiAdminState(AdminStates.InService, null));
     }
 
     @Test
     void setTapiOperationalState_shouldReturnEnabledWhenBothEndpointsInService() {
         assertEquals(
                 OperationalState.ENABLED,
-                tapiLinkImpl.setTapiOperationalState(State.InService, State.InService));
+                linkStateMapper.toTapiOperationalState(State.InService, State.InService));
     }
 
     @Test
     void setTapiOperationalState_shouldReturnDisabledWhenBothEndpointsOutOfService() {
         assertEquals(
                 OperationalState.DISABLED,
-                tapiLinkImpl.setTapiOperationalState(State.OutOfService, State.OutOfService));
+                linkStateMapper.toTapiOperationalState(State.OutOfService, State.OutOfService));
     }
 
     @Test
     void setTapiOperationalState_shouldReturnDisabledWhenEndpointStatesDiffer() {
         assertEquals(
                 OperationalState.DISABLED,
-                tapiLinkImpl.setTapiOperationalState(State.InService, State.OutOfService));
+                linkStateMapper.toTapiOperationalState(State.InService, State.OutOfService));
     }
 
     @Test
     void setTapiOperationalState_shouldReturnNullWhenFirstEndpointStateIsNull() {
-        assertNull(tapiLinkImpl.setTapiOperationalState(null, State.InService));
+        assertNull(linkStateMapper.toTapiOperationalState(null, State.InService));
     }
 
     @Test
     void setTapiOperationalState_shouldReturnNullWhenSecondEndpointStateIsNull() {
-        assertNull(tapiLinkImpl.setTapiOperationalState(State.InService, null));
+        assertNull(linkStateMapper.toTapiOperationalState(State.InService, null));
     }
 
     private static String uuidOf(String input) {
