@@ -12,13 +12,8 @@ import java.util.Set;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
-import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
@@ -153,76 +148,6 @@ public interface TapiLink {
             Set<LayerProtocolName> layerProtoNameList,
             Set<String> transLayerNameList,
             Uuid tapiTopoUuid);
-
-    /**
-     * Converts a textual administrative state into the corresponding TAPI administrative state.
-     *
-     * @param adminState administrative state
-     * @return {@link AdministrativeState#UNLOCKED}, {@link AdministrativeState#LOCKED},
-     *         or {@code null} if the input is {@code null}
-     */
-    @Deprecated(forRemoval = true)
-    AdministrativeState setTapiAdminState(AdminStates adminState);
-
-    /**
-     * Converts a textual administrative state into the corresponding TAPI administrative state.
-     *
-     * @param adminState administrative state expressed as a string
-     * @return {@link AdministrativeState#UNLOCKED}, {@link AdministrativeState#LOCKED},
-     *         or {@code null} if the input is {@code null}
-     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(String)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    AdministrativeState setTapiAdminState(String adminState);
-
-    /**
-     * Converts two OpenROADM administrative states into a single effective TAPI administrative state.
-     *
-     * <p>The effective state is typically derived from both link endpoints.
-     *
-     * @param adminState1 administrative state of the first endpoint
-     * @param adminState2 administrative state of the second endpoint
-     * @return {@link AdministrativeState#UNLOCKED} when both endpoints are in service,
-     *         otherwise {@link AdministrativeState#LOCKED}; {@code null} if either input is {@code null}
-     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(AdminStates, AdminStates)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2);
-
-    /**
-     * Converts a textual operational state into the corresponding TAPI operational state.
-     *
-     * @param operState operational state
-     * @return {@link OperationalState#ENABLED}, {@link OperationalState#DISABLED},
-     *         or {@code null} if the input is {@code null}
-     */
-    @Deprecated(forRemoval = true)
-    OperationalState setTapiOperationalState(State operState);
-
-    /**
-     * Converts a textual operational state into the corresponding TAPI operational state.
-     *
-     * @param operState operational state expressed as a string
-     * @return {@link OperationalState#ENABLED}, {@link OperationalState#DISABLED},
-     *         or {@code null} if the input is {@code null}
-     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiOperationalState(String)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    OperationalState setTapiOperationalState(String operState);
-
-    /**
-     * Converts two OpenROADM operational states into a single effective TAPI operational state.
-     *
-     * <p>The effective state is typically derived from both link endpoints.
-     *
-     * @param operState1 operational state of the first endpoint
-     * @param operState2 operational state of the second endpoint
-     * @return {@link OperationalState#ENABLED} when both endpoints are in service,
-     *         otherwise {@link OperationalState#DISABLED}; {@code null} if either input is {@code null}
-     * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiOperationalState(State, State)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    OperationalState setTapiOperationalState(State operState1, State operState2);
 
     /**
      * Retrieves the effective operational state of a link from the corresponding source and destination NEPs.

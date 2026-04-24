@@ -33,14 +33,13 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminatio
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.TapiLinkAttributes;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateAttributes;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -109,6 +108,8 @@ public class TapiLinkImpl implements TapiLink {
     private Map<Map<String, String>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list
         .ConnectionEndPoint> cepMap = new HashMap<>();
     private final LinkStateResolver linkStateResolver;
+    private final LinkTerminationPointsFactory defaultLinkTerminationPointsFactory;
+    private final LinkStateMapper defaultLinkStateMapper;
 
     @Activate
     public TapiLinkImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -117,17 +118,24 @@ public class TapiLinkImpl implements TapiLink {
         this(
                 networkTransactionService,
                 tapiContext,
-                new OpenRoadmLinkStateResolver(new OpenRoadmLinkStateMapper())
+                new OpenRoadmLinkStateResolver(new OpenRoadmLinkStateMapper()),
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()),
+                new OpenRoadmLinkStateMapper()
         );
     }
 
     public TapiLinkImpl(
             NetworkTransactionService networkTransactionService,
             TapiContext tapiContext,
-            LinkStateResolver linkStateResolver) {
+            LinkStateResolver linkStateResolver,
+            LinkTerminationPointsFactory defaultLinkTerminationPointsFactory,
+            LinkStateMapper openRoadmLinkStateMapper) {
+
         this.networkTransactionService = networkTransactionService;
         this.tapiContext = tapiContext;
         this.linkStateResolver = linkStateResolver;
+        this.defaultLinkTerminationPointsFactory = defaultLinkTerminationPointsFactory;
+        this.defaultLinkStateMapper = openRoadmLinkStateMapper;
     }
 
     @Override
@@ -150,7 +158,7 @@ public class TapiLinkImpl implements TapiLink {
                 ),
                 network,
                 tapiTopoUuid,
-                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+                defaultLinkTerminationPointsFactory
         );
     }
 
@@ -444,8 +452,8 @@ public class TapiLinkImpl implements TapiLink {
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTION)
                 .setRestorationPolicy(RestorationPolicy.NA)
                 .build())
-            .setAdministrativeState(setTapiAdminState(adminState))
-            .setOperationalState(setTapiOperationalState(operState))
+            .setAdministrativeState(defaultLinkStateMapper.toTapiAdminState(adminState))
+            .setOperationalState(defaultLinkStateMapper.toTapiOperationalState(operState))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
@@ -684,62 +692,6 @@ public class TapiLinkImpl implements TapiLink {
             LOG.error("TAPILINKIMPL Failed getting Mapping data from portMapping",e);
         }
         return null;
-    }
-
-    @Override
-    public AdministrativeState setTapiAdminState(AdminStates adminState) {
-        if (adminState != null) {
-            return setTapiAdminState(adminState.getName());
-        }
-
-        return setTapiAdminState((String)null);
-    }
-
-    @Override
-    public AdministrativeState setTapiAdminState(String adminState) {
-        if (adminState == null) {
-            return null;
-        }
-        return adminState.equals(AdminStates.InService.getName())
-            || adminState.equals(AdministrativeState.UNLOCKED.getName()) ? AdministrativeState.UNLOCKED
-                : AdministrativeState.LOCKED;
-    }
-
-    @Override
-    public AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2) {
-        if (adminState1 == null || adminState2 == null) {
-            return null;
-        }
-        LOG.info("Admin state 1 = {}, andmin state 2 = {}", adminState1.getName(), adminState2.getName());
-        return AdminStates.InService.equals(adminState1) && AdminStates.InService.equals(adminState2)
-            ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
-    }
-
-    @Override
-    public OperationalState setTapiOperationalState(State operState) {
-        if (operState != null) {
-            return setTapiOperationalState(operState.getName());
-        }
-
-        return setTapiOperationalState((String)null);
-    }
-
-    @Override
-    public OperationalState setTapiOperationalState(String operState) {
-        if (operState == null) {
-            return null;
-        }
-        return operState.equals("inService") || operState.equals(OperationalState.ENABLED.getName())
-            ? OperationalState.ENABLED : OperationalState.DISABLED;
-    }
-
-    @Override
-    public OperationalState setTapiOperationalState(State operState1, State operState2) {
-        if (operState1 == null || operState2 == null) {
-            return null;
-        }
-        return State.InService.equals(operState1) && State.InService.equals(operState2)
-            ? OperationalState.ENABLED : OperationalState.DISABLED;
     }
 
     @Override
