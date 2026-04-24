@@ -44,6 +44,8 @@ import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTopologyRepository;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
@@ -207,6 +209,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
     private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
     private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
+    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     @Activate
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -2276,8 +2279,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
                     .setDirection(Direction.BIDIRECTIONAL)
                     .setLinkPortRole(PortRole.SYMMETRIC)
-                    .setAdministrativeState(this.tapiLink.setTapiAdminState(tp.getAdministrativeState().getName()))
-                    .setOperationalState(this.tapiLink.setTapiOperationalState(tp.getOperationalState().getName()))
+                    .setAdministrativeState(linkStateMapper.toTapiAdminState(tp.getAdministrativeState().getName()))
+                    .setOperationalState(linkStateMapper.toTapiOperationalState(tp.getOperationalState().getName()))
                     .setLifecycleState(LifecycleState.INSTALLED);
 
             //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
