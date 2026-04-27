@@ -105,7 +105,7 @@ public class CrossConnectImpl121Test {
         when(deviceTransactionManager.getDeviceTransaction("deviceId"))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
         doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
-        crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, Decimal64.valueOf("100"), "1");
+        crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, Decimal64.valueOf(2, 100), "1");
         assertTrue(true, "set Level should be true");
     }
 }

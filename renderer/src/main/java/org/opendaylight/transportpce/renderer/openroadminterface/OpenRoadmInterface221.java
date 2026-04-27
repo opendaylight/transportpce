@@ -224,7 +224,7 @@ public class OpenRoadmInterface221 {
                                 .setFrequency(
                                     new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
                                 .setRate(R100G.VALUE)
-                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(2, -5)))
                                 .setModulationFormat(modulationFormat)
                                 .build())
                         .build());

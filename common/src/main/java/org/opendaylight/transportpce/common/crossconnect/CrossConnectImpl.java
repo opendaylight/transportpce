@@ -130,23 +130,20 @@ public class CrossConnectImpl implements CrossConnect {
                 if (OpticalControlMode.forName(mode) == null) {
                     return false;
                 }
-                return crossConnectImpl121.setPowerLevel(nodeId,
-                    OpticalControlMode.forName(mode),
-                    powerValue, connectionNumber);
+                return crossConnectImpl121.setPowerLevel(nodeId, OpticalControlMode.forName(mode), powerValue,
+                        connectionNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
                         .forName(mode) == null) {
                     return false;
                 }
                 return crossConnectImpl221.setPowerLevel(nodeId,
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
-                        .forName(mode),
-                    powerValue, connectionNumber);
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
+                                .forName(mode), powerValue, connectionNumber);
             case OPENROADM_DEVICE_VERSION_7_1:
                 return crossConnectImpl710.setPowerLevel(nodeId,
                         org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.OpticalControlMode
-                        .forName(mode),
-                    powerValue, connectionNumber);
+                                .forName(mode), powerValue, connectionNumber);
             default:
                 return false;
         }

@@ -206,7 +206,7 @@ public class TapiLinkImpl implements TapiLink {
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
             .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
-                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
+                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf(7, 100)).build())
                 .build())
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTION)
                 .setRestorationPolicy(RestorationPolicy.NA)
@@ -215,7 +215,7 @@ public class TapiLinkImpl implements TapiLink {
             .setOperationalState(setTapiOperationalState(operState))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
-                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
+                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf(7, 100)).build())
                 .build())
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
@@ -279,7 +279,7 @@ public class TapiLinkImpl implements TapiLink {
         Map<String,Double> lossPoutcorrect = NetworkUtils.calcSpanLoss(link);
         LOG.debug("In TapiLinkImpl, for link {} lossPoutcorrect equals {}",
             link.getLinkId(), lossPoutcorrect);
-        Decimal64 linkLoss = Decimal64.valueOf("9999");
+        Decimal64 linkLoss = Decimal64.valueOf(7, 9999);
         if (lossPoutcorrect != null && lossPoutcorrect.containsKey("SpanLoss")) {
             linkLoss = Decimal64.valueOf(lossPoutcorrect.entrySet().stream()
                 .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue().doubleValue(),
@@ -287,15 +287,15 @@ public class TapiLinkImpl implements TapiLink {
         }
         Map<String, Double> pmd = NetworkUtils.calcCDandPMD(link);
         LOG.debug("In TapiLinkImpl, for link {} pmd equals {}", link.getLinkId(), pmd);
-        Decimal64 pmdValue = Decimal64.valueOf("0");
+        Decimal64 pmdValue = Decimal64.valueOf(7, 0);
         if (pmd != null && pmd.containsKey("PMD")) {
             pmdValue = Decimal64.valueOf(pmd.entrySet().stream().filter(res -> res.getKey()
                 .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
         }
         Decimal64 oppLinkLoss;
         OtsFiberSpanImpairments otsFSimp = new OtsFiberSpanImpairmentsBuilder()
-            .setConnectorIn(Decimal64.valueOf("0"))
-            .setConnectorOut(Decimal64.valueOf("0"))
+            .setConnectorIn(Decimal64.valueOf(7, 0))
+            .setConnectorOut(Decimal64.valueOf(7, 0))
             .setLength(
                 NetworkUtils.calcLength(link) != null
                     ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(link)))
@@ -322,21 +322,21 @@ public class TapiLinkImpl implements TapiLink {
                 Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
                 LOG.debug("In TapiLinkImpl, for link {} opposite lossPoutcorrect equals {}",
                     link.getLinkId(), opplossPoutcorrect);
-                oppLinkLoss = Decimal64.valueOf("9999");
+                oppLinkLoss = Decimal64.valueOf(7, 9999);
                 if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
                     oppLinkLoss = Decimal64.valueOf(opplossPoutcorrect.entrySet().stream()
                         .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue()
                         .doubleValue(), RoundingMode.UP);
                 }
                 Map<String, Double> opppmd = NetworkUtils.calcCDandPMD(link);
-                Decimal64 opppmdValue = Decimal64.valueOf("0");
+                Decimal64 opppmdValue = Decimal64.valueOf(7, 0);
                 if (opppmd != null && opppmd.containsKey("PMD")) {
                     opppmdValue = Decimal64.valueOf(opppmd.entrySet().stream().filter(res -> res.getKey()
                         .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
                 }
                 otsFSimpOppLink = new OtsFiberSpanImpairmentsBuilder()
-                    .setConnectorIn(Decimal64.valueOf("0"))
-                    .setConnectorOut(Decimal64.valueOf("0"))
+                    .setConnectorIn(Decimal64.valueOf(7, 0))
+                    .setConnectorOut(Decimal64.valueOf(7, 0))
                     .setLength(NetworkUtils.calcLength(oppLink) != null
                             ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(oppLink)))
                             : Uint64.valueOf(9999))

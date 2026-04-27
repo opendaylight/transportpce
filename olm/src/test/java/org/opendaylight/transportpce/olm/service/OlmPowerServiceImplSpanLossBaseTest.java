@@ -110,8 +110,8 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
             .thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
         Ots otsValue = new OtsBuilder()
-            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("25")))
-            .setSpanLossReceive(new RatioDB(Decimal64.valueOf("25")))
+            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 25)))
+            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(3, 25)))
             .build();
         Interface1 ots = new Interface1Builder().setOts(otsValue).build();
         Interface interA = new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").setType(OpticalTransport.VALUE)
