@@ -24,7 +24,14 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.link.LinkEndpointNormalizer;
+import org.opendaylight.transportpce.tapi.link.LinkEndpoints;
+import org.opendaylight.transportpce.tapi.link.LinkTerminationPointNormalizer;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkNotFoundException;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPoints;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
@@ -84,6 +91,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         }
 
         OpenRoadmLinkResolver linkResolver = new OpenRoadmLinkResolver();
+        OpenRoadmLinkTerminationPointsFactory linkTerminationPointsFactory = new OpenRoadmLinkTerminationPointsFactory(
+                new TopologyTerminationPointTypeResolver());
+        LinkEndpointNormalizer linkEndpointNormalizer = new LinkTerminationPointNormalizer();
         for (DataTreeModification<Link> change : changes) {
 
             Link link = change.getRootNode().dataAfter();
@@ -120,13 +130,23 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 && link11.getOMSAttributes() != null) {
                 LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());
             }
-            String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
             String srcTp = link.getSource().getSourceTp().getValue();
-            String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
             String destTp = link.getDestination().getDestTp().getValue();
             //Configuring link type to default OMS_XPDR-RDM
 
             if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+
+                LinkEndpoints linkEndpoints;
+                try {
+                    LinkTerminationPoints linkTerminationPoints = linkTerminationPointsFactory.fromLink(link, network);
+                    linkEndpoints = linkEndpointNormalizer.normalize(linkTerminationPoints);
+                } catch (LinkNotFoundException e) {
+                    LOG.warn("Skipping OpenROADM link {} because its termination points could not be resolved",
+                            link.getLinkId(), e);
+                    continue;
+                }
+                String srcNode = linkEndpoints.srcNodeId();
+                String destNode = linkEndpoints.dstNodeId();
                 // For ROADM to ROADM link, only capture change on existing links to track change in OMS
                 // Avoid creating 2 unidirectional links since these links are bidirectional in TAPI :
                 // Links are created at initialization through a process that guarantees the creation of a unique link
@@ -264,11 +284,5 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             LOG.error("Failed to read opposite link", e);
             return false;
         }
-    }
-
-    private String getRoadmOrXpdr(String node) {
-        return node.contains("ROADM")
-            ? String.join("-", node.split("-")[0], node.split("-")[1])
-            : node;
     }
 }
