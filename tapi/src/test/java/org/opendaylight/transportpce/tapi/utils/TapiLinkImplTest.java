@@ -341,12 +341,12 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 TapiConstants.XPDR,
                 TapiConstants.XPDR,
-                TapiConstants.ODU,
-                TapiConstants.ODU,
+                TapiConstants.E_ODU,
+                TapiConstants.E_ODU,
                 "otn link name",
                 ADMIN_STATE,
                 OPER_STATE,
-                LAYER_PROTOCOLS,
+                Set.of(LayerProtocolName.ODU),
                 TOPOLOGY_UUID);
 
         Link actual = createTapiLink(
@@ -357,11 +357,11 @@ class TapiLinkImplTest extends AbstractTest {
                 TapiConstants.OTN_XPDR_XPDR_LINK,
                 TapiConstants.XPDR,
                 TapiConstants.XPDR,
-                TapiConstants.ODU,
-                TapiConstants.ODU,
+                TapiConstants.E_ODU,
+                TapiConstants.E_ODU,
                 ADMIN_STATE,
                 OPER_STATE,
-                LAYER_PROTOCOLS,
+                Set.of(LayerProtocolName.ODU),
                 TRANS_LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
 
@@ -552,6 +552,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-A1-SRG1",
+                "SRG1-PP2-TXRX",
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -588,6 +604,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-C1-SRG1",
+                "SRG1-PP1-TXRX",
+                "XPDR-C1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -624,6 +656,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-A1-SRG1",
+                "SRG1-PP3-TXRX",
+                "SPDR-SA1-XPDR2",
+                "XPDR2-NETWORK2",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -660,6 +708,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-C1-SRG1",
+                "SRG1-PP2-TXRX",
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -696,6 +760,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-C1-SRG1",
+                "SRG1-PP3-TXRX",
+                "SPDR-SC1-XPDR2",
+                "XPDR2-NETWORK2",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -732,6 +812,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "ROADM-A1-SRG1",
+                "SRG1-PP4-TXRX",
+                "SPDR-SA1-XPDR2",
+                "XPDR2-NETWORK3",
+                OpenroadmLinkType.XPONDERINPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -768,6 +864,22 @@ class TapiLinkImplTest extends AbstractTest {
                 OTN_TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orODTU4Link(
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.OTNLINK);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOTNTopology(),
+                OTN_TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -804,6 +916,22 @@ class TapiLinkImplTest extends AbstractTest {
                 OTN_TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orOTU4Link(
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                "SPDR-SC1-XPDR1",
+                "XPDR1-NETWORK1",
+                OpenroadmLinkType.OTNLINK);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOTNTopology(),
+                OTN_TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     @Test
@@ -840,6 +968,22 @@ class TapiLinkImplTest extends AbstractTest {
                 TOPOLOGY_UUID);
 
         assertEquals(expected, actual);
+
+        var equivalentInput = orLink(
+                "SPDR-SA1-XPDR1",
+                "XPDR1-NETWORK1",
+                "ROADM-A1-SRG1",
+                "SRG1-PP2-TXRX",
+                OpenroadmLinkType.XPONDEROUTPUT);
+
+        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
+        );
+
+        assertEquals(actual, actualFromEquivalentInput);
     }
 
     private Link createTapiLink(
