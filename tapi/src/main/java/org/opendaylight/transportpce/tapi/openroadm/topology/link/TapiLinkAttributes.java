@@ -72,6 +72,15 @@ public record TapiLinkAttributes(
                             TapiConstants.I_OTSI,
                             LayerProtocolName.PHOTONICMEDIA);
                 }
+                case ODTU4 -> {
+                    return new TapiLinkAttributes(
+                            TapiConstants.OTN_XPDR_XPDR_LINK,
+                            TapiConstants.XPDR,
+                            TapiConstants.XPDR,
+                            TapiConstants.E_ODU,
+                            TapiConstants.E_ODU,
+                            LayerProtocolName.PHOTONICMEDIA);
+                }
                 case null, default -> {
                     return new TapiLinkAttributes(
                             TapiConstants.OTN_XPDR_XPDR_LINK,
