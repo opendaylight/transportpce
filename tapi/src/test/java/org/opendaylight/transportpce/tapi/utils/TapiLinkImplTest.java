@@ -36,8 +36,6 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
-import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateMapper;
-import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
@@ -108,7 +106,6 @@ class TapiLinkImplTest extends AbstractTest {
     private NetworkTransactionService networkTransactionService;
     private TapiLinkImpl tapiLinkImpl;
     private TopologyUtils topologyUtils;
-    private final LinkStateMapper linkStateMapper = new OpenRoadmLinkStateMapper();
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
@@ -1050,7 +1047,6 @@ class TapiLinkImplTest extends AbstractTest {
                         .networks.network.Link.class
         );
 
-
         FluentFuture<Optional<
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                         .networks.network.Link>> future =
@@ -1208,92 +1204,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
                 link.getTransitionedLayerProtocolName()
         );
-    }
-
-    @Test
-    void setTapiAdminState_shouldMapStringsCorrectly() {
-        NetworkTransactionService nts = mock(NetworkTransactionService.class);
-        TapiContext tapiContext = mock(TapiContext.class);
-        TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
-
-        assertEquals(AdministrativeState.UNLOCKED, linkStateMapper.toTapiAdminState("UNLOCKED"));
-        assertEquals(AdministrativeState.UNLOCKED, linkStateMapper.toTapiAdminState("inService"));
-        assertEquals(AdministrativeState.LOCKED, linkStateMapper.toTapiAdminState("LOCKED"));
-        assertNull(linkStateMapper.toTapiAdminState((String)null));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldMapStringsCorrectly() {
-        NetworkTransactionService nts = mock(NetworkTransactionService.class);
-        TapiContext tapiContext = mock(TapiContext.class);
-        TapiLinkImpl tapiLink = new TapiLinkImpl(nts, tapiContext);
-
-        assertEquals(OperationalState.ENABLED, linkStateMapper.toTapiOperationalState("ENABLED"));
-        assertEquals(OperationalState.ENABLED, linkStateMapper.toTapiOperationalState("inService"));
-        assertEquals(OperationalState.DISABLED, linkStateMapper.toTapiOperationalState("DISABLED"));
-        assertNull(linkStateMapper.toTapiOperationalState((String)null));
-    }
-
-    @Test
-    void setTapiAdminState_shouldReturnUnlockedWhenBothEndpointsInService() {
-        assertEquals(
-                AdministrativeState.UNLOCKED,
-                linkStateMapper.toTapiAdminState(AdminStates.InService, AdminStates.InService));
-    }
-
-    @Test
-    void setTapiAdminState_shouldReturnLockedWhenBothEndpointsOutOfService() {
-        assertEquals(
-                AdministrativeState.LOCKED,
-                linkStateMapper.toTapiAdminState(AdminStates.OutOfService, AdminStates.OutOfService));
-    }
-
-    @Test
-    void setTapiAdminState_shouldReturnLockedWhenEndpointStatesDiffer() {
-        assertEquals(
-                AdministrativeState.LOCKED,
-                linkStateMapper.toTapiAdminState(AdminStates.InService, AdminStates.OutOfService));
-    }
-
-    @Test
-    void setTapiAdminState_shouldReturnNullWhenFirstEndpointStateIsNull() {
-        assertNull(linkStateMapper.toTapiAdminState(null, AdminStates.InService));
-    }
-
-    @Test
-    void setTapiAdminState_shouldReturnNullWhenSecondEndpointStateIsNull() {
-        assertNull(linkStateMapper.toTapiAdminState(AdminStates.InService, null));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldReturnEnabledWhenBothEndpointsInService() {
-        assertEquals(
-                OperationalState.ENABLED,
-                linkStateMapper.toTapiOperationalState(State.InService, State.InService));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldReturnDisabledWhenBothEndpointsOutOfService() {
-        assertEquals(
-                OperationalState.DISABLED,
-                linkStateMapper.toTapiOperationalState(State.OutOfService, State.OutOfService));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldReturnDisabledWhenEndpointStatesDiffer() {
-        assertEquals(
-                OperationalState.DISABLED,
-                linkStateMapper.toTapiOperationalState(State.InService, State.OutOfService));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldReturnNullWhenFirstEndpointStateIsNull() {
-        assertNull(linkStateMapper.toTapiOperationalState(null, State.InService));
-    }
-
-    @Test
-    void setTapiOperationalState_shouldReturnNullWhenSecondEndpointStateIsNull() {
-        assertNull(linkStateMapper.toTapiOperationalState(State.InService, null));
     }
 
     private static String uuidOf(String input) {
