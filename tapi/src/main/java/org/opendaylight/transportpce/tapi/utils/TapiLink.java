@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -69,10 +70,31 @@ public interface TapiLink {
      * <p>The link is built from the supplied openroadm link,
      * and the UUID of the target TAPI topology.
      *
+     * @see #createTapiLink(
+     *     org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link,
+     *     Network,
+     *     Uuid,
+     *     LinkTerminationPointsFactory,
+     *     LinkStateResolver)
+     */
+    Link createTapiLink(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .networks.network.Link openRoadmLink,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkTerminationPointsFactory linkTerminationPointsFactory);
+
+    /**
+     * Creates a TAPI link between a source and destination termination point.
+     *
+     * <p>The link is built from the supplied openroadm link,
+     * and the UUID of the target TAPI topology.
+     *
      * @param openRoadmLink The openroadm link being translated into a TAPI link
      * @param network OpenROADM topology
      * @param tapiTopoUuid UUID of the TAPI topology that will contain the link
      * @param linkTerminationPointsFactory Primarily used to validate the given link against the topology.
+     * @param linkStateResolver Determine the administrative state and operational state for a link
      * @return the created TAPI link, or {@code null} if the link type is not recognized
      *         or the link cannot be created
      */
@@ -81,7 +103,8 @@ public interface TapiLink {
                     .networks.network.Link openRoadmLink,
             Network network,
             Uuid tapiTopoUuid,
-            LinkTerminationPointsFactory linkTerminationPointsFactory);
+            LinkTerminationPointsFactory linkTerminationPointsFactory,
+            LinkStateResolver linkStateResolver);
 
     /**
      * Creates a TAPI link between a source and destination termination point.
@@ -134,6 +157,16 @@ public interface TapiLink {
     /**
      * Converts a textual administrative state into the corresponding TAPI administrative state.
      *
+     * @param adminState administrative state
+     * @return {@link AdministrativeState#UNLOCKED}, {@link AdministrativeState#LOCKED},
+     *         or {@code null} if the input is {@code null}
+     */
+    @Deprecated(forRemoval = true)
+    AdministrativeState setTapiAdminState(AdminStates adminState);
+
+    /**
+     * Converts a textual administrative state into the corresponding TAPI administrative state.
+     *
      * @param adminState administrative state expressed as a string
      * @return {@link AdministrativeState#UNLOCKED}, {@link AdministrativeState#LOCKED},
      *         or {@code null} if the input is {@code null}
@@ -155,6 +188,16 @@ public interface TapiLink {
      */
     @Deprecated(forRemoval = true)
     AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2);
+
+    /**
+     * Converts a textual operational state into the corresponding TAPI operational state.
+     *
+     * @param operState operational state
+     * @return {@link OperationalState#ENABLED}, {@link OperationalState#DISABLED},
+     *         or {@code null} if the input is {@code null}
+     */
+    @Deprecated(forRemoval = true)
+    OperationalState setTapiOperationalState(State operState);
 
     /**
      * Converts a textual operational state into the corresponding TAPI operational state.
