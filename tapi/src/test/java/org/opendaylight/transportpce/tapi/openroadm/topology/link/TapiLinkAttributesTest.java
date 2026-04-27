@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType.ODTU4;
 import static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType.OTU4;
 
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,31 @@ class TapiLinkAttributesTest {
         assertEquals(TapiConstants.XPDR, attrs.destinationNodeQualifier());
         assertEquals(TapiConstants.I_OTSI, attrs.sourceTpQualifier());
         assertEquals(TapiConstants.I_OTSI, attrs.destinationTpQualifier());
+        assertEquals(LayerProtocolName.PHOTONICMEDIA, attrs.layerProtocolName());
+    }
+
+    @Test
+    void shouldMapOtnLinkWithOdtu4Subtype() {
+        Link link = mock(Link.class);
+        Link1 openroadmLink1 = mock(Link1.class);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.Link1 otnAug =
+                mock(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
+                        .Link1.class);
+
+        when(link.augmentation(Link1.class)).thenReturn(openroadmLink1);
+        when(openroadmLink1.getLinkType()).thenReturn(OpenroadmLinkType.OTNLINK);
+        when(link.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.Link1.class))
+                .thenReturn(otnAug);
+        when(otnAug.getOtnLinkType()).thenReturn(ODTU4);
+
+        TapiLinkAttributes attrs = TapiLinkAttributes.fromOpenRoadmLink(link);
+
+        assertEquals(TapiConstants.OTN_XPDR_XPDR_LINK, attrs.tapiLinkType());
+        assertEquals(TapiConstants.XPDR, attrs.sourceNodeQualifier());
+        assertEquals(TapiConstants.XPDR, attrs.destinationNodeQualifier());
+        assertEquals(TapiConstants.E_ODU, attrs.sourceTpQualifier());
+        assertEquals(TapiConstants.E_ODU, attrs.destinationTpQualifier());
         assertEquals(LayerProtocolName.PHOTONICMEDIA, attrs.layerProtocolName());
     }
 
