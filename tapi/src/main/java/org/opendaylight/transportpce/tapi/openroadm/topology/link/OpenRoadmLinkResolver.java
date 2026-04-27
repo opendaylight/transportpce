@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.tapi.openroadm.topology.link;
 
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.format.DefaultLinkIdFormatter;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.format.LinkIdFormatter;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
@@ -15,6 +17,16 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 
 public class OpenRoadmLinkResolver implements LinkResolver {
+
+    private final LinkIdFormatter linkIdFormatter;
+
+    public OpenRoadmLinkResolver(LinkIdFormatter linkIdFormatter) {
+        this.linkIdFormatter = linkIdFormatter;
+    }
+
+    public OpenRoadmLinkResolver() {
+        this.linkIdFormatter = new DefaultLinkIdFormatter();
+    }
 
     @Override
     public Link resolveLink(
@@ -75,7 +87,7 @@ public class OpenRoadmLinkResolver implements LinkResolver {
             String destOpenRoadmTopologyNodeId,
             String destOpenRoadmTopologyTerminationPointId) {
 
-        return "%s-%sto%s-%s".formatted(
+        return linkIdFormatter.linkId(
                 srcOpenRoadmTopologyNodeId,
                 srcOpenRoadmTopologyTerminationPointId,
                 destOpenRoadmTopologyNodeId,
