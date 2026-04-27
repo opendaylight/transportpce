@@ -62,26 +62,34 @@ public record TapiLinkAttributes(
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.Link1.class);
 
         if (otnLinkTypeAugmentation != null) {
-            switch (otnLinkTypeAugmentation.getOtnLinkType()) {
-                case OTU4 -> {
-                    return new TapiLinkAttributes(
+            return switch (otnLinkTypeAugmentation.getOtnLinkType()) {
+                case OTU4 ->
+                    new TapiLinkAttributes(
                             TapiConstants.OTN_XPDR_XPDR_LINK,
                             TapiConstants.XPDR,
                             TapiConstants.XPDR,
                             TapiConstants.I_OTSI,
                             TapiConstants.I_OTSI,
                             LayerProtocolName.PHOTONICMEDIA);
-                }
-                case null, default -> {
-                    return new TapiLinkAttributes(
+
+                case ODTU4 ->
+                    new TapiLinkAttributes(
+                            TapiConstants.OTN_XPDR_XPDR_LINK,
+                            TapiConstants.XPDR,
+                            TapiConstants.XPDR,
+                            TapiConstants.E_ODU,
+                            TapiConstants.E_ODU,
+                            LayerProtocolName.ODU);
+
+                case null, default ->
+                    new TapiLinkAttributes(
                             TapiConstants.OTN_XPDR_XPDR_LINK,
                             TapiConstants.XPDR,
                             TapiConstants.XPDR,
                             TapiConstants.ODU,
                             TapiConstants.ODU,
                             LayerProtocolName.PHOTONICMEDIA);
-                }
-            }
+            };
         } else {
             return new TapiLinkAttributes(
                     TapiConstants.OTN_XPDR_XPDR_LINK,
@@ -94,54 +102,50 @@ public record TapiLinkAttributes(
     }
 
     private static TapiLinkAttributes fromOpenRoadmLinkType(OpenroadmLinkType sourceLinkType) {
-        switch (sourceLinkType) {
+        return switch (sourceLinkType) {
             case ROADMTOROADM,
                  ADDLINK,
-                 DROPLINK -> {
-                return new TapiLinkAttributes(
+                 DROPLINK ->
+                new TapiLinkAttributes(
                         TapiConstants.OMS_RDM_RDM_LINK,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         LayerProtocolName.PHOTONICMEDIA);
-            }
 
-            case EXPRESSLINK -> {
-                return new TapiLinkAttributes(
+            case EXPRESSLINK ->
+                new TapiLinkAttributes(
                         TapiConstants.TRANSITIONAL_LINK,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         LayerProtocolName.PHOTONICMEDIA);
-            }
 
-            case XPONDERINPUT -> {
-                return new TapiLinkAttributes(
+            case XPONDERINPUT ->
+                new TapiLinkAttributes(
                         TapiConstants.OTS_RDM_XPDR_LINK,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.XPDR,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         LayerProtocolName.PHOTONICMEDIA);
-            }
 
-            case XPONDEROUTPUT -> {
-                return new TapiLinkAttributes(
+            case XPONDEROUTPUT ->
+                new TapiLinkAttributes(
                         TapiConstants.OTS_XPDR_RDM_LINK,
                         TapiConstants.XPDR,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         TapiConstants.PHTNC_MEDIA_OTS,
                         LayerProtocolName.PHOTONICMEDIA);
-            }
 
-            case OTNLINK -> {
-                throw new IllegalStateException("Unsupported link type: " + sourceLinkType);
-            }
+            case OTNLINK ->
+                    throw new IllegalStateException("Unsupported link type: " + sourceLinkType);
 
-            default -> throw new IllegalStateException("Unexpected value: " + sourceLinkType);
-        }
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + sourceLinkType);
+        };
     }
 }
