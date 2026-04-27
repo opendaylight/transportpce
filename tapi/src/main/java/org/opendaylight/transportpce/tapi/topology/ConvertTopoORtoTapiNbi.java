@@ -19,11 +19,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
@@ -104,7 +105,10 @@ public class ConvertTopoORtoTapiNbi {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.LinkKey,
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .networks.network.Link> otnLinkMap) {
+                .networks.network.Link> otnLinkMap,
+            Network otnTopology,
+            OpenRoadmLinkTerminationPointsFactory linkTerminationPointsFactory,
+            LinkStateResolver linkStateResolver) {
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> otnLinkList = new ArrayList<>(otnLinkMap.values());
         Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
@@ -119,43 +123,20 @@ public class ConvertTopoORtoTapiNbi {
             var oppositeLink = otnLinkMap.get(
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                     .networks.network.LinkKey(otnlinkAug.getOppositeLink()));
-            AdminStates oppLnkAdmState = null;
-            State oppLnkOpState = null;
             String oppositeLinkId = null;
             if (oppositeLink != null) {
-                var oppositeLinkAug = oppositeLink.augmentation(Link1.class);
-                oppLnkAdmState = oppositeLinkAug.getAdministrativeState();
-                oppLnkOpState = oppositeLinkAug.getOperationalState();
                 oppositeLinkId = oppositeLink.getLinkId().getValue();
             }
             // TODO: Handle not only OTU4 but also other cases
-            String prefix = otnlinkId.split("-")[0];
-            String tpsQual = prefix.equals("OTU4") ? TapiConstants.I_OTSI : TapiConstants.E_ODU;
-            LayerProtocolName layerProtocolName =
-                prefix.equals("OTU4") ? LayerProtocolName.PHOTONICMEDIA : LayerProtocolName.ODU;
-            var otnlinkSrc = otnlink.getSource();
-            var otnlinkDst = otnlink.getDestination();
             Link tapLink = this.tapiLink.createTapiLink(
-                otnlinkSrc.getSourceNode().getValue(),
-                otnlinkSrc.getSourceTp().getValue(),
-                otnlinkDst.getDestNode().getValue(),
-                otnlinkDst.getDestTp().getValue(),
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                // nodesQual, nodesQual,
-                TapiConstants.XPDR,
-                TapiConstants.XPDR,
-                tpsQual,
-                tpsQual,
-                otnlinkAug.getAdministrativeState() == null || oppLnkAdmState == null ? null
-                    : this.tapiLink.setTapiAdminState(
-                        otnlinkAug.getAdministrativeState(), oppLnkAdmState).getName(),
-                otnlinkAug.getOperationalState() == null || oppLnkOpState == null ? null
-                    : this.tapiLink.setTapiOperationalState(
-                        otnlinkAug.getOperationalState(), oppLnkOpState).getName(),
-                Set.of(layerProtocolName),
-                Set.of(layerProtocolName.getName()),
-                this.tapiTopoUuid);
-            linksToNotConvert.add(oppositeLinkId);
+                otnlink,
+                otnTopology,
+                this.tapiTopoUuid,
+                linkTerminationPointsFactory,
+                linkStateResolver);
+            if (oppositeLinkId != null) {
+                linksToNotConvert.add(oppositeLinkId);
+            }
             tapiLinks.put(tapLink.key(), tapLink);
             LOG.debug("Links converted are as follow  {}", tapiLinks);
         }
