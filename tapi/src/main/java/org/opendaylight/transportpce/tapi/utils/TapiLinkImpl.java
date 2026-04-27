@@ -154,6 +154,22 @@ public class TapiLinkImpl implements TapiLink {
         );
     }
 
+    @Override
+    public Link createTapiLink(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+                    .Link openRoadmLink,
+            Network network,
+            Uuid tapiTopoUuid,
+            LinkTerminationPointsFactory linkTerminationPointsFactory) {
+        return createTapiLink(
+                openRoadmLink,
+                network,
+                tapiTopoUuid,
+                linkTerminationPointsFactory,
+                linkStateResolver
+        );
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -163,7 +179,8 @@ public class TapiLinkImpl implements TapiLink {
                     .networks.network.Link link,
             Network network,
             Uuid tapiTopoUuid,
-            LinkTerminationPointsFactory linkTerminationPointsFactory) {
+            LinkTerminationPointsFactory linkTerminationPointsFactory,
+            LinkStateResolver lnkStateResolver) {
 
         Link1 link1 = link.augmentation(Link1.class);
         if (link1 == null) {
@@ -261,7 +278,7 @@ public class TapiLinkImpl implements TapiLink {
                 .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
                 .build();
         LOG.debug("Successfully created tapiLink {} of type {}", linkKey, tapiLinkAttributes.tapiLinkType());
-        LinkStateAttributes linkStateAttributes = linkStateResolver.resolve(link, network);
+        LinkStateAttributes linkStateAttributes = lnkStateResolver.resolve(link, network);
         return new LinkBuilder()
                 .setUuid(new Uuid(
                         UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
@@ -670,6 +687,15 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     @Override
+    public AdministrativeState setTapiAdminState(AdminStates adminState) {
+        if (adminState != null) {
+            return setTapiAdminState(adminState.getName());
+        }
+
+        return setTapiAdminState((String)null);
+    }
+
+    @Override
     public AdministrativeState setTapiAdminState(String adminState) {
         if (adminState == null) {
             return null;
@@ -687,6 +713,15 @@ public class TapiLinkImpl implements TapiLink {
         LOG.info("Admin state 1 = {}, andmin state 2 = {}", adminState1.getName(), adminState2.getName());
         return AdminStates.InService.equals(adminState1) && AdminStates.InService.equals(adminState2)
             ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
+    }
+
+    @Override
+    public OperationalState setTapiOperationalState(State operState) {
+        if (operState != null) {
+            return setTapiOperationalState(operState.getName());
+        }
+
+        return setTapiOperationalState((String)null);
     }
 
     @Override
