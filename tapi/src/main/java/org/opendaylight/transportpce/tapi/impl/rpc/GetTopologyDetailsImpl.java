@@ -28,6 +28,10 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkTerminationPointsFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbi;
 import org.opendaylight.transportpce.tapi.topology.ConvertTopoTapiToTapiNbi;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
@@ -272,7 +276,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
         }
         if (otnTopo.augmentation(Network1.class) != null) {
-            tapiAbstractFactory.convertLinks(otnTopo.augmentation(Network1.class).getLink());
+            tapiAbstractFactory.convertLinks(
+                    otnTopo.augmentationOrElseThrow(Network1.class).nonnullLink(),
+                    readTopology(InstanceIdentifiers.OTN_NETWORK_II),
+                    new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()),
+                    new OpenRoadmLinkStateResolver(new OpenRoadmLinkStateMapper()));
             tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         }
         Name name = new NameBuilder().setValue(TapiConstants.T0_MULTILAYER).setValueName("TAPI Topology Name").build();
