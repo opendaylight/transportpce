@@ -1358,7 +1358,7 @@ class TapiLinkImplTest extends AbstractTest {
         assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("UNLOCKED"));
         assertEquals(AdministrativeState.UNLOCKED, tapiLink.setTapiAdminState("inService"));
         assertEquals(AdministrativeState.LOCKED, tapiLink.setTapiAdminState("LOCKED"));
-        assertNull(tapiLink.setTapiAdminState(null));
+        assertNull(tapiLink.setTapiAdminState((String)null));
     }
 
     @Test
@@ -1370,7 +1370,7 @@ class TapiLinkImplTest extends AbstractTest {
         assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("ENABLED"));
         assertEquals(OperationalState.ENABLED, tapiLink.setTapiOperationalState("inService"));
         assertEquals(OperationalState.DISABLED, tapiLink.setTapiOperationalState("DISABLED"));
-        assertNull(tapiLink.setTapiOperationalState(null));
+        assertNull(tapiLink.setTapiOperationalState((String)null));
     }
 
     @Test
