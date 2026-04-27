@@ -138,6 +138,10 @@ public class ConvertTopoORtoTapiAtInit {
                 continue;
             }
             var lnk1 = link.augmentation(Link1.class);
+            if (lnk1 == null) {
+                LOG.warn("Skipping OpenROADM link {} because Link1 augmentation is missing", link.getLinkId());
+                continue;
+            }
             var lnk1OppLnk = lnk1.getOppositeLink();
 
             Link tapLink = this.tapiLink.createTapiLink(
@@ -145,7 +149,14 @@ public class ConvertTopoORtoTapiAtInit {
                 network,
                 this.tapiTopoUuid,
                 linkTerminationPointsFactory);
-            linksToNotConvert.add(lnk1OppLnk.getValue());
+            if (tapLink == null) {
+                LOG.warn("Skipping OpenROADM link {} because TAPI link creation failed", link.getLinkId());
+                continue;
+            }
+
+            if (lnk1OppLnk != null) {
+                linksToNotConvert.add(lnk1OppLnk.getValue());
+            }
             tapiLinks.put(tapLink.key(), tapLink);
             Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
             LOG.debug("CONVERTTOFULL147, cepMap is {}", cepMap);
