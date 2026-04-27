@@ -104,7 +104,7 @@ public final class NodeUtils {
                             new OMSAttributesBuilder()
                                 .setSpan(
                                     new SpanBuilder()
-                                        .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("20")))
+                                        .setSpanlossCurrent(new RatioDB(Decimal64.valueOf(3, 20)))
                                         .setLinkConcatenation(Map.of(linkConcatenation.key(), linkConcatenation))
                                         .build())
                                 .build())
@@ -117,7 +117,7 @@ public final class NodeUtils {
         return createLinkBuilder(true, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
                 .setLinkLatency(Uint32.TWO)
-                .setLinkLength(Decimal64.valueOf("50.0"))
+                .setLinkLength(Decimal64.valueOf(2, 50))
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM)
                 .setAdministrativeState(AdminStates.InService)
                 .setOperationalState(State.InService));

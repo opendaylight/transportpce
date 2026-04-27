@@ -559,7 +559,7 @@ public final class PceTestData {
                     .setNodeId(List.of(new NodeIdType("XPONDER-1-2")))
                     .build())
                 .setLatency(new LatencyBuilder()
-                    .setMaxLatency(Decimal64.valueOf("3223"))
+                    .setMaxLatency(Decimal64.valueOf(3, 3223))
                     .build())
                 .build())
             .build();
@@ -795,7 +795,7 @@ public final class PceTestData {
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
                 .setLatency(new LatencyBuilder()
-                    .setMaxLatency(Decimal64.valueOf("3223"))
+                    .setMaxLatency(Decimal64.valueOf(3, 3223))
                     .build())
                 .setDiversity(new DiversityBuilder()
                     .setServiceIdentifierList(Map.of(

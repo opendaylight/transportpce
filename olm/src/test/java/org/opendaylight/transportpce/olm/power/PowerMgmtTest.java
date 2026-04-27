@@ -109,7 +109,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
                                         .build())
                                 .build())
                 .build();
@@ -154,7 +154,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
-                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
                             .build())
                     .build())
                 .build();
@@ -167,10 +167,10 @@ class PowerMgmtTest {
         assertTrue(result);
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
-                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+                    eq(Decimal64.valueOf(2, -3)), matches("srg1-A-deg2-A-761:768"));
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
-                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+                    eq(Decimal64.valueOf(2, -3)), matches("srg1-A-deg2-A-761:768"));
     }
 
     @Test
@@ -212,7 +212,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
                                         .build())
                                 .build())
                 .build();
@@ -237,7 +237,7 @@ class PowerMgmtTest {
                     anyString(), eq(new BigDecimal("-5")), any(), any()));
             verify(this.crossConnect, times(1))
                 .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
-                        eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+                        eq(Decimal64.valueOf(2, -3)), matches("srg1-A-deg2-A-761:768"));
         }
     }
 
@@ -262,7 +262,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
-                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                                        .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
                                         .build())
                                 .build())
                 .build();
@@ -326,7 +326,7 @@ class PowerMgmtTest {
             .setPowerLevel(matches("roadm-C"), matches(OpticalControlMode.Off.getName()), isNull(), anyString());
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
-                    eq(Decimal64.valueOf("-60")), anyString());
+                    eq(Decimal64.valueOf(2, -60)), anyString());
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Off.getName()), isNull(), anyString());
     }
@@ -354,7 +354,7 @@ class PowerMgmtTest {
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
-                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
                             .build())
                     .build())
                 .build();
@@ -370,10 +370,10 @@ class PowerMgmtTest {
         boolean result = this.powerMgmt.setPower(input);
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
-                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+                    eq(Decimal64.valueOf(2, -3)), matches("srg1-A-deg2-A-761:768"));
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
-                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+                    eq(Decimal64.valueOf(2, -3)), matches("srg1-A-deg2-A-761:768"));
         assertFalse(result);
     }
 

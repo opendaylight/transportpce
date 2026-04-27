@@ -591,7 +591,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         }
         assertEquals(CAPACITYUNITGBPS.VALUE, link.getTotalPotentialCapacity().getTotalSize().getUnit(),
             "Total capacity unit should be GBPS");
-        assertEquals(Decimal64.valueOf("100"), link.getTotalPotentialCapacity().getTotalSize().getValue(),
+        assertEquals(Decimal64.valueOf(7, 100), link.getTotalPotentialCapacity().getTotalSize().getValue(),
             "Total capacity -total size value should be 100");
         if ("OTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",

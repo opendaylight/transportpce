@@ -90,7 +90,7 @@ public final class OlmPowerServiceRpcImplUtil {
                                         .setPmParameterName(new PmParameterNameBuilder()
                                                 .setType(PmNamesEnum.OpticalPowerInput)
                                                 .build())
-                                        .setPmParameterValue(new PmDataType(Decimal64.valueOf("3")))
+                                        .setPmParameterValue(new PmDataType(Decimal64.valueOf(2, 3)))
                                         .build())
                                 .build()))
                 .build();

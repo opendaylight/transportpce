@@ -86,7 +86,7 @@ public final class TapiConnectivityDataUtils {
                     .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).setServiceLevel("some service-level")
                     .setRequestedCapacity(new RequestedCapacityBuilder()
                     .setTotalSize(new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE)
-                        .setValue(Decimal64.valueOf("10")).build()).build()).build())
+                        .setValue(Decimal64.valueOf(7, 10)).build()).build()).build())
             .setState(AdministrativeState.UNLOCKED)
             .setTopologyConstraint(getTopoConstraintMap())
             .build();

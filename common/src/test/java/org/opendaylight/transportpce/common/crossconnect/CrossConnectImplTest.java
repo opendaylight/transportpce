@@ -88,13 +88,14 @@ public class CrossConnectImplTest {
     @Test
     void setPowerLevel() {
         when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn(OPENROADM_DEVICE_VERSION_1_2_1);
-        boolean res = crossConnectImpl.setPowerLevel("nodeId", "bad mode", Decimal64.valueOf("1"), "connection number");
+        boolean res = crossConnectImpl.setPowerLevel("nodeId", "bad mode", Decimal64.valueOf(2, 1),
+                "connection number");
         assertFalse(res, "Power Level sgould be false");
 
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_1_2_1);
         when(crossConnectImpl121.setPowerLevel(any(), any(), any(), any()))
                 .thenReturn(true);
-        crossConnectImpl.setPowerLevel("nodeId", "power", Decimal64.valueOf("1"), "connection number");
+        crossConnectImpl.setPowerLevel("nodeId", "power", Decimal64.valueOf(2, 1), "connection number");
         assertTrue(true);
     }
 }

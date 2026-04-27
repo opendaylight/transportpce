@@ -102,10 +102,10 @@ public final class OlmTransactionUtils {
                 .withKey(new LinkConcatenationKey(Uint32.ONE))
                 .addAugmentation(new LinkConcatenation1Builder()
                     .setFiberType(FiberType.Truewave)
-                    .setPmd(new FiberPmd(Decimal64.valueOf("1")))
+                    .setPmd(new FiberPmd(Decimal64.valueOf(2, 1)))
                     .build())
                 .setSRLGId(Uint32.ONE)
-                .setSRLGLength(Decimal64.valueOf("1"))
+                .setSRLGLength(Decimal64.valueOf(2, 1))
                 .build();
         LinkConcatenation linkConcatenation2 =
             new LinkConcatenationBuilder()
@@ -113,10 +113,10 @@ public final class OlmTransactionUtils {
                 .addAugmentation(
                     new LinkConcatenation1Builder()
                         .setFiberType(FiberType.Truewave)
-                        .setPmd(new FiberPmd(Decimal64.valueOf("1")))
+                        .setPmd(new FiberPmd(Decimal64.valueOf(2, 1)))
                         .build())
                 .setSRLGId(Uint32.ONE)
-                .setSRLGLength(Decimal64.valueOf("1"))
+                .setSRLGLength(Decimal64.valueOf(2, 1))
                 .build();
         linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
         linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
@@ -162,10 +162,10 @@ public final class OlmTransactionUtils {
                                         .span.SpanBuilder()
                                     .setAdministrativeState(AdminStates.InService)
                                     .setAutoSpanloss(true)
-                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
+                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf(3, 1)))
                                     .setLinkConcatenation(linkConcentationValues)
-                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
-                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
+                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf(3, 1)))
+                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf(3, 1)))
                                     .build())
                             .build())
                         .build())
@@ -185,10 +185,10 @@ public final class OlmTransactionUtils {
                                         .span.SpanBuilder()
                                     .setAdministrativeState(AdminStates.InService)
                                     .setAutoSpanloss(true)
-                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
+                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf(3, 1)))
                                     .setLinkConcatenation(linkConcentationValues)
-                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
-                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
+                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf(3, 1)))
+                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf(3, 1)))
                                     .build())
                             .build())
                     .build())

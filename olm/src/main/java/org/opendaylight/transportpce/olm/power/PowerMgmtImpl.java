@@ -578,7 +578,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             try {
                 if (destTpId.toUpperCase(Locale.getDefault()).contains("DEG")) {
                     if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(),
-                            Decimal64.valueOf("-60"), connectionNumber)) {
+                            Decimal64.valueOf(2, -60), connectionNumber)) {
                         LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
