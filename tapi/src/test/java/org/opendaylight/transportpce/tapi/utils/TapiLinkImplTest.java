@@ -9,28 +9,15 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
-import com.google.common.util.concurrent.FluentFuture;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -84,7 +71,6 @@ import org.opendaylight.yangtools.yang.common.Decimal64;
 
 class TapiLinkImplTest extends AbstractTest {
 
-    private static final String NODE_QUAL = "PHOTONIC_MEDIA";
     private static final String TP_QUAL = "PHOTONIC_MEDIA_OTS";
 
     private static final String ADMIN_STATE = "UNLOCKED";
@@ -92,9 +78,6 @@ class TapiLinkImplTest extends AbstractTest {
 
     private static final Set<LayerProtocolName> LAYER_PROTOCOLS =
             Set.of(LayerProtocolName.PHOTONICMEDIA);
-
-    private static final Set<String> TRANS_LAYER_PROTOCOLS =
-            Set.of(LayerProtocolName.PHOTONICMEDIA.getName());
 
     private static final Uuid TOPOLOGY_UUID =
             new Uuid(UUID.nameUUIDFromBytes(
@@ -153,15 +136,6 @@ class TapiLinkImplTest extends AbstractTest {
                 LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
 
-        Link actual = createDefaultTapiLink(
-                "ROADM-C1",
-                "DEG1-TTP-TXRX",
-                "ROADM-A1",
-                "DEG2-TTP-TXRX",
-                TapiConstants.OMS_RDM_RDM_LINK);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-C1-DEG1",
                 "DEG1-TTP-TXRX",
@@ -169,13 +143,13 @@ class TapiLinkImplTest extends AbstractTest {
                 "DEG2-TTP-TXRX",
                 OpenroadmLinkType.ROADMTOROADM);
 
-        assertEquals(
-                tapiLinkImpl.createTapiLink(
-                        equivalentInput,
-                        readOpenRoadmTopology(),
-                        TOPOLOGY_UUID,
-                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())),
-                actual);
+        Link actual = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()));
+
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -195,24 +169,6 @@ class TapiLinkImplTest extends AbstractTest {
                 LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "XPDR-C1-XPDR1",
-                "XPDR1-NETWORK1",
-                "ROADM-C1",
-                "SRG1-PP1-TXRX",
-                TapiConstants.OTS_XPDR_RDM_LINK,
-                TapiConstants.XPDR,
-                TapiConstants.PHTNC_MEDIA,
-                TP_QUAL,
-                TP_QUAL,
-                ADMIN_STATE,
-                OPER_STATE,
-                LAYER_PROTOCOLS,
-                TRANS_LAYER_PROTOCOLS,
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "XPDR-C1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -220,13 +176,13 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP1-TXRX",
                 OpenroadmLinkType.XPONDEROUTPUT);
 
-        assertEquals(
-                tapiLinkImpl.createTapiLink(
-                        equivalentInput,
-                        readOpenRoadmTopology(),
-                        TOPOLOGY_UUID,
-                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())),
-                actual);
+        Link actual = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOpenRoadmTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()));
+
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -246,24 +202,6 @@ class TapiLinkImplTest extends AbstractTest {
                 LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                TapiConstants.XPDR,
-                TapiConstants.XPDR,
-                TapiConstants.ODU,
-                TapiConstants.ODU,
-                ADMIN_STATE,
-                OPER_STATE,
-                LAYER_PROTOCOLS,
-                TRANS_LAYER_PROTOCOLS,
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orOTNLink(
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -271,13 +209,13 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.OTNLINK);
 
-        assertEquals(
-                expected,
-                tapiLinkImpl.createTapiLink(
-                        equivalentInput,
-                        readOTNTopology(),
-                        TOPOLOGY_UUID,
-                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
+        Link actual = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOTNTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()));
+
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -297,24 +235,6 @@ class TapiLinkImplTest extends AbstractTest {
                 LAYER_PROTOCOLS,
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                TapiConstants.XPDR,
-                TapiConstants.XPDR,
-                TapiConstants.I_OTSI,
-                TapiConstants.I_OTSI,
-                ADMIN_STATE,
-                OPER_STATE,
-                LAYER_PROTOCOLS,
-                TRANS_LAYER_PROTOCOLS,
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orOTU4Link(
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -322,18 +242,17 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.OTNLINK);
 
-        assertEquals(
-                expected,
-                tapiLinkImpl.createTapiLink(
-                        equivalentInput,
-                        readOTNTopology(),
-                        TOPOLOGY_UUID,
-                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
+        Link actual = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOTNTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()));
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void createTapiLink_shouldCreateODTU4XpdrXpdrLink() {
-
         Link expected = buildExpectedLink(
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -349,24 +268,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.ODU),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                TapiConstants.XPDR,
-                TapiConstants.XPDR,
-                TapiConstants.E_ODU,
-                TapiConstants.E_ODU,
-                ADMIN_STATE,
-                OPER_STATE,
-                Set.of(LayerProtocolName.ODU),
-                TRANS_LAYER_PROTOCOLS,
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orODTU4Link(
                 "SPDR-SC1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -374,25 +275,13 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.OTNLINK);
 
-        assertEquals(
-                expected,
-                tapiLinkImpl.createTapiLink(
-                        equivalentInput,
-                        readOTNTopology(),
-                        TOPOLOGY_UUID,
-                        new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())));
-    }
+        Link actual = tapiLinkImpl.createTapiLink(
+                equivalentInput,
+                readOTNTopology(),
+                TOPOLOGY_UUID,
+                new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver()));
 
-    @Test
-    void createTapiLink_shouldReturnNullForUnknownLinkType() {
-        Link actual = createDefaultTapiLink(
-                "ROADM-C1",
-                "DEG1-TTP-TXRX",
-                "ROADM-A1",
-                "DEG2-TTP-TXRX",
-                "unknown-link-type");
-
-        assertNull(actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -412,24 +301,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-C1",
-                "SRG1-PP4-TXRX",
-                "SPDR-SC1-XPDR2",
-                "XPDR2-NETWORK3",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-C1-SRG1",
                 "SRG1-PP4-TXRX",
@@ -437,14 +308,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR2-NETWORK3",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -463,24 +334,6 @@ class TapiLinkImplTest extends AbstractTest {
                 "ENABLED",
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
-
-        Link actual = createTapiLink(
-                "ROADM-A1",
-                "SRG1-PP1-TXRX",
-                "XPDR-A1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
 
         LinkId linkId = new LinkId("ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1");
         LinkKey linkKey = new LinkKey(linkId);
@@ -508,14 +361,14 @@ class TapiLinkImplTest extends AbstractTest {
                                 .build()
                 ).build();
 
-        Link actualTwo = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 link,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualTwo);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -535,24 +388,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-A1",
-                "SRG1-PP2-TXRX",
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-A1-SRG1",
                 "SRG1-PP2-TXRX",
@@ -560,14 +395,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -587,24 +422,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-C1",
-                "SRG1-PP1-TXRX",
-                "XPDR-C1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-C1-SRG1",
                 "SRG1-PP1-TXRX",
@@ -612,14 +429,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -639,24 +456,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-A1",
-                "SRG1-PP3-TXRX",
-                "SPDR-SA1-XPDR2",
-                "XPDR2-NETWORK2",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-A1-SRG1",
                 "SRG1-PP3-TXRX",
@@ -664,14 +463,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR2-NETWORK2",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -691,24 +490,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-C1",
-                "SRG1-PP2-TXRX",
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-C1-SRG1",
                 "SRG1-PP2-TXRX",
@@ -716,14 +497,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -743,24 +524,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-C1",
-                "SRG1-PP3-TXRX",
-                "SPDR-SC1-XPDR2",
-                "XPDR2-NETWORK2",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-C1-SRG1",
                 "SRG1-PP3-TXRX",
@@ -768,14 +531,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR2-NETWORK2",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -795,24 +558,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "ROADM-A1",
-                "SRG1-PP4-TXRX",
-                "SPDR-SA1-XPDR2",
-                "XPDR2-NETWORK3",
-                TapiConstants.OTS_RDM_XPDR_LINK,
-                "PHOTONIC_MEDIA",
-                "XPONDER",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "ROADM-A1-SRG1",
                 "SRG1-PP4-TXRX",
@@ -820,14 +565,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR2-NETWORK3",
                 OpenroadmLinkType.XPONDERINPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -847,24 +592,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.ODU),
                 OTN_TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                "XPONDER",
-                "XPONDER",
-                "eODU",
-                "eODU",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.ODU),
-                Set.of("ODU"),
-                OTN_TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orODTU4Link(
                 "SPDR-SA1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -872,14 +599,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.OTNLINK);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOTNTopology(),
                 OTN_TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -899,24 +626,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 OTN_TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                "SPDR-SC1-XPDR1",
-                "XPDR1-NETWORK1",
-                TapiConstants.OTN_XPDR_XPDR_LINK,
-                "XPONDER",
-                "XPONDER",
-                "iOTSi",
-                "iOTSi",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                OTN_TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orOTU4Link(
                 "SPDR-SA1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -924,14 +633,14 @@ class TapiLinkImplTest extends AbstractTest {
                 "XPDR1-NETWORK1",
                 OpenroadmLinkType.OTNLINK);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOTNTopology(),
                 OTN_TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -951,24 +660,6 @@ class TapiLinkImplTest extends AbstractTest {
                 Set.of(LayerProtocolName.PHOTONICMEDIA),
                 TOPOLOGY_UUID);
 
-        Link actual = createTapiLink(
-                "SPDR-SA1-XPDR1",
-                "XPDR1-NETWORK1",
-                "ROADM-A1",
-                "SRG1-PP2-TXRX",
-                TapiConstants.OTS_XPDR_RDM_LINK,
-                "XPONDER",
-                "PHOTONIC_MEDIA",
-                "PHOTONIC_MEDIA_OTS",
-                "PHOTONIC_MEDIA_OTS",
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("PHOTONIC_MEDIA"),
-                TOPOLOGY_UUID);
-
-        assertEquals(expected, actual);
-
         var equivalentInput = orLink(
                 "SPDR-SA1-XPDR1",
                 "XPDR1-NETWORK1",
@@ -976,48 +667,16 @@ class TapiLinkImplTest extends AbstractTest {
                 "SRG1-PP2-TXRX",
                 OpenroadmLinkType.XPONDEROUTPUT);
 
-        Link actualFromEquivalentInput = tapiLinkImpl.createTapiLink(
+        Link actual = tapiLinkImpl.createTapiLink(
                 equivalentInput,
                 readOpenRoadmTopology(),
                 TOPOLOGY_UUID,
                 new OpenRoadmLinkTerminationPointsFactory(new TopologyTerminationPointTypeResolver())
         );
 
-        assertEquals(actual, actualFromEquivalentInput);
+        assertEquals(expected, actual);
     }
 
-    private Link createTapiLink(
-            String srcNodeId,
-            String srcTpId,
-            String dstNodeId,
-            String dstTpId,
-            String linkType,
-            String srcNodeQual,
-            String dstNodeQual,
-            String srcTpQual,
-            String dstTpQual,
-            String adminState,
-            String operState,
-            Set<LayerProtocolName> layerProtocols,
-            Set<String> transLayerProtocols,
-            Uuid topologyUuid) {
-
-        return tapiLinkImpl.createTapiLink(
-                srcNodeId,
-                srcTpId,
-                dstNodeId,
-                dstTpId,
-                linkType,
-                srcNodeQual,
-                dstNodeQual,
-                srcTpQual,
-                dstTpQual,
-                adminState,
-                operState,
-                layerProtocols,
-                transLayerProtocols,
-                topologyUuid);
-    }
 
     private AdministrativeState mapAdminState(String adminState) {
         return "UNLOCKED".equals(adminState)
@@ -1143,214 +802,6 @@ class TapiLinkImplTest extends AbstractTest {
                 .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
                         nepKey.getBytes(StandardCharsets.UTF_8)).toString()))
                 .build();
-    }
-
-    private Link createDefaultTapiLink(
-            String srcNodeId,
-            String srcTpId,
-            String dstNodeId,
-            String dstTpId,
-            String linkType) {
-
-        return createTapiLink(
-                srcNodeId,
-                srcTpId,
-                dstNodeId,
-                dstTpId,
-                linkType,
-                NODE_QUAL,
-                NODE_QUAL,
-                TP_QUAL,
-                TP_QUAL,
-                ADMIN_STATE,
-                OPER_STATE,
-                LAYER_PROTOCOLS,
-                TRANS_LAYER_PROTOCOLS,
-                TOPOLOGY_UUID);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void createTapiLink_shouldBuildExpectedOmsRoadmRoadmLink() throws Exception {
-        NetworkTransactionService nts = mock(NetworkTransactionService.class);
-        TapiContext tapiContext = mock(TapiContext.class);
-
-        TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
-
-        // Avoid exercising CEP/span logic here. This is a unit test for Link creation.
-        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
-
-        var orLink = mock(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.Link.class
-        );
-
-
-        FluentFuture<Optional<
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.Link>> future =
-                (FluentFuture<Optional<
-                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                                .networks.network.Link>>) mock(FluentFuture.class);
-
-        when(future.get()).thenReturn(Optional.of(orLink));
-        doReturn(future).when(nts).read(eq(LogicalDatastoreType.CONFIGURATION), any());
-
-        Link link = tapiLink.createTapiLink(
-                "ROADM-C1",
-                "DEG1-TTP-TXRX",
-                "ROADM-A1",
-                "DEG2-TTP-TXRX",
-                TapiConstants.OMS_RDM_RDM_LINK,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                TapiConstants.T0_FULL_MULTILAYER_UUID
-        );
-
-        assertNotNull(link);
-
-        // Stable scalar fields
-        assertEquals(AdministrativeState.UNLOCKED, link.getAdministrativeState());
-        assertEquals(OperationalState.ENABLED, link.getOperationalState());
-        assertEquals(LifecycleState.INSTALLED, link.getLifecycleState());
-        assertEquals(ForwardingDirection.UNIDIRECTIONAL, link.getDirection());
-        assertEquals(Set.of(LayerProtocolName.PHOTONICMEDIA), link.getLayerProtocolName());
-
-        // Ignored input parameter transLayerNameList; implementation hardcodes this instead
-        assertEquals(
-                Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
-                link.getTransitionedLayerProtocolName()
-        );
-
-        // Name
-        assertNotNull(link.getName());
-        assertEquals(2, link.getName().size());
-        assertEquals(
-                TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK,
-                link.getName().values().stream()
-                    .filter(name -> !name.getValueName().equals(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID))
-                    .toList().iterator().next().getValueName()
-        );
-        assertEquals(
-                "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
-                link.getName().values().stream()
-                .filter(name -> !name.getValueName().equals(TapiConstants.VALUE_NAME_OPPOSITE_LINK_UUID))
-                .toList().iterator().next().getValue()
-        );
-
-        // UUID
-        assertEquals(
-                new Uuid(uuidOf(
-                        "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"
-                )),
-                link.getUuid()
-        );
-        assertEquals(link.getUuid(), link.key().getUuid());
-
-        // NodeEdgePoints
-        assertNotNull(link.getNodeEdgePoint());
-        assertEquals(2, link.getNodeEdgePoint().size());
-
-        Map<?, NodeEdgePoint> neps = link.getNodeEdgePoint();
-
-        assertTrue(neps.values().stream().anyMatch(nep ->
-                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
-                        && new Uuid(uuidOf("ROADM-C1+PHOTONIC_MEDIA")).equals(nep.getNodeUuid())
-                        && new Uuid(uuidOf("ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX"))
-                        .equals(nep.getNodeEdgePointUuid())
-        ));
-
-        assertTrue(neps.values().stream().anyMatch(nep ->
-                TapiConstants.T0_FULL_MULTILAYER_UUID.equals(nep.getTopologyUuid())
-                        && new Uuid(uuidOf("ROADM-A1+PHOTONIC_MEDIA")).equals(nep.getNodeUuid())
-                        && new Uuid(uuidOf("ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"))
-                        .equals(nep.getNodeEdgePointUuid())
-        ));
-
-        // Fixed text fields
-        assertEquals("error", link.getErrorCharacteristic());
-        assertEquals("loss", link.getLossCharacteristic());
-        assertEquals("repeat delivery", link.getRepeatDeliveryCharacteristic());
-        assertEquals("delivery order", link.getDeliveryOrderCharacteristic());
-        assertEquals("unavailable time", link.getUnavailableTimeCharacteristic());
-        assertEquals("server integrity process", link.getServerIntegrityProcessCharacteristic());
-
-        // Fixed capacities
-        assertNotNull(link.getAvailableCapacity());
-        assertNotNull(link.getTotalPotentialCapacity());
-        assertEquals("100.0", link.getAvailableCapacity().getTotalSize().getValue().toString());
-        assertEquals("100.0", link.getTotalPotentialCapacity().getTotalSize().getValue().toString());
-
-        // Single-entry maps
-        assertNotNull(link.getCostCharacteristic());
-        assertEquals(1, link.getCostCharacteristic().size());
-
-        assertNotNull(link.getLatencyCharacteristic());
-        assertEquals(1, link.getLatencyCharacteristic().size());
-
-        assertNotNull(link.getRiskCharacteristic());
-        assertEquals(1, link.getRiskCharacteristic().size());
-
-        assertNotNull(link.getValidationMechanism());
-        assertEquals(1, link.getValidationMechanism().size());
-    }
-
-    @Test
-    void createTapiLink_shouldUseHardcodedTransitionedLayerProtocols() throws Exception {
-        NetworkTransactionService nts = mock(NetworkTransactionService.class);
-        TapiContext tapiContext = mock(TapiContext.class);
-
-        TapiLinkImpl tapiLink = spy(new TapiLinkImpl(nts, tapiContext));
-        doNothing().when(tapiLink).createCepForLink(any(), any(), any());
-
-        var orLink = mock(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.Link.class
-        );
-
-        @SuppressWarnings("unchecked")
-        FluentFuture<Optional<
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.Link>> future =
-                (FluentFuture<Optional<
-                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                                .networks.network.Link>>) mock(FluentFuture.class);
-
-        when(future.get()).thenReturn(Optional.of(orLink));
-        doReturn(future).when(nts).read(eq(LogicalDatastoreType.CONFIGURATION), any());
-
-        Link link = tapiLink.createTapiLink(
-                "ROADM-C1",
-                "DEG1-TTP-TXRX",
-                "ROADM-A1",
-                "DEG2-TTP-TXRX",
-                TapiConstants.OMS_RDM_RDM_LINK,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                TapiConstants.PHTNC_MEDIA_OTS,
-                "UNLOCKED",
-                "ENABLED",
-                Set.of(LayerProtocolName.PHOTONICMEDIA),
-                Set.of("SOMETHING_ELSE_ENTIRELY"),
-                TapiConstants.T0_FULL_MULTILAYER_UUID
-        );
-
-        assertNotNull(link);
-        assertEquals(
-                Set.of(TapiConstants.PHTNC_MEDIA_OMS, TapiConstants.PHTNC_MEDIA_OTS),
-                link.getTransitionedLayerProtocolName()
-        );
-    }
-
-    private static String uuidOf(String input) {
-        return UUID.nameUUIDFromBytes(input.getBytes(StandardCharsets.UTF_8)).toString();
     }
 
     private Network readOpenRoadmTopology() {
