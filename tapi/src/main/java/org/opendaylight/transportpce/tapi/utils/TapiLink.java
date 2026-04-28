@@ -8,12 +8,10 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.Map;
-import java.util.Set;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.LinkTerminationPointsFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.LinkStateResolver;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
@@ -100,54 +98,6 @@ public interface TapiLink {
             Uuid tapiTopoUuid,
             LinkTerminationPointsFactory linkTerminationPointsFactory,
             LinkStateResolver linkStateResolver);
-
-    /**
-     * Creates a TAPI link between a source and destination termination point.
-     *
-     * <p>The link is built from the supplied source/destination node and TP identifiers,
-     * link type, qualifiers, administrative/operational state, supported layer protocols,
-     * and the UUID of the target TAPI topology.
-     *
-     * @param srcNodeId source node identifier
-     * @param srcTpId source termination point identifier
-     * @param dstNodeId destination node identifier
-     * @param dstTpId destination termination point identifier
-     * @param linkType link type used to determine how the TAPI link is built
-     * @param srcNodeQual qualifier associated with the source node
-     * @param dstNodeQual qualifier associated with the destination node
-     * @param srcTpQual qualifier associated with the source termination point
-     * @param dstTpQual qualifier associated with the destination termination point
-     * @param adminState administrative state as a string
-     * @param operState operational state as a string
-     * @param layerProtoNameList set of layer protocols supported by the link
-     * @param transLayerNameList set of transition layer protocol names
-     * @param tapiTopoUuid UUID of the TAPI topology that will contain the link
-     * @return the created TAPI link, or {@code null} if the link type is not recognized
-     *         or the link cannot be created
-     * @deprecated use one of the other two alternatives instead
-     * @see #createTapiLink(String, String, String, String, Network, Uuid, LinkResolver)
-     * @see #createTapiLink(
-     *     org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link,
-     *     Network,
-     *     Uuid,
-     *     LinkTerminationPointsFactory)
-     */
-    @Deprecated(forRemoval = true)
-    Link createTapiLink(
-            String srcNodeId,
-            String srcTpId,
-            String dstNodeId,
-            String dstTpId,
-            String linkType,
-            String srcNodeQual,
-            String dstNodeQual,
-            String srcTpQual,
-            String dstTpQual,
-            String adminState,
-            String operState,
-            Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList,
-            Uuid tapiTopoUuid);
 
     /**
      * Retrieves the effective operational state of a link from the corresponding source and destination NEPs.
