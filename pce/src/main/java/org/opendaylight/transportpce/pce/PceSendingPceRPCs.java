@@ -81,6 +81,9 @@ public class PceSendingPceRPCs {
     private String pceOperMode;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
+    public static final String SERVICE_LAYER_OTN = "OTN";
+    public static final String SERVICE_LAYER_PHOTONIC = "PHOTONIC";
+    public static final String SERVICE_LAYER_UNDEFINED = "UNDEFINED";
 
     public PceSendingPceRPCs(GnpyConsumer gnpyConsumer, String pceOperationalMode) {
         setPathDescription(null);
@@ -168,7 +171,7 @@ public class PceSendingPceRPCs {
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
             nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
             rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-            clientInput);
+            clientInput, nwAnalizer.getServiceLayer());
 
         Subscriber errorSubscriber = new EventSubscriber();
         graph.setPceOperMode(this.pceOperMode);
