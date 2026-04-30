@@ -95,6 +95,7 @@ public class PceCalculation {
     private String serviceFormatA = "";
     private String serviceFormatZ = "";
     private String serviceType = "";
+    private String serviceLayer = "";
     private Uint32 serviceRate = Uint32.ZERO;
     private Map<Uuid, NodeId> uuidToNodeId = new HashMap<>();
 
@@ -249,6 +250,7 @@ public class PceCalculation {
         LOG.debug("PceCalculation:parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
 
         getAZnodeId();
+        getServiceLayerFromServiceType();
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
         returnStructure.setServiceFormat(input.getServiceAEnd().getServiceFormat());
@@ -289,9 +291,7 @@ public class PceCalculation {
                 : input.getServiceZEnd().getNodeId();
     }
 
-    private boolean readMdSal(Subscriber subscriber) {
-        DataObjectIdentifier<Network> nwInstanceIdentifier = null;
-        LOG.info("PceCalculation:ReadMdSal Line291, serviceType = {}", serviceType);
+    private void getServiceLayerFromServiceType() {
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_400GE:
@@ -300,10 +300,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_OTHER:
-                LOG.debug("PceCalculation:readMdSal: network {}", StringConstants.OPENROADM_TOPOLOGY);
-                nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-                    .build();
+                this.serviceLayer = PceSendingPceRPCs.SERVICE_LAYER_PHOTONIC;
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -313,6 +310,26 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
+                this.serviceLayer = PceSendingPceRPCs.SERVICE_LAYER_OTN;
+                break;
+            default:
+                this.serviceLayer = PceSendingPceRPCs.SERVICE_LAYER_UNDEFINED;
+                break;
+        }
+        LOG.debug("PceCalculation:getServiceLayerFromServiceType: ServiceLayer qualified to  {}", serviceLayer);
+    }
+
+    private boolean readMdSal(Subscriber subscriber) {
+        DataObjectIdentifier<Network> nwInstanceIdentifier = null;
+        LOG.info("PceCalculation:ReadMdSal Line291, serviceType = {}", serviceType);
+        switch (serviceLayer) {
+            case PceSendingPceRPCs.SERVICE_LAYER_PHOTONIC:
+                LOG.debug("PceCalculation:readMdSal: network {}", StringConstants.OPENROADM_TOPOLOGY);
+                nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
+                    .build();
+                break;
+            case PceSendingPceRPCs.SERVICE_LAYER_OTN:
                 LOG.debug("PceCalculation:readMdSal: network {}", StringConstants.OTN_NETWORK);
                 nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
                     .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
@@ -367,22 +384,7 @@ public class PceCalculation {
 
     private boolean readMdSalTapi(Subscriber subscriber) {
         ConnectivityContext conCont = null;
-        boolean isserviceOTN = false;
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_100GE_M:
-            case StringConstants.SERVICE_TYPE_100GE_S:
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_ODUC2:
-            case StringConstants.SERVICE_TYPE_ODUC3:
-            case StringConstants.SERVICE_TYPE_ODUC4:
-            case StringConstants.SERVICE_TYPE_10GE:
-            case StringConstants.SERVICE_TYPE_1GE:
-                isserviceOTN = true;
-                break;
-            default:
-                break;
-        }
-        if (isserviceOTN) {
+        if (PceSendingPceRPCs.SERVICE_LAYER_OTN.equals(serviceLayer)) {
             var conContIID = DataObjectIdentifier
                 .builder(Context.class)
                 .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -499,14 +501,8 @@ public class PceCalculation {
     private boolean analyzeNw(Subscriber subscriber) {
 
         LOG.debug("PceCalculation:analyzeNw : allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_100GE_T:
-            case  StringConstants.SERVICE_TYPE_OTU4:
-            case  StringConstants.SERVICE_TYPE_400GE:
-            case StringConstants.SERVICE_TYPE_OTUC2:
-            case StringConstants.SERVICE_TYPE_OTUC3:
-            case  StringConstants.SERVICE_TYPE_OTUC4:
-            case StringConstants.SERVICE_TYPE_OTHER:
+        switch (serviceLayer) {
+            case PceSendingPceRPCs.SERVICE_LAYER_PHOTONIC:
                 Factory portPreferenceFactory = new PreferenceFactory();
                 Preference portPreference = portPreferenceFactory.portPreference(input);
                 // 100GE service and OTU4 service are handled at the openroadm-topology layer
@@ -603,14 +599,8 @@ public class PceCalculation {
             .map(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Link::getName)
             .collect(Collectors.toList()));
         LOG.info("PceCalculation:analyzeTapiNw : ServiceType = {}", serviceType);
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_100GE_T:
-            case StringConstants.SERVICE_TYPE_OTU4:
-            case StringConstants.SERVICE_TYPE_400GE:
-            case StringConstants.SERVICE_TYPE_OTUC2:
-            case StringConstants.SERVICE_TYPE_OTUC3:
-            case StringConstants.SERVICE_TYPE_OTUC4:
-            case StringConstants.SERVICE_TYPE_OTHER:
+        switch (serviceLayer) {
+            case PceSendingPceRPCs.SERVICE_LAYER_PHOTONIC:
                 Factory portPreferenceFactory = new PreferenceFactory();
                 Preference portPreference = portPreferenceFactory.portPreference(input);
                 for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
@@ -832,23 +822,10 @@ public class PceCalculation {
             return false;
         }
 
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_100GE_T:
-            case StringConstants.SERVICE_TYPE_OTU4:
-            case StringConstants.SERVICE_TYPE_OTUC2:
-            case StringConstants.SERVICE_TYPE_OTUC3:
-            case StringConstants.SERVICE_TYPE_OTUC4:
-            case StringConstants.SERVICE_TYPE_400GE:
-            case StringConstants.SERVICE_TYPE_OTHER:
+        switch (serviceLayer) {
+            case PceSendingPceRPCs.SERVICE_LAYER_PHOTONIC:
                 return processPceLink(link, sourceId, destId, source, dest);
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_10GE:
-            case StringConstants.SERVICE_TYPE_100GE_M:
-            case StringConstants.SERVICE_TYPE_100GE_S:
-            case StringConstants.SERVICE_TYPE_ODUC2:
-            case StringConstants.SERVICE_TYPE_ODUC3:
-            case StringConstants.SERVICE_TYPE_ODUC4:
-            case StringConstants.SERVICE_TYPE_1GE:
+            case PceSendingPceRPCs.SERVICE_LAYER_OTN:
                 return processPceOtnLink(link, source, dest);
             default:
                 LOG.error("PceCalculation:validateLink : Unmanaged service type {}", serviceType);
@@ -1895,6 +1872,10 @@ public class PceCalculation {
 
     public String getServiceType() {
         return serviceType;
+    }
+
+    public String getServiceLayer() {
+        return serviceLayer;
     }
 
     public PceResult getReturnStructure() {
