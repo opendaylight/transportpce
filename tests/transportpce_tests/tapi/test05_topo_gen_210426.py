@@ -909,7 +909,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(120)
         print("Time to retrieve topology : 120 seconds... Hurry up")
 
-    def test_40_get_tapi_context(self):
+    def test_40_check_tapi_context(self):
         url = {'rfc8040': '{}/data/tapi-common:context',
                'draft-bierman02': '{}/operational/tapi-common:context'}
         response = requests.request(
@@ -918,12 +918,10 @@ class TransportPCEtesting(unittest.TestCase):
             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
             timeout=test_utils.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
-        root = ET.fromstring(response.text)
-        ET.indent(root)
-        tree = ET.ElementTree(root)
         ref_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'tapi-context.xml')
-        with open(ref_path, 'wb') as f:
-            tree.write(f, encoding='utf-8', xml_declaration=True)
+        with open(ref_path, 'r', encoding='utf-8') as f:
+            expected_xml = f.read()
+        self.assertEqual(ET.canonicalize(expected_xml), ET.canonicalize(response.text))
 
 
 if __name__ == "__main__":
