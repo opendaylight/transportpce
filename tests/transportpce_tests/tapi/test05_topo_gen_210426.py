@@ -558,8 +558,14 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_29_get_service_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
@@ -609,8 +615,14 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_31_get_service2_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic2")
@@ -660,8 +672,14 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_33_get_service3_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic3")
@@ -720,8 +738,14 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_35_get_service_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_1")
@@ -779,8 +803,14 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_37_get_service3_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_3")
@@ -842,8 +872,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # The sleep here is okey as the DSR service creation is very fast
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
+                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
+                self.LONG_WAIT),
+            f'Timed out waiting for service {serv_name} to complete')
 
     def test_39_get_service_DSR(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR")
