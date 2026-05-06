@@ -15,6 +15,8 @@
 # pylint: disable=line-too-long
 
 import os
+import queue
+import threading
 import unittest
 import xml.etree.ElementTree as ET
 import time
@@ -25,6 +27,8 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+from netconf_client.connect import connect_ssh  # nopep8
+from netconf_client.ncclient import Manager  # nopep8
 
 
 # pylint: disable=too-few-public-methods
@@ -58,6 +62,9 @@ class TransportPCEtesting(unittest.TestCase):
     LONG_WAIT = 20  # nominal value is 300
     SHORT_WAIT = LONG_WAIT / 4
     NODE_VERSION = '2.2.1'
+    ODL_NETCONF_PORT = 2830
+    TAPI_NOTIF_TAG = '{nbi-notifications}publish-tapi-notification-service'
+    TAPI_NOTIF_TOPIC_TAG = '{nbi-notifications}topic'
     uuid_services = UuidServices()
     uuid_services2 = UuidServices2()
     uuid_services3 = UuidServices3()
@@ -213,13 +220,54 @@ class TransportPCEtesting(unittest.TestCase):
                                                ('xpdra', cls.NODE_VERSION),
                                                ('xpdrc', cls.NODE_VERSION),
                                                ('spdrc', cls.NODE_VERSION)])
+        cls.netconf_session = connect_ssh(
+            host='127.0.0.1',
+            port=cls.ODL_NETCONF_PORT,
+            username=test_utils.ODL_LOGIN,
+            password=test_utils.ODL_PWD)
+        cls.netconf_manager = Manager(cls.netconf_session, timeout=120)
+        cls.netconf_manager.create_subscription(stream='NETCONF')
+        cls.notif_queue = queue.Queue()
+        cls._notif_stop = threading.Event()
+        cls._notif_thread = threading.Thread(target=cls._collect_notifications, daemon=True)
+        cls._notif_thread.start()
 
     @classmethod
     def tearDownClass(cls):
+        cls._notif_stop.set()
+        cls.netconf_session.close()
         # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+
+    @classmethod
+    def _collect_notifications(cls):
+        while not cls._notif_stop.is_set():
+            notif = cls.netconf_manager.take_notification(block=True, timeout=2)
+            if notif is not None:
+                cls.notif_queue.put(notif)
+
+    def _wait_for_tapi_notification(self, svc_uuid, timeout):
+        deadline = time.time() + timeout
+        pending = []
+        while time.time() < deadline:
+            remaining = max(0.1, deadline - time.time())
+            try:
+                notif = self.notif_queue.get(timeout=min(remaining, 1.0))
+            except queue.Empty:
+                continue
+            tapi_ele = notif.notification_ele.find(self.TAPI_NOTIF_TAG)
+            if tapi_ele is not None:
+                topic = tapi_ele.findtext(self.TAPI_NOTIF_TOPIC_TAG)
+                if topic == svc_uuid:
+                    for n in pending:
+                        self.notif_queue.put(n)
+                    return True
+            pending.append(notif)
+        for n in pending:
+            self.notif_queue.put(n)
+        return False
 
     def setUp(self):
         time.sleep(self.LONG_WAIT)
@@ -558,14 +606,9 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services.pm, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services.pm}')
 
     def test_29_get_service_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
@@ -615,14 +658,9 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services2.pm, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services2.pm}')
 
     def test_31_get_service2_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic2")
@@ -672,14 +710,9 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services3.pm, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services3.pm}')
 
     def test_33_get_service3_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic3")
@@ -738,14 +771,9 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services.odu, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services.odu}')
 
     def test_35_get_service_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_1")
@@ -803,14 +831,9 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services3.odu, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services3.odu}')
 
     def test_37_get_service3_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_3")
@@ -872,14 +895,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            test_utils.wait_until_log_contains(
-                test_utils.TPCE_LOG,
-                [f'Done, OpenROADM service {serv_name} copied to TAPI!',
-                 f'Copy OpenROADM service {serv_name} to TAPI failed!'],
-                self.LONG_WAIT),
-            f'Timed out waiting for service {serv_name} to complete')
+            self._wait_for_tapi_notification(self.uuid_services.dsr, self.LONG_WAIT),
+            f'Timed out waiting for TAPI notification for service {self.uuid_services.dsr}')
 
     def test_39_get_service_DSR(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR")
