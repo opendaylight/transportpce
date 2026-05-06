@@ -207,6 +207,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-parser-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.ietf.model</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
       <scope>test</scope>

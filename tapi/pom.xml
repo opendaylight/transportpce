@@ -165,6 +165,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <groupId>org.eclipse.jdt</groupId>
       <artifactId>org.eclipse.jdt.annotation</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
@@ -198,6 +202,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>binding-generator</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-parser-api</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
