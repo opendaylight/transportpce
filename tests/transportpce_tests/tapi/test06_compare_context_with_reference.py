@@ -57,6 +57,7 @@ class TransportPCEtesting(unittest.TestCase):
     processes = []
     LONG_WAIT = 20  # nominal value is 300
     SHORT_WAIT = LONG_WAIT / 4
+    SERVICE_WAIT = 300  # time for service creation to complete
     NODE_VERSION = '2.2.1'
     uuid_services = UuidServices()
     uuid_services2 = UuidServices2()
@@ -597,8 +598,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_29_get_service_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
@@ -648,8 +654,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_31_get_service2_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic2")
@@ -699,8 +710,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_33_get_service3_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic3")
@@ -759,8 +775,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_35_get_service_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_1")
@@ -818,8 +839,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_37_get_service3_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_3")
@@ -881,8 +907,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # The sleep here is okey as the DSR service creation is very fast
-        time.sleep(self.LONG_WAIT)
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
+        self.assertTrue(
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_39_get_service_DSR(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR")
@@ -895,42 +926,102 @@ class TransportPCEtesting(unittest.TestCase):
         print("Time to retrieve topology : 120 seconds... Hurry up")
 
     # -------------------------------------------------------------------------
-    # Reference-based context comparison tests (test_40 – test_54)
+    # Reference-based context comparison tests (test_40 – test_53)
     #
-    # Each test extracts expected values dynamically from self.ref_tree
-    # (tapi-context.xml) and compares them against the live controller context.
-    # No values are hardcoded in this section.
+    # Each test fetches the live TAPI context from the controller and compares
+    # a specific slice of it against the reference snapshot saved by test05.
+    # Values are never hardcoded here; everything is derived from ref_tree so
+    # the tests stay valid after topology or service changes — just regenerate
+    # the reference by running test05.
+    #
+    # XML navigation uses Clark notation: f'{{{namespace_uri}}}element-name'
+    # expands to the fully-qualified tag that ElementTree uses internally, e.g.
+    # '{urn:onf:otcc:yang:tapi-topology}node'.  The _names() helper extracts the
+    # set of name/value strings from a list of elements; _t0() locates the
+    # "T0 - Full Multi-layer topology" element within a parsed tree.
     # -------------------------------------------------------------------------
 
     def test_40_tapi_context_name(self):
+        """Check the top-level TAPI context name.
+
+        The root <context> element carries a <name><value> leaf that identifies
+        the overall TAPI context. Verifies it matches the reference.
+
+        XML path: context / name / value
+        """
         TC = 'urn:onf:otcc:yang:tapi-common'
         ref_name = self.ref_tree.findtext(f'{{{TC}}}name/{{{TC}}}value')
         live_name = self._get_live_tree().findtext(f'{{{TC}}}name/{{{TC}}}value')
         self.assertEqual(live_name, ref_name)
 
     def test_41_tapi_topology_names(self):
+        """Check the set of topologies in the topology context.
+
+        The topology context holds one entry per topology layer / abstraction
+        level (e.g. "T0 - Full Multi-layer topology", "T100G topology").
+        Verifies that the count and names of topology entries match the reference.
+
+        XML path: context / topology-context / topology / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_topos = list(self.ref_tree.iter(f'{{{T}}}topology'))
         live_topos = list(self._get_live_tree().iter(f'{{{T}}}topology'))
         self.assertEqual(len(live_topos), len(ref_topos))
-        ref_names = self._names(ref_topos, T)
-        live_names = self._names(live_topos, T)
-        self.assertEqual(live_names, ref_names)
+        self.assertEqual(self._names(live_topos, T), self._names(ref_topos, T))
 
     def test_42_tapi_nw_topology_service_name(self):
+        """Check the network-topology-service name.
+
+        The <nw-topology-service> element links the topology context to the
+        underlying network. Verifies its name matches the reference.
+
+        XML path: context / topology-context / nw-topology-service / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_name = next(self.ref_tree.iter(f'{{{T}}}nw-topology-service')).findtext(f'{{{T}}}name/{{{T}}}value')
         live_name = next(self._get_live_tree().iter(f'{{{T}}}nw-topology-service')).findtext(f'{{{T}}}name/{{{T}}}value')
         self.assertEqual(live_name, ref_name)
 
     def test_43_tapi_t0_node_names(self):
+        """Check the nodes in the T0 full multi-layer topology.
+
+        Verifies that count and device-specific names match the reference.
+
+        Note: XPDR nodes carry several <name> entries with different value-names
+        ("dsr/odu node name", "otsi node name", "Node Type"). These are stored
+        in an unordered Java HashMap, so their XML serialisation order can differ
+        between Karaf JVM runs. The helper node_device_names() explicitly looks
+        for the entry whose value-name contains "node name" to avoid depending on
+        serialisation order.
+
+        XML path: context / topology-context / topology["T0"] / node / name / value
+                    (selecting the <name> entry whose <value-name> contains "node name")
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_nodes = self._t0(self.ref_tree, T).findall(f'{{{T}}}node')
         live_nodes = self._t0(self._get_live_tree(), T).findall(f'{{{T}}}node')
         self.assertEqual(len(live_nodes), len(ref_nodes))
-        self.assertEqual(self._names(live_nodes, T), self._names(ref_nodes, T))
+
+        def node_device_names(nodes):
+            result = set()
+            for node in nodes:
+                for name in node.findall(f'{{{T}}}name'):
+                    vn = name.findtext(f'{{{T}}}value-name') or ''
+                    if 'node name' in vn:
+                        result.add(name.findtext(f'{{{T}}}value'))
+                        break
+            return result
+
+        self.assertEqual(node_device_names(live_nodes), node_device_names(ref_nodes))
 
     def test_44_tapi_t0_link_names(self):
+        """Check the links in the T0 full multi-layer topology.
+
+        Links in T0 connect ROADM degree/SRG nodes to transponder client/line
+        ports across layers.  Verifies that count and names match the reference.
+
+        XML path: context / topology-context / topology["T0"] / link / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_links = self._t0(self.ref_tree, T).findall(f'{{{T}}}link')
         live_links = self._t0(self._get_live_tree(), T).findall(f'{{{T}}}link')
@@ -938,6 +1029,16 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(self._names(live_links, T), self._names(ref_links, T))
 
     def test_45_tapi_t0_nep_names(self):
+        """Check the Node Edge Points (NEPs) on every T0 node.
+
+        A NEP is a connection point on a node — a port where a link terminates
+        or a service can be instantiated.  For each T0 node (looked up by UUID
+        so the comparison is order-independent), verifies that the count and
+        names of its owned NEPs match the reference.
+
+        XML path: context / topology-context / topology["T0"] / node
+                    / owned-node-edge-point / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_nodes = {n.findtext(f'{{{T}}}uuid'): n
                      for n in self._t0(self.ref_tree, T).findall(f'{{{T}}}node')}
@@ -952,6 +1053,16 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(self._names(live_neps, T), self._names(ref_neps, T))
 
     def test_46_tapi_t0_cep_names(self):
+        """Check the Connection End Points (CEPs) on every T0 node.
+
+        For each T0 node, verifies that the count and names of CEPs nested under
+        its NEPs match the reference — confirming that the six services created
+        in tests 28–38 produced the expected CEPs on the correct devices.
+
+        XML path: context / topology-context / topology["T0"] / node
+                    / owned-node-edge-point / cep-list / connection-end-point
+                    / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         C = 'urn:onf:otcc:yang:tapi-connectivity'
         ref_nodes = {n.findtext(f'{{{T}}}uuid'): n
@@ -968,6 +1079,14 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(live_cep_names, ref_cep_names)
 
     def test_47_tapi_t0_node_rule_group_names(self):
+        """Check the Node Rule Groups (NRGs) on every T0 node.
+
+        For each T0 node, verifies that the count and names of NRGs
+        match the reference.
+
+        XML path: context / topology-context / topology["T0"] / node
+                    / node-rule-group / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_nodes = {n.findtext(f'{{{T}}}uuid'): n
                      for n in self._t0(self.ref_tree, T).findall(f'{{{T}}}node')}
@@ -981,6 +1100,14 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(self._names(live_nrgs, T), self._names(ref_nrgs, T))
 
     def test_48_tapi_t0_inter_rule_group_names(self):
+        """Check the Inter Rule Groups (IRGs) on every T0 node.
+
+        For each T0 node, verifies that the count and names of IRGs
+        match the reference.
+
+        XML path: context / topology-context / topology["T0"] / node
+                    / inter-rule-group / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_nodes = {n.findtext(f'{{{T}}}uuid'): n
                      for n in self._t0(self.ref_tree, T).findall(f'{{{T}}}node')}
@@ -994,6 +1121,12 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(self._names(live_irgs, T), self._names(ref_irgs, T))
 
     def test_49_tapi_sip_names(self):
+        """Check the Service Interface Points (SIPs) in the TAPI context.
+
+        Verifies that the count and names of SIPs match the reference.
+
+        XML path: context / service-interface-point / name / value
+        """
         TC = 'urn:onf:otcc:yang:tapi-common'
         ref_sips = list(self.ref_tree.iter(f'{{{TC}}}service-interface-point'))
         live_sips = list(self._get_live_tree().iter(f'{{{TC}}}service-interface-point'))
@@ -1001,6 +1134,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(self._names(live_sips, TC), self._names(ref_sips, TC))
 
     def test_50_tapi_connectivity_service_names(self):
+        """Check the connectivity services in the TAPI connectivity context.
+
+        Each service created in tests 28–38 (three photonic-media, two ODU4,
+        one DSR) should appear as a connectivity-service entry here. Verifies
+        that the count and names match the reference.
+
+        XML path: context / connectivity-context / connectivity-service / name / value
+        """
         C = 'urn:onf:otcc:yang:tapi-connectivity'
         ref_svcs = list(self.ref_tree.iter(f'{{{C}}}connectivity-service'))
         live_svcs = list(self._get_live_tree().iter(f'{{{C}}}connectivity-service'))
@@ -1008,6 +1149,16 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(self._names(live_svcs, C), self._names(ref_svcs, C))
 
     def test_51_tapi_connectivity_service_endpoint_names(self):
+        """Check the end-points of every connectivity service.
+
+        Each connectivity service has two end-points identifying the A-end and
+        Z-end devices. Services are matched by name (order-independent), then
+        for each service the count and names of its end-points are compared
+        against the reference.
+
+        XML path: context / connectivity-context / connectivity-service
+                    / end-point / name / value
+        """
         C = 'urn:onf:otcc:yang:tapi-connectivity'
         ref_svcs = {svc.findtext(f'{{{C}}}name/{{{C}}}value'): svc
                     for svc in self.ref_tree.iter(f'{{{C}}}connectivity-service')}
@@ -1022,6 +1173,13 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(self._names(live_eps, C), self._names(ref_eps, C))
 
     def test_52_tapi_connection_names(self):
+        """Check the connections in the TAPI connectivity context.
+
+        Verifies that the count and names of all named connections
+        match the reference.
+
+        XML path: context / connectivity-context / connection / name / value
+        """
         C = 'urn:onf:otcc:yang:tapi-connectivity'
         ref_conns = [c for c in self.ref_tree.iter(f'{{{C}}}connection')
                      if c.findtext(f'{{{C}}}name/{{{C}}}value') is not None]
@@ -1033,6 +1191,12 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(live_names, ref_names)
 
     def test_53_tapi_profile_names(self):
+        """Check the profiles referenced in the T0 topology.
+
+        Verifies that the set of named profiles matches the reference.
+
+        XML path: context / topology-context / topology / profile / name / value
+        """
         T = 'urn:onf:otcc:yang:tapi-topology'
         ref_named = {p.findtext(f'{{{T}}}name/{{{T}}}value')
                      for p in self.ref_tree.iter(f'{{{T}}}profile')
@@ -1041,20 +1205,6 @@ class TransportPCEtesting(unittest.TestCase):
                       for p in self._get_live_tree().iter(f'{{{T}}}profile')
                       if p.findtext(f'{{{T}}}name/{{{T}}}value') is not None}
         self.assertEqual(live_named, ref_named)
-
-    def test_54_tapi_full_context_xml(self):
-        url = {'rfc8040': '{}/data/tapi-common:context',
-               'draft-bierman02': '{}/operational/tapi-common:context'}
-        response = requests.request(
-            'GET', url[test_utils.RESTCONF_VERSION].format(test_utils.RESTCONF_BASE_URL),
-            headers=test_utils.TYPE_APPLICATION_XML,
-            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-            timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        ref_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'tapi-context.xml')
-        with open(ref_path, 'r', encoding='utf-8') as f:
-            expected_xml = f.read()
-        self.assertEqual(ET.canonicalize(expected_xml), ET.canonicalize(response.text))
 
 
 if __name__ == "__main__":

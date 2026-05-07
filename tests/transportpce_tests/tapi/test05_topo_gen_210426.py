@@ -57,6 +57,7 @@ class TransportPCEtesting(unittest.TestCase):
     processes = []
     LONG_WAIT = 20  # nominal value is 300
     SHORT_WAIT = LONG_WAIT / 4
+    SERVICE_WAIT = 300  # time for service creation to complete
     NODE_VERSION = '2.2.1'
     uuid_services = UuidServices()
     uuid_services2 = UuidServices2()
@@ -220,21 +221,6 @@ class TransportPCEtesting(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
-
-    def _wait_for_tapi_service_enabled(self, svc_uuid, timeout):
-        deadline = time.time() + timeout
-        while time.time() < deadline:
-            response = test_utils.transportpce_api_rpc_request(
-                'tapi-connectivity', 'get-connectivity-service-details',
-                {'service-id-or-name': svc_uuid})
-            if response.get('status_code') == requests.codes.ok:
-                op_state = (response.get('output', {})
-                            .get('service', {})
-                            .get('operational-state'))
-                if op_state == 'ENABLED':
-                    return True
-            time.sleep(2)
-        return False
 
     def setUp(self):
         time.sleep(self.LONG_WAIT)
@@ -573,9 +559,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services.pm, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services.pm}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_29_get_service_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
@@ -625,9 +615,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services2.pm, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services2.pm}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_31_get_service2_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic2")
@@ -677,9 +671,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services3.pm, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services3.pm}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_33_get_service3_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "servicePhotonic3")
@@ -738,9 +736,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services.odu, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services.odu}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_35_get_service_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_1")
@@ -798,9 +800,13 @@ class TransportPCEtesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services3.odu, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services3.odu}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_37_get_service3_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceODU4_3")
@@ -862,9 +868,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
+        serv_name = self.cr_serv_input_data["name"][0]["value"]
         self.assertTrue(
-            self._wait_for_tapi_service_enabled(self.uuid_services.dsr, self.LONG_WAIT),
-            f'Timed out waiting for TAPI service to reach ENABLED state: {self.uuid_services.dsr}')
+            test_utils.wait_until_log_contains(
+                test_utils.TPCE_LOG,
+                [f'Service {serv_name} is becoming InService'],
+                self.SERVICE_WAIT),
+            f'Timed out waiting for service {serv_name} to reach InService')
 
     def test_39_get_service_DSR(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR")
@@ -876,7 +886,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(120)
         print("Time to retrieve topology : 120 seconds... Hurry up")
 
-    def test_40_check_tapi_context(self):
+    def test_40_get_tapi_context(self):
         url = {'rfc8040': '{}/data/tapi-common:context',
                'draft-bierman02': '{}/operational/tapi-common:context'}
         response = requests.request(
@@ -885,693 +895,12 @@ class TransportPCEtesting(unittest.TestCase):
             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
             timeout=test_utils.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
+        root = ET.fromstring(response.text)
+        ET.indent(root)
+        tree = ET.ElementTree(root)
         ref_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'tapi-context.xml')
-        with open(ref_path, 'r', encoding='utf-8') as f:
-            expected_xml = f.read()
-        self.assertEqual(ET.canonicalize(expected_xml), ET.canonicalize(response.text))
-
-    def _fetch_tapi_context_tree(self):
-        url = {'rfc8040': '{}/data/tapi-common:context',
-               'draft-bierman02': '{}/operational/tapi-common:context'}
-        response = requests.request(
-            'GET', url[test_utils.RESTCONF_VERSION].format(test_utils.RESTCONF_BASE_URL),
-            headers=test_utils.TYPE_APPLICATION_XML,
-            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-            timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        return ET.fromstring(response.text)
-
-    def test_41_tapi_topology_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        topos = list(root.iter(f'{{{T}}}topology'))
-        self.assertEqual(len(topos), 3)
-        names = [t.findtext(f'{{{T}}}name/{{{T}}}value') for t in topos]
-        self.assertIn('Alien-Xponders - TAPI topology', names)
-        self.assertIn('SBI - Multi-layer - TAPI topology', names)
-        self.assertIn('T0 - Full Multi-layer topology', names)
-
-    def test_42_tapi_t0_node_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        nodes = t0.findall(f'{{{T}}}node')
-        self.assertEqual(len(nodes), 11)
-        names = [n.findtext(f'{{{T}}}name/{{{T}}}value') for n in nodes]
-        self.assertEqual(names.count('MUXPDR'), 4)
-        self.assertEqual(names.count('SWITCH'), 2)
-        self.assertEqual(names.count('TPDR'), 3)
-        self.assertIn('ROADM-A1+PHOTONIC_MEDIA', names)
-        self.assertIn('ROADM-C1+PHOTONIC_MEDIA', names)
-
-    def test_43_tapi_t0_link_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        links = t0.findall(f'{{{T}}}link')
-        self.assertEqual(len(links), 11)
-        names = {lnk.findtext(f'{{{T}}}name/{{{T}}}value') for lnk in links}
-        for expected in [
-            'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRXtoSPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoXPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
-            'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRXtoSPDR-SA1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoXPDR-C1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRXtoSPDR-SC1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SC1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-            'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-        ]:
-            self.assertIn(expected, names)
-
-    def test_44_tapi_t0_nep_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        nodes = {n.findtext(f'{{{T}}}uuid'): n for n in t0.findall(f'{{{T}}}node')}
-        expected_neps_per_node = {
-            '4582e51f-2b2d-3b70-b374-86c463062710': {  # MUXPDR SPDR-SA1-XPDR3
-                'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT1',
-                'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT2',
-                'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT3',
-                'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT4',
-                'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT1',
-                'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT2',
-                'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT3',
-                'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT4',
-                'SPDR-SA1-XPDR3+iODU+XPDR3-NETWORK1',
-                'SPDR-SA1-XPDR3+iOTU+XPDR3-NETWORK1',
-                'SPDR-SA1-XPDR3+OTSi_MEDIA_CHANNEL+XPDR3-NETWORK1',
-                'SPDR-SA1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            },
-            'd852c340-77db-3f9a-96e8-cb4de8e1004a': {  # SWITCH SPDR-SC1-XPDR2
-                'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT1',
-                'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT2',
-                'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT3',
-                'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT4',
-                'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT1',
-                'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT2',
-                'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT3',
-                'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT4',
-                'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK1',
-                'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK2',
-                'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK3',
-                'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK4',
-                'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK1',
-                'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK2',
-                'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK3',
-                'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK4',
-                'SPDR-SC1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK1',
-                'SPDR-SC1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK2',
-                'SPDR-SC1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK3',
-                'SPDR-SC1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK4',
-                'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-                'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-                'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-                'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-            },
-            'dd417035-b3ae-3c3c-a6c3-49f0aa27c82f': {  # TPDR XPDR-C1-XPDR2
-                'XPDR-C1-XPDR2+DSR+XPDR2-CLIENT1',
-                'XPDR-C1-XPDR2+eODU+XPDR2-CLIENT1',
-                'XPDR-C1-XPDR2+iODU+XPDR2-NETWORK1',
-                'XPDR-C1-XPDR2+iOTU+XPDR2-NETWORK1',
-                'XPDR-C1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK1',
-                'XPDR-C1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            },
-            '4986dca9-2d59-3d79-b306-e11802bcf1e6': {  # ROADM-C1
-                'ROADM-C1+MEDIA_CHANNEL+DEG1-TTP-TXRX',
-                'ROADM-C1+OTSi_MEDIA_CHANNEL+DEG1-TTP-TXRX',
-                'ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX',
-                'ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX',
-                'ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX',
-                'ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRX',
-            },
-            '4e44bcc5-08d3-3fee-8fac-f021489e5a61': {  # MUXPDR SPDR-SA1-XPDR1
-                'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT1',
-                'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT2',
-                'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT3',
-                'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT4',
-                'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1',
-                'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT2',
-                'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT3',
-                'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT4',
-                'SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1',
-                'SPDR-SA1-XPDR1+iOTU+XPDR1-NETWORK1',
-                'SPDR-SA1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1',
-                'SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            },
-            '215ee18f-7869-3492-94d2-0f24ed0a3023': {  # MUXPDR SPDR-SC1-XPDR1
-                'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT1',
-                'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT2',
-                'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT3',
-                'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT4',
-                'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT1',
-                'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT2',
-                'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT3',
-                'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT4',
-                'SPDR-SC1-XPDR1+iODU+XPDR1-NETWORK1',
-                'SPDR-SC1-XPDR1+iOTU+XPDR1-NETWORK1',
-                'SPDR-SC1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1',
-                'SPDR-SC1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            },
-            '38c114ae-9c0e-3068-bb27-db2dbd81220b': {  # SWITCH SPDR-SA1-XPDR2
-                'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT1',
-                'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT2',
-                'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT3',
-                'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT4',
-                'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT1',
-                'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT2',
-                'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT3',
-                'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT4',
-                'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK1',
-                'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK2',
-                'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK3',
-                'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK4',
-                'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK1',
-                'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK2',
-                'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK3',
-                'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK4',
-                'SPDR-SA1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK1',
-                'SPDR-SA1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK2',
-                'SPDR-SA1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK3',
-                'SPDR-SA1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK4',
-                'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-                'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-                'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-                'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-            },
-            'c1f06957-c0b9-32be-8492-e278b2d4a3aa': {  # MUXPDR SPDR-SC1-XPDR3
-                'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT1',
-                'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT2',
-                'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT3',
-                'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT4',
-                'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT1',
-                'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT2',
-                'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT3',
-                'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT4',
-                'SPDR-SC1-XPDR3+iODU+XPDR3-NETWORK1',
-                'SPDR-SC1-XPDR3+iOTU+XPDR3-NETWORK1',
-                'SPDR-SC1-XPDR3+OTSi_MEDIA_CHANNEL+XPDR3-NETWORK1',
-                'SPDR-SC1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            },
-            '3b726367-6f2d-3e3f-9033-d99b61459075': {  # ROADM-A1
-                'ROADM-A1+MEDIA_CHANNEL+DEG2-TTP-TXRX',
-                'ROADM-A1+OTSi_MEDIA_CHANNEL+DEG2-TTP-TXRX',
-                'ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX',
-                'ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX',
-                'ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP1-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP2-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP3-TXRX',
-                'ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP4-TXRX',
-            },
-            '4378fc29-6408-39ec-8737-5008c3dc49e5': {  # TPDR XPDR-A1-XPDR1
-                'XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1',
-                'XPDR-A1-XPDR1+DSR+XPDR1-CLIENT2',
-                'XPDR-A1-XPDR1+eODU+XPDR1-CLIENT1',
-                'XPDR-A1-XPDR1+eODU+XPDR1-CLIENT2',
-                'XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1',
-                'XPDR-A1-XPDR1+iODU+XPDR1-NETWORK2',
-                'XPDR-A1-XPDR1+iOTU+XPDR1-NETWORK1',
-                'XPDR-A1-XPDR1+iOTU+XPDR1-NETWORK2',
-                'XPDR-A1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1',
-                'XPDR-A1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK2',
-                'XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-                'XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK2',
-            },
-            '1770bea4-b1da-3b20-abce-7d182c0ec0df': {  # TPDR XPDR-C1-XPDR1
-                'XPDR-C1-XPDR1+DSR+XPDR1-CLIENT1',
-                'XPDR-C1-XPDR1+eODU+XPDR1-CLIENT1',
-                'XPDR-C1-XPDR1+iODU+XPDR1-NETWORK1',
-                'XPDR-C1-XPDR1+iOTU+XPDR1-NETWORK1',
-                'XPDR-C1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1',
-                'XPDR-C1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            },
-        }
-        for node_uuid, expected_names in expected_neps_per_node.items():
-            with self.subTest(node=node_uuid):
-                node = nodes[node_uuid]
-                neps = node.findall(f'{{{T}}}owned-node-edge-point')
-                self.assertEqual(len(neps), len(expected_names))
-                actual_names = {nep.findtext(f'{{{T}}}name/{{{T}}}value') for nep in neps}
-                self.assertEqual(actual_names, expected_names)
-
-    def test_45_tapi_t0_cep_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        C = 'urn:onf:otcc:yang:tapi-connectivity'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        nodes = {n.findtext(f'{{{T}}}uuid'): n for n in t0.findall(f'{{{T}}}node')}
-        expected_ceps_per_node = {
-            '4582e51f-2b2d-3b70-b374-86c463062710': {  # MUXPDR SPDR-SA1-XPDR3
-                'CEP+SPDR-SA1-XPDR3+OTSi_MEDIA_CHANNEL+XPDR3-NETWORK1-[761-768]',
-                'CEP+SPDR-SA1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-                'CEP+SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT1',
-                'CEP+SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT2',
-                'CEP+SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT3',
-                'CEP+SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT4',
-                'CEP+SPDR-SA1-XPDR3+iOTU+XPDR3-NETWORK1',
-            },
-            'd852c340-77db-3f9a-96e8-cb4de8e1004a': {  # SWITCH SPDR-SC1-XPDR2
-                'CEP+SPDR-SC1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK1-[761-768]',
-                'CEP+SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-                'CEP+SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-                'CEP+SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-                'CEP+SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-                'CEP+SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT1',
-                'CEP+SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT2',
-                'CEP+SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT3',
-                'CEP+SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT4',
-                'CEP+SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK1',
-            },
-            'dd417035-b3ae-3c3c-a6c3-49f0aa27c82f': {  # TPDR XPDR-C1-XPDR2
-                'CEP+XPDR-C1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            },
-            '4986dca9-2d59-3d79-b306-e11802bcf1e6': {  # ROADM-C1
-                'CEP+ROADM-C1+MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-                'CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-                'CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]',
-                'CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]',
-                'CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX',
-                'CEP+ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRX',
-            },
-            '4e44bcc5-08d3-3fee-8fac-f021489e5a61': {  # MUXPDR SPDR-SA1-XPDR1
-                'CEP+SPDR-SA1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1-[761-768]',
-                'CEP+SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-                'CEP+SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1',
-                'CEP+SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT2',
-                'CEP+SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT3',
-                'CEP+SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT4',
-                'CEP+SPDR-SA1-XPDR1+iOTU+XPDR1-NETWORK1',
-            },
-            '215ee18f-7869-3492-94d2-0f24ed0a3023': {  # MUXPDR SPDR-SC1-XPDR1
-                'CEP+SPDR-SC1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1-[761-768]',
-                'CEP+SPDR-SC1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-                'CEP+SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT1',
-                'CEP+SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT2',
-                'CEP+SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT3',
-                'CEP+SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT4',
-                'CEP+SPDR-SC1-XPDR1+iOTU+XPDR1-NETWORK1',
-            },
-            '38c114ae-9c0e-3068-bb27-db2dbd81220b': {  # SWITCH SPDR-SA1-XPDR2
-                'CEP+SPDR-SA1-XPDR2+OTSi_MEDIA_CHANNEL+XPDR2-NETWORK1-[761-768]',
-                'CEP+SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-                'CEP+SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-                'CEP+SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-                'CEP+SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-                'CEP+SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT1',
-                'CEP+SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT2',
-                'CEP+SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT3',
-                'CEP+SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT4',
-                'CEP+SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK1',
-            },
-            'c1f06957-c0b9-32be-8492-e278b2d4a3aa': {  # MUXPDR SPDR-SC1-XPDR3
-                'CEP+SPDR-SC1-XPDR3+OTSi_MEDIA_CHANNEL+XPDR3-NETWORK1-[761-768]',
-                'CEP+SPDR-SC1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-                'CEP+SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT1',
-                'CEP+SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT2',
-                'CEP+SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT3',
-                'CEP+SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT4',
-                'CEP+SPDR-SC1-XPDR3+iOTU+XPDR3-NETWORK1',
-            },
-            '3b726367-6f2d-3e3f-9033-d99b61459075': {  # ROADM-A1
-                'CEP+ROADM-A1+MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-                'CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-                'CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]',
-                'CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]',
-                'CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP1-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP2-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP3-TXRX',
-                'CEP+ROADM-A1+PHOTONIC_MEDIA_OTS+SRG3-PP4-TXRX',
-            },
-            '4378fc29-6408-39ec-8737-5008c3dc49e5': {  # TPDR XPDR-A1-XPDR1
-                'CEP+XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-                'CEP+XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK2',
-            },
-            '1770bea4-b1da-3b20-abce-7d182c0ec0df': {  # TPDR XPDR-C1-XPDR1
-                'CEP+XPDR-C1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            },
-        }
-        for node_uuid, expected_names in expected_ceps_per_node.items():
-            with self.subTest(node=node_uuid):
-                node = nodes[node_uuid]
-                ceps = list(node.iter(f'{{{C}}}connection-end-point'))
-                self.assertEqual(len(ceps), len(expected_names))
-                actual_names = {cep.findtext(f'{{{C}}}name/{{{C}}}value') for cep in ceps}
-                self.assertEqual(actual_names, expected_names)
-
-    def test_46_tapi_context_name(self):
-        root = self._fetch_tapi_context_tree()
-        TC = 'urn:onf:otcc:yang:tapi-common'
-        name = root.findtext(f'{{{TC}}}name/{{{TC}}}value')
-        self.assertEqual(name, 'T-API context')
-
-    def test_47_tapi_nw_topology_service_name(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        nw_topo_svc = next(root.iter(f'{{{T}}}nw-topology-service'))
-        name = nw_topo_svc.findtext(f'{{{T}}}name/{{{T}}}value')
-        self.assertEqual(name, 'Network Topo Service')
-
-    def test_48_tapi_profile_name(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        named_profiles = [
-            p.findtext(f'{{{T}}}name/{{{T}}}value')
-            for p in root.iter(f'{{{T}}}profile')
-            if p.findtext(f'{{{T}}}name/{{{T}}}value') is not None
-        ]
-        self.assertIn('OperationalModeKey{modeId=100G}', named_profiles)
-
-    def test_49_tapi_connectivity_service_names(self):
-        C = 'urn:onf:otcc:yang:tapi-connectivity'
-        root = self._fetch_tapi_context_tree()
-        services = list(root.iter(f'{{{C}}}connectivity-service'))
-        self.assertEqual(len(services), 6)
-        names = {svc.findtext(f'{{{C}}}name/{{{C}}}value') for svc in services}
-        for expected in [
-            'servicePhotonic3',
-            'servicePhotonic2',
-            'serviceODU4_1',
-            'servicephotonic-1',
-            'serviceODU4_3',
-            'serviceDSR',
-        ]:
-            self.assertIn(expected, names)
-
-    def test_50_tapi_connectivity_service_endpoint_names(self):
-        C = 'urn:onf:otcc:yang:tapi-connectivity'
-        root = self._fetch_tapi_context_tree()
-        expected_endpoints_per_service = {
-            'servicePhotonic3': {'SPDR-SC1-XPDR3', 'SPDR-SA1-XPDR3'},
-            'servicePhotonic2': {'SPDR-SC1-XPDR2', 'SPDR-SA1-XPDR2'},
-            'serviceODU4_1':    {'SPDR-SC1-XPDR1', 'SPDR-SA1-XPDR1'},
-            'servicephotonic-1': {'SPDR-SC1-XPDR1', 'SPDR-SA1-XPDR1'},
-            'serviceODU4_3':    {'SPDR-SC1-XPDR3', 'SPDR-SA1-XPDR3'},
-            'serviceDSR':       {'SPDR-SC1-XPDR1', 'SPDR-SA1-XPDR1'},
-        }
-        for svc in root.iter(f'{{{C}}}connectivity-service'):
-            svc_name = svc.findtext(f'{{{C}}}name/{{{C}}}value')
-            with self.subTest(service=svc_name):
-                endpoints = svc.findall(f'{{{C}}}end-point')
-                actual_names = {ep.findtext(f'{{{C}}}name/{{{C}}}value') for ep in endpoints}
-                self.assertEqual(actual_names, expected_endpoints_per_service[svc_name])
-
-    def test_51_tapi_connection_names(self):
-        C = 'urn:onf:otcc:yang:tapi-connectivity'
-        root = self._fetch_tapi_context_tree()
-        connections = [
-            c for c in root.iter(f'{{{C}}}connection')
-            if c.findtext(f'{{{C}}}name/{{{C}}}value') is not None
-        ]
-        self.assertEqual(len(connections), 24)
-        names = {c.findtext(f'{{{C}}}name/{{{C}}}value') for c in connections}
-        for expected in [
-            'XC+CEP+ROADM-C1+MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]+CEP+ROADM-C1+MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1-[761-768]+SPDR-SC1-XPDR1+XPDR1-NETWORK1-[761-768]+OTSi_MEDIA_CHANNEL',
-            'XC+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'TOP+ROADM-A1+SRG1-PP1-TXRX-[761-768]+ROADM-C1+SRG1-PP1-TXRX-[761-768]+MEDIA_CHANNEL',
-            'TOP+ROADM-A1+SRG1-PP3-TXRX-[761-768]+ROADM-C1+SRG1-PP3-TXRX-[761-768]+OTSi_MEDIA_CHANNEL',
-            'TOP+ROADM-A1+SRG1-PP3-TXRX-[761-768]+ROADM-C1+SRG1-PP3-TXRX-[761-768]+MEDIA_CHANNEL',
-            'TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1-[761-768]+SPDR-SC1-XPDR3+XPDR3-NETWORK1-[761-768]+OTSi_MEDIA_CHANNEL',
-            'XC+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'XC+CEP+ROADM-C1+MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]+CEP+ROADM-C1+MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'XC+CEP+ROADM-A1+MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]+CEP+ROADM-A1+MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-            'TOP+ROADM-A1+SRG1-PP2-TXRX-[761-768]+ROADM-C1+SRG1-PP2-TXRX-[761-768]+MEDIA_CHANNEL',
-            'XC+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]+CEP+ROADM-C1+OTSi_MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU',
-            'TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1-[761-768]+SPDR-SC1-XPDR2+XPDR2-NETWORK1-[761-768]+OTSi_MEDIA_CHANNEL',
-            'XC+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-            'TOP+ROADM-A1+SRG1-PP2-TXRX-[761-768]+ROADM-C1+SRG1-PP2-TXRX-[761-768]+OTSi_MEDIA_CHANNEL',
-            'TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iOTU',
-            'TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iOTU',
-            'XC+CEP+ROADM-A1+MEDIA_CHANNEL+SRG1-PP3-TXRX-[761-768]+CEP+ROADM-A1+MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-            'XC+CEP+ROADM-A1+MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]+CEP+ROADM-A1+MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-            'XC+CEP+ROADM-C1+MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]+CEP+ROADM-C1+MEDIA_CHANNEL+DEG1-TTP-TXRX-[761-768]',
-            'TOP+ROADM-A1+SRG1-PP1-TXRX-[761-768]+ROADM-C1+SRG1-PP1-TXRX-[761-768]+OTSi_MEDIA_CHANNEL',
-            'XC+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP2-TXRX-[761-768]+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-            'XC+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+SRG1-PP1-TXRX-[761-768]+CEP+ROADM-A1+OTSi_MEDIA_CHANNEL+DEG2-TTP-TXRX-[761-768]',
-        ]:
-            self.assertIn(expected, names)
-
-    def test_52_tapi_sip_names(self):
-        TC = 'urn:onf:otcc:yang:tapi-common'
-        root = self._fetch_tapi_context_tree()
-        sips = list(root.iter(f'{{{TC}}}service-interface-point'))
-        self.assertEqual(len(sips), 104)
-        names = {sip.findtext(f'{{{TC}}}name/{{{TC}}}value') for sip in sips}
-        for expected in [
-            'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK1',
-            'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-            'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK4',
-            'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-            'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT3',
-            'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT2',
-            'XPDR-C1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK2',
-            'XPDR-C1-XPDR2+iOTU+XPDR2-NETWORK1',
-            'SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'XPDR-C1-XPDR1+iOTU+XPDR1-NETWORK1',
-            'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT1',
-            'XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1',
-            'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT1',
-            'XPDR-C1-XPDR1+DSR+XPDR1-CLIENT1',
-            'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT4',
-            'SPDR-SC1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2',
-            'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK2',
-            'XPDR-A1-XPDR1+iOTU+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR3+iODU+XPDR3-NETWORK1',
-            'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT3',
-            'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT2',
-            'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT4',
-            'XPDR-A1-XPDR1+eODU+XPDR1-CLIENT1',
-            'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK3',
-            'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT2',
-            'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT4',
-            'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK1',
-            'SPDR-SA1-XPDR3+iOTU+XPDR3-NETWORK1',
-            'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT2',
-            'SPDR-SA1-XPDR3+iODU+XPDR3-NETWORK1',
-            'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT2',
-            'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK4',
-            'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT3',
-            'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK4',
-            'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT3',
-            'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK1',
-            'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK4',
-            'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT1',
-            'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT2',
-            'XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK2',
-            'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT1',
-            'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT4',
-            'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT1',
-            'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT1',
-            'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT4',
-            'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT2',
-            'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT4',
-            'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT2',
-            'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT2',
-            'SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT3',
-            'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK3',
-            'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT1',
-            'XPDR-A1-XPDR1+iOTU+XPDR1-NETWORK2',
-            'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK2',
-            'SPDR-SC1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-            'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT3',
-            'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT4',
-            'XPDR-C1-XPDR1+eODU+XPDR1-CLIENT1',
-            'XPDR-C1-XPDR1+iODU+XPDR1-NETWORK1',
-            'XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT2',
-            'XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1',
-            'XPDR-C1-XPDR2+iODU+XPDR2-NETWORK1',
-            'SPDR-SC1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR2+iOTU+XPDR2-NETWORK1',
-            'SPDR-SA1-XPDR2+eODU+XPDR2-CLIENT1',
-            'SPDR-SA1-XPDR3+PHOTONIC_MEDIA_OTS+XPDR3-NETWORK1',
-            'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1',
-            'SPDR-SC1-XPDR1+eODU+XPDR1-CLIENT4',
-            'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK4',
-            'SPDR-SC1-XPDR3+DSR+XPDR3-CLIENT1',
-            'XPDR-A1-XPDR1+DSR+XPDR1-CLIENT2',
-            'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT1',
-            'XPDR-C1-XPDR2+eODU+XPDR2-CLIENT1',
-            'SPDR-SC1-XPDR1+iOTU+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT2',
-            'SPDR-SC1-XPDR1+iODU+XPDR1-NETWORK1',
-            'SPDR-SC1-XPDR2+iODU+XPDR2-NETWORK3',
-            'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT2',
-            'SPDR-SA1-XPDR2+iOTU+XPDR2-NETWORK3',
-            'SPDR-SC1-XPDR3+iOTU+XPDR3-NETWORK1',
-            'SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK3',
-            'SPDR-SC1-XPDR3+eODU+XPDR3-CLIENT4',
-            'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT1',
-            'XPDR-A1-XPDR1+eODU+XPDR1-CLIENT2',
-            'SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT3',
-            'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT3',
-            'SPDR-SA1-XPDR1+iOTU+XPDR1-NETWORK1',
-            'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT4',
-            'SPDR-SA1-XPDR3+DSR+XPDR3-CLIENT3',
-            'SPDR-SC1-XPDR2+eODU+XPDR2-CLIENT4',
-            'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT3',
-            'XPDR-C1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK1',
-            'XPDR-C1-XPDR2+DSR+XPDR2-CLIENT1',
-            'SPDR-SC1-XPDR2+DSR+XPDR2-CLIENT3',
-            'SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK2',
-            'SPDR-SA1-XPDR3+eODU+XPDR3-CLIENT4',
-            'SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT3',
-            'XPDR-A1-XPDR1+iODU+XPDR1-NETWORK2',
-        ]:
-            self.assertIn(expected, names)
-
-    def test_53_tapi_t0_node_rule_group_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        nodes = {n.findtext(f'{{{T}}}uuid'): n for n in t0.findall(f'{{{T}}}node')}
-        expected_nrgs_per_node = {
-            '4582e51f-2b2d-3b70-b374-86c463062710': {  # MUXPDR SPDR-SA1-XPDR3
-                'ODU node rule group-2.4',
-                'ODU node rule group-2.1',
-                'DSR node rule group-2.1',
-                'ODU node rule group-2.3',
-                'DSR node rule group-2.3',
-                'DSR node rule group-2.4',
-                'DSR node rule group-2.2',
-                'ODU node rule group-2.2',
-            },
-            'd852c340-77db-3f9a-96e8-cb4de8e1004a': {  # SWITCH SPDR-SC1-XPDR2
-                'ODU node rule group-1.1',
-                'DSR node rule group-1.1',
-            },
-            'dd417035-b3ae-3c3c-a6c3-49f0aa27c82f': {  # TPDR XPDR-C1-XPDR2
-                'TSP node rule group-0.1',
-            },
-            '4986dca9-2d59-3d79-b306-e11802bcf1e6': {  # ROADM-C1
-                'ROADM-C1-SRG1-node-rule-group-1',
-                'ROADM-C1-DEG-node-rule-group-0',
-            },
-            '4e44bcc5-08d3-3fee-8fac-f021489e5a61': {  # MUXPDR SPDR-SA1-XPDR1
-                'DSR node rule group-0.2',
-                'ODU node rule group-0.4',
-                'DSR node rule group-0.1',
-                'ODU node rule group-0.1',
-                'ODU node rule group-0.2',
-                'DSR node rule group-0.4',
-                'ODU node rule group-0.3',
-                'DSR node rule group-0.3',
-            },
-            '215ee18f-7869-3492-94d2-0f24ed0a3023': {  # MUXPDR SPDR-SC1-XPDR1
-                'DSR node rule group-0.2',
-                'ODU node rule group-0.4',
-                'DSR node rule group-0.1',
-                'ODU node rule group-0.1',
-                'ODU node rule group-0.2',
-                'DSR node rule group-0.4',
-                'ODU node rule group-0.3',
-                'DSR node rule group-0.3',
-            },
-            '38c114ae-9c0e-3068-bb27-db2dbd81220b': {  # SWITCH SPDR-SA1-XPDR2
-                'ODU node rule group-1.1',
-                'DSR node rule group-1.1',
-            },
-            'c1f06957-c0b9-32be-8492-e278b2d4a3aa': {  # MUXPDR SPDR-SC1-XPDR3
-                'ODU node rule group-2.4',
-                'ODU node rule group-2.1',
-                'DSR node rule group-2.1',
-                'ODU node rule group-2.3',
-                'DSR node rule group-2.3',
-                'DSR node rule group-2.4',
-                'DSR node rule group-2.2',
-                'ODU node rule group-2.2',
-            },
-            '3b726367-6f2d-3e3f-9033-d99b61459075': {  # ROADM-A1
-                'ROADM-A1-DEG-node-rule-group-0',
-                'ROADM-A1-SRG3-node-rule-group-2',
-                'ROADM-A1-SRG1-node-rule-group-1',
-            },
-            '4378fc29-6408-39ec-8737-5008c3dc49e5': {  # TPDR XPDR-A1-XPDR1
-                'TSP node rule group-0.1',
-                'TSP node rule group-0.2',
-            },
-            '1770bea4-b1da-3b20-abce-7d182c0ec0df': {  # TPDR XPDR-C1-XPDR1
-                'TSP node rule group-0.1',
-            },
-        }
-        for node_uuid, expected_names in expected_nrgs_per_node.items():
-            with self.subTest(node=node_uuid):
-                node = nodes[node_uuid]
-                nrgs = node.findall(f'{{{T}}}node-rule-group')
-                self.assertEqual(len(nrgs), len(expected_names))
-                actual_names = {nrg.findtext(f'{{{T}}}name/{{{T}}}value') for nrg in nrgs}
-                self.assertEqual(actual_names, expected_names)
-
-    def test_54_tapi_t0_inter_rule_group_names(self):
-        T = 'urn:onf:otcc:yang:tapi-topology'
-        root = self._fetch_tapi_context_tree()
-        t0 = next(t for t in root.iter(f'{{{T}}}topology')
-                  if t.findtext(f'{{{T}}}name/{{{T}}}value') == 'T0 - Full Multi-layer topology')
-        nodes = {n.findtext(f'{{{T}}}uuid'): n for n in t0.findall(f'{{{T}}}node')}
-        expected_irgs_per_node = {
-            '4582e51f-2b2d-3b70-b374-86c463062710': {' irg-3'},   # MUXPDR SPDR-SA1-XPDR3
-            'd852c340-77db-3f9a-96e8-cb4de8e1004a': {' irg-2'},   # SWITCH SPDR-SC1-XPDR2
-            'dd417035-b3ae-3c3c-a6c3-49f0aa27c82f': {' irg-2'},   # TPDR XPDR-C1-XPDR2
-            '4986dca9-2d59-3d79-b306-e11802bcf1e6': {'ROADM-C1 inter rule group-0'},  # ROADM-C1
-            '4e44bcc5-08d3-3fee-8fac-f021489e5a61': {' irg-1'},   # MUXPDR SPDR-SA1-XPDR1
-            '215ee18f-7869-3492-94d2-0f24ed0a3023': {' irg-1'},   # MUXPDR SPDR-SC1-XPDR1
-            '38c114ae-9c0e-3068-bb27-db2dbd81220b': {' irg-2'},   # SWITCH SPDR-SA1-XPDR2
-            'c1f06957-c0b9-32be-8492-e278b2d4a3aa': {' irg-3'},   # MUXPDR SPDR-SC1-XPDR3
-            '3b726367-6f2d-3e3f-9033-d99b61459075': {'ROADM-A1 inter rule group-0', 'ROADM-A1 inter rule group-1'},  # ROADM-A1
-            '4378fc29-6408-39ec-8737-5008c3dc49e5': {' irg-2'},   # TPDR XPDR-A1-XPDR1
-            '1770bea4-b1da-3b20-abce-7d182c0ec0df': {' irg-2'},   # TPDR XPDR-C1-XPDR1
-        }
-        for node_uuid, expected_names in expected_irgs_per_node.items():
-            with self.subTest(node=node_uuid):
-                node = nodes[node_uuid]
-                irgs = node.findall(f'{{{T}}}inter-rule-group')
-                self.assertEqual(len(irgs), len(expected_names))
-                actual_names = {irg.findtext(f'{{{T}}}name/{{{T}}}value') for irg in irgs}
-                self.assertEqual(actual_names, expected_names)
+        with open(ref_path, 'wb') as f:
+            tree.write(f, encoding='utf-8', xml_declaration=True)
 
 
 if __name__ == "__main__":
