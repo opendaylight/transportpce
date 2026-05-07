@@ -163,8 +163,10 @@ public class NetworkModelNotificationHandler implements NetworkListener {
             State ztoAState = ztoA.getResource().getState();
             TerminationPoint tp = (TerminationPoint) ztoA.getResource().getResource();
             if (topologyChanges.containsKey(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
-                && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
-                .equals(ztoAState)) {
+                    && topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())) != null
+                    && topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState() != null
+                    && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
+                        .equals(ztoAState)) {
                 LOG.debug("updating ztoa tp {}", ztoA);
                 State updatedState = topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
                     .getState();
@@ -211,9 +213,14 @@ public class NetworkModelNotificationHandler implements NetworkListener {
             String atoZid = atoZ.getId();
             State atoZState = atoZ.getResource().getState();
             TerminationPoint tp = (TerminationPoint) atoZ.getResource().getResource();
+            LOG.info("atoZState={}", atoZState);
+            LOG.info("topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())) = {}",
+                    topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())));
             if (topologyChanges.containsKey(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
-                && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
-                .equals(atoZState)) {
+                    && topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())) != null
+                    && topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState() != null
+                    && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
+                        .equals(atoZState)) {
                 LOG.debug("updating atoz tp {}", atoZ);
                 State updatedState = topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
                     .getState();

@@ -9,7 +9,10 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.util.List;
 import java.util.Optional;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -35,30 +38,30 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();
-            if (rootNode.dataBefore() == null) {
-                continue;
-            }
-            String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNodeAugment.class)
-                    .getNetconfNode();
-            switch (rootNode.modificationType()) {
-                case DELETE:
+            switch (rootNode) {
+                case DataObjectWritten<Node> writtenNode -> {
+                    // Do nothing, just wait for the node to be connected and then process it in the DataObjectModified
+                    // case
+                }
+                case DataObjectDeleted<Node> deletedNode -> {
+                    String nodeId = deletedNode.dataBefore().key().getNodeId().getValue();
                     this.tapiNetworkModelService.deleteTapinode(nodeId);
-                    // TODO -> unregistration to NETCONF stream not yet supported
-                    // onDeviceDisConnected(nodeId);
                     LOG.info("Device {} correctly disconnected from controller", nodeId);
-                    break;
-                case SUBTREE_MODIFIED:
-                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNodeAugment.class)
+                }
+                case DataObjectModified<Node> modifiedNode -> {
+                    String nodeId = modifiedNode.dataAfter().key().getNodeId().getValue();
+                    NetconfNode netconfNodeBefore = modifiedNode.dataBefore().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode();
+                    NetconfNode netconfNodeAfter = modifiedNode.dataAfter().augmentation(NetconfNodeAugment.class)
                             .getNetconfNode();
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
-                        Optional<AvailableCapability> deviceCapabilityOpt = netconfNodeAfter
-                            .getAvailableCapabilities().getAvailableCapability().stream()
-                            .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                            .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
-                            .findFirst();
+                        Optional<AvailableCapability> deviceCapabilityOpt = netconfNodeAfter.getAvailableCapabilities()
+                                .getAvailableCapability().stream()
+                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
+                                .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
+                                .findFirst();
                         if (deviceCapabilityOpt.isEmpty()) {
                             LOG.error("Unable to get openroadm-device-capability");
                             return;
@@ -71,10 +74,8 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
                             && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.warn("Node: {} is being disconnected", nodeId);
                     }
-                    break;
-                default:
-                    LOG.debug("Unknown modification type {}", rootNode.modificationType().name());
-                    break;
+
+                }
             }
         }
     }

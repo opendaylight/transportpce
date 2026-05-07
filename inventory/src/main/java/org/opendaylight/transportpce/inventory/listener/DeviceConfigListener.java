@@ -7,12 +7,12 @@
  */
 package org.opendaylight.transportpce.inventory.listener;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -44,30 +44,24 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
 
     @Override
     public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
-
-        //LOG.debug("testing np1: {}", changes.toString());
-        String openROADMversion = "";
-        List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
-        for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
-            DataObjectModification<Node> rootNode = device.getRootNode();
-            String nodeId = rootNode.dataAfter().key().getNodeId().getValue();
-
-            LOG.debug("nodeId {}", nodeId);
-
-            NetconfNode netconfNode = rootNode.dataAfter().augmentation(NetconfNodeAugment.class).getNetconfNode();
-            ConnectionStatus connectionStatus =
-                    netconfNode.getConnectionStatus();
-            long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                    .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                    .count();
-            LOG.debug("DCL Modification Type {}", device.getRootNode().modificationType());
-            LOG.debug("DCL Capability Count {}", count);
-            LOG.debug("DCL Connection Status {}", connectionStatus);
-            if (isCreate(device) || isUpdate(device)) {
-                LOG.info("Node {} was modified", nodeId);
-                processModifiedSubtree(nodeId, netconfNode, openROADMversion);
-            } else if (isDelete(device)) {
-                LOG.info("Node {} was deleted", nodeId);
+        for (DataTreeModification<Node> change : changes) {
+            DataObjectModification<Node> rootNode = change.getRootNode();
+            switch (rootNode) {
+                case DataObjectModified<Node> modifiedNode -> {
+                    String nodeId = modifiedNode.dataAfter().key().getNodeId().getValue();
+                    NetconfNode netconfNode = modifiedNode.dataAfter().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode();
+                    LOG.info("Node {} was modified", nodeId);
+                    processModifiedSubtree(nodeId, netconfNode, "");
+                }
+                case DataObjectDeleted<Node> deletedNode -> {
+                    String nodeId = deletedNode.dataBefore().key().getNodeId().getValue();
+                    LOG.info("Node {} was deleted", nodeId);
+                }
+                default -> {
+                    LOG.warn("Unknown DataObjectModification type {}", rootNode);
+                    throw new IllegalStateException("Unexpected value: " + rootNode);
+                }
             }
         }
     }
@@ -84,12 +78,12 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      */
     private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion) {
         ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
-        /*long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
+        long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                 .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)).count();
         if (count < 1) {
             LOG.info("No {} capable device was found", StringConstants.OPENROADM_DEVICE_MODEL_NAME);
             return;
-        } */
+        }
         if (ConnectionStatus.Connected.equals(connectionStatus)) {
             LOG.info("DCL The device is in {} state", connectionStatus);
             deviceInventory.initializeDevice(nodeId, openROADMversion);
@@ -101,49 +95,4 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
         }
     }
 
-    /**
-     * Filters the {@link StringConstants#DEFAULT_NETCONF_NODEID} nodes from the provided {@link Collection}.
-     *
-     */
-    private static List<DataTreeModification<Node>> getRealDevicesOnly(Collection<DataTreeModification<Node>> changes) {
-        return changes.stream()
-                .filter(change ->
-                    (change.getRootNode().dataAfter() != null
-                        && !StringConstants.DEFAULT_NETCONF_NODEID
-                            .equalsIgnoreCase(change.getRootNode().dataAfter().key().getNodeId().getValue())
-                        && change.getRootNode().dataAfter().augmentation(NetconfNodeAugment.class)
-                            .getNetconfNode() != null)
-                    || (change.getRootNode().dataBefore() != null
-                        && !StringConstants.DEFAULT_NETCONF_NODEID
-                            .equalsIgnoreCase(change.getRootNode().dataBefore().key().getNodeId().getValue())
-                        && change.getRootNode().dataBefore().augmentation(NetconfNodeAugment.class)
-                            .getNetconfNode() != null))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * In the filtered collection checks if the change is a new write.
-     *
-     */
-    private static boolean isCreate(DataTreeModification<Node> change) {
-        return change.getRootNode().dataBefore() == null && change.getRootNode().dataAfter() != null
-                && ModificationType.WRITE.equals(change.getRootNode().modificationType());
-    }
-
-    /**
-     * In the filtered collection checks if the modification is update.
-     *
-     */
-    private static boolean isUpdate(DataTreeModification<Node> change) {
-        return ModificationType.SUBTREE_MODIFIED.equals(change.getRootNode().modificationType());
-    }
-
-    /**
-     * In the filtered collection checks if the node was deleted.
-     *
-     */
-    private static boolean isDelete(DataTreeModification<Node> change) {
-        return change.getRootNode().dataBefore() != null && change.getRootNode().dataAfter() == null
-                && ModificationType.DELETE.equals(change.getRootNode().modificationType());
-    }
 }

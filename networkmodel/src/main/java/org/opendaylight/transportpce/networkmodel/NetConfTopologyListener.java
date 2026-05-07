@@ -16,7 +16,10 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -86,74 +89,77 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     @Override
     public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
-        for (DataTreeModification<Node> change : changes) {
-            DataObjectModification<Node> rootNode = change.getRootNode();
-            if (rootNode.dataBefore() == null) {
-                continue;
+        DataObjectModification<Node> rootNode = changes.getLast().getRootNode();
+        switch (rootNode) {
+            case DataObjectWritten<Node> writtenNode -> {
+                // Do nothing, just wait for the node to be connected and then process it in the DataObjectModified
+                // case
+                LOG.info("New node {} detected, waiting for it to be connected",
+                        writtenNode.dataAfter().key().getNodeId().getValue());
+                LOG.info("writtenNode: {}", writtenNode.dataAfter());
             }
-            String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNodeAugment.class)
-                    .getNetconfNode();
-            switch (rootNode.modificationType()) {
-                case DELETE:
-                    NodeDatamodelType type = portMapping.getNode(nodeId).getDatamodelType();
-                    if (type != null && type.getName().equalsIgnoreCase("OPENCONFIG")) {
-                        if (this.networkModelService.deleteOpenConfignode(nodeId)) {
-                            onDeviceDisConnected(nodeId);
-                            LOG.info("Device {} correctly disconnected from controller", nodeId);
-                        }
-                    } else {
-                        if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
-                            onDeviceDisConnected(nodeId);
-                            LOG.info("Device {} correctly disconnected from controller", nodeId);
-                        }
+            case DataObjectDeleted<Node> deletedNode -> {
+                String nodeId = deletedNode.dataBefore().key().getNodeId().getValue();
+                NodeDatamodelType type = null;
+                if (portMapping.getNode(nodeId) != null) {
+                    type = portMapping.getNode(nodeId).getDatamodelType();
+                }
+                if (type != null && type.getName().equalsIgnoreCase("OPENCONFIG")) {
+                    if (this.networkModelService.deleteOpenConfignode(nodeId)) {
+                        onDeviceDisConnected(nodeId);
+                        LOG.info("Device {} correctly disconnected from controller", nodeId);
                     }
-                    break;
-                case SUBTREE_MODIFIED:
-                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNodeAugment.class)
-                            .getNetconfNode();
-                    if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
-                            && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
-                        LOG.info("Connecting Node: {}", nodeId);
-                        Optional<AvailableCapability> deviceCapability = null;
-                        deviceCapability =
-                              netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
-                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)
-                                && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
+                } else {
+                    if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
+                        onDeviceDisConnected(nodeId);
+                        LOG.info("Device {} correctly disconnected from controller", nodeId);
+                    }
+                }
+            }
+            case DataObjectModified<Node> modifiedNode -> {
+                NetconfNode netconfNodeBefore = modifiedNode.dataBefore().augmentation(NetconfNodeAugment.class)
+                        .getNetconfNode();
+                NetconfNode netconfNodeAfter = modifiedNode.dataAfter().augmentation(NetconfNodeAugment.class)
+                        .getNetconfNode();
+                String nodeId = modifiedNode.dataBefore().key().getNodeId().getValue();
+                if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
+                        && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
+                    LOG.info("Connecting Node: {}", nodeId);
+                    Optional<AvailableCapability> deviceCapability = netconfNodeAfter
+                            .getAvailableCapabilities().getAvailableCapability().stream()
+                                    .filter(cp -> cp.getCapability()
+                                            .contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)
+                                                && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
+                                    .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
+                                    .findFirst();
+                    if (!deviceCapability.isEmpty()) {
+                        this.networkModelService
+                                .createOpenRoadmNode(nodeId, deviceCapability.orElseThrow().getCapability());
+                        onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
+                        LOG.info("OpenRoadm device {} correctly connected to controller", nodeId);
+                    } else {
+                        deviceCapability = netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                                .filter(cp -> cp.getCapability()
+                                        .matches("(.*)" + StringConstants.OPENCONFIG_XPDR_DEVICE_MODEL))
                                 .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
                                 .findFirst();
-                        if (!deviceCapability.isEmpty()) {
-                            this.networkModelService
-                                    .createOpenRoadmNode(nodeId, deviceCapability.orElseThrow().getCapability());
-                            onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
-                            LOG.info("OpenRoadm device {} correctly connected to controller", nodeId);
-                        } else {
-                            deviceCapability =
-                                    netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
-                                            .filter(cp -> cp.getCapability()
-                                                    .matches("(.*)" + StringConstants.OPENCONFIG_XPDR_DEVICE_MODEL))
-                                            .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
-                                            .findFirst();
-                            if (deviceCapability.isEmpty()) {
-                                LOG.error("Unable to get openroadm-device-capability or openconfig-device-capability");
-                                return;
-                            }
-                            IpAddress ipAddress = netconfNodeAfter.getHost().getIpAddress();
-                            this.networkModelService
-                                    .createOpenConfigNode(nodeId, deviceCapability.orElseThrow().getCapability(),
-                                            ipAddress);
-                            onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
-                            LOG.info("OpenConfig device {} correctly connected to controller", nodeId);
+                        if (deviceCapability.isEmpty()) {
+                            LOG.error("Unable to get openroadm-device-capability or openconfig-device-capability");
+                            return;
                         }
+                        IpAddress ipAddress = netconfNodeAfter.getHost().getIpAddress();
+                        this.networkModelService.createOpenConfigNode(
+                                nodeId,
+                                deviceCapability.orElseThrow().getCapability(),
+                                ipAddress);
+                        onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
+                        LOG.info("OpenConfig device {} correctly connected to controller", nodeId);
                     }
-                    if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
-                            && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
-                        LOG.warn("Node: {} is being disconnected", nodeId);
-                    }
-                    break;
-                default:
-                    LOG.debug("Unknown modification type {}", rootNode.modificationType().name());
-                    break;
+                }
+                if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
+                        && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
+                    LOG.warn("Node: {} is being disconnected", nodeId);
+                }
             }
         }
     }

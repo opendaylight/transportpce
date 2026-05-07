@@ -15,9 +15,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.DELETE;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.SUBTREE_MODIFIED;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.WRITE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,15 +93,12 @@ public class ServiceListenerTest {
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        when(service.modificationType()).thenReturn(DELETE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).modificationType();
-        verify(service, times(2)).dataBefore();
-        verify(service, never()).dataAfter();
+        verify(service, times(1)).dataBefore();
         try {
             verify(notificationPublishService, never()).putNotification(any(PublishNotificationAlarmService.class));
         } catch (InterruptedException e) {
@@ -121,15 +115,14 @@ public class ServiceListenerTest {
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceDown = buildService(State.OutOfService, AdminStates.InService);
-        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.dataAfter()).thenReturn(serviceDown);
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
+
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).modificationType();
-        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataBefore();
         verify(service, times(1)).dataAfter();
         try {
             verify(notificationPublishService, times(1))
@@ -146,16 +139,14 @@ public class ServiceListenerTest {
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
+        when(service.dataAfter()).thenReturn(buildService(State.InService, AdminStates.InService));
 
-        when(service.modificationType()).thenReturn(SUBTREE_MODIFIED);
-        when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(2)).modificationType();
-        verify(service, times(2)).dataBefore();
-        verify(service, never()).dataAfter();
+        verify(service, never()).dataBefore();
+        verify(service, times(1)).dataAfter();
         try {
             verify(notificationPublishService, never()).putNotification(any(PublishNotificationAlarmService.class));
         } catch (InterruptedException e) {
@@ -175,7 +166,6 @@ public class ServiceListenerTest {
         Services serviceAfter = new ServicesBuilder(buildService(State.OutOfService, AdminStates.InService))
                 .setServiceResiliency(serviceResiliency)
                 .build();
-        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore())
             .thenReturn(new ServicesBuilder(buildService(State.InService, AdminStates.InService))
                         .setServiceResiliency(serviceResiliency)
@@ -210,14 +200,18 @@ public class ServiceListenerTest {
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).modificationType();
-        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataBefore();
         verify(service, times(1)).dataAfter();
-//        verify(servicehandler, times(1)).serviceDelete(any());
+        verify(serviceDelete, times(1)).invoke(any());
 
-        when(service.modificationType()).thenReturn(DELETE);
+        final DataObjectDeleted<Services> serviceStep2 = mock();
+        when(ch.getRootNode()).thenReturn(serviceStep2);
+        when(serviceStep2.dataBefore())
+                .thenReturn(new ServicesBuilder(buildService(State.OutOfService, AdminStates.InService))
+                        .setServiceResiliency(serviceResiliency)
+                        .build());
         listener.onDataTreeChanged(changes);
-//        verify(servicehandler, times(1)).serviceCreate(any());
+        verify(serviceCreate, times(1)).invoke(any());
     }
 
     @Test
@@ -229,21 +223,18 @@ public class ServiceListenerTest {
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceAfter = buildService(State.OutOfService, AdminStates.InService);
-        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.dataAfter()).thenReturn(serviceAfter);
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).modificationType();
-        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataBefore();
         verify(service, times(1)).dataAfter();
-//        verify(servicehandler, times(0)).serviceDelete(any());
+        verify(serviceDelete, never()).invoke(any());
 
-        when(service.modificationType()).thenReturn(DELETE);
         listener.onDataTreeChanged(changes);
-//        verify(servicehandler, times(0)).serviceCreate(any());
+        verify(serviceCreate, never()).invoke(any());
     }
 
     private Services buildService(State state, AdminStates adminStates) {

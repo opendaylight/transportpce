@@ -17,7 +17,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -83,20 +86,25 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Services> change : changes) {
             DataObjectModification<Services> rootService = change.getRootNode();
-            if (rootService.dataBefore() == null) {
-                continue;
-            }
-            String serviceInputName = rootService.dataBefore().key().getServiceName();
-            switch (rootService.modificationType()) {
-                case DELETE:
+            switch (rootService) {
+                case DataObjectModified<Services> writtenService -> {
+                    String serviceInputName = writtenService.dataAfter().key().getServiceName();
+                    LOG.info("Service {} modified in controller", serviceInputName);
+                }
+                case DataObjectDeleted<Services> deletedService -> {
+                    String serviceInputName = deletedService.dataBefore().key().getServiceName();
                     LOG.info("Service {} correctly deleted from controller", serviceInputName);
                     if (mapServiceInputReroute.get(serviceInputName) != null) {
                         serviceRerouteStep2(serviceInputName);
                     }
-                    break;
-                case WRITE:
-                    Services inputBefore = rootService.dataBefore();
-                    Services inputAfter = rootService.dataAfter();
+                }
+                case DataObjectWritten<Services> modifiedService -> {
+                    Services inputBefore = modifiedService.dataBefore();
+                    Services inputAfter = modifiedService.dataAfter();
+                    String serviceInputName = inputAfter.key().getServiceName();
+                    if (inputBefore == null) {
+                        continue;
+                    }
                     if (inputBefore.getOperationalState() == State.InService
                             && inputAfter.getOperationalState() == State.OutOfService) {
                         LOG.info("Service {} is becoming outOfService", serviceInputName);
@@ -154,10 +162,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                             mapServiceInputReroute.remove(serviceInputName);
                         }
                     }
-                    break;
-                default:
-                    LOG.debug("Unknown modification type {}", rootService.modificationType().name());
-                    break;
+                }
             }
         }
     }
