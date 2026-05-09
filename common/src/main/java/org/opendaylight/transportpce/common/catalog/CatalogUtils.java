@@ -129,7 +129,7 @@ public class CatalogUtils {
     public double getPceTxTspChannelSpacing(String operationalModeId) {
         double baudRate;
         double maxRollOff;
-        if (operationalModeId.startsWith("OR")) {
+        if (operationalModeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
             DataObjectIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
@@ -207,7 +207,7 @@ public class CatalogUtils {
         SpecificOperationalMode speTspOM = null;
         RatioDB minOOBOsnrSingleChannelValue;
         RatioDB minOOBOsnrMultiChannelValue;
-        if (operationalModeId.startsWith("OR")) {
+        if (operationalModeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
             DataObjectIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
@@ -308,7 +308,7 @@ public class CatalogUtils {
         XponderPluggableOpenroadmOperationalMode orTspOM = null;
         SpecificOperationalMode speTspOM = null;
         Map<PenaltiesKey, Penalties> penaltiesMap = null;
-        if (operationalModeId.startsWith("OR")) {
+        if (operationalModeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
             var omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
