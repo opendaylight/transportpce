@@ -414,27 +414,33 @@ public class PceOpticalNode implements PceNode {
 
     @Override
     public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
+        String modeId = StringConstants.UNKNOWN_MODE;
         if (tp.getSupportedOperationalModes() == null) {
             LOG.warn("PceOpticalNode:getOperationalMode: NetworkPort {} has no operational mode declared compatible"
                 + " with service type", tp);
-            return StringConstants.UNKNOWN_MODE;
+            return modeId;
         }
         for (Map.Entry<OperationalModeKey, OperationalMode> mode : tp.getSupportedOperationalModes()
                 .getOperationalMode().entrySet()) {
-            String modeId = mode.getValue().getModeId();
-            if (modeId.startsWith("OR")) {
+            modeId = mode.getValue().getModeId();
+            // Even bookended modes can start with "OR"
+            // Logic should be to split the openroadm operational modes with delimiter "-"
+            if (modeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
                 if (mode.getKey().toString().contains(StringConstants.SERVICE_TYPE_RATE
                         .get(this.serviceType).toCanonicalString())) {
                     LOG.info("getOperationalMode: NetworkPort {}  has {} operational mode declared", tp,
                             mode.getKey().toString());
+                    // TODO: We may need to scan for all modes supported on the port, esp, if we are using bookended
+                    //  modes
                     return modeId;
                 }
+            } else {
+                LOG.warn("getOperationalMode: NetworkPort {}  has operational mode {} that is not an OpenROADM mode"
+                         + " for a given service type {}", tp, modeId, this.serviceType);
+                modeId = StringConstants.UNKNOWN_MODE;
             }
-            return modeId;
         }
-        LOG.warn("PceOpticalNode:getOperationalMode: NetworkPort {}  has no operational mode declared compatible"
-            + " with service type", tp);
-        return StringConstants.UNKNOWN_MODE;
+        return modeId;
     }
 
     @Override
