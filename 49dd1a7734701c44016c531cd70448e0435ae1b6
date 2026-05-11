@@ -33,6 +33,29 @@
       "message": "recheck",
       "revId": "49dd1a7734701c44016c531cd70448e0435ae1b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a8cb72_06364929",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-11T14:39:24Z",
+      "side": 1,
+      "message": "Do we really need this intermediate variable? Since we have an if-else structure below, we could directly set the adequate enumeration value in both cases!",
+      "range": {
+        "startLine": 284,
+        "startChar": 26,
+        "endLine": 284,
+        "endChar": 43
+      },
+      "revId": "49dd1a7734701c44016c531cd70448e0435ae1b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
