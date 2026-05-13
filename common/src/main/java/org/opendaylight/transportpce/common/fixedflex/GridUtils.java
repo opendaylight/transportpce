@@ -180,7 +180,7 @@ public final class GridUtils {
                                                       int precision) {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
                 Decimal64.valueOf(computeCentralFrequencyForOpenConfig(minFrequency, maxFrequency)
-                        .setScale(precision, RoundingMode.HALF_EVEN)));
+                        .setScale(precision, RoundingMode.HALF_EVEN)).scaleTo(8));
     }
 
     /**
