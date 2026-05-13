@@ -104,14 +104,14 @@ public class TapiLinkImpl implements TapiLink {
     public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
             String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid tapiTopoUuid) {
+            Set<String> transLayerNameList, Uuid topoUuid) {
 
         LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(tapiTopoUuid)
+            .setTopologyUuid(topoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", srcNodeId, srcNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
@@ -119,7 +119,7 @@ public class TapiLinkImpl implements TapiLink {
                 new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NodeEdgePoint destNep = new NodeEdgePointBuilder()
-            .setTopologyUuid(tapiTopoUuid)
+            .setTopologyUuid(topoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", dstNodeId, dstNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
@@ -145,7 +145,7 @@ public class TapiLinkImpl implements TapiLink {
                     LOG.error("unable to create Cep for link {} which was not found in OR Topology", linkiid);
                     break;
                 }
-                createCepForLink(orLinkFromLinkId);
+                createCepForLink(orLinkFromLinkId, topoUuid);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
@@ -268,7 +268,7 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     public void createCepForLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-            .topology.rev180226.networks.network.Link link) {
+            .topology.rev180226.networks.network.Link link, Uuid topoUuid) {
         //Retrieve OMS from OR link for both end
         //Build OTS media connection End Point spec
         //Build Cep and put them in DataStore
@@ -378,14 +378,13 @@ public class TapiLinkImpl implements TapiLink {
             .setOtsImpairments(otsImpairmentListA).build();
         OtsMediaConnectionEndPointSpec otsMCCepSpecZ = new OtsMediaConnectionEndPointSpecBuilder()
             .setOtsImpairments(otsImpairmentListZ).build();
-        LOG.debug("LINKIMPL365 OtsMediaConnectionEndSpec for link {} on A end is {}",
+        LOG.debug("TapiLinkImpl:createCepForLink OtsMediaConnectionEndSpec for link {} on A end is {}",
             link.getLinkId(), otsMCmCepSpecA);
-        LOG.debug("LINK LINKIMPL366 OtsMediaConnectionEndSpec for link {} on Z end is {}",
+        LOG.debug("TapiLinkImpl:createCepForLink OtsMediaConnectionEndSpec for link {} on Z end is {}",
             link.getLinkId(), otsMCCepSpecZ);
 
 
-        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(
-            TapiConstants.T0_FULL_MULTILAYER_UUID);
+        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topoUuid);
 
         String intermediateSupNodeId = getSupportingNodeFromNodeId(link.getSource().getSourceNode().getValue());
         String intermediateTp = link.getSource().getSourceTp().getValue();
@@ -393,17 +392,17 @@ public class TapiLinkImpl implements TapiLink {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCmCepSpecA, false);
-        LOG.debug("TAPILINKIMPLLINE378 CepSpec is {}", otsMCmCepSpecA);
-        LOG.debug("TAPILINKIMPLLINE379 Cep Node A OTS is {}", cepNodeAots);
+        LOG.debug("TapiLinkImpl:createCepForLink CepSpec is {}", otsMCmCepSpecA);
+        LOG.debug("TapiLinkImpl:createCepForLink Cep Node A OTS is {}", cepNodeAots);
 
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots, topoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms, topoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
         intermediateSupNodeId = getSupportingNodeFromNodeId(link.getDestination().getDestNode().getValue());
         intermediateTp = link.getDestination().getDestTp().getValue();
@@ -411,13 +410,13 @@ public class TapiLinkImpl implements TapiLink {
                 cepNodeZots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots, topoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms, topoUuid);
         LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
 
     }
@@ -498,10 +497,8 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     @Override
-    public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
-        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
-            .toString());
+    public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId,
+            Uuid topoUuid) {
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA_OTS, sourceTpId)
                     .getBytes(StandardCharsets.UTF_8))
@@ -512,7 +509,7 @@ public class TapiLinkImpl implements TapiLink {
                     DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Topology.class, new TopologyKey(topoUuid))
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA)
@@ -534,7 +531,7 @@ public class TapiLinkImpl implements TapiLink {
                     DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Topology.class, new TopologyKey(topoUuid))
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", destNodeId, TapiConstants.PHTNC_MEDIA)
@@ -557,10 +554,8 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     @Override
-    public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
-        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
-            .toString());
+    public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId,
+        Uuid topoUuid) {
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA_OTS, sourceTpId)
                     .getBytes(StandardCharsets.UTF_8))
@@ -571,7 +566,7 @@ public class TapiLinkImpl implements TapiLink {
                     DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Topology.class, new TopologyKey(topoUuid))
                         .child(Node.class, new NodeKey(
                             //nodeUuid
                             new Uuid(UUID.nameUUIDFromBytes(
@@ -594,7 +589,7 @@ public class TapiLinkImpl implements TapiLink {
                     DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Topology.class, new TopologyKey(topoUuid))
                         .child(Node.class, new NodeKey(
                             //node1Uuid
                             new Uuid(UUID.nameUUIDFromBytes(
@@ -619,7 +614,7 @@ public class TapiLinkImpl implements TapiLink {
 
     public void putRdmCepInTopoContextAndAddToCepList(String nodeId, String tpId, String qual,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
-            cep) {
+            cep, Uuid topoUuid) {
         LOG.debug("TAPILINKIMPLLINE566 nodeId {}, tpId {}, qual {}", nodeId, tpId, qual);
         String nepId = String.join("+", nodeId, qual, tpId);
         String nodeNepId = String.join("+", nodeId, TapiConstants.PHTNC_MEDIA);
@@ -632,8 +627,7 @@ public class TapiLinkImpl implements TapiLink {
         LOG.debug("TAPILINKIMPL570, Before calling TapiContext.updateTopologyWith CEP cepMap is {}", this.cepMap);
         tapiContext.updateTopologyWithCep(
             //TopoUuid
-            new Uuid(UUID.nameUUIDFromBytes(
-                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()),
+            topoUuid,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(nodeNepId.getBytes(StandardCharsets.UTF_8)).toString()),
             //nepUuid,

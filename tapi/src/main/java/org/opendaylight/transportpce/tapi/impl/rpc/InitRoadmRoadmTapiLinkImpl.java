@@ -46,8 +46,8 @@ public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implemen
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
             TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-            this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
-            this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
+            this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp, tapiTopoUuid),
+            this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp, tapiTopoUuid),
             Set.of(LayerProtocolName.PHOTONICMEDIA),
             Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
             tapiTopoUuid);
