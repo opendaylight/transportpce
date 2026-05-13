@@ -34,6 +34,23 @@
       "message": "recheck",
       "revId": "44201a47bbe8f82d6e2b33123938faa262384fc0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "607058bd_e952a070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-05-13T08:54:35Z",
+      "side": 1,
+      "message": "Thanks Joakim for having fixed that bug. Outside the fact that it must be rebased, LGTM",
+      "revId": "44201a47bbe8f82d6e2b33123938faa262384fc0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
