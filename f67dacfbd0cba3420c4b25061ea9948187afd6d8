@@ -17,6 +17,29 @@
       "message": "Thanks Joakim for this contribution. Happy to have a test for this class. Outside the fact that it must be rebased and that conflict must be solved, LGTM",
       "revId": "f67dacfbd0cba3420c4b25061ea9948187afd6d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dda47af_46088116",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImplTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-18T14:44:41Z",
+      "side": 1,
+      "message": "Why not using new Uuid(\"393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7\") directly as for OTN_TOPOLOGY_UUID?",
+      "range": {
+        "startLine": 85,
+        "startChar": 12,
+        "endLine": 86,
+        "endChar": 105
+      },
+      "revId": "f67dacfbd0cba3420c4b25061ea9948187afd6d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
