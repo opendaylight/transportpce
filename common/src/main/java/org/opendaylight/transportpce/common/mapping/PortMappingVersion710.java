@@ -1351,6 +1351,13 @@ public class PortMappingVersion710 {
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
                 McCapabilityProfile mcCapabilityProfile = mcCapProfile.getValue();
+                // if slot-width in mc-cap is default (50 GHz), then verify this value if it correct
+                // based on the center frequency granularity provided in the profile
+                // As per the 7.1 device model WP, slot-width , min/max-slots are not used for xponder cap.
+                // TODO: read the min-edge-freq/max-edge-freq from the profile and check if the default min/max
+                //  slots are valid
+                // We need to write some test-cases, to check if this is valid or not.
+
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
                     .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
