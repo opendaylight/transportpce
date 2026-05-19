@@ -1351,9 +1351,26 @@ public class PortMappingVersion710 {
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
                 McCapabilityProfile mcCapabilityProfile = mcCapProfile.getValue();
+                // As per the 7.1 device model WP, slot-width , min/max-slots are not used for xponder cap.
+                // As per the device models, there are default values for slot-width-granularity =50 Ghz and
+                // max-slots =1, which makes the MC capability not usable for XPDRs.
+                if (mcCapabilityProfile.getSlotWidthGranularity() == null
+                        || mcCapabilityProfile.getSlotWidthGranularity().getValue().doubleValue() == 50.0) {
+                    LOG.warn("XPDR {}: slot-width granularity is not provided in the mc-capability-profile, "
+                            + "setting it to default value of 50 GHz", nodeId);
+                    // Here we are assuming the slot-width granularity is 6.25 GHz for XPDR, same as the center
+                    // frequency granularity.
+                    // This is to avoid having non-usable MC capabilities with 50 GHz slot-width granularity for XPDRs
+                    mcCapabilitiesBuilder.setSlotWidthGranularity(FrequencyGHz
+                            .getDefaultInstance(mcCapabilityProfile.getCenterFreqGranularity()
+                                    .getValue().toString()));
+                }
                 mcCapabilitiesBuilder
-                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity());
+                LOG.info("XPDR {}: center-frequency granularity is set to {} GHz and slot-width "
+                                + "granularity is set to {} GHz",
+                    nodeId, mcCapabilitiesBuilder.getCenterFreqGranularity().getValue().doubleValue(),
+                    mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue());
 
                 if (mcCapabilityProfile.getMinSlots() != null) {
                     mcCapabilitiesBuilder.setMinSlots(mcCapabilityProfile.getMinSlots());
@@ -1365,6 +1382,23 @@ public class PortMappingVersion710 {
                     mcCapabilitiesBuilder.setMaxSlots(mcCapabilityProfile.getMaxSlots());
                 } else {
                     mcCapabilitiesBuilder.setMaxSlots(Uint32.valueOf(1));
+                }
+                // If min/max edge frequencies are defined in the profile, we can calculate the min/max slots based
+                // on the center frequency granularity and slot-width granularity and check if the provided or
+                // default min/max slots are valid
+                if (mcCapabilityProfile.getMinEdgeFreq() != null && mcCapabilityProfile.getMaxEdgeFreq() != null) {
+                    double calculatedMaxSlots = (mcCapabilityProfile.getMaxEdgeFreq().getValue().decimalValue()
+                            .subtract(mcCapabilityProfile.getMinEdgeFreq().getValue().decimalValue()))
+                            .divide((mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().decimalValue())
+                            .divide(new BigDecimal(1000))).doubleValue();
+                    // TODO: do we need to check the min-slots as well ? if yes,
+                    //  then we can calculate the min-slots based on min-slot-width needed (which 37.5 GHz for 100G)
+                    if (calculatedMaxSlots > mcCapabilitiesBuilder.getMaxSlots().intValue()) {
+                        LOG.warn("XPDR {}: provided max-slots {} in the mc-capability-profile is not valid based on "
+                                        + "the slot frequency granularity and edge frequencies, setting it to {}",
+                                nodeId, mcCapabilitiesBuilder.getMaxSlots().intValue(), (int) calculatedMaxSlots);
+                        mcCapabilitiesBuilder.setMaxSlots(Uint32.valueOf((int) calculatedMaxSlots));
+                    }
                 }
 
                 if (!usableMc(mcCapabilitiesBuilder)) {
