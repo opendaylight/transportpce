@@ -24,6 +24,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -249,13 +251,22 @@ public class PortMappingVersion710 {
         WithKey<Nodes, NodesKey> portMappingNodeIID = DataObjectIdentifier.builder(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
                 .build();
-        Nodes portmappingNode = null;
+        Nodes portmappingNode;
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            portmappingNode = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingNodeIID).get().orElseThrow();
-        } catch (InterruptedException | ExecutionException ex) {
+            Optional<Nodes> portmappingNodeOpt = Optional.ofNullable(readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, portMappingNodeIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+            if (portmappingNodeOpt.isEmpty()) {
+                LOG.warn("Could not find port-mapping for nodeId {}", nodeId);
+                return false;
+            }
+            portmappingNode = portmappingNodeOpt.orElseThrow();
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read the port-mapping for nodeId {}", nodeId, ex);
-        }
-        if (portmappingNode == null) {
             return false;
         }
 

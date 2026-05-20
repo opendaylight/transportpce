@@ -166,9 +166,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private Node1 getNetworkNodeFromDatastore(String nodeId) {
         DataObjectIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Node1> optionalNode = nodeReadTx
+            Optional<Node1> optionalNode = Optional.ofNullable(nodeReadTx
                 .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
             if (optionalNode.isEmpty()) {
                 LOG.warn("Unable to get network node for node id {} from topology {}",
                      nodeId, StringConstants.OPENROADM_TOPOLOGY);
@@ -198,9 +199,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1> optionalNode =
-                nodeReadTx
+                Optional.ofNullable(nodeReadTx
                     .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (optionalNode.isEmpty()) {
                 LOG.error("Unable to get common network node for node id {} from topology {}",
                         nodeId, StringConstants.OPENROADM_TOPOLOGY);
@@ -242,9 +244,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         DataObjectIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
                 .createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<TerminationPoint1> optionalTerminationPoint = readTx
+            Optional<TerminationPoint1> optionalTerminationPoint = Optional.ofNullable(readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             return optionalTerminationPoint.isEmpty() ? null : optionalTerminationPoint.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
@@ -270,9 +273,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             tpIID = OpenRoadmTopology.createCommonNetworkTerminationPointIIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1>
-                optionalTerminationPoint = readTx
+                optionalTerminationPoint = Optional.ofNullable(readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (optionalTerminationPoint.isEmpty()) {
                 LOG.error("Unable to get common-network termination point {} for node id {}from topology {}",
                         tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY);

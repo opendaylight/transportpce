@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenconfigNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
@@ -253,7 +256,10 @@ public final class MappingUtilsImpl implements MappingUtils {
                 .build();
         try (ReadTransaction readTx = dataBroker.newReadOnlyTransaction()) {
             Optional<NodeInfo> nodeInfoObj =
-                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
+                    Optional.ofNullable(readTx
+                                    .read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID)
+                                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                            .orElse(Optional.empty());
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.orElseThrow();
                 OpenroadmNodeVersion version = nodInfo.getOpenroadmVersion();
@@ -274,7 +280,10 @@ public final class MappingUtilsImpl implements MappingUtils {
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);
         }
         return null;
@@ -300,7 +309,10 @@ public final class MappingUtilsImpl implements MappingUtils {
                 .build();
         try (ReadTransaction readTx = dataBroker.newReadOnlyTransaction()) {
             Optional<NodeInfo> nodeInfoObj =
-                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
+                    Optional.ofNullable(readTx
+                                    .read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID)
+                                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                            .orElse(Optional.empty());
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.orElseThrow();
                 OpenconfigNodeVersion version = nodInfo.getOpenconfigVersion();
@@ -318,7 +330,10 @@ public final class MappingUtilsImpl implements MappingUtils {
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for nodeId {}", nodeId, ex);
         }
         return null;
@@ -336,14 +351,16 @@ public final class MappingUtilsImpl implements MappingUtils {
                 .child(Nodes.class, new NodesKey(nodeId))
                 .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodePortMapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
-                    .get();
+            Optional<Nodes> nodePortMapObject = Optional.ofNullable(
+                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (nodePortMapObject.isPresent()) {
                 LOG.debug("Found node {}", nodeId);
                 Nodes node = nodePortMapObject.orElseThrow();
                 mcCapabilities.addAll(node.nonnullMcCapabilities().values());
             }
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | TimeoutException e) {
             LOG.error("Something went wrong while getting node {}", nodeId, e);
         } catch (InterruptedException e) {
             LOG.error("Request interrupted for node {} interrupted", nodeId, e);
