@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d01a2ecb_50a50318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-20T06:51:20Z",
+      "side": 1,
+      "message": "Hi Bala,\nDon\u0027t forget to pull origin/master branch before pushing a change to be rebased...",
+      "revId": "fe394c4b60fc28e19c1dfd2d527d23cf8286edda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
