@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -20,12 +19,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
@@ -279,23 +281,32 @@ public final class TopologyUtils {
                 .getAssociatedConnectionMapTp().iterator().next().getValue()
             : tp.getTpId().getValue();
         LOG.info("Network LCP associated = {}", networkLcp);
-        @NonNull
-        FluentFuture<Optional<Mapping>> mappingOpt = this.dataBroker.newReadOnlyTransaction().read(
-                LogicalDatastoreType.CONFIGURATION,
-                DataObjectIdentifier.builder(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network.class)
-                .child(Nodes.class, new NodesKey(nodeIdPortMap))
-                .child(Mapping.class, new MappingKey(networkLcp))
-                .build());
-        if (!mappingOpt.isDone()) {
-            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
-                networkLcp, tp.getTpId().getValue());
+        Mapping mapping;
+        try (ReadTransaction readTransaction = this.dataBroker.newReadOnlyTransaction()) {
+
+            Optional<Mapping> mappingOpt = Optional.ofNullable(readTransaction.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    DataObjectIdentifier.builder(
+                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
+                                    .Network.class)
+                            .child(Nodes.class, new NodesKey(nodeIdPortMap))
+                            .child(Mapping.class, new MappingKey(networkLcp))
+                            .build())
+                            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+
+            if (mappingOpt.isEmpty()) {
+                LOG.info("Mapping not found for node {}-{}", nodeIdTopo, nodeIdPortMap);
+                return false;
+            }
+
+            mapping = mappingOpt.orElseThrow();
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Error getting mapping for {}", networkLcp, e);
             return false;
-        }
-        Mapping mapping = null;
-        try {
-            mapping = mappingOpt.get().orElseThrow();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (ExecutionException | TimeoutException e) {
             LOG.error("Error getting mapping for {}", networkLcp, e);
             return false;
         }
