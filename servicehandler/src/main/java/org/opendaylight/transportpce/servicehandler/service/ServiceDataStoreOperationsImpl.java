@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -97,7 +98,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("init failed: ", e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("Failed to initialize service registry", e);
         }
     }
 
@@ -111,38 +115,46 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 new TempServiceListBuilder().build());
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("init failed: ", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to initialize temp service registry", e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Failed to initialize temp service registry", e);
         }
     }
 
     @Override
     public Optional<Services> getService(String serviceName) {
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServiceList.class)
                             .child(Services.class, new ServicesKey(serviceName))
                             .build()
                         )
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Reading service {} failed:", serviceName, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<ServiceList> getServices() {
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServiceList.class).build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Reading services failed:", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to read services from operational datastore", e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Failed to read services from operational datastore", e);
+
         }
         return Optional.empty();
     }
@@ -150,9 +162,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110
             .temp.service.list.Services> getTempService(String serviceName) {
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(TempServiceList.class)
                             .child(
@@ -162,8 +173,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                                     .temp.service.list.ServicesKey(serviceName))
                             .build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Reading service {} failed:", serviceName, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
@@ -181,7 +195,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("deleteService : {}", LogMessages.failedTo("delete", serviceName), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("deleteService : {}", LogMessages.failedTo("delete", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("delete", serviceName));
         }
     }
@@ -203,7 +220,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("deleteTempService : {}", LogMessages.failedTo("delete Temp", commonId), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("deleteTempService : {}", LogMessages.failedTo("delete Temp", commonId), e);
             return OperationResult.failed(LogMessages.failedTo("delete Temp", commonId));
         }
     }
@@ -230,7 +250,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("modifyService : {}", LogMessages.failedTo("modify", serviceName), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("modifyService : {}", LogMessages.failedTo("modify", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify", serviceName));
         }
     }
@@ -264,7 +287,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("modifyTempService : {}", LogMessages.failedTo("modify Temp", serviceName), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("modifyTempService : {}", LogMessages.failedTo("modify Temp", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify Temp", serviceName));
         }
     }
@@ -283,7 +309,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("createService : {}", LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("createService : {}", LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()), e);
             return OperationResult.failed(LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()));
         }
     }
@@ -308,7 +337,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("createTempService : {}",
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("createTempService : {}",
                     LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()), e);
             return OperationResult.failed(LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()));
         }
@@ -317,14 +349,16 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<ServicePathList> getServicePaths() {
         LOG.debug("Retrieving list of ServicePath...");
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServicePathList.class).build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Reading service path list failed. Error={}", e.getMessage());
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("Failed to read service path list from operational datastore", e);
         }
         return Optional.empty();
     }
@@ -332,16 +366,18 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<ServicePaths> getServicePath(String serviceName) {
         LOG.debug("Retrieving service path of service {}", serviceName);
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServicePathList.class)
                             .child(ServicePaths.class, new ServicePathsKey(serviceName))
                             .build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Reading service path failed. Error={}", e.getMessage());
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("Failed to read service path {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
@@ -360,7 +396,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("createServicePath : {}",
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("createServicePath : {}",
                     LogMessages.failedTo("create servicePath", serviceInput.getCommonId()), e);
             return OperationResult.failed(LogMessages.failedTo("create servicePath", serviceInput.getCommonId()));
         }
@@ -398,7 +437,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("modifyServicePath : {}", LogMessages.failedTo("modify service path", serviceName), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            LOG.error("modifyServicePath : {}", LogMessages.failedTo("modify service path", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify service path", serviceName));
         }
     }
@@ -415,6 +457,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             servicePathsWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("deleteServicePath : {}", LogMessages.failedTo("delete servicePath", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("delete servicePath", serviceName));
         }
@@ -459,6 +504,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
                 return null;
             } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("writeOrModifyOrDeleteServiceList : {}", LogMessages.failedTo(CREATE_MSG, serviceName), e);
                 return LogMessages.failedTo(CREATE_MSG, serviceName);
             }
@@ -495,6 +543,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         try {
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("writeOrModifyOrDeleteServiceList : {}", LogMessages.failedTo(action, serviceName), e);
             return LogMessages.failedTo(action, serviceName);
         }
