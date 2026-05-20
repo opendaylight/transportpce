@@ -8,15 +8,16 @@
 
 package org.opendaylight.transportpce.networkmodel;
 
-import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.InitInterDomainLinksInput;
@@ -298,21 +299,22 @@ final class OrdLink {
                         .Node1.class)
                 .child(TerminationPoint.class, new TerminationPointKey(new TpId(srcTp)))
                 .build();
-        @NonNull
-        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
-        @NonNull
-        FluentFuture<Optional<TerminationPoint>> tpFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, iiTp);
-        if (tpFf.isDone()) {
-            try {
-                Optional<TerminationPoint> tpOpt;
-                tpOpt = tpFf.get();
-                if (tpOpt.isPresent()) {
-                    return tpOpt.orElseThrow();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                        StringConstants.OPENROADM_TOPOLOGY, e);
+
+        try (ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction()) {
+            Optional<TerminationPoint> tpOpt = Optional.ofNullable(readTransaction.read(
+                    LogicalDatastoreType.CONFIGURATION, iiTp)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+            if (tpOpt.isPresent()) {
+                return tpOpt.orElseThrow();
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
+                    StringConstants.OPENROADM_TOPOLOGY, e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
+                    StringConstants.OPENROADM_TOPOLOGY, e);
         }
         return null;
     }
