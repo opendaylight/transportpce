@@ -10,12 +10,15 @@ package org.opendaylight.transportpce.networkmodel;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.DeleteLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.DeleteLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.DeleteLinkOutput;
@@ -105,16 +108,21 @@ public class NetworkUtilsImpl {
 
 
         //Check if link exists
-        try {
-            ReadTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction();
-            Optional<Link> linkOptional = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, linkIID).get();
-            if (!linkOptional.isPresent()) {
+        try (ReadTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction()) {
+            Optional<Link> linkOptional = Optional.ofNullable(
+                    readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, linkIID)
+                            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+            if (linkOptional.isEmpty()) {
                 LOG.info("Link not present");
                 return RpcResultBuilder
                     .success(new DeleteLinkOutputBuilder().setResult("Fail").build())
                     .buildFuture();
             }
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | TimeoutException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("readMdSal: Error reading link {}", input.getLinkId(), e);
             return RpcResultBuilder
                 .success(new DeleteLinkOutputBuilder().setResult("Fail").build())

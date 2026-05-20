@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.Nodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
@@ -76,17 +79,23 @@ public class AlarmNotificationListener221 {
         List<Nodes> allNodeList = new ArrayList<>();
         DataObjectIdentifier<ServiceNodelist> serviceNodeListIID = DataObjectIdentifier.builder(ServiceNodelist.class)
                 .build();
-        try {
-            ReadTransaction rtx = dataBroker.newReadOnlyTransaction();
+        try (ReadTransaction rtx = dataBroker.newReadOnlyTransaction()) {
             Optional<ServiceNodelist> serviceListObject =
-                    rtx.read(LogicalDatastoreType.OPERATIONAL, serviceNodeListIID).get();
+                    Optional.ofNullable(
+                            rtx.read(LogicalDatastoreType.OPERATIONAL, serviceNodeListIID)
+                                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                            .orElse(Optional.empty());
+
             if (serviceListObject.isPresent()) {
                 for (Nodelist nodelist : serviceListObject.orElseThrow().nonnullNodelist().values()) {
                     allNodeList.addAll(nodelist.nonnullNodes().values());
                 }
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
             LOG.warn("Exception thrown while reading Logical Connection Point value", ex);
+        } catch (TimeoutException | ExecutionException ex) {
+            throw new RuntimeException(ex);
         }
         String message = String.join(PIPE,notification.getResource().getDevice().getNodeId().getValue(),
                 buildCause(notification.getProbableCause()),notification.getId() != null ? notification.getId() : "",
