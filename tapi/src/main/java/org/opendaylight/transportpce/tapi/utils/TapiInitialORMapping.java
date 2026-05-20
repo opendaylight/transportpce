@@ -64,8 +64,9 @@ public class TapiInitialORMapping {
 
     public boolean performServInitialMapping() {
         Optional<ServiceList> optOrServices = this.serviceDataStoreOperations.getServices();
-        if (!optOrServices.isPresent()) {
-            LOG.error("Couldnt obtain OR services from datastore");
+        if (optOrServices.isEmpty()) {
+            LOG.info("No OR services present in operational datastore yet");
+
             return false;
         }
 

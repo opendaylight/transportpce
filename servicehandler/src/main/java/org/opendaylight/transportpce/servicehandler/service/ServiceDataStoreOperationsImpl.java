@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -135,14 +136,17 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
     @Override
     public Optional<ServiceList> getServices() {
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServiceList.class).build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Reading services failed:", e);
+            LOG.error("Failed to read services from operational datastore", e);
+
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
         return Optional.empty();
     }
@@ -150,9 +154,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110
             .temp.service.list.Services> getTempService(String serviceName) {
-        try {
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
+            return tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(TempServiceList.class)
                             .child(
@@ -163,7 +166,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                             .build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Reading service {} failed:", serviceName, e);
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
+
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
         return Optional.empty();
     }
