@@ -56,6 +56,30 @@
       },
       "revId": "49dd1a7734701c44016c531cd70448e0435ae1b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f5b0df6_d39a9b97",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 9365
+      },
+      "writtenOn": "2026-05-20T13:47:54Z",
+      "side": 1,
+      "message": "Hello Gilles, I have made changes to the operational mode selection logic.Could you please review these new changes in Patchset-18?",
+      "parentUuid": "54a8cb72_06364929",
+      "range": {
+        "startLine": 284,
+        "startChar": 26,
+        "endLine": 284,
+        "endChar": 43
+      },
+      "revId": "49dd1a7734701c44016c531cd70448e0435ae1b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
