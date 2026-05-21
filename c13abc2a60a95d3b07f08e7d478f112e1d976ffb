@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed428047_129fbf6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-21T12:29:28Z",
+      "side": 1,
+      "message": "Thanks for reminding me about creating a JIRA ticket!",
+      "revId": "c13abc2a60a95d3b07f08e7d478f112e1d976ffb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
