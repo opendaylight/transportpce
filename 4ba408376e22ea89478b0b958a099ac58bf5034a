@@ -1,4 +1,39 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1779310280 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1779310280-8BDD32E5B9C1A8BB2378C3BEF52174AE7FFE6FB5\n\n0000000000000000000000000000000000000000 153ebb0f863132827c549a648bd2a8af1695058b refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmoOHsgACgkQX735uTFP\nrXHeZBAAgB+nqOsHxF9OTgtTBb715w2F8tBhvLzNA9JSiS1/GD/ImuQiXKCIKuHl\n1yk51UrhRgrA35Z1Uaqok0tm/mve0jRh5TjNujbJctN0VznPRTPMy0SeZPdvc2CY\nJRoREgWuPVAbi2hAVxgE/McMLLFg6cWDdHKsnpkVOptlv0vDZd1RtaJ/jY0DEmgR\nCfBPH8i1Q/q93wSdGnG8K8+yi6MJ+6B6IqD+AB90p5kegfDASgXMQg8tFwpJIjkd\nVpaq87iTQ7VXc3HoGstrP5/CudUP8g1oroJmOY3zK8baAPggCp2FOQy92HcFXQ/j\n6jW1g75nMxBbGNPijamn0OEoz2GosIkdcCuvQyRabGdq9Y6iv9Pjy+XGmBVyQptw\nKDydVM1ka6CPcw+nX6GwfI5LIJLn1Vn+514gMYBf11tfw5XqbgBhdVziXt7DGgIy\npqi6SrzTbAcrkPRY+tFod1IlnCYmmuXtk6Z0/THl10s57i/O9ItYl3mHLYOwo073\nhLQzxyLYyxgNwoneiIhqk/dfZdWRWyUw8SF/05QGq9VI7h9dtqJwf/m5v+P9f203\nr0xOnKSgotz4byZ6eZyCRMa1ybCvsKGpzaNzccusLuhjgP3PQ6ljXR8IKXE8OMm8\nupuB1QEpailA83SejX5l2OyiaynlA7V5DSlKAdiCKyDG/aNQABI\u003d\n\u003dPOgV\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bee9233_aab672df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T11:31:39Z",
+      "side": 1,
+      "message": "Could you add a JIRA ticket please?",
+      "revId": "4ba408376e22ea89478b0b958a099ac58bf5034a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec582bb1_ada5d39f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T11:31:39Z",
+      "side": 1,
+      "message": "Thank you for this improvement. If you could simply add a JIRA ticket...",
+      "revId": "4ba408376e22ea89478b0b958a099ac58bf5034a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
