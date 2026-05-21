@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7b11c42_c2736ca1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-21T19:02:55Z",
+      "side": 1,
+      "message": "This change appears to rely on implementing guesswork in TPCE. I believe it only moves the problem elsewhere at best, or creates a new one at worst. \n\nI’ve given this some thought, and I would like to suggest an alternate solution: one that allows the user to optionally specify overriding MC capabilities during device mount.\n\nThis would effectively remove the need for TPCE to rely on any kind of guesswork and instead make the user responsible for providing accurate information. If the user does not specify any overriding MC capabilities, TPCE will use the values reported by the device, just as it does today.\n\nI\u0027ve created a ticket in JIRA outlining my suggestion: \nhttps://lf-opendaylight.atlassian.net/browse/TRNSPRTPCE-951",
+      "revId": "e4628cec61bb2eeb25e2ef5ee2af51fda0ddac20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
