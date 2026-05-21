@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "796c14af_86fee7aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T11:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bdd249d_fec97bfe",
+      "revId": "14fd7577fcf43ad76b63dacb785dbf5ff3e956c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8b27e2b2_7120d55a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -48,6 +66,30 @@
       "writtenOn": "2026-05-21T08:34:46Z",
       "side": 1,
       "message": "Beware, I think that by doing this else structure, you are making all other OpenConfig operational modes unavailable...",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 441,
+        "endChar": 13
+      },
+      "revId": "14fd7577fcf43ad76b63dacb785dbf5ff3e956c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e3db5f_995caba1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T11:20:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9815e2a3_6ddc2aac",
       "range": {
         "startLine": 437,
         "startChar": 0,
