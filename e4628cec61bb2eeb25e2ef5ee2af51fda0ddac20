@@ -33,6 +33,24 @@
       "message": "I\u0027m confused. Why are we even setting slot-width-granularity and min/max-slots for xponders if the WP says they are not used. You say they are \"non-usable\", which implies we want to use them, but at the same time they are \"not used\".",
       "revId": "e4628cec61bb2eeb25e2ef5ee2af51fda0ddac20",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a74fe31_4e217cfe",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2026-05-21T20:36:00Z",
+      "side": 1,
+      "message": "I talked to Joakim and if I understand things correctly now, the problem is that spectrum allocation in TPCE incorrectly uses these parameters. So the real fix should be to modify spectrum allocation to not take slot-width-granularity and min/max-slots into account for xponders, like the WP says.",
+      "parentUuid": "e6a953f6_1ef22d79",
+      "revId": "e4628cec61bb2eeb25e2ef5ee2af51fda0ddac20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
