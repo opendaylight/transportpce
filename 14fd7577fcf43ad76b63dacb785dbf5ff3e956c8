@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bdd249d_fec97bfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T08:34:46Z",
+      "side": 1,
+      "message": "It would be worth to add a JIRA ticket",
+      "revId": "14fd7577fcf43ad76b63dacb785dbf5ff3e956c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8b27e2b2_7120d55a",
@@ -14,6 +31,29 @@
       "writtenOn": "2026-05-20T16:17:31Z",
       "side": 1,
       "message": "It seems that this modification is causing a regression on the OpenConfig side...",
+      "revId": "14fd7577fcf43ad76b63dacb785dbf5ff3e956c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9815e2a3_6ddc2aac",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-05-21T08:34:46Z",
+      "side": 1,
+      "message": "Beware, I think that by doing this else structure, you are making all other OpenConfig operational modes unavailable...",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 441,
+        "endChar": 13
+      },
       "revId": "14fd7577fcf43ad76b63dacb785dbf5ff3e956c8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
