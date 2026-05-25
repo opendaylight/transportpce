@@ -28,7 +28,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -65,10 +65,10 @@ public class PcePathDescriptionTests extends AbstractTest {
         node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                new NodeMcCapability());
+                new InterfaceMcCapability());
         PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                new NodeMcCapability());
+                new InterfaceMcCapability());
 
         pceLink = new PceORLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClientA("XPONDER-CLIENT");
