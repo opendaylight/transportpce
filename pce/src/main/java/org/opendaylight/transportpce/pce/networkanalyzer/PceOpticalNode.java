@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -22,7 +21,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
@@ -575,34 +574,9 @@ public class PceOpticalNode implements PceNode {
         return this.version;
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
-    */
     @Override
-    public BigDecimal getSlotWidthGranularity() {
-        return mcCapability.slotWidthGranularity();
-    }
-
-    @Override
-    public int getMinSlots() {
-        return mcCapability.minSlots();
-    }
-
-    @Override
-    public int getMaxSlots() {
-        return mcCapability.maxSlots();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
-     */
-    @Override
-    public BigDecimal getCentralFreqGranularity() {
-        return mcCapability.centerFrequencyGranularity();
+    public McCapability mcCapabilities() {
+        return mcCapability;
     }
 
     @Override

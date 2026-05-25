@@ -36,16 +36,15 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Factory;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.PreferenceFactory;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.UnconstrainedMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.XpdrMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
@@ -77,7 +76,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
-import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1052,12 +1050,9 @@ public class PceCalculation {
         }
         var ton = new TapiOpticalNode(serviceType, node, null,
                 new Uuid(getUuidFromInput(anodeId)), new Uuid(getUuidFromInput(znodeId)),
-                aportUuid, zportUuid, new NodeMcCapability(new McCapabilitiesBuilder()
-                    .withKey(new McCapabilitiesKey(node.getName().entrySet().iterator().next().getValue().getValue()))
-                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25)).scaleTo(5)))
-                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5)).scaleTo(5)))
-                    .setMaxSlots(Uint32.valueOf(768))
-                    .build()),
+                aportUuid, zportUuid, new InterfaceMcCapability(
+                    node.getName().entrySet().iterator().next().getValue().getValue(),
+                    BigDecimal.valueOf(12.5), 1, 768, BigDecimal.valueOf(6.25)),
                 topoUuid);
         ton.initialize();
         Map<Uuid, PceTapiOpticalNode> ptonMap = new HashMap<>();
@@ -1239,12 +1234,7 @@ public class PceCalculation {
         }
         var ton = new TapiOpticalNode(serviceType, node, null, new Uuid(getUuidFromInput(anodeId)),
                 new Uuid(getUuidFromInput(znodeId)), aportUuid, zportUuid,
-                new NodeMcCapability(new McCapabilitiesBuilder()
-                    .withKey(new McCapabilitiesKey(node.getName().entrySet().iterator().next().getValue().getValue()))
-                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0)).scaleTo(5)))
-                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0)).scaleTo(5)))
-                    .setMaxSlots(Uint32.valueOf(768))
-                    .build()),
+                new UnconstrainedMcCapability(),
                 topoUuid);
         ton.initialize();
         PceTapiOtnNode otnNode = ton.getXpdrOtnNode();
@@ -1923,14 +1913,25 @@ public class PceCalculation {
         String[] params = nodeId.getValue().split("-");
         // DEGx or SRGx or XPDRx
         String moduleName = params[params.length - 1];
-        for (McCapabilities mcCapabitility : mcCapabilities) {
-            if (mcCapabitility.getMcNodeName().contains("XPDR")
-                    || mcCapabitility.getMcNodeName().contains(moduleName)) {
-
-                return new NodeMcCapability(mcCapabitility);
+        for (McCapabilities mcCapability : mcCapabilities) {
+            if (mcCapability.getMcNodeName().contains("XPDR")) {
+                return new XpdrMcCapability(mcCapability.getCenterFreqGranularity().getValue().decimalValue());
+            }
+            if (mcCapability.getMcNodeName().contains(moduleName)) {
+                return new InterfaceMcCapability(
+                        nodeId.getValue(),
+                        mcCapability.getSlotWidthGranularity() != null
+                                ? mcCapability.getSlotWidthGranularity().getValue().decimalValue()
+                                : BigDecimal.valueOf(50),
+                        mcCapability.getMinSlots() != null ? mcCapability.getMinSlots().intValue() : 1,
+                        mcCapability.getMaxSlots() != null ? mcCapability.getMaxSlots().intValue() : 1,
+                        mcCapability.getCenterFreqGranularity() != null
+                                ? mcCapability.getCenterFreqGranularity().getValue().decimalValue()
+                                : BigDecimal.valueOf(50));
             }
         }
-        return new NodeMcCapability();
+        return new InterfaceMcCapability(nodeId.getValue(), BigDecimal.valueOf(50), 1, 1,
+                BigDecimal.valueOf(50));
     }
 
     private Uuid getUuidFromInput(String inString) {

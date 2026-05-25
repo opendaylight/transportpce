@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.node.termination.point.XpdrNetworkAttributes;
@@ -653,50 +652,15 @@ public class PceTapiOpticalNode implements PceNode {
         return this.version;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#
-     * getSlotWidthGranularity()
-     */
     @Override
-    public BigDecimal getSlotWidthGranularity() {
-        return mcCapability.slotWidthGranularity();
+    public McCapability mcCapabilities() {
+        return mcCapability;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#
-     * getCentralFreqGranularity()
-     */
-    @Override
-    public BigDecimal getCentralFreqGranularity() {
-        return mcCapability.centerFrequencyGranularity();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getMinSlots()
-     */
     @Override
     public boolean isContentionLessSrg() {
         // TODO To be implemented
         return false;
-    }
-
-    @Override
-    public int getMinSlots() {
-        return mcCapability.minSlots();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getMaxSlots()
-     */
-    @Override
-    public int getMaxSlots() {
-        return mcCapability.maxSlots();
     }
 
     /*

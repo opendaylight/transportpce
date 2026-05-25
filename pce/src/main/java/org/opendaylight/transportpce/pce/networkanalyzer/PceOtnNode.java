@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
@@ -19,6 +18,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.UnconstrainedMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.node.termination.point.XpdrNetworkAttributes;
@@ -603,34 +604,9 @@ public class PceOtnNode implements PceNode {
         return this.nodeType;
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
-    */
     @Override
-    public BigDecimal getSlotWidthGranularity() {
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
-     */
-    @Override
-    public BigDecimal getCentralFreqGranularity() {
-        return null;
-    }
-
-    @Override
-    public int getMinSlots() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxSlots() {
-        return 1;
+    public McCapability mcCapabilities() {
+        return new UnconstrainedMcCapability();
     }
 
     @Override

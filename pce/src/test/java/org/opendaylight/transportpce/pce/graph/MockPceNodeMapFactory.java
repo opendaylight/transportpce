@@ -16,6 +16,8 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.XpdrMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 
@@ -105,10 +107,12 @@ public class MockPceNodeMapFactory {
         when(node.getNodeId()).thenReturn(id);
         when(node.isContentionLessSrg()).thenReturn(false);
         when(node.getBitSetData()).thenReturn(range(0, 772));
-        when(node.getCentralFreqGranularity()).thenReturn(BigDecimal.valueOf(centralFreqGranularity));
-        when(node.getSlotWidthGranularity()).thenReturn(BigDecimal.valueOf(slotWidthGranularity));
-        when(node.getMinSlots()).thenReturn(minSlots);
-        when(node.getMaxSlots()).thenReturn(maxSlots);
+        when(node.mcCapabilities()).thenReturn(new InterfaceMcCapability(
+                nodeName,
+                BigDecimal.valueOf(slotWidthGranularity),
+                minSlots,
+                maxSlots,
+                BigDecimal.valueOf(centralFreqGranularity)));
         when(node.getVersion()).thenReturn(DEVICE_VERSION);
 
         return node;
@@ -122,8 +126,38 @@ public class MockPceNodeMapFactory {
             int maxSlots,
             OpenroadmNodeType nodeType) {
 
-        PceNode node = createMockNode(nodeName, centralFreqGranularity, slotWidthGranularity, minSlots, maxSlots);
+        PceNode node;
+        if (nodeType == OpenroadmNodeType.XPONDER) {
+            node = createXpdrMockNode(nodeName, centralFreqGranularity);
+        } else {
+            node = createMockNode(nodeName, centralFreqGranularity, slotWidthGranularity, minSlots, maxSlots);
+        }
+
         when(node.getORNodeType()).thenReturn(nodeType);
+        return node;
+    }
+
+    /**
+     * Creates a mocked XPDR {@link PceNode} wired up to return the given properties.
+     *
+     * @param nodeName the unique name (and NodeId) of the node
+     * @param centralFreqGranularity the central frequency granularity (in GHz)
+     * @return a configured mocked XPDR {@link PceNode} instance
+     */
+    private static PceNode createXpdrMockNode(
+            String nodeName,
+            double centralFreqGranularity) {
+
+        NodeId id = new NodeId(nodeName);
+        PceNode node = mock(PceNode.class);
+
+        when(node.getNodeId()).thenReturn(id);
+        when(node.isContentionLessSrg()).thenReturn(false);
+        when(node.getBitSetData()).thenReturn(range(0, 772));
+        when(node.mcCapabilities()).thenReturn(new XpdrMcCapability(
+                BigDecimal.valueOf(centralFreqGranularity)));
+        when(node.getVersion()).thenReturn(DEVICE_VERSION);
+
         return node;
     }
 
