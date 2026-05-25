@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b4e088_7f369f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T15:55:01Z",
+      "side": 1,
+      "message": "LGTM, only one minor thing to consider.",
+      "revId": "5a7975c29ca964e2213a899ba68c8878e31d37b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d169a0c0_459bd959",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T15:55:01Z",
+      "side": 1,
+      "message": "Can we create the UUID from a string instead?",
+      "revId": "5a7975c29ca964e2213a899ba68c8878e31d37b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
