@@ -19,7 +19,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.NodeMcCapability;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;

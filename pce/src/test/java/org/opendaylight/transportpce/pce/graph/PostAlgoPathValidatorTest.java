@@ -565,6 +565,18 @@ class PostAlgoPathValidatorTest {
         assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
     }
 
+    private PceGraphEdge mockXponder(String sourceId, String destId, String edgeString) {
+        PceLink link = mock(PceLink.class);
+        when(link.getSourceId()).thenReturn(sourceId);
+        when(link.getDestId()).thenReturn(destId);
+
+        PceGraphEdge edge = mock(PceGraphEdge.class);
+        when(edge.link()).thenReturn(link);
+        when(edge.toString()).thenReturn(edgeString);
+
+        return edge;
+    }
+
     private PceGraphEdge mockEdge(String sourceId, String destId, String edgeString) {
         PceLink link = mock(PceLink.class);
         when(link.getSourceId()).thenReturn(sourceId);

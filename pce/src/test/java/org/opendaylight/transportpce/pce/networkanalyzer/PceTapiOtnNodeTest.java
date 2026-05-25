@@ -32,8 +32,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.NodeMcCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
@@ -231,8 +231,10 @@ public class PceTapiOtnNodeTest extends AbstractTest {
             + "after Nep have been pruned : 1 DSR, 1eODU");
         assertEquals(2, pceONspdrSA1.getUsableXpdrNWTps().size(),
                 "SPDR-SA1 has 2 selectable NEP/CEP at iODU level after Cep/Nep have been pruned : 2 iODU");
-        assertNull(pceONspdrSA1.getSlotWidthGranularity(), "An Otn Node returns null slotWidth Granularity");
-        assertNull(pceONspdrSA1.getCentralFreqGranularity(), "An Otn Node returns null Central Frequency Granularity");
+        assertNull(pceONspdrSA1.mcCapabilities().centerFrequencyGranularity(),
+            "An Otn Node returns null Central Frequency Granularity");
+        assertTrue(pceONspdrSA1.mcCapabilities().isCompatibleWithServiceFrequency(0.0),
+            "An Otn Node is always compatible with any service frequency");
         assertNull(pceONspdrSA1.getBitSetData(), "Spectrum is not defined at OTN level");
     }
 
@@ -520,8 +522,10 @@ public class PceTapiOtnNodeTest extends AbstractTest {
                 .toList()
                 .size(),
                 "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
-        assertNull(pceONspdrSA1.getSlotWidthGranularity(), "An Otn Node returns null slotWidth Granularity");
-        assertNull(pceONspdrSA1.getCentralFreqGranularity(), "An Otn Node returns null Central Frequency Granularity");
+        assertNull(pceONspdrSA1.mcCapabilities().centerFrequencyGranularity(),
+            "An Otn Node returns null Central Frequency Granularity");
+        assertTrue(pceONspdrSA1.mcCapabilities().isCompatibleWithServiceFrequency(0.0),
+            "An Otn Node is always compatible with any service frequency");
         assertNull(pceONspdrSA1.getBitSetData(), "Spectrum is not defined at OTN level");
     }
 
