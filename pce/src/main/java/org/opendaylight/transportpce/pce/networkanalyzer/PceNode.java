@@ -8,10 +8,10 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.node.termination.point.XpdrNetworkAttributes;
@@ -190,32 +190,11 @@ public interface PceNode {
     BitSet getBitSetData();
 
     /**
-     * For optical node the slot width granularity from mc capabilities.
-     * @return Decimal64.
+     * Returns the MC capabilities for this node.
+     * Optical nodes return an implementation reflecting their spectrum constraints.
+     * Non-optical nodes (e.g. OTN) return an unconstrained implementation.
      */
-    BigDecimal getSlotWidthGranularity();
-
-    /**
-     * For optical node the min-slots from mc capabilities.
-     * Minimum number of slots permitted to be joined together to form a media channel.
-     * Must be less than or equal to the max-slots.
-     * @return int.
-     */
-    int getMinSlots();
-
-    /**
-     * For optical node the max-slots from mc capabilities.
-     * Maximum number of slots permitted to be joined together to form a media channel.
-     * Must be greater than or equal to the min-slots.
-     * @return int.
-     */
-    int getMaxSlots();
-
-    /**
-     * For optical node the central-frequency granularity from mc capabilities.
-     * @return Decimal64.
-     */
-    BigDecimal getCentralFreqGranularity();
+    McCapability mcCapabilities();
 
     /**
      * Determines whether this node is a contentionless srg.
