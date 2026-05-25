@@ -1,0 +1,633 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42b0bc44_2d5f50cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Hi Olivier! Since this wasn’t marked as WIP, I went ahead and added a few review comments. Ignore anything that’s already outdated if you’re still iterating on the change.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87407bda_66c2c6d6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Remove these lines, no need to add code that is commented out.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 100
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa4a339_8925fdcb",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 99
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a0ea457_f8a7b016",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 62
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c014afd_b93e90cf",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 62
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de6a88e_04454fa6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Remove this line",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38419b37_1fef65ac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Fully qualified names for `Context.class`, `Context1.class` and `TopologyContext.class` can be replaced with imports.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "116a0359_ef322639",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "This hard-coded UUID is concerning. Any way to get rid of it? Perhaps by converting a readable string into a UUID instead?",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c795e86f_46accb9b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Remove extra empty line.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89f7e640_973da7aa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Not a big deal, and I know this is consistent with how we format things. Anyway, I feel this make the code easier to read:\n\n```\n        listeners.add(dataBroker.registerTreeChangeListener(\n                LogicalDatastoreType.OPERATIONAL,\n                TAPI_TOPO_SBI_II,\n                sbiTapiTopoListener));\n```",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 38
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bc3422f_e47354a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Hard-coded UUID. Any way to get rid of it? Perhaps by converting a readable string into a UUID instead?",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda8aca7_ab45f4fb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Minor, but this one can be final, i.e.:\n```\nprivate final NetworkTransactionService networkTransactionService;\n```",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f814756_d5ba3183",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "This one doesn\u0027t seem to be used. Maybe it was left here by mistake, or it is used in subsequent commits. If so, introduce the constant in that change instead.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08762d0b_54674de9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "`.dataAfter()` is deprecated since 15.0.0. The interface suggests \"Use a enhanced switch over DataObjectModification type hierarchy instead\".\n\nMaybe something along these lines? However, it\u0027s untested, so I actually have no idea whether it works as replacement for `.dataAfter()`.\n\n```\nimport org.opendaylight.mdsal.binding.api.DataObjectDeleted;\nimport org.opendaylight.mdsal.binding.api.DataObjectModification;\n\n...\n\nfor (DataTreeModification\u003cTopology\u003e change : changes) {\n\n    switch (change.getRootNode()) {\n        case DataObjectDeleted\u003cTopology\u003e ignored -\u003e {\n            continue;  // topology deleted, nothing to update\n        }\n        case DataObjectModification.WithDataAfter\u003cTopology\u003e mod -\u003e {\n            Topology updatedTopo \u003d mod.dataAfter();  // @NonNull — no null check needed\n            if (updatedTopo.getNode() \u003d\u003d null) {\n                continue;\n            }\n            // ... rest of logic\n            Topology oldTopo \u003d mod.dataBefore();     // still @Nullable\n            // ...\n        }\n    }\n}\n```",
+      "range": {
+        "startLine": 109,
+        "startChar": 55,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0a537d3_baf70afb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Do we really want to abort the iteration (i.e `return`), or do we want to `continue` with the next item?",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03dbb20_e2aa3539",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "`.collect(Collectors.toList())` can be simplified with `.toList()`.\n\nAlso, I think these lines could use more line breaks, e.g.:\n\n```\nList\u003cNodeKey\u003e newNodeUuidList \u003d updatedTopo\n    .getNode()\n    .entrySet()\n    .stream()\n    .map(Map.Entry\u003cNodeKey, Node\u003e::getKey)\n    .toList();\n```",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 0
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a93d42_5bbd9f6e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "1. `.collect(Collectors.toList());` can be simplified with `.toList()`.\n2. More line breaks would make this easier to read, imho\n\n```\noldNodeUuidList \u003d oldTopo\n    .getNode()\n    .entrySet()\n    .stream()\n    .map(Map.Entry\u003cNodeKey, Node\u003e::getKey)\n    .toList();\n```",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9cb95f9_23962be7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "1. Use `nonnullOwnedNodeEdgePoint()` instead of `.getOwnedNodeEdgePoint()` to avoid  `.values()` potentially throwing a NPE.\n2. Use `nonnullName()` instead of `.getName()` to avoid `.entrySet()` potentially throwing a NPE.\n3. Probably need to guard against empty `onepName` as well.\n\n```\nfor (OwnedNodeEdgePoint onep : \n        oldNode.getValue().nonnullOwnedNodeEdgePoint().values())  {\n\n    onepName \u003d onep\n            .nonnullName()\n            .entrySet()\n            .iterator()\n            .next()\n            .getValue()\n            .getValue();\n\n    if (onepName !\u003d null \u0026\u0026 !onepName.isEmpty()) {\n        LOG.info(\"{} remove TP {} from TAPI-SBI-ABS-NODE\",\n                removeTpFromTapiAbsSbiNode(\n                        new TpId(onepName),\n                        identifyTpType(onep)),\n                onepName);\n    }\n    ...\n```",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 0
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c545d8_65b62641",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 25
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6337f664_86714f91",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 21
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db21ae0b_f87da1d0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "idem. Perhaps also change `... add TP...` to `... update TP`?",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d3782d_a7709ff3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "1. `.getName()` may be `null`, use `nonnullName()` instead.\n2. Maybe abort if we don\u0027t find a name?\n\ne.g.:\n\n```\nvar firstNameFound \u003d onep\n        .nonnullName()\n        .values()\n        .stream()\n        .findFirst()\n        .orElse(null);\n\nif (firstNameFound \u003d\u003d null) {\n    return \"Ignore TP (no name) and did not\";\n}\n\nTerminationPoint tp \u003d new TerminationPointBuilder()\n    .setTpId(new TpId(firstNameFound.getValue()))\n    .addAugmentation(terminationPoint1)\n    .addAugmentation(tpceAugmTp1)\n    .addAugmentation(tpceAugmTp2)\n    .build();\n```",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6836e3c9_cc09c340",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "1. Replace `.getName()` with `.nonnullName()` to avoid potential NPE.\n2. Searching for specific substrings in the name make me somewhat concerned. I tried to replace this with some kind of \"type\" object, but there doesn\u0027t seem to be one in TAPI in the same way as it does in OpenROADM. \nHowever, I wonder if using the \"value name\" would improve things ever so slightly? If I\u0027m not mistaken, the value name is set entirely by the TAPI code, no? This is completely untested, but perhaps something like this:\n\n```\n  private OpenroadmTpType identifyTpType(OwnedNodeEdgePoint onep) {\n      String nameKey \u003d onep.getName().entrySet().iterator().next().getValue().getValueName();\n      return switch (nameKey) {\n          case \"eNodeEdgePoint\"    -\u003e OpenroadmTpType.XPONDERNETWORK;\n          case \"eNodeEdgePoint_N\", \"NodeEdgePoint_C\", \"100G-tpdr\" -\u003e OpenroadmTpType.XPONDERCLIENT;\n          case \"PHOTONIC_MEDIA_OTSNodeEdgePoint\" -\u003e {\n              var sips \u003d onep.getMappedServiceInterfacePoint();\n              yield (sips !\u003d null \u0026\u0026 !sips.isEmpty())\n                  ? OpenroadmTpType.SRGTXRXPP\n                  : OpenroadmTpType.DEGREETXRXTTP;\n          }\n          default -\u003e null;\n      };\n  }\n```",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 5
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e504a5_75b52eb6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "`TP_TYPE_LAYERS.get(tpType)` could be `null`. May I suggest something `null`-safe like:\n\n    private List\u003cString\u003e evaluateLayers(OpenroadmTpType tpType) {\n        List\u003cString\u003e strings \u003d TP_TYPE_LAYERS.get(tpType);\n        if (strings !\u003d null) {\n            new ArrayList\u003c\u003e(strings);\n        }\n\n        return new ArrayList\u003c\u003e();\n    }",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 5
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33fe371e_26ae06e2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "How about a boolean instead? i.e. `boolean tapiSBIAend \u003d ...`",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fb80d14_6a1c5177",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "These seems almost redundant, since we\u0027re immediately overwriting one of them, but only one of them?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 83
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f87a08e_2385488c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "This if-statement silently assumes src equals to \"TAPI-SBI-ABS-NODE\" without actually verifying. If neither endpoint is TAPI-SBI-ABS-NODE the code produces wrong UUIDs with no error — it should probably log and return false instead.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 9
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "939470e1_1e4d8ec0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "1. Replace qualified name with import (`TerminationPoint1`)\n2. `optTp` may be `null`, guard with `Optional.ofNullabe(...).orElse(Optional.empty())`\n\n```\nimport org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.TerminationPoint1;\n\n...\n\nOptional\u003cTerminationPoint1\u003e optTp \u003d Optional.ofNullable(\n        networkTransactionService.read(\n                    LogicalDatastoreType.CONFIGURATION,\n                    tpIID).get())\n        .orElse(Optional.empty());\nif (optTp.isPresent()) {\n...\n```",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8686d3_c69937a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Should probably be executed one-by-one. I believe the second will never be executed if the first one fails. Maybe that is what we want? Worth considering.",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 99
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f46cab9_1e2311f9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Remove extra line on line 143.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a15a2d03_51c0c3dc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-05-25T18:31:46Z",
+      "side": 1,
+      "message": "Please add javadoc explaining what this method does. Also, there is an extra line break between these two methods.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
