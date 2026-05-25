@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -54,7 +53,7 @@ import org.opendaylight.transportpce.pce.spectrum.index.Base;
 import org.opendaylight.transportpce.pce.spectrum.index.BaseFrequency;
 import org.opendaylight.transportpce.pce.spectrum.index.SpectrumIndex;
 import org.opendaylight.transportpce.pce.spectrum.slot.CapabilityCollection;
-import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.McCapabilityCollection;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
@@ -1120,25 +1119,17 @@ public class PostAlgoPathValidator {
             } else {
                 LOG.debug("PCE node {} is a contentionless srg, skipping available frequency map.", pceNode);
             }
-            centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
-            if (!isXponder(pceNode.getORNodeType())) {
-                mcCapabilityCollection.add(
-                        new InterfaceMcCapability(
-                                pceNode.getNodeId().getValue(),
-                                pceNode.getSlotWidthGranularity(),
-                                pceNode.getMinSlots(),
-                                pceNode.getMaxSlots()));
-            }
+            McCapability mcCapability = pceNode.mcCapabilities();
+            centerFrequencyGranularityCollection.add(mcCapability.centerFrequencyGranularity());
+            mcCapabilityCollection.add(mcCapability);
 
             String pceNodeVersion = pceNode.getVersion();
-            BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
             if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
                 isFlexGrid = false;
             }
 
-            LOG.debug(
-                "Node {}: version is {} with slot width and central frequency granularities {} {}, flex grid = {}",
-                pceNode.getNodeId(), pceNodeVersion, sltWdthGran, pceNode.getCentralFreqGranularity(), isFlexGrid);
+            LOG.debug("Node {}: version is {}, mc-capabilities: {}, flex grid = {}",
+                pceNode.getNodeId(), pceNodeVersion, mcCapability, isFlexGrid);
         }
 
         LOG.info("Available bitset on nodes: {}", result);
@@ -1174,12 +1165,6 @@ public class PostAlgoPathValidator {
                 centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
                 isFlexGrid,
                 subscriber);
-    }
-
-    private boolean isXponder(OpenroadmNodeType nodeType) {
-        return OpenroadmNodeType.XPONDER.equals(nodeType)
-                || OpenroadmNodeType.MUXPDR.equals(nodeType)
-                || OpenroadmNodeType.SWITCH.equals(nodeType);
     }
 
     private SpectrumAssignment createEmptySpectrumAssignment() {

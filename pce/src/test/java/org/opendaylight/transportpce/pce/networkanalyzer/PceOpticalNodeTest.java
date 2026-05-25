@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.NoPreference;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1Builder;
@@ -94,7 +95,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     void isValidTest() {
         OpenroadmNodeType nodeType = OpenroadmNodeType.ROADM;
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node, nodeType,
-            StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+            StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         assertTrue(pceOpticalNode.isValid());
     }
 
@@ -102,7 +103,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     void testInitSrgTps() {
 
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initFrequenciesBitSet();
@@ -119,7 +121,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, specificNode,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initFrequenciesBitSet();
         assertTrue(pceOpticalNode.isValid());
         assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
@@ -129,7 +132,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     void testInitXndrTpDegTypes() {
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initFrequenciesBitSet();
         assertTrue(pceOpticalNode.isValid());
         assertEquals(usedBitSet,pceOpticalNode.getBitSetData().get(88,96));
@@ -139,7 +143,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     void testInitXndrTpXpondrTypes() {
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initFrequenciesBitSet();
         assertTrue(pceOpticalNode.isValid());
         assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
@@ -149,7 +154,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     void testinitFrequenciesBitSet() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initFrequenciesBitSet();
         assertFalse(pceOpticalNode.isValid());
@@ -160,7 +166,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     void testGetRdmSrgClient() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("7", StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
@@ -173,7 +180,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilderEmpty(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
         Node specificNode = node1Builder.setNodeId(new NodeId("test")).build();
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         pceOpticalNode.initFrequenciesBitSet();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
@@ -186,7 +194,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     void testGetRdmSrgClientDeg() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("7" ,StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
@@ -199,7 +208,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXCP);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
@@ -212,7 +222,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
         pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("2" ,StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
@@ -225,7 +236,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
@@ -243,7 +255,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
@@ -261,7 +274,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
@@ -279,7 +293,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
@@ -297,7 +312,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertTrue(pceOpticalNode.isContentionLessSrg());
     }
@@ -315,7 +331,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
@@ -329,7 +346,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         node1Builder.addAugmentation(node1);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                new InterfaceMcCapability(BigDecimal.valueOf(50), 1, 1));
 
         assertFalse(pceOpticalNode.isContentionLessSrg());
     }
