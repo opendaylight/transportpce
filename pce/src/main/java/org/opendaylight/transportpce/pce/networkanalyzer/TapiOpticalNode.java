@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
@@ -1284,7 +1284,7 @@ public class TapiOpticalNode {
             degMap.put(nodeId.keySet().iterator().next(), degNode);
             LOG.debug("TON:splitDegNodes : SupClliNodeId = {}", degNode.getSupClliNodeId());
             LOG.debug("TON:splitDegNodes : AdminState = {}", degNode.getAdminState());
-            LOG.debug("TON:splitDegNodes : CentralFreqGranularity = {}", degNode.getCentralFreqGranularity());
+            LOG.debug("TON:splitDegNodes : mc-capabilities = {}", degNode.mcCapabilities());
             LOG.debug("TON:splitDegNodes : NodeId = {}", degNode.getNodeId());
             LOG.debug("TON:splitDegNodes : State = {}", degNode.getState());
             LOG.debug("TON:splitDegNodes : variable nodeId is {}", nodeId);

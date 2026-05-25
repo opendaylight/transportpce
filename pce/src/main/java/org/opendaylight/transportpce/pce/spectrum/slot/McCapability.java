@@ -14,6 +14,13 @@ import org.opendaylight.transportpce.pce.spectrum.observer.Observer;
 public interface McCapability {
 
     /**
+     * Granularity of allowed center frequencies in GHz.
+     * The base reference frequency is 193.1 THz (ITU-T G.694.1).
+     * May return null for node types that do not constrain optical spectrum (e.g. OTN).
+     */
+    BigDecimal centerFrequencyGranularity();
+
+    /**
      * Determine if this MC interface is compatible with the required
      * service frequency width.
      */

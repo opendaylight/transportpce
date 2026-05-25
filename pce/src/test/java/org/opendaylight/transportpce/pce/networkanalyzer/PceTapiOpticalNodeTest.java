@@ -34,8 +34,8 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
@@ -60,7 +60,7 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
     private static Context tapiContext;
 //    private TapiOpticalNode tapiONroadmA;
     private static String version = "2.4.0";
-    private static McCapability mcCapability = new NodeMcCapability(
+    private static McCapability mcCapability = new InterfaceMcCapability(
         BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
     private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
     private String serviceType;
@@ -187,21 +187,14 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
                 .size(),
                 "ROADM A Degrees shall both be of DEGREE type");
         LOG.info("pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
-                .map(PceTapiOpticalNode::getSlotWidthGranularity)
+                .map(rdm -> rdm.mcCapabilities().toString())
                 .toList());
         assertEquals(2, pceTapiDegNodes.stream()
-                .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
+                .filter(rdm -> rdm.mcCapabilities().centerFrequencyGranularity()
+                        .equals(BigDecimal.valueOf(1.2E+10)))
                 .toList()
                 .size(),
-                "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
-        LOG.info("pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
-                .map(PceTapiOpticalNode::getCentralFreqGranularity)
-                .toList());
-        assertEquals(2, pceTapiDegNodes.stream()
-                .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
-                .toList()
-                .size(),
-                "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
+                "ROADM A Degrees shall both have a 12.0 GHz center-freq granularity");
         //Testing private method splitSrgNodes()
         List<PceTapiOpticalNode> pceTapiSrgNodes = tapiONroadmA.getPceNodeMap().entrySet().stream()
             .map(Map.Entry::getValue)
@@ -234,15 +227,11 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
                 .size(),
                 "ROADM A SRGs shall both be of SRG type");
         assertEquals(2, pceTapiSrgNodes.stream()
-                .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
+                .filter(rdm -> rdm.mcCapabilities().centerFrequencyGranularity()
+                        .equals(BigDecimal.valueOf(1.2E+10)))
                 .toList()
                 .size(),
-                "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
-        assertEquals(2, pceTapiSrgNodes.stream()
-                .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
-                .toList()
-                .size(),
-                "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
+                "ROADM A SRGs shall both have a 12.0 GHz center-freq granularity");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
         assertEquals(2, pceTapiSrgNodes.stream()
@@ -305,10 +294,8 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(),
                 "SPDR-SA1 Node shall be of xponder OR Node Type");
         assertEquals("optical", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType optical");
-        assertEquals(BigDecimal.valueOf(6.25E+9), pceONspdrSA1.getSlotWidthGranularity(),
-                "SPDR-SA1 Node shall have a 6.25 GHz slotWidth Granularity");
-        assertEquals(BigDecimal.valueOf(1.2E+10), pceONspdrSA1.getCentralFreqGranularity(),
-                "SPDR-SA1 Node shall have a 12.5 GHz slotWidth Granularity");
+        assertEquals(BigDecimal.valueOf(1.2E+10), pceONspdrSA1.mcCapabilities().centerFrequencyGranularity(),
+                "SPDR-SA1 Node shall have a 12.5 GHz center-freq granularity");
         assertEquals(0, pceONspdrSA1.getXpdrAvailNW().size(),
                 "SPDR A Muxponder shall have no OTS network Port available");
         assertNull(pceONspdrSA1.getAvailableTribPorts(), "PceTapiOpticalNode does not return trib ports");
@@ -352,12 +339,11 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         initializeAll();
 
         PceTapiOpticalNode pceONxpdrA1 = tapiONxpdrAx1.getXpdrOpticalNode();
-        LOG.info("PTONLine272 Node Id = {}, SUpNetworkNodeId = {}, CLLI = {} NodeType = {}, slotwidthGran = {}"
-            + " PceNodeType = {}, CentralFreqGranularity = {}, AvailableTribPorts = {}, AvailableTribSlots = {}",
+        LOG.info("PTONLine272 Node Id = {}, SUpNetworkNodeId = {}, CLLI = {} NodeType = {}, mc-capabilities = {}"
+            + " PceNodeType = {}, AvailableTribPorts = {}, AvailableTribSlots = {}",
             pceONxpdrA1.getNodeId().getValue(), pceONxpdrA1.getSupNetworkNodeId(), pceONxpdrA1.getSupClliNodeId(),
-            pceONxpdrA1.getORNodeType(), pceONxpdrA1.getSlotWidthGranularity(), pceONxpdrA1.getPceNodeType(),
-            pceONxpdrA1.getCentralFreqGranularity(), pceONxpdrA1.getAvailableTribPorts(),
-            pceONxpdrA1.getAvailableTribSlots());
+            pceONxpdrA1.getORNodeType(), pceONxpdrA1.mcCapabilities(), pceONxpdrA1.getPceNodeType(),
+            pceONxpdrA1.getAvailableTribPorts(), pceONxpdrA1.getAvailableTribSlots());
         assertEquals("XPDR-A1-XPDR1+XPONDER", pceONxpdrA1.getNodeId().getValue(),
                 "XPDR-A1 Node shall have XPDR-A1-XPDR1+XPONDER NodeId");
         assertEquals("4378fc29-6408-39ec-8737-5008c3dc49e5", pceONxpdrA1.getSupNetworkNodeId(),
@@ -366,10 +352,8 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
                 "XPDR-A1 Node shall have XPDR-A1-XPDR1 Uuid as supporting CLLI NodeId");
         assertEquals(OpenroadmNodeType.XPONDER, pceONxpdrA1.getORNodeType(), "XPDR-A1 Node shall be of Xponder Type");
         assertEquals("optical", pceONxpdrA1.getPceNodeType(), "XPDR-A1 Node shall be of PceNodeType optical");
-        assertEquals(BigDecimal.valueOf(6.25E+9), pceONxpdrA1.getSlotWidthGranularity(),
-                "XPDR-A1 Node shall both have a 6.25 GHz slotWidth Granularity");
-        assertEquals(BigDecimal.valueOf(1.2E+10), pceONxpdrA1.getCentralFreqGranularity(),
-                "XPDR-A1 Node shall both have a 12.5 GHz slotWidth Granularity");
+        assertEquals(BigDecimal.valueOf(1.2E+10), pceONxpdrA1.mcCapabilities().centerFrequencyGranularity(),
+                "XPDR-A1 Node shall have a 12.5 GHz center-freq granularity");
         assertEquals(2, pceONxpdrA1.getXpdrAvailNW().size(),
                 "XPDR A Transponder shall have 2 OTS network Port available N1 & N2");
         assertEquals(

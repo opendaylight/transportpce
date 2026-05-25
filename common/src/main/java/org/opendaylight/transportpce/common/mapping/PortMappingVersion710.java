@@ -1352,26 +1352,7 @@ public class PortMappingVersion710 {
                     .setMcNodeName(mcNodeName);
                 McCapabilityProfile mcCapabilityProfile = mcCapProfile.getValue();
                 mcCapabilitiesBuilder
-                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
-
-                if (mcCapabilityProfile.getMinSlots() != null) {
-                    mcCapabilitiesBuilder.setMinSlots(mcCapabilityProfile.getMinSlots());
-                } else {
-                    mcCapabilitiesBuilder.setMinSlots(Uint32.valueOf(1));
-                }
-
-                if (mcCapabilityProfile.getMaxSlots() != null) {
-                    mcCapabilitiesBuilder.setMaxSlots(mcCapabilityProfile.getMaxSlots());
-                } else {
-                    mcCapabilitiesBuilder.setMaxSlots(Uint32.valueOf(1));
-                }
-
-                if (!usableMc(mcCapabilitiesBuilder)) {
-                    LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "XPDR", "",
-                            mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
-                            mcCapabilitiesBuilder.getMaxSlots().intValue());
-                }
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity());
 
                 // Build and add to the Map
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());

@@ -36,8 +36,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
-import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
@@ -69,7 +69,7 @@ public class PceTapiLinkTest  extends AbstractTest {
     private static Context tapiContext;
     private String serviceType;
     private static String version = "2.4.0";
-    private static McCapability mcCapability = new NodeMcCapability(
+    private static McCapability mcCapability = new InterfaceMcCapability(
         BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
     private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
     private Uuid anodeId;
