@@ -51,6 +51,24 @@
       "parentUuid": "e6a953f6_1ef22d79",
       "revId": "e4628cec61bb2eeb25e2ef5ee2af51fda0ddac20",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b022852_c76a9de8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-05-27T15:01:04Z",
+      "side": 1,
+      "message": "Yes Jonas, that would be correct. We can ignore the the slot-width-granulairty, min/max-slots for xponders. At least for 7.1 OpenROADM models for xponders, we should ignore these values for spectrum allocation. We have many xponders in lab, that do not advertise these values, and other vendor puts a default value. These default values are causing PCE to break the mc-capability check. I will review what Jonas has in JIRA",
+      "parentUuid": "4a74fe31_4e217cfe",
+      "revId": "e4628cec61bb2eeb25e2ef5ee2af51fda0ddac20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
