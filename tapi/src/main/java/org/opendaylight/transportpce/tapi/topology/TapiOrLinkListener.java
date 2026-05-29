@@ -154,7 +154,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                     // Links are created at initialization through a process that guarantees the creation of a unique
                     // link. Thus check that the link already exist in Datastore to upgrade it rather than creating an
                     // additional unidirectional link
-                    if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp, getQual(srcNode), getQual(destNode),
+                    if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp,
                             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS))) {
                         continue;
                     }
@@ -216,7 +216,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private boolean linkExistInTopology(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId,
-            String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual) {
+            String srcTpQual, String dstTpQual) {
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
@@ -260,10 +260,6 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             LOG.error("Error populating TAPI topology: ", e);
         }
         LOG.info("TAPI Link added succesfully.");
-    }
-
-    private String getQual(String node) {
-        return node.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR;
     }
 
     private boolean oppositeLinkExists(LinkId oppositeLink) {
