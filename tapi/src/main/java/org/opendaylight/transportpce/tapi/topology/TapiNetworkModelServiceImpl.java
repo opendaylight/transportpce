@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -55,6 +57,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.switching.pool.lcp.SwitchingPoolLcp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
@@ -73,6 +76,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.Supp
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -330,12 +334,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 for (Mapping mapping : node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
                         .collect(Collectors.toList())) {
-                    Integer xpdrNb =
-                        Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+
+                    Uint16 nbNumber = getXpdrNumber(node.getNodeId());
+                    if (nbNumber == null) {
+                        continue;
+                    }
+
+                    Integer xpdrNb = nbNumber.intValue();
                     String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNb;
                     if (xpdrMap.containsKey(xpdrNb)) {
                         continue;
                     }
+
                     List<Mapping> xpdrNetMaps = node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint()
                             .contains("XPDR" + xpdrNb + TapiConstants.NETWORK))
@@ -631,27 +641,33 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private List<Uuid> getChangedNodeUuids(String nodeId, Mapping mapping) {
-        if (nodeId.contains("ROADM")) {
-            return new ArrayList<>(List.of(new Uuid(
-                UUID.nameUUIDFromBytes(
-                    String.join("+", nodeId, TapiConstants.PHTNC_MEDIA).getBytes(StandardCharsets.UTF_8)).toString())));
+        OpenroadmNodeType nodeType = getOpenRoadmNodeType(nodeId);
+
+        switch (nodeType) {
+            case ROADM -> {
+                return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId, TapiConstants.PHTNC_MEDIA)));
+            }
+            case XPONDER,
+                 MUXPDR,
+                 SWITCH -> {
+                LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
+
+                Uint16 nbNumber = getXpdrNumber(nodeId);
+                if (nbNumber == null) {
+                    LOG.error("Failed to fetch nbNumber for XPDR node {}", nodeId);
+                    return new ArrayList<>();
+                }
+
+                return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId
+                        + TapiConstants.XXPDR
+                        + nbNumber,
+                        TapiConstants.XPDR)));
+            }
+            default -> {
+                LOG.error("Updating this device is currently not supported");
+                return new ArrayList<>();
+            }
         }
-        if (nodeId.contains("PDR")) {
-            LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
-            return new ArrayList<>(List.of(new Uuid(
-                UUID.nameUUIDFromBytes(
-                        String.join("+",
-                                //xpdrNodeId,
-                                nodeId + TapiConstants.XXPDR
-                                    // + xpdrNb,
-                                    + Integer.parseInt(
-                                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]),
-                                TapiConstants.XPDR)
-                            .getBytes(StandardCharsets.UTF_8))
-                    .toString())));
-        }
-        LOG.error("Updating this device is currently not supported");
-        return new ArrayList<>();
     }
 
     private void updateSips(Mapping mapping, OwnedNodeEdgePoint onep) {
@@ -869,28 +885,40 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.error("No nodes in topology");
             return;
         }
-        if (nodeId.contains("ROADM")) {
-            if (TOPOLOGICAL_MODE.equals("Full")) {
-             // Node is in photonic media layer and UUID can be built from nodeId + PHTN_MEDIA
-                Uuid nodeUuid = new Uuid(
-                    UUID.nameUUIDFromBytes(
-                            (String.join("+", nodeId,TapiConstants.PHTNC_MEDIA)).getBytes(StandardCharsets.UTF_8))
-                        .toString());
-                deleteNodeFromTopo(nodeUuid);
-            } else {
-                LOG.info("Abstracted Topo Mode in TAPI topology Datastore for OR topology representation. Node"
-                    + " {} is not represented in the abstraction and will not be deleted", nodeId);
-            }
+
+        OpenroadmNodeType nodeType = getOpenRoadmNodeType(nodeId);
+        // TODO: How do we handle the cases where nodetype cannot be found?
+        if (nodeType == null) {
+            LOG.error("Couldnt find node type for {}", nodeId);
+            return;
         }
-        if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
-            // Node is either XPDR, MXPDR or SPDR. Retrieve nodes from topology and check names
-            for (Node tapiNode:topology.getNode().values()) {
-                if (tapiNode.getName().values().stream().anyMatch(name -> name.getValue().contains(nodeId))) {
-                    // Found node we need to delete
-                    deleteNodeFromTopo(tapiNode.getUuid());
+
+        switch (nodeType) {
+            case OpenroadmNodeType.ROADM -> {
+                if (TOPOLOGICAL_MODE.equals("Full")) {
+                    deleteNodeFromTopo(createTapiUuidFromRoadmId(nodeId, TapiConstants.PHTNC_MEDIA));
+                } else {
+                    LOG.info("Abstracted Topo Mode in TAPI topology Datastore for OR topology representation. Node"
+                            + " {} is not represented in the abstraction and will not be deleted", nodeId);
                 }
             }
+            case OpenroadmNodeType.XPONDER,
+                 OpenroadmNodeType.SWITCH,
+                 OpenroadmNodeType.MUXPDR -> {
+                // Node is either XPDR, MXPDR or SPDR. Retrieve nodes from topology and check names
+                for (Node tapiNode : topology.getNode().values()) {
+                    if (tapiNode.getName().values().stream()
+                            .anyMatch(name -> name.getValue().contains(nodeId))) {
+                        // Found node we need to delete
+                        deleteNodeFromTopo(tapiNode.getUuid());
+                    }
+                }
+            }
+            default -> {
+                //Do nothing
+            }
         }
+
         // Delete links of topology
         Map<LinkKey, Link> linkMap = topology.getLink();
         if (linkMap != null) {
@@ -930,6 +958,83 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 deleteSipFromTopo(sip.getUuid());
             }
         }
+    }
+
+    private Uuid createTapiUuidFromRoadmId(String nodeId, String mediaType) {
+        Uuid nodeUuid = new Uuid(nameUuid(nodeId, mediaType));
+        return nodeUuid;
+    }
+
+    private OpenroadmNodeType getOpenRoadmNodeType(String nodeId) {
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node node =
+                getOpenRoadmNode(nodeId);
+        return getOpenroadmNodeType(node);
+    }
+
+    private
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node
+        getOpenRoadmNode(String nodeId) {
+        try {
+            Network net = readTopology(InstanceIdentifiers.OPENROADM_NETWORK_II);
+            Optional<Entry<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
+                    .network.NodeKey,
+                    org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                            .Node>> nodeEntryOptional = net.getNode().entrySet().stream()
+                    .filter(entry -> nodeId.equals(entry.getValue().getNodeId().getValue()))
+                    .findFirst();
+            if (nodeEntryOptional.isPresent()) {
+                return nodeEntryOptional.orElse(null).getValue();
+            }
+        } catch (TapiTopologyException e) {
+            return null;
+        }
+        return null;
+    }
+
+    private OpenroadmNodeType getOpenroadmNodeType(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+            .ietf.network.rev180226.networks.network.Node node) {
+        if (node != null) {
+            Node1 node1 = node.augmentation(Node1.class);
+            if (node1 != null) {
+                return node1.getNodeType();
+            }
+        }
+        return null;
+    }
+
+    private Uint16 getXpdrNumber(String nodeId) {
+        return getXpdrNumber(getOpenRoadmNode(nodeId));
+    }
+
+    private Uint16 getXpdrNumber(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+            .networks.network.Node node) {
+        if (node != null) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                    node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+                            .Node1.class);
+            if (node1 != null) {
+                return node1.getXpdrAttributes().getXpdrNumber();
+            }
+        }
+        return null;
+    }
+
+
+    private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
+        Network topology = null;
+        ListenableFuture<Optional<Network>> topologyFuture = networkTransactionService
+                .read(LogicalDatastoreType.CONFIGURATION, networkIID);
+        try {
+            topology = topologyFuture.get().orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException("Unable to get from mdsal topology: "
+                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        } catch (ExecutionException e) {
+            throw new TapiTopologyException("Unable to get from mdsal topology: "
+                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        }
+        return topology;
     }
 
     private Node createTapiXpdrNode(Nodes node,
@@ -1120,7 +1225,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         // network nep creation on I_OTU node
         for (Mapping mapping : xpdrNetMaps) {
-            var lcp = mapping.getLogicalConnectionPoint();
+            var lcp = mapping. getLogicalConnectionPoint();
             String onedNameVal = String.join("+", nodeId, TapiConstants.I_OTU, lcp);
             LOG.info("iOTU NEP = {}", onedNameVal);
             Name onedName = new NameBuilder().setValueName("iNodeEdgePoint_OTU").setValue(onedNameVal).build();
