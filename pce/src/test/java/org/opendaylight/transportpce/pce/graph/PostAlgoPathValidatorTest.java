@@ -511,6 +511,60 @@ class PostAlgoPathValidatorTest {
         assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 10, mock(Subscriber.class)));
     }
 
+    /**
+     * Setting up a 100GHz service should succeed even though the XPONDER on the path has a very
+     * restrictive MC capability (maxSlots=2, i.e. 25GHz max). XPONDER nodes are excluded from the
+     * MC capability collection, so only the ROADM nodes are checked.
+     *
+     * <p>Path: [(XPDR-A1 : ROADM-A-DEG1), (ROADM-A-DEG1 : ROADM-B-DEG1), (ROADM-B-DEG1 : ROADM-B-SRG3)]</p>
+     * <pre>
+     * {@code
+     * XPDR-A1 (XPONDER, excluded from MC capability check)
+     *     <slotWidthGranularityGHz>12.5
+     *     <centerFrequencyGranularityGHz>6.25
+     *     <minSlots>1
+     *     <maxSlots>2  (would limit service to 25GHz if included)
+     * ROADM-A-DEG1
+     *     <slotWidthGranularityGHz>12.5
+     *     <centerFrequencyGranularityGHz>6.25
+     *     <minSlots>3
+     *     <maxSlots>16
+     * ROADM-B-DEG1
+     *     <slotWidthGranularityGHz>12.5
+     *     <centerFrequencyGranularityGHz>100.0
+     *     <minSlots>3
+     *     <maxSlots>16
+     * ROADM-B-SRG3
+     *     <slotWidthGranularityGHz>12.5
+     *     <centerFrequencyGranularityGHz>6.25
+     *     <minSlots>3
+     *     <maxSlots>16
+     * }
+     * </pre>
+     * The above settings are found in the class MockPceNodeMapFactory.
+     * @see MockPceNodeMapFactory
+     */
+    @Test
+    void xponderMcCapabilityExcludedFrom100GHzSpectrumAssignment() {
+        List<PceGraphEdge> edges = List.of(
+                mockEdge("XPDR-A1", "ROADM-A-DEG1", "(XPDR-A1 : ROADM-A-DEG1)"),
+                mockEdge("ROADM-A-DEG1", "ROADM-B-DEG1", "(ROADM-A-DEG1 : ROADM-B-DEG1)"),
+                mockEdge("ROADM-B-DEG1", "ROADM-B-SRG3", "(ROADM-B-DEG1 : ROADM-B-SRG3)")
+        );
+        GraphPath<String, PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
+
+        PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
+                customerAvailableFrequencies, clientInputMock);
+
+        SpectrumAssignment expected = new SpectrumAssignmentBuilder()
+                .setBeginIndex(Uint16.valueOf(740))
+                .setStopIndex(Uint16.valueOf(755))
+                .setFlexGrid(true)
+                .build();
+
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
+    }
+
     private PceGraphEdge mockEdge(String sourceId, String destId, String edgeString) {
         PceLink link = mock(PceLink.class);
         when(link.getSourceId()).thenReturn(sourceId);
