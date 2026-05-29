@@ -16,6 +16,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 
 /**
@@ -75,6 +76,9 @@ public class MockPceNodeMapFactory {
         allPceNodes.put(new NodeId("ROADM-B-DEG2"),
                 createMockNode("ROADM-B-DEG2", 75.0, 12.5, 4, 8));
 
+        allPceNodes.put(new NodeId("XPDR-A1"),
+                createMockNode("XPDR-A1", 6.25, 12.5, 1, 2, OpenroadmNodeType.XPONDER));
+
         return allPceNodes;
     }
 
@@ -107,6 +111,19 @@ public class MockPceNodeMapFactory {
         when(node.getMaxSlots()).thenReturn(maxSlots);
         when(node.getVersion()).thenReturn(DEVICE_VERSION);
 
+        return node;
+    }
+
+    private static PceNode createMockNode(
+            String nodeName,
+            double centralFreqGranularity,
+            double slotWidthGranularity,
+            int minSlots,
+            int maxSlots,
+            OpenroadmNodeType nodeType) {
+
+        PceNode node = createMockNode(nodeName, centralFreqGranularity, slotWidthGranularity, minSlots, maxSlots);
+        when(node.getORNodeType()).thenReturn(nodeType);
         return node;
     }
 
