@@ -14,29 +14,44 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
@@ -45,6 +60,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Port
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ClientNodeEdgePoint;
@@ -65,13 +83,36 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrum;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanism;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanismBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanismKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint64;
-
 
 public class TapiNetworkModelServiceImplTest extends AbstractTest {
 
@@ -86,19 +127,26 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
 
     private TapiNetworkModelServiceImpl service;
 
+    private NetworkTransactionService networkTransactionService;
+
     private TopologyUtils topologyUtils;
 
     private OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
 
     @BeforeEach
     public void setup() throws ExecutionException, InterruptedException {
+        //Clears the datastores before each test is run.
+        TopologyDataUtils.clear(getDataStoreContextUtil());
+
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 "src/test/resources/openroadm-topology.xml",
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
+        TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
+                "src/test/resources/openroadm-network.xml",
+                InstanceIdentifiers.OPENROADM_NETWORK_II);
 
-
-        NetworkTransactionService networkTransactionService = new NetworkTransactionImpl(getDataBroker());
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
 
         service = new TapiNetworkModelServiceImpl(
                 networkTransactionService,
@@ -250,6 +298,259 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         assertNotNull(actualNep);
 
         assertEquals(expectedNep, actualNep, "NEP must match");
+    }
+
+    @Test
+    void deleteTapiNodeDeletesMatchingXpdrNodeLinkAndSip() throws ExecutionException, InterruptedException {
+        String nodeId = "XPDR-DELETE";
+
+        Uuid deletedNodeUuid = uuid("deleted-node");
+        Uuid keptNodeUuid = uuid("kept-node");
+        Uuid deletedLinkUuid = uuid("deleted-link");
+        Uuid keptLinkUuid = uuid("kept-link");
+        Uuid deletedSipUuid = uuid("deleted-sip");
+        Uuid keptSipUuid = uuid("kept-sip");
+
+        Node deletedNode = tapiNode(deletedNodeUuid, nodeId + "+PHOTONIC_MEDIA");
+        Node keptNode = tapiNode(keptNodeUuid, "XPDR-KEEP+PHOTONIC_MEDIA");
+
+        mergeTapiTopology(
+                Map.of(
+                        new NodeKey(deletedNodeUuid), deletedNode,
+                        new NodeKey(keptNodeUuid), keptNode),
+                Map.of(
+                        new LinkKey(deletedLinkUuid), tapiLink(deletedLinkUuid, "link-for-" + nodeId, deletedNode),
+                        new LinkKey(keptLinkUuid), tapiLink(keptLinkUuid, "link-for-XPDR-KEEP", keptNode)));
+
+        mergeOpenRoadmNetworkNodes(Map.of(
+                openRoadmNetworkNodeKey(nodeId), openRoadmNetworkNode(nodeId),
+                openRoadmNetworkNodeKey("XPDR-KEEP"), openRoadmNetworkNode("XPDR-KEEP")));
+
+        mergeSips(Map.of(
+                new ServiceInterfacePointKey(deletedSipUuid), tapiSip(deletedSipUuid, "sip-for-" + nodeId),
+                new ServiceInterfacePointKey(keptSipUuid), tapiSip(keptSipUuid, "sip-for-XPDR-KEEP")));
+
+        assertTrue(readOpenRoadmNetworkNode(nodeId).isPresent(), "XPDR-DELETE must exist in OpenROADM network");
+        assertTrue(readOpenRoadmNetworkNode("XPDR-KEEP").isPresent(),
+                "XPDR-KEEP must exist in OpenROADM network");
+
+        service.deleteTapinode(nodeId);
+
+        assertTrue(readTapiNode(deletedNodeUuid).isEmpty(), "Matching XPDR node must be deleted");
+        assertTrue(readTapiLink(deletedLinkUuid).isEmpty(), "Matching link must be deleted");
+        assertTrue(readTapiSip(deletedSipUuid).isEmpty(), "Matching SIP must be deleted");
+
+        assertTrue(readTapiNode(keptNodeUuid).isPresent(), "Unrelated node must be kept");
+        assertTrue(readTapiLink(keptLinkUuid).isPresent(), "Unrelated link must be kept");
+        assertTrue(readTapiSip(keptSipUuid).isPresent(), "Unrelated SIP must be kept");
+    }
+
+    @Test
+    void deleteTapiNodeDeletesRoadmNodeByDeterministicUuid() throws ExecutionException, InterruptedException {
+        String nodeId = "ROADM-DELETE";
+        Uuid roadmNodeUuid = roadmTapiNodeUuid(nodeId);
+
+        mergeTapiTopology(
+                Map.of(new NodeKey(roadmNodeUuid), tapiNode(roadmNodeUuid, nodeId + "+PHOTONIC_MEDIA")),
+                Map.of());
+        mergeOpenRoadmNetworkNodes(Map.of(
+                openRoadmNetworkNodeKey(nodeId), openRoadmNetworkNode(nodeId),
+                openRoadmNetworkNodeKey("ROADM-KEEP"), openRoadmNetworkNode("ROADM-KEEP")));
+        mergeSips(Map.of());
+
+        service.deleteTapinode(nodeId);
+
+        assertTrue(readTapiNode(roadmNodeUuid).isEmpty(), "ROADM node must be deleted by its deterministic UUID");
+    }
+
+    private void mergeTapiTopology(Map<NodeKey, Node> nodes, Map<LinkKey, Link> links)
+            throws ExecutionException, InterruptedException {
+        networkTransactionService.merge(
+                LogicalDatastoreType.OPERATIONAL,
+                tapiTopologyIid(),
+                new TopologyBuilder()
+                        .setUuid(TapiProvider.TAPI_TOPO_UUID)
+                        .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
+                        .setNode(nodes)
+                        .setLink(links)
+                        .build());
+        networkTransactionService.commit().get();
+    }
+
+    private void mergeOpenRoadmNetworkNodes(Map<
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                    .Node> nodes)
+            throws ExecutionException, InterruptedException {
+
+        networkTransactionService.merge(
+                LogicalDatastoreType.CONFIGURATION,
+                InstanceIdentifiers.OPENROADM_NETWORK_II,
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
+                        .NetworkBuilder()
+                        .setNetworkId(new NetworkId(StringConstants.OPENROADM_NETWORK))
+                        .setNode(nodes)
+                        .build());
+        networkTransactionService.commit().get();
+    }
+
+    private void mergeSips(Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips)
+            throws ExecutionException, InterruptedException {
+        networkTransactionService.merge(
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class).build(),
+                new ContextBuilder().setServiceInterfacePoint(sips).build());
+        networkTransactionService.commit().get();
+    }
+
+    private Optional<Node> readTapiNode(Uuid nodeUuid) throws ExecutionException, InterruptedException {
+        return networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(TapiProvider.TAPI_TOPO_UUID))
+                        .child(Node.class, new NodeKey(nodeUuid))
+                        .build()).get();
+    }
+
+    private Optional<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+            .Node>
+        readOpenRoadmNetworkNode(String nodeId) throws ExecutionException, InterruptedException {
+
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId openRoadmNodeId =
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId(nodeId);
+
+        return networkTransactionService.read(
+                LogicalDatastoreType.CONFIGURATION,
+                InstanceIdentifiers.OPENROADM_NETWORK_II
+                        .toBuilder()
+                        .child(
+                                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                        .networks.network.Node.class,
+                                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                        .networks.network.NodeKey(openRoadmNodeId))
+                        .build()).get();
+    }
+
+    private Optional<Link> readTapiLink(Uuid linkUuid) throws ExecutionException, InterruptedException {
+        return networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(TapiProvider.TAPI_TOPO_UUID))
+                        .child(Link.class, new LinkKey(linkUuid))
+                        .build()).get();
+    }
+
+    private Optional<ServiceInterfacePoint> readTapiSip(Uuid sipUuid)
+            throws ExecutionException, InterruptedException {
+        return networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class)
+                        .child(ServiceInterfacePoint.class, new ServiceInterfacePointKey(sipUuid))
+                        .build()).get();
+    }
+
+    private DataObjectIdentifier<Topology> tapiTopologyIid() {
+        return DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(TapiProvider.TAPI_TOPO_UUID))
+                .build();
+    }
+
+    private Node tapiNode(Uuid uuid, String nameValue) {
+        Name name = new NameBuilder()
+                .setValueName("node name")
+                .setValue(nameValue)
+                .build();
+
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+                .setRiskCharacteristicName("test-risk")
+                .setRiskIdentifierList(Set.of("risk1", "risk2"))
+                .build();
+
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                .setCostAlgorithm("alg1")
+                .setCostName("costname1")
+                .setCostValue("1000")
+                .build();
+
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+                .setFixedLatencyCharacteristic("0")
+                .setQueuingLatencyCharacteristic("0")
+                .setJitterCharacteristic("0")
+                .setWanderCharacteristic("0")
+                .setTrafficPropertyName("test-latency")
+                .build();
+
+        return new NodeBuilder()
+                .setUuid(uuid)
+                .setName(Map.of(name.key(), name))
+                .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
+                .setAdministrativeState(AdministrativeState.UNLOCKED)
+                .setOperationalState(OperationalState.ENABLED)
+                .setLifecycleState(LifecycleState.INSTALLED)
+                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                .setRiskParameterPac(new RiskParameterPacBuilder()
+                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                        .build())
+                .setErrorCharacteristic("error")
+                .setLossCharacteristic("loss")
+                .setRepeatDeliveryCharacteristic("repeat delivery")
+                .setDeliveryOrderCharacteristic("delivery order")
+                .setUnavailableTimeCharacteristic("unavailable time")
+                .setServerIntegrityProcessCharacteristic("server integrity process")
+                .build();
+    }
+
+    private Link tapiLink(Uuid uuid, String nameValue, Node tapiNode) {
+        Name name = new NameBuilder().setValueName("link name").setValue(nameValue).build();
+        Uuid epUuid = new Uuid(UUID.nameUUIDFromBytes("node-edge-point1".getBytes(StandardCharsets.UTF_8)).toString());
+
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+                .setRiskCharacteristicName("test-risk")
+                .setRiskIdentifierList(Set.of("risk1", "risk2"))
+                .build();
+
+        NodeEdgePoint ep = new NodeEdgePointBuilder().setNodeEdgePointUuid(epUuid)
+                .setNodeUuid(epUuid)
+                .setTopologyUuid(uuid)
+                .build();
+
+        ValidationMechanism mec = new ValidationMechanismBuilder().setValidationMechanism("mech5").build();
+
+        return new LinkBuilder()
+                .setUuid(uuid)
+                .setName(Map.of(name.key(), name))
+                .setNodeEdgePoint(Map.of(ep.key(), ep))
+                .setLayerProtocolName(tapiNode.getLayerProtocolName())
+                .setTransitionedLayerProtocolName(tapiNode.getLayerProtocolName().stream()
+                        .map(protocolName -> protocolName.getName()).collect(Collectors.toSet()))
+                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .setCostCharacteristic(tapiNode.getCostCharacteristic())
+                .setLatencyCharacteristic(tapiNode.getLatencyCharacteristic())
+                .setValidationMechanism(Map.of(new ValidationMechanismKey("mec"), mec))
+                .build();
+    }
+
+    private ServiceInterfacePoint tapiSip(Uuid uuid, String nameValue) {
+        Name name = new NameBuilder().setValueName("sip name").setValue(nameValue).build();
+        return new ServiceInterfacePointBuilder()
+                .setUuid(uuid)
+                .setName(Map.of(name.key(), name))
+                .build();
+    }
+
+    private Uuid uuid(String value) {
+        return new Uuid(UUID.nameUUIDFromBytes(value.getBytes(StandardCharsets.UTF_8)).toString());
+    }
+
+    private Uuid roadmTapiNodeUuid(String nodeId) {
+        return uuid(String.join("+", nodeId, TapiConstants.PHTNC_MEDIA));
     }
 
     private OwnedNodeEdgePoint1 photonicMediaAugmentation(SpectrumCapabilityPac spectrumCapabilityPac) {
@@ -426,5 +727,51 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
         return spectrumCapabilityPacBuilder
                 .setAvailableSpectrum(Map.of(availableSpectrum.key(), availableSpectrum))
                 .build();
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node
+        openRoadmNetworkNode(String nodeId) {
+        return openRoadmNetworkNode(nodeId, openRoadmNodeType(nodeId));
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node
+        openRoadmNetworkNode(String nodeId, OpenroadmNodeType nodeType) {
+
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId openRoadmNodeId =
+            new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId(nodeId);
+
+        Node1 nodeAugmentation = new Node1Builder()
+            .setNodeType(nodeType)
+            .build();
+
+        return new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+            .NodeBuilder()
+            .setNodeId(openRoadmNodeId)
+            .addAugmentation(nodeAugmentation)
+            .build();
+    }
+
+    private OpenroadmNodeType openRoadmNodeType(String nodeId) {
+        if (nodeId.contains("ROADM")) {
+            return OpenroadmNodeType.ROADM;
+        }
+        if (nodeId.contains("SPDR")) {
+            return OpenroadmNodeType.SWITCH;
+        }
+        if (nodeId.contains("XPDR")) {
+            return OpenroadmNodeType.XPONDER;
+        }
+        if (nodeId.contains("MXPDR")) {
+            return OpenroadmNodeType.MUXPDR;
+        }
+        throw new IllegalArgumentException("Unsupported OpenROADM node type for nodeId: " + nodeId);
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey
+        openRoadmNetworkNodeKey(String nodeId) {
+
+        return new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                .NodeKey(new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .NodeId(nodeId));
     }
 }
