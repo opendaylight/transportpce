@@ -74,31 +74,23 @@ public class InterfaceMcCapability implements McCapability {
     @Override
     public boolean isCompatibleWithServiceFrequency(BigDecimal requiredFrequencyWidthGHz, Observer observer) {
 
-        BigDecimal quotient;
-        try {
-            quotient = requiredFrequencyWidthGHz.divide(slotWidthGranularity);
-        } catch (ArithmeticException e) {
+        BigDecimal remainder = requiredFrequencyWidthGHz.remainder(slotWidthGranularity);
+
+        if (remainder.compareTo(BigDecimal.ZERO) != 0) {
+            observer.error(unsupportedServiceFrequency(requiredFrequencyWidthGHz));
+
             return false;
         }
 
-        BigDecimal remainder = requiredFrequencyWidthGHz.remainder(slotWidthGranularity);
+        BigDecimal quotient = requiredFrequencyWidthGHz.divideToIntegralValue(slotWidthGranularity);
 
-        if (remainder.compareTo(BigDecimal.ZERO) == 0
-                && quotient.compareTo(BigDecimal.valueOf(minSlots)) >= 0
+        if (quotient.compareTo(BigDecimal.valueOf(minSlots)) >= 0
                 && quotient.compareTo(BigDecimal.valueOf(maxSlots)) <= 0) {
 
             return true;
         }
 
-        observer.error(String.format("%s does not support a service slot width of %sGHz (%s supports "
-                        + "slot-width-granularity: %sGHz, and min-slots: %s, and max-slots %s, i.e. slot width: %s).",
-                node,
-                requiredFrequencyWidthGHz.stripTrailingZeros().toPlainString(),
-                node,
-                slotWidthGranularity.stripTrailingZeros().toPlainString(),
-                minSlots,
-                maxSlots,
-                slotWidthRange(minSlots, maxSlots, slotWidthGranularity)));
+        observer.error(unsupportedServiceFrequency(requiredFrequencyWidthGHz));
 
         return false;
     }
@@ -144,6 +136,18 @@ public class InterfaceMcCapability implements McCapability {
                     ? centerFrequencyGranularity.stripTrailingZeros().toPlainString() : "null",
             minSlots,
             maxSlots);
+    }
+
+    private String unsupportedServiceFrequency(BigDecimal requiredFrequencyWidthGHz) {
+        return String.format("%s does not support a service slot width of %sGHz (%s supports "
+                        + "slot-width-granularity: %sGHz, and min-slots: %s, and max-slots %s, i.e. slot width: %s).",
+                node,
+                requiredFrequencyWidthGHz.stripTrailingZeros().toPlainString(),
+                node,
+                slotWidthGranularity.stripTrailingZeros().toPlainString(),
+                minSlots,
+                maxSlots,
+                slotWidthRange(minSlots, maxSlots, slotWidthGranularity));
     }
 
     private String slotWidthRange(long minSlotNb, long maxSlotNb, BigDecimal slotWidthGran) {
