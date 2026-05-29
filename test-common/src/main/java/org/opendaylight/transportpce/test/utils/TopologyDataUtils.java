@@ -35,6 +35,23 @@ public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
 
+    /**
+     * Clears all stores from data.
+     *
+     * @param dataStoreContextUtil where we fetch the dataBroker from
+     * @throws InterruptedException if the process was interrupted
+     * @throws ExecutionException if the datastore failed to be cleared
+     */
+    public static void clear(DataStoreContext dataStoreContextUtil)
+            throws InterruptedException, ExecutionException {
+        DataBroker dataBroker = dataStoreContextUtil.getDataBroker();
+
+        clearStore(dataBroker, LogicalDatastoreType.CONFIGURATION);
+        clearStore(dataBroker, LogicalDatastoreType.OPERATIONAL);
+
+        LOG.info("All test datastore contents cleared");
+    }
+
     @SuppressWarnings("rawtypes")
     // FIXME check if the InstanceIdentifier raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
@@ -193,6 +210,45 @@ public final class TopologyDataUtils {
                 portmappingIID, result);
         writeTransaction.get();
         LOG.info("portmapping-example stored with success in datastore");
+    }
+
+    private static void clearStore(DataBroker dataBroker, LogicalDatastoreType datastoreType)
+            throws InterruptedException, ExecutionException {
+        deleteIfPresent(
+                dataBroker,
+                datastoreType,
+                DataObjectIdentifier.builder(Networks.class).build());
+
+        deleteIfPresent(
+                dataBroker,
+                datastoreType,
+                DataObjectIdentifier.builder(Context.class).build());
+
+        deleteIfPresent(
+                dataBroker,
+                datastoreType,
+                DataObjectIdentifier.builder(Network.class).build());
+    }
+
+    private static <T extends DataObject> void deleteIfPresent(
+            DataBroker dataBroker,
+            LogicalDatastoreType datastoreType,
+            DataObjectIdentifier<T> instanceIdentifier)
+            throws InterruptedException, ExecutionException {
+
+        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
+        Optional<T> existing;
+        try {
+            existing = readTransaction.read(datastoreType, instanceIdentifier).get();
+        } finally {
+            readTransaction.close();
+        }
+
+        if (existing.isPresent()) {
+            WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
+            writeTransaction.delete(datastoreType, instanceIdentifier);
+            writeTransaction.commit().get();
+        }
     }
 
     private TopologyDataUtils() {
