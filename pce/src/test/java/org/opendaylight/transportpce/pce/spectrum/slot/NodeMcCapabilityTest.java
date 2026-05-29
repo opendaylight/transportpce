@@ -16,105 +16,114 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.spectrum.observer.Observer;
 
-public class NodeMcCapabilityTest {
+class NodeMcCapabilityTest {
 
     Observer observer = mock(Observer.class);
 
     @Test
-    public void slotWidthEqualToServiceWidth() {
+    void slotWidthEqualToServiceWidth() {
         McCapability slot = new NodeMcCapability(50, 1, 1);
 
         assertTrue(slot.isCompatibleWithServiceFrequency(50));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertTrue(slot.isCompatibleWithServiceFrequency(50, observer));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(0)).error(anyString());
     }
 
     @Test
-    public void slotWidthIsLessThanServiceWidth() {
+    void slotWidthIsLessThanServiceWidth() {
         McCapability slot = new NodeMcCapability(6.25, 1, 8);
 
         assertTrue(slot.isCompatibleWithServiceFrequency(50));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertTrue(slot.isCompatibleWithServiceFrequency(50, observer));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(0)).error(anyString());
     }
 
     @Test
-    public void slotWidthIsLessThanServiceWidthTwo() {
+    void slotWidthIsLessThanServiceWidthTwo() {
         McCapability slot = new NodeMcCapability(3.125, 1, 16);
 
         assertTrue(slot.isCompatibleWithServiceFrequency(50));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertTrue(slot.isCompatibleWithServiceFrequency(50, observer));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(0)).error(anyString());
     }
 
     @Test
-    public void slotWidthIsLessThanServiceWidthThree() {
+    void slotWidthIsLessThanServiceWidthThree() {
         McCapability slot = new NodeMcCapability(4.6875, 1, 16);
 
         assertTrue(slot.isCompatibleWithServiceFrequency(37.5));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(37.5)));
         assertTrue(slot.isCompatibleWithServiceFrequency(37.5, observer));
         assertTrue(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(37.5), observer));
+        verify(observer, times(0)).error(anyString());
     }
 
     @Test
-    public void incompatibleGranularityIsFalse() {
+    void incompatibleGranularityIsFalse() {
         McCapability slot = new NodeMcCapability(4.6875, 1, 16);
 
         assertFalse(slot.isCompatibleWithServiceFrequency(50));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertFalse(slot.isCompatibleWithServiceFrequency(50, observer));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(2)).error(anyString());
     }
 
     @Test
-    public void incompatibleGranularityIsFalseTwo() {
+    void incompatibleGranularityIsFalseTwo() {
         McCapability slot = new NodeMcCapability(6.30, 1, 8);
 
         assertFalse(slot.isCompatibleWithServiceFrequency(50));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertFalse(slot.isCompatibleWithServiceFrequency(50, observer));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(2)).error(anyString());
     }
 
     @Test
-    public void incompatibleGranularityIsFalseThree() {
+    void maxSlotsTooLowIsFalse() {
         McCapability slot = new NodeMcCapability(6.25, 1, 6);
 
         assertFalse(slot.isCompatibleWithServiceFrequency(50));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertFalse(slot.isCompatibleWithServiceFrequency(50, observer));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(2)).error(anyString());
     }
 
     @Test
-    public void minSlotIsTooHigh() {
+    void minSlotIsTooHigh() {
         McCapability slot = new NodeMcCapability(6.25, 8, 16);
 
         assertFalse(slot.isCompatibleWithServiceFrequency(37.5));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(37.5)));
         assertFalse(slot.isCompatibleWithServiceFrequency(37.5, observer));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(37.5), observer));
+        verify(observer, times(2)).error(anyString());
     }
 
     @Test
-    public void slotWidthGranularityIsTooHigh() {
+    void slotWidthGranularityIsTooHigh() {
         McCapability slot = new NodeMcCapability(100, 1, 1);
 
         assertFalse(slot.isCompatibleWithServiceFrequency(50));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50)));
         assertFalse(slot.isCompatibleWithServiceFrequency(50, observer));
         assertFalse(slot.isCompatibleWithServiceFrequency(BigDecimal.valueOf(50), observer));
+        verify(observer, times(2)).error(anyString());
     }
 
     @Test
-    public void testUnknownNodesEquals() {
+    void testUnknownNodesEquals() {
         McCapability slotOne = new NodeMcCapability(50, 1, 1);
         McCapability slotTwo = new NodeMcCapability(50, 1, 1);
 
@@ -122,7 +131,7 @@ public class NodeMcCapabilityTest {
     }
 
     @Test
-    public void testKnownNodesEquals() {
+    void testKnownNodesEquals() {
         McCapability slotOne = new NodeMcCapability("A", 50, 1, 1);
         McCapability slotTwo = new NodeMcCapability("A", 50, 1, 1);
 
@@ -130,7 +139,7 @@ public class NodeMcCapabilityTest {
     }
 
     @Test
-    public void testKnownNodesNotEquals() {
+    void testKnownNodesNotEquals() {
         McCapability slotOne = new NodeMcCapability("A", 50, 1, 1);
         McCapability slotTwo = new NodeMcCapability("B", 50, 1, 1);
 
@@ -138,7 +147,7 @@ public class NodeMcCapabilityTest {
     }
 
     @Test
-    public void observerIsNotifiedFrequencyAsDoubleValue() {
+    void observerIsNotifiedFrequencyAsDoubleValue() {
         McCapability slot = new NodeMcCapability(100, 1, 1);
 
         Observer observerMock = mock(Observer.class);
@@ -149,7 +158,7 @@ public class NodeMcCapabilityTest {
     }
 
     @Test
-    public void observerIsNotifiedMinSlotsEqualsMaxSlots() {
+    void observerIsNotifiedMinSlotsEqualsMaxSlots() {
         McCapability slot = new NodeMcCapability("ROADM-A-SRG1", 100, 1, 1);
 
         Observer observerMock = mock(Observer.class);
@@ -162,7 +171,7 @@ public class NodeMcCapabilityTest {
     }
 
     @Test
-    public void observerIsNotifiedMinSlotsNotEqualToMaxSlots() {
+    void observerIsNotifiedMinSlotsNotEqualToMaxSlots() {
         McCapability slot = new NodeMcCapability("ROADM-A-SRG1", 12.5, 1, 3);
 
         Observer observerMock = mock(Observer.class);
