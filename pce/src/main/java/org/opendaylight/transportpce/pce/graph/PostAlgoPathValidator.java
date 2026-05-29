@@ -1121,12 +1121,14 @@ public class PostAlgoPathValidator {
                 LOG.debug("PCE node {} is a contentionless srg, skipping available frequency map.", pceNode);
             }
             centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
-            mcCapabilityCollection.add(
-                    new InterfaceMcCapability(
-                            pceNode.getNodeId().getValue(),
-                            pceNode.getSlotWidthGranularity(),
-                            pceNode.getMinSlots(),
-                            pceNode.getMaxSlots()));
+            if (!isXponder(pceNode.getORNodeType())) {
+                mcCapabilityCollection.add(
+                        new InterfaceMcCapability(
+                                pceNode.getNodeId().getValue(),
+                                pceNode.getSlotWidthGranularity(),
+                                pceNode.getMinSlots(),
+                                pceNode.getMaxSlots()));
+            }
 
             String pceNodeVersion = pceNode.getVersion();
             BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
@@ -1172,6 +1174,12 @@ public class PostAlgoPathValidator {
                 centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
                 isFlexGrid,
                 subscriber);
+    }
+
+    private boolean isXponder(OpenroadmNodeType nodeType) {
+        return OpenroadmNodeType.XPONDER.equals(nodeType)
+                || OpenroadmNodeType.MUXPDR.equals(nodeType)
+                || OpenroadmNodeType.SWITCH.equals(nodeType);
     }
 
     private SpectrumAssignment createEmptySpectrumAssignment() {
