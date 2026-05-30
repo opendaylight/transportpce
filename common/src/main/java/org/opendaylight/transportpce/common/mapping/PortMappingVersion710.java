@@ -897,7 +897,9 @@ public class PortMappingVersion710 {
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
                     .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity())
                     .setMinSlots(mcCapabilityProfile.getMinSlots())
-                    .setMaxSlots(mcCapabilityProfile.getMaxSlots());
+                    .setMaxSlots(mcCapabilityProfile.getMaxSlots())
+                    .setMinEdgeFreq(mcCapabilityProfile.getMinEdgeFreq())
+                    .setMaxEdgeFreq(mcCapabilityProfile.getMaxEdgeFreq());
                 if (!usableMc(mcCapabilitiesBuilder)) {
                     LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "degree", degree.getDegreeNumber(),
                             mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
