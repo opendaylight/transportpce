@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-05-29 {
+    description
+      "Add min-edge-freq and max-edge-freq to mc-capabilities";
+  }
+
   revision 2025-09-05 {
     description
       "Add wavelength duplication support for SRG";
@@ -436,6 +441,16 @@ module transportpce-portmapping {
         default "50";
         description
           "Width of a slot measured in GHz.";
+      }
+      leaf min-edge-freq {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+          "Minimum edge frequency";
+      }
+      leaf max-edge-freq {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+          "Maximum edge frequency";
       }
     }
   }

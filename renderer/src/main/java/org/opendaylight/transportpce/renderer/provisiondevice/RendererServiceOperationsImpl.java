@@ -58,8 +58,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -148,7 +148,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
                 LOG.info("Using {}G rate", serviceRate);
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
                         .network.Nodes mappingNode =
                     portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                         ? portMapping.getNode(input.getServiceAEnd().getNodeId())
@@ -250,7 +250,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                 }
                 PathDescription pathDescription = pathDescriptionOpt.orElseThrow();
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
                         .network.Nodes mappingNode =
                         portMapping.isNodeExist(service.getServiceAEnd().getNodeId().getValue())
                                 ? portMapping.getNode(service.getServiceAEnd().getNodeId().getValue())
@@ -667,7 +667,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         justification = "call in call() method")
     private boolean manageServicePathCreation(ServiceImplementationRequestInput input, String serviceType,
                                               boolean isTempService) {
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes
                 mappingNode = portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                 ? portMapping.getNode(input.getServiceAEnd().getNodeId())
                 : null;
