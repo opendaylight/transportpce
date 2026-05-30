@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.spectrum.slot;
 
 import java.math.BigDecimal;
+import java.util.BitSet;
 import org.opendaylight.transportpce.pce.spectrum.observer.Observer;
 
 /**
@@ -40,6 +41,18 @@ public class UnconstrainedMcCapability implements McCapability {
     @Override
     public boolean isCompatibleWithServiceFrequency(double requiredFrequencyWidthGHz, Observer observer) {
         return true;
+    }
+
+    @Override
+    public BitSet supportableFrequencyRange(
+            double slotWidthGranularityGHz,
+            double edgeFrequencyTHz,
+            int effectiveBits) {
+
+        BitSet bitSet = new BitSet(effectiveBits);
+        bitSet.set(0, effectiveBits);
+
+        return bitSet;
     }
 
     @Override
