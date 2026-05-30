@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.pce.spectrum.slot;
 
+import java.util.BitSet;
+
 public interface CapabilityCollection {
 
     /**
@@ -24,4 +26,21 @@ public interface CapabilityCollection {
      */
     boolean isCompatibleService(double slotWidthGranularityGHz, int slotCount);
 
+    /**
+     * Filters the available spectrum grid to only include frequencies that are supported
+     * by all capabilities in this collection.
+     *
+     * <p>0 = outside range, 1 = within range.
+     *
+     * @param availableFrequencyGrid available slots as a BitSet (1 = available).
+     * @param slotWidthGranularityGHz Typically the frequency width of each slot in a 768 grid.
+     * @param edgeFrequencyTHz Typically the lowest frequency on the spectrum grid.
+     * @param effectiveBits Typically the nr of bits in the spectrum grid.
+     * @return a BitSet of slots supported by this collection (0 = outside range, 1 = within range).
+     */
+    BitSet usableFrequencyRange(
+            BitSet availableFrequencyGrid,
+            double slotWidthGranularityGHz,
+            double edgeFrequencyTHz,
+            int effectiveBits);
 }

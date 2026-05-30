@@ -9,10 +9,13 @@
 package org.opendaylight.transportpce.pce.spectrum.slot;
 
 import java.math.BigDecimal;
+import java.util.BitSet;
 import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.pce.spectrum.observer.Observer;
 import org.opendaylight.transportpce.pce.spectrum.observer.VoidObserver;
+import org.opendaylight.transportpce.pce.spectrum.range.EntireGridRange;
+import org.opendaylight.transportpce.pce.spectrum.range.FrequencyRange;
 
 public class InterfaceMcCapability implements McCapability {
 
@@ -26,6 +29,8 @@ public class InterfaceMcCapability implements McCapability {
 
     private final int maxSlots;
 
+    private final FrequencyRange supportedFrequencyRange;
+
     /**
      * Create a NodeMcCapability object with default values defined in the yang model:
      * - CenterFrequencyGranularity = 50(GHz).
@@ -33,37 +38,53 @@ public class InterfaceMcCapability implements McCapability {
      * - min and max slots set to 1.
      */
     public InterfaceMcCapability() {
-        this("Unknown node", BigDecimal.valueOf(50), 1, 1, BigDecimal.valueOf(50));
+        this("Unknown node", BigDecimal.valueOf(50), 1, 1, BigDecimal.valueOf(50),
+                new EntireGridRange());
     }
 
-    public InterfaceMcCapability(BigDecimal slotWidthGranularity, int minSlots, int maxSlots) {
-        this("Unknown node", slotWidthGranularity, minSlots, maxSlots, slotWidthGranularity);
-    }
+    public InterfaceMcCapability(BigDecimal slotWidthGranularity, int minSlots, int maxSlots,
+            FrequencyRange supportedFrequencyRange) {
 
-    public InterfaceMcCapability(@NonNull String node, BigDecimal slotWidthGranularity, int minSlots, int maxSlots) {
-        this(node, slotWidthGranularity, minSlots, maxSlots, slotWidthGranularity);
+        this("Unknown node", slotWidthGranularity, minSlots, maxSlots, slotWidthGranularity,
+                supportedFrequencyRange);
     }
 
     public InterfaceMcCapability(@NonNull String node, BigDecimal slotWidthGranularity, int minSlots, int maxSlots,
-            BigDecimal centerFrequencyGranularity) {
+            FrequencyRange supportedFrequencyRange) {
+        this(node, slotWidthGranularity, minSlots, maxSlots, slotWidthGranularity, supportedFrequencyRange);
+    }
+
+    public InterfaceMcCapability(@NonNull String node, BigDecimal slotWidthGranularity, int minSlots, int maxSlots,
+            BigDecimal centerFrequencyGranularity, FrequencyRange supportedFrequencyRange) {
         this.node = node;
         this.slotWidthGranularity = slotWidthGranularity;
         this.centerFrequencyGranularity = centerFrequencyGranularity;
         this.minSlots = minSlots;
         this.maxSlots = maxSlots;
+        this.supportedFrequencyRange = supportedFrequencyRange;
     }
 
     public InterfaceMcCapability(
-            BigDecimal slotWidthGranularity, BigDecimal centerFrequencyGranularity, int minSlots, int maxSlots) {
-        this("Unknown node", slotWidthGranularity, minSlots, maxSlots, centerFrequencyGranularity);
+            BigDecimal slotWidthGranularity, BigDecimal centerFrequencyGranularity, int minSlots, int maxSlots,
+            FrequencyRange supportedFrequencyRange) {
+
+        this("Unknown node", slotWidthGranularity, minSlots, maxSlots, centerFrequencyGranularity,
+                supportedFrequencyRange);
     }
 
-    public InterfaceMcCapability(double slotWidthGranularity, int minSlots, int maxSlots) {
-        this(BigDecimal.valueOf(slotWidthGranularity), minSlots, maxSlots);
+    public InterfaceMcCapability(
+            double slotWidthGranularity,
+            int minSlots,
+            int maxSlots,
+            FrequencyRange supportedFrequencyRange) {
+
+        this(BigDecimal.valueOf(slotWidthGranularity), minSlots, maxSlots, supportedFrequencyRange);
     }
 
-    public InterfaceMcCapability(@NonNull String node, double slotWidthGranularity, int minSlots, int maxSlots) {
-        this(node, BigDecimal.valueOf(slotWidthGranularity), minSlots, maxSlots);
+    public InterfaceMcCapability(@NonNull String node, double slotWidthGranularity, int minSlots, int maxSlots,
+            FrequencyRange supportedFrequencyRange) {
+
+        this(node, BigDecimal.valueOf(slotWidthGranularity), minSlots, maxSlots, supportedFrequencyRange);
     }
 
     @Override
@@ -108,6 +129,15 @@ public class InterfaceMcCapability implements McCapability {
     @Override
     public BigDecimal centerFrequencyGranularity() {
         return centerFrequencyGranularity;
+    }
+
+    @Override
+    public BitSet supportableFrequencyRange(
+            double slotWidthGranularityGHz,
+            double edgeFrequencyTHz,
+            int effectiveBits) {
+
+        return supportedFrequencyRange.gridRange(slotWidthGranularityGHz, edgeFrequencyTHz, effectiveBits);
     }
 
     @Override

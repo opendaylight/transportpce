@@ -25,6 +25,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -36,6 +37,8 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Factory;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.PreferenceFactory;
+import org.opendaylight.transportpce.pce.spectrum.range.EntireGridRange;
+import org.opendaylight.transportpce.pce.spectrum.range.McCapabilityRange;
 import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.UnconstrainedMcCapability;
@@ -1052,7 +1055,8 @@ public class PceCalculation {
                 new Uuid(getUuidFromInput(anodeId)), new Uuid(getUuidFromInput(znodeId)),
                 aportUuid, zportUuid, new InterfaceMcCapability(
                     node.getName().entrySet().iterator().next().getValue().getValue(),
-                    BigDecimal.valueOf(12.5), 1, 768, BigDecimal.valueOf(6.25)),
+                    BigDecimal.valueOf(12.5), 1, 768, BigDecimal.valueOf(6.25),
+                    new EntireGridRange()),
                 topoUuid);
         ton.initialize();
         Map<Uuid, PceTapiOpticalNode> ptonMap = new HashMap<>();
@@ -1915,7 +1919,14 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapability : mcCapabilities) {
             if (mcCapability.getMcNodeName().contains("XPDR")) {
-                return new XpdrMcCapability(mcCapability.getCenterFreqGranularity().getValue().decimalValue());
+                return new XpdrMcCapability(
+                        mcCapability.getCenterFreqGranularity().getValue().decimalValue(),
+                        McCapabilityRange.from(
+                                mcCapability.getMinEdgeFreq(),
+                                mcCapability.getMaxEdgeFreq(),
+                                GridConstant.GRANULARITY,
+                                GridConstant.START_EDGE_FREQUENCY_THZ,
+                                GridConstant.EFFECTIVE_BITS));
             }
             if (mcCapability.getMcNodeName().contains(moduleName)) {
                 return new InterfaceMcCapability(
@@ -1927,11 +1938,18 @@ public class PceCalculation {
                         mcCapability.getMaxSlots() != null ? mcCapability.getMaxSlots().intValue() : 1,
                         mcCapability.getCenterFreqGranularity() != null
                                 ? mcCapability.getCenterFreqGranularity().getValue().decimalValue()
-                                : BigDecimal.valueOf(50));
+                                : BigDecimal.valueOf(50),
+                        McCapabilityRange.from(
+                                mcCapability.getMinEdgeFreq(),
+                                mcCapability.getMaxEdgeFreq(),
+                                GridConstant.GRANULARITY,
+                                GridConstant.START_EDGE_FREQUENCY_THZ,
+                                GridConstant.EFFECTIVE_BITS)
+                );
             }
         }
         return new InterfaceMcCapability(nodeId.getValue(), BigDecimal.valueOf(50), 1, 1,
-                BigDecimal.valueOf(50));
+                BigDecimal.valueOf(50), new EntireGridRange());
     }
 
     private Uuid getUuidFromInput(String inString) {
