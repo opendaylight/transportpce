@@ -9,9 +9,11 @@
 package org.opendaylight.transportpce.pce.spectrum.slot;
 
 import java.math.BigDecimal;
+import java.util.BitSet;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.pce.spectrum.observer.Observer;
 import org.opendaylight.transportpce.pce.spectrum.observer.VoidObserver;
+import org.opendaylight.transportpce.pce.spectrum.range.FrequencyRange;
 
 /**
  * MC capability for OpenROADM 7.1 XPDRs.
@@ -42,8 +44,14 @@ public class XpdrMcCapability implements McCapability {
 
     private final BigDecimal centerFreqGranularity;
 
-    public XpdrMcCapability(@NonNull BigDecimal centerFreqGranularity) {
+    private final FrequencyRange supportedFrequencyRange;
+
+    public XpdrMcCapability(
+            @NonNull BigDecimal centerFreqGranularity,
+            @NonNull FrequencyRange supportedFrequencyRange) {
+
         this.centerFreqGranularity = centerFreqGranularity;
+        this.supportedFrequencyRange = supportedFrequencyRange;
     }
 
     @Override
@@ -69,6 +77,15 @@ public class XpdrMcCapability implements McCapability {
     @Override
     public boolean isCompatibleWithServiceFrequency(double requiredFrequencyWidthGHz, Observer observer) {
         return isCompatibleWithServiceFrequency(BigDecimal.valueOf(requiredFrequencyWidthGHz), observer);
+    }
+
+    @Override
+    public BitSet supportableFrequencyRange(
+            double slotWidthGranularityGHz,
+            double edgeFrequencyTHz,
+            int effectiveBits) {
+
+        return supportedFrequencyRange.gridRange(slotWidthGranularityGHz, edgeFrequencyTHz, effectiveBits);
     }
 
     @Override
