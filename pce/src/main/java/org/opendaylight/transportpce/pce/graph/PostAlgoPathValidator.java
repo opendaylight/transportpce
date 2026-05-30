@@ -1139,6 +1139,19 @@ public class PostAlgoPathValidator {
             return createEmptySpectrumAssignment();
         }
 
+        result = mcCapabilityCollection.usableFrequencyRange(
+                result,
+                GridConstant.GRANULARITY,
+                GridConstant.START_EDGE_FREQUENCY_THZ,
+                GridConstant.EFFECTIVE_BITS);
+
+        LOG.info("Available bitset on nodes supported by McCapabilities: {}", result);
+
+        if (result.isEmpty()) {
+            subscriber.error("No frequencies available (restricted by McCapabilities)");
+            return createEmptySpectrumAssignment();
+        }
+
         int slotCount = clientInput.slotWidth(spectralWidthSlotNumber);
 
         if (!mcCapabilityCollection.isCompatibleService(GridConstant.GRANULARITY, slotCount)) {
