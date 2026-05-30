@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.spectrum.range.EntireGridRange;
+import org.opendaylight.transportpce.pce.spectrum.range.FrequencyRange;
+import org.opendaylight.transportpce.pce.spectrum.range.McCapabilityRange;
 import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.XpdrMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
@@ -81,6 +83,10 @@ public class MockPceNodeMapFactory {
 
         allPceNodes.put(new NodeId("XPDR-A1"),
                 createMockNode("XPDR-A1", 6.25, 12.5, 1, 2, OpenroadmNodeType.XPONDER));
+
+        allPceNodes.put(new NodeId("XPDR-A2"),
+                createXpdrMockNodeWithFrequencyRange("XPDR-A2", 6.25,
+                        new McCapabilityRange(BigDecimal.valueOf(191.325), BigDecimal.valueOf(194.45))));
 
         return allPceNodes;
     }
@@ -158,6 +164,30 @@ public class MockPceNodeMapFactory {
         when(node.getBitSetData()).thenReturn(range(0, 772));
         when(node.mcCapabilities()).thenReturn(new XpdrMcCapability(
                 BigDecimal.valueOf(centralFreqGranularity), new EntireGridRange()));
+        when(node.getVersion()).thenReturn(DEVICE_VERSION);
+
+        return node;
+    }
+
+    /**
+     * Creates a mocked XPDR {@link PceNode} with an explicit {@link FrequencyRange}.
+     *
+     * @param nodeName the unique name (and NodeId) of the node
+     * @param centralFreqGranularity the central frequency granularity (in GHz)
+     * @param frequencyRange the frequency range supported by this XPDR
+     * @return a configured mocked XPDR {@link PceNode} instance
+     */
+    private static PceNode createXpdrMockNodeWithFrequencyRange(
+            String nodeName, double centralFreqGranularity, FrequencyRange frequencyRange) {
+
+        NodeId id = new NodeId(nodeName);
+        PceNode node = mock(PceNode.class);
+
+        when(node.getNodeId()).thenReturn(id);
+        when(node.isContentionLessSrg()).thenReturn(false);
+        when(node.getBitSetData()).thenReturn(range(0, 772));
+        when(node.mcCapabilities()).thenReturn(new XpdrMcCapability(
+                BigDecimal.valueOf(centralFreqGranularity), frequencyRange));
         when(node.getVersion()).thenReturn(DEVICE_VERSION);
 
         return node;
