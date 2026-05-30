@@ -16,6 +16,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.transportpce.pce.spectrum.range.EntireGridRange;
 import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.XpdrMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
@@ -112,7 +113,8 @@ public class MockPceNodeMapFactory {
                 BigDecimal.valueOf(slotWidthGranularity),
                 minSlots,
                 maxSlots,
-                BigDecimal.valueOf(centralFreqGranularity)));
+                BigDecimal.valueOf(centralFreqGranularity),
+                new EntireGridRange()));
         when(node.getVersion()).thenReturn(DEVICE_VERSION);
 
         return node;
@@ -155,7 +157,7 @@ public class MockPceNodeMapFactory {
         when(node.isContentionLessSrg()).thenReturn(false);
         when(node.getBitSetData()).thenReturn(range(0, 772));
         when(node.mcCapabilities()).thenReturn(new XpdrMcCapability(
-                BigDecimal.valueOf(centralFreqGranularity)));
+                BigDecimal.valueOf(centralFreqGranularity), new EntireGridRange()));
         when(node.getVersion()).thenReturn(DEVICE_VERSION);
 
         return node;

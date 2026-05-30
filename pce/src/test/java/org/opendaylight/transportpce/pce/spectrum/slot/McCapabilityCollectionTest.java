@@ -8,12 +8,14 @@
 
 package org.opendaylight.transportpce.pce.spectrum.slot;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.BitSet;
 import org.junit.jupiter.api.Test;
 
 class McCapabilityCollectionTest {
@@ -80,6 +82,121 @@ class McCapabilityCollectionTest {
 
         assertFalse(slotCollection.isCompatibleService(6.25, 8));
 
+    }
+
+    @Test
+    void emptyCollectionReturnsAvailableGridUnchanged() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        CapabilityCollection collection = new McCapabilityCollection();
+
+        BitSet expected = new BitSet(768);
+        expected.set(0, 768);
+        assertArrayEquals(expected.toByteArray(),
+                collection.usableFrequencyRange(available, 6.25, 191.325, 768).toByteArray());
+    }
+
+    @Test
+    void singleCapabilityWithFullRangeReturnsAvailableGridUnchanged() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        BitSet fullRange = new BitSet(768);
+        fullRange.set(0, 768);
+
+        McCapability mcCapability = mock(McCapability.class);
+        when(mcCapability.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(fullRange);
+
+        CapabilityCollection collection = new McCapabilityCollection();
+        collection.add(mcCapability);
+
+        BitSet expected = new BitSet(768);
+        expected.set(0, 768);
+        assertArrayEquals(expected.toByteArray(),
+                collection.usableFrequencyRange(available, 6.25, 191.325, 768).toByteArray());
+    }
+
+    @Test
+    void singleCapabilityNarrowsAvailableGrid() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        BitSet restricted = new BitSet(768);
+        restricted.set(100, 668);
+
+        McCapability mcCapability = mock(McCapability.class);
+        when(mcCapability.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(restricted);
+
+        CapabilityCollection collection = new McCapabilityCollection();
+        collection.add(mcCapability);
+
+        BitSet expected = new BitSet(768);
+        expected.set(100, 668);
+        assertArrayEquals(expected.toByteArray(),
+                collection.usableFrequencyRange(available, 6.25, 191.325, 768).toByteArray());
+    }
+
+    @Test
+    void multipleCapabilitiesNarrowAvailableGrid() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        BitSet rangeOne = new BitSet(768);
+        rangeOne.set(0, 500);
+
+        BitSet rangeTwo = new BitSet(768);
+        rangeTwo.set(200, 768);
+
+        McCapability capabilityOne = mock(McCapability.class);
+        when(capabilityOne.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(rangeOne);
+
+        McCapability capabilityTwo = mock(McCapability.class);
+        when(capabilityTwo.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(rangeTwo);
+
+        CapabilityCollection collection = new McCapabilityCollection();
+        collection.add(capabilityOne);
+        collection.add(capabilityTwo);
+
+        // intersection of [0,500) and [200,768) is [200,500)
+        BitSet expected = new BitSet(768);
+        expected.set(200, 500);
+        assertArrayEquals(expected.toByteArray(),
+                collection.usableFrequencyRange(available, 6.25, 191.325, 768).toByteArray());
+    }
+
+    @Test
+    void availableFrequencyGridIsNotModified() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        BitSet restricted = new BitSet(768);
+        restricted.set(100, 668);
+
+        McCapability mcCapability = mock(McCapability.class);
+        when(mcCapability.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(restricted);
+
+        CapabilityCollection collection = new McCapabilityCollection();
+        collection.add(mcCapability);
+        collection.usableFrequencyRange(available, 6.25, 191.325, 768);
+
+        BitSet expected = new BitSet(768);
+        expected.set(0, 768);
+        assertArrayEquals(expected.toByteArray(), available.toByteArray());
+    }
+
+    @Test
+    void capabilityExcludingAllSlotsReturnsEmptyBitSet() {
+        BitSet available = new BitSet(768);
+        available.set(0, 768);
+
+        McCapability mcCapability = mock(McCapability.class);
+        when(mcCapability.supportableFrequencyRange(6.25, 191.325, 768)).thenReturn(new BitSet(768));
+
+        CapabilityCollection collection = new McCapabilityCollection();
+        collection.add(mcCapability);
+
+        assertTrue(collection.usableFrequencyRange(available, 6.25, 191.325, 768).isEmpty());
     }
 
 }
