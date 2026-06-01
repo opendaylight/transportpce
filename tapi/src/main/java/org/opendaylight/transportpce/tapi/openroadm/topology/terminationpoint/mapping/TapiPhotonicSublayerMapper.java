@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.m
 import java.util.Optional;
 import java.util.Set;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.NepPhotonicSublayer;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 
 /**
  * Maps an OpenROADM termination point type to the corresponding set of

@@ -22,7 +22,7 @@ public interface LinkEndpointNormalizer {
      *
      * <p>The normalization process typically involves resolving which node identifier to use
      * (e.g. {@code nodeId} vs {@code supportingNodeId}) based on the
-     * {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType}
+     * {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType}
      * of each termination point.
      *
      * <p>Implementations may apply different strategies or rules depending on the termination

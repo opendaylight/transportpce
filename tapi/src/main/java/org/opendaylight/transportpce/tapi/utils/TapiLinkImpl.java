@@ -38,7 +38,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoad
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoadmLinkStateResolver;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -520,14 +520,14 @@ public class TapiLinkImpl implements TapiLink {
             .setTotalLoss(linkLoss)
             .build();
         OtsFiberSpanImpairments otsFSimpOppLink;
-        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                 .Link1.class).getOppositeLink() == null) {
             otsFSimpOppLink = otsFSimp;
             oppLinkLoss = linkLoss;
         } else {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link oppLink = getORLinkFromLinkId(
-                    link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                    link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                     .Link1.class).getOppositeLink());
             if (oppLink == null) {
                 otsFSimpOppLink = otsFSimp;

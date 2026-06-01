@@ -16,11 +16,11 @@ import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOper
 import org.opendaylight.transportpce.servicehandler.catalog.CatalogMapper;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl.LogMessages;
 import org.opendaylight.transportpce.servicehandler.validation.CatalogValidation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.AddOpenroadmOperationalModesToCatalog;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.AddOpenroadmOperationalModesToCatalogInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.AddOpenroadmOperationalModesToCatalogOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.AddOpenroadmOperationalModesToCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.AddOpenroadmOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.AddOpenroadmOperationalModesToCatalogOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

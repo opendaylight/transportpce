@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOTUCnODUCn;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
@@ -464,7 +464,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Provides the child CEP's Uuid of an input NEP.
-     * @param Uuid  The NEP Uuid provided as an input.
+     * @param nepUuid  The NEP Uuid provided as an input.
      * @return      Uuid of the CEP that corresponds to child of the input NEP.
      */
     private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
@@ -493,7 +493,7 @@ public class PceTapiOtnNode implements PceNode {
      * Provides the NEP Uuid that corresponds to a BasePceNep, whether it is the NEP itself or its parent NEP.
      *  Checks whether it finds the Uuid provided as an input in the Node Map of OwnedNodeEdgePoint,
      *  or if the Uuid corresponds to a CEP. In the last case returns the CEP's parent NEP Uuid.
-     * @param Uuid  The Uuid of a BasePceNep.
+     * @param nepCepUuid  The Uuid of a BasePceNep.
      * @return      Uuid of the NEP that corresponds to the parent of the BasePceNep or the NEP Uuid itself, if the
      *              the BasePceNep is a NEP.
      */

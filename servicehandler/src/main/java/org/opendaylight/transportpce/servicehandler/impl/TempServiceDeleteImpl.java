@@ -19,12 +19,12 @@ import org.opendaylight.transportpce.servicehandler.service.RendererServiceWrapp
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ServiceNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.configuration.response.common.ConfigurationResponseCommon;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceDelete;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceDelete;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceDeleteOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class TempServiceDeleteImpl implements TempServiceDelete {
 
         //Check presence of service to be deleted
         LOG.debug("service common-id '{}' is compliant", commonId);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service.list.Services>
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.temp.service.list.Services>
                 serviceOpt =
             this.serviceDataStoreOperations.getTempService(commonId);
         if (serviceOpt.isEmpty()) {
@@ -88,7 +88,7 @@ public class TempServiceDeleteImpl implements TempServiceDelete {
         this.rendererListener.setServiceInput(new ServiceInput(input));
         this.rendererListener.setTempService(true);
         this.rendererListener.setserviceDataStoreOperations(serviceDataStoreOperations);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
                 .temp.service.list.Services service = serviceOpt.orElseThrow();
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput output =
                 this.rendererServiceWrapper.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult,

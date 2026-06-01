@@ -17,34 +17,32 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant.CatalogNodeType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.ImpairmentType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.amplifier.parameters.Amplifier;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.SpecificOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.Amplifiers;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.Roadms;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.XpondersPluggables;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalModeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.specific.operational.modes.SpecificOperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.specific.operational.modes.SpecificOperationalModeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.add.parameters.Add;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.add.parameters.add.AddOpenroadmOperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.add.parameters.add.AddOpenroadmOperationalModeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.drop.parameters.Drop;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalModeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.express.parameters.Express;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.OutputPowerRange;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.OutputPowerRangeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.Penalties;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.PenaltiesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.TXOOBOsnrKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.power.mask.MaskPowerVsPin;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.power.mask.MaskPowerVsPinKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.OperationalModeCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev241213.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.ImpairmentType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.amplifier.parameters.Amplifier;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.SpecificOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.openroadm.operational.modes.Amplifiers;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.openroadm.operational.modes.Roadms;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.openroadm.operational.modes.XpondersPluggables;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.specific.operational.modes.SpecificOperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.catalog.specific.operational.modes.SpecificOperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.roadm.add.parameters.Add;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.roadm.drop.parameters.Drop;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.roadm.express.parameters.Express;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.OutputPowerRange;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.OutputPowerRangeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.Penalties;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.PenaltiesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.TXOOBOsnrKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.power.mask.MaskPowerVsPin;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.power.mask.MaskPowerVsPinKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.OperationalModeCatalog;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -414,8 +412,8 @@ public class CatalogUtils {
      */
 
     private double getRxTspPenalty(double calculatedParameter, ImpairmentType impairmentType,
-            Map<PenaltiesKey, Penalties> penalitiesMap) {
-        Penalties penalty = penalitiesMap.values().stream()
+            Map<PenaltiesKey, Penalties> penaltiesMap) {
+        Penalties penalty = penaltiesMap.values().stream()
             // We only keep penalties corresponding to the calculated Parameter
             .filter(val -> val.getParameterAndUnit().getName().equals(impairmentType.getName()))
             // we sort it according to the comparator (based on up-to-boundary)
@@ -483,11 +481,15 @@ public class CatalogUtils {
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Add.class)
-                    .child(AddOpenroadmOperationalMode.class, new AddOpenroadmOperationalModeKey(operationalModeId))
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                            .operational.mode.roadm.add.parameters.add.OpenroadmOperationalMode.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                                .operational.mode.roadm.add.parameters.add.OpenroadmOperationalModeKey(
+                                        operationalModeId))
                     .build();
                 try {
-                    var omOptional =
-                        networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                    var omOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid)
+                            .get();
                     if (omOptional.isEmpty()) {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
@@ -554,10 +556,10 @@ public class CatalogUtils {
                     .child(Express.class)
                     .child(
                         org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.operational.mode.catalog.rev250110
+                            .org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.roadm.express.parameters.express.OpenroadmOperationalMode.class,
                         new org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.operational.mode.catalog.rev250110
+                            .org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.roadm.express.parameters.express.OpenroadmOperationalModeKey(
                                 operationalModeId))
                     .build();
@@ -596,9 +598,9 @@ public class CatalogUtils {
                     .child(Amplifiers.class)
                     .child(Amplifier.class)
                     .child(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.amplifier.parameters.amplifier.OpenroadmOperationalMode.class,
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.amplifier.parameters.amplifier.OpenroadmOperationalModeKey(
                                     operationalModeId))
                     .build();
@@ -709,7 +711,10 @@ public class CatalogUtils {
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Add.class)
-                    .child(AddOpenroadmOperationalMode.class, new AddOpenroadmOperationalModeKey(operationalModeId))
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                            .operational.mode.roadm.add.parameters.add.OpenroadmOperationalMode.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                            .operational.mode.roadm.add.parameters.add.OpenroadmOperationalModeKey(operationalModeId))
                     .build();
                 try {
                     var omOptional =
@@ -748,10 +753,10 @@ public class CatalogUtils {
                     .child(Express.class)
                     .child(
                         org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.operational.mode.catalog.rev250110
+                            .org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.roadm.express.parameters.express.OpenroadmOperationalMode.class,
                         new org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.operational.mode.catalog.rev250110
+                            .org.openroadm.operational.mode.catalog.rev250530
                             .operational.mode.roadm.express.parameters.express.OpenroadmOperationalModeKey(
                                 operationalModeId))
                     .build();
@@ -833,7 +838,10 @@ public class CatalogUtils {
             .child(OpenroadmOperationalModes.class)
             .child(Roadms.class)
             .child(Add.class)
-            .child(AddOpenroadmOperationalMode.class, new AddOpenroadmOperationalModeKey(CatalogConstant.MWWRCORE))
+            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                    .operational.mode.roadm.add.parameters.add.OpenroadmOperationalMode.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530
+                    .operational.mode.roadm.add.parameters.add.OpenroadmOperationalModeKey(CatalogConstant.MWWRCORE))
             .build();
         try {
             if (networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get().isEmpty()) {
@@ -920,8 +928,8 @@ public class CatalogUtils {
         }
 
         SpecificOperationalMode om = somOptional.orElseThrow();
-        Decimal64 minFreq = om.getMinCentralFrequency().getValue();
-        Decimal64 maxFreq = om.getMaxCentralFrequency().getValue();
+        Decimal64 minFreq = om.getMinEdgeFrequency().getValue();
+        Decimal64 maxFreq = om.getMaxEdgeFrequency().getValue();
         Decimal64 centralFreqGranularity = om.getCentralFrequencyGranularity().getValue();
         double maxSlotValue =
                 ((maxFreq.doubleValue() - minFreq.doubleValue()) / (centralFreqGranularity.doubleValue() * 2)) * 1000;

@@ -40,7 +40,7 @@ public interface TerminationPointMappingFactory {
      * Creates a mapping for a single OpenROADM termination point.
      *
      * <p>The provided {@link Network} is used to resolve termination point metadata
-     * (including {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType}).
+     * (including {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType}).
      *
      * @param nodeId OpenROADM node identifier (e.g. "ROADM-C1")
      * @param tpId OpenROADM termination point identifier (e.g. "SRG1-PP1-TXRX")

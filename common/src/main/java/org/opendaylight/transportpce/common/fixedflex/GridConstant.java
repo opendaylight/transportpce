@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.ModulationFormat;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**

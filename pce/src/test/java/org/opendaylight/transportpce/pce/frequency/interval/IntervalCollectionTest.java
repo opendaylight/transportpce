@@ -19,7 +19,7 @@ import java.util.BitSet;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.FrequencySpectrumSet;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyTHz;
 
 class IntervalCollectionTest {
 

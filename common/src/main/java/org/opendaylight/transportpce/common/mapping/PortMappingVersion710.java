@@ -1084,7 +1084,7 @@ public class PortMappingVersion710 {
         int maxOpModeRate = 0;
         int opModeRate;
         if (supIntfCapaList != null) {
-            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability>
+            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability>
                     supportedIntf = new HashSet<>();
             Set<String> regenProfiles = new HashSet<>();
             rate = 0;

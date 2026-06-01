@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.tapi.openroadm.topology.datastore;
 
 import java.util.Optional;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 
@@ -21,10 +21,10 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
  * <ul>
  *   <li>the base IETF {@link TerminationPoint}</li>
  *   <li>the OpenROADM "common network"
- *       {@link org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1}
+ *       {@link org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1}
  *       augmentation</li>
  *   <li>the OpenROADM "network topology"
- *       {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1}
+ *       {@link org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.TerminationPoint1}
  *       augmentation</li>
  * </ul>
  *
@@ -70,7 +70,7 @@ public interface OpenRoadmTerminationPointReader {
      *
      * @see #readTopologyTerminationPoint1(TopologyNodeId, TpId)
      */
-    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
             .TerminationPoint1> readTopologyTerminationPoint1(TopologyNodeId nodeId, String tpId);
 
     /**
@@ -80,7 +80,7 @@ public interface OpenRoadmTerminationPointReader {
      * @param tpId termination point identifier on the node
      * @return the network-topology {@code TerminationPoint1} augmentation if present
      */
-    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
             .TerminationPoint1> readTopologyTerminationPoint1(TopologyNodeId nodeId, TpId tpId);
 
 }

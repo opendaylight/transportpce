@@ -35,23 +35,23 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.TapiSpectrumCapabilityPacFactory;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMaps;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250530.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.available.freq.map.AvailFreqMapsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250530.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
@@ -328,7 +328,7 @@ public class ORtoTapiTopoConversionTools {
     public void convertNode(Node ietfNode, List<String> networkPorts) {
         this.ietfNodeId = ietfNode.getNodeId().getValue();
         var ietfAug =
-            ietfNode.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
+            ietfNode.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1.class);
         if (ietfAug == null) {
             return;
         }
@@ -1253,14 +1253,13 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Create an OpenROADM Odu Switching pool for 100G transponder that rely on a connection map.
-     * @param OduSwitchingPools OduSwitchingPool returned by the method.
      */
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
         Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
         int count = 1;
         for (TerminationPoint tp : this.oorNetworkPortList) {
             Set<TpId> nblTpId = new HashSet<>();
-            nblTpId.addAll(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+            nblTpId.addAll(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                 .TerminationPoint1.class).getAssociatedConnectionMapTp());
             nblTpId.add(tp.getTpId());
             NonBlockingList nbl = new NonBlockingListBuilder()
@@ -1279,7 +1278,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Create Tapi Node from class parameters setting automatically some mandatory default parameters.
-     * @param nodeName Map of NameKey and Name provided as an input of the method.
+     * @param nodeNames Map of NameKey and Name provided as an input of the method.
      * @param layerProtocols Set of layer protocol names supported by the Node.
      */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createTapiNode(
@@ -1345,9 +1344,8 @@ public class ORtoTapiTopoConversionTools {
      * Main method used to populate and create the Node Neps, node rule groups of a Xponder.
      * Done scanning all OpenROADM termination points and switching pool.
      * Returns the Uuid of the Node returned by the method in case of successfull Nep and NRG creation.
-     * @param onepList A map of owned node edge point filled scanning the Node OpenROADM tps.
+     * @param onepl A map of owned node edge point filled scanning the Node OpenROADM tps.
      * @param nodeRuleGroupList A map of Node Rule Group filled scanning the Node Odu Switching Pool.
-     * @param ruleList Map of Rules to be used for the creation of the NRGs.
      */
     private Uuid getNodeUuid4Dsr(
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
@@ -1677,7 +1675,7 @@ public class ORtoTapiTopoConversionTools {
     private List<OwnedNodeEdgePoint> createNep(TerminationPoint oorTp, Map<NameKey, Name> nepNames,
             LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword) {
         var tp1 = oorTp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.TerminationPoint1.class);
         var oorTpId = oorTp.getTpId();
         var oorTpIdValue = oorTpId.getValue();
         if (tp1.getTpSupportedInterfaces() == null) {
@@ -1691,7 +1689,7 @@ public class ORtoTapiTopoConversionTools {
         List<OperationalModeKey> opModeList = new ArrayList<>();
         if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
             var tp11 = oorTp.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class);
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.TerminationPoint1.class);
             if (tp11 == null || tp11.getXpdrNetworkAttributes() == null) {
                 for (SupportedInterfaceCapability sic : sicColl) {
                     String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
@@ -2016,7 +2014,7 @@ public class ORtoTapiTopoConversionTools {
      * @param sipUuid The SIP Uuid,
      * @param layerProtocol Layer protocol the SIP is associated to,
      * @param tpId OpenROADM termination Point Id,
-     * @param nodeId OpenROADM Node Id,
+     * @param nodeid OpenROADM Node Id,
      * @param supportedInterfaceCapability Collection of supported interface capabilities,
      * @param operState Operational state of the SIP,
      * @param adminState Administrative state of the SIP,
@@ -2047,9 +2045,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Generates a list of Supported Cep Layer Protocol Qualifier Instances supported by a Service Interface Point.
      * @param supportedInterfaceCapability Collection of supported interface capabilities,
-     * @param layerProtocolName Layer protocol the SIP is associated to,
-     * @param operState Operational state of the SIP,
-     * @param adminState Administrative state of the SIP,
+     * @param lpn Layer protocol the SIP is associated to,
      */
     private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
                 .service._interface.point.SupportedCepLayerProtocolQualifierInstances>
