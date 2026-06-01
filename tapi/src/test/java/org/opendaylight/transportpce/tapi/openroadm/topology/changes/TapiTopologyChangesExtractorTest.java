@@ -47,7 +47,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.TapiSpectrumCapabilityPacFactory;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;

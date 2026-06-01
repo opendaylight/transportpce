@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;

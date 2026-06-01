@@ -15,8 +15,8 @@ import static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.ne
 
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.tapi.TapiConstants;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 

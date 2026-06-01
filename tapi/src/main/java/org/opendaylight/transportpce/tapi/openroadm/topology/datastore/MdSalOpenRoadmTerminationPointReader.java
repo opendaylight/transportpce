@@ -15,7 +15,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -68,7 +68,7 @@ public class MdSalOpenRoadmTerminationPointReader implements OpenRoadmTerminatio
     @Override
     public Optional<TerminationPoint1> readCommonTerminationPoint1(TopologyNodeId nodeId, TpId tpId) {
         DataObjectIdentifier<TerminationPoint1> tpIID = dataObjectIdentifierBuilder(nodeId, tpId)
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                         .TerminationPoint1.class)
                 .build();
 
@@ -76,19 +76,19 @@ public class MdSalOpenRoadmTerminationPointReader implements OpenRoadmTerminatio
     }
 
     @Override
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
             .TerminationPoint1> readTopologyTerminationPoint1(TopologyNodeId nodeId, String tpId) {
 
         return  readTopologyTerminationPoint1(nodeId, new TpId(tpId));
     }
 
     @Override
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
             .TerminationPoint1> readTopologyTerminationPoint1(TopologyNodeId nodeId, TpId tpId) {
 
-        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
                 .TerminationPoint1> tpIID = dataObjectIdentifierBuilder(nodeId, new TpId(tpId))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530
                                 .TerminationPoint1.class)
                 .build();
 

@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.tapi.openroadm.topology.link.state;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;

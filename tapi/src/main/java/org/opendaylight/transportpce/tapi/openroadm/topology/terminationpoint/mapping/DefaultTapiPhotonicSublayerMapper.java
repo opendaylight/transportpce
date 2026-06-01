@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.NepPhotonicSublayer;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 
 /**
  * Default implementation of {@link TapiPhotonicSublayerMapper} that translates

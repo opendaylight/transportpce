@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPac;
 

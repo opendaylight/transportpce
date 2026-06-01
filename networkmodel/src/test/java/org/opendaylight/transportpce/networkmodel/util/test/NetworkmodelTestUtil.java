@@ -22,25 +22,25 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODTU4TsAllocated;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.otn.tp.attributes.OdtuTpnPool;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If100GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250530.xpdr.otn.tp.attributes.OdtuTpnPool;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250530.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -141,7 +141,7 @@ public final class NetworkmodelTestUtil {
                             new LinkId(type.getName() + "-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
                         .build())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530
                             .Link1Builder()
                         .setAvailableBandwidth(availBW)
                         .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
@@ -172,7 +172,7 @@ public final class NetworkmodelTestUtil {
                             new LinkId(type.getName() + "-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
                         .build())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530
                             .Link1Builder()
                         .setAvailableBandwidth(availBW)
                         .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
@@ -235,7 +235,7 @@ public final class NetworkmodelTestUtil {
                 .setSupportingTerminationPoint(Map.of(supTermPointA.key(), supTermPointA))
                 .addAugmentation(otnTp1)
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                             .TerminationPoint1Builder()
                         .setTpType(OpenroadmTpType.XPONDERNETWORK)
                         .build())
@@ -246,7 +246,7 @@ public final class NetworkmodelTestUtil {
                 .setSupportingTerminationPoint(Map.of(supTermPointZ.key(), supTermPointZ))
                 .addAugmentation(otnTp1)
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
                             .TerminationPoint1Builder()
                         .setTpType(OpenroadmTpType.XPONDERNETWORK)
                         .build())

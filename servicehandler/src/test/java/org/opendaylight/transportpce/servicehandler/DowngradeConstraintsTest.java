@@ -18,12 +18,12 @@ import static org.opendaylight.transportpce.servicehandler.utils.ConstraintsUtil
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.DiversityConstraints.DiversityType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.common.constraints.LinkIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service.constraints.ServiceIdentifierListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.DiversityConstraints.DiversityType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.common.constraints.LinkIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.diversity.existing.service.constraints.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.SoftConstraints;
 
 /**
  * Class to test downgrading and updating Constraints .
@@ -404,19 +404,19 @@ public class DowngradeConstraintsTest {
         assertEquals(2, generatedSoftConstraints.getCoRouting().getServiceIdentifierList().size(),
             "updated soft constraints should contain 2 co-routed services");
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                     .routing.ServiceIdentifierListKey("service 1"))
             .getServiceApplicability().getEquipment().getRoadmSrg());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 1"))
             .getServiceApplicability().getLink());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 2"))
             .getServiceApplicability().getEquipment());
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                     .routing.ServiceIdentifierListKey("service 2"))
             .getServiceApplicability().getLink());
 
@@ -431,11 +431,11 @@ public class DowngradeConstraintsTest {
         assertEquals(1, generatedSoftConstraints.getCoRouting().getServiceIdentifierList().size(),
             "updated soft constraints should contain 1 co-routed service");
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 3"))
             .getServiceApplicability().getSite());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 3"))
             .getServiceApplicability().getLink());
 
@@ -448,11 +448,11 @@ public class DowngradeConstraintsTest {
             "updated soft constraints should contain 3 co-routed service");
         assertThat(generatedSoftConstraints.getCoRouting().getServiceIdentifierList())
             .containsKeys(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 1"),
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 2"),
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.constraints.co
                         .routing.ServiceIdentifierListKey("service 3"));
     }
 

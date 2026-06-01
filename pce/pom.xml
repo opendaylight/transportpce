@@ -57,7 +57,7 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-13.1.1</artifactId>
+      <artifactId>openroadm-common-17.1.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
@@ -65,11 +65,11 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-network-13.1.1</artifactId>
+      <artifactId>openroadm-network-17.1.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-service-13.1.1</artifactId>
+      <artifactId>openroadm-service-17.1.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>

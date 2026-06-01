@@ -16,9 +16,9 @@ import org.opendaylight.transportpce.servicehandler.validation.checks.Compliance
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerServiceResiliencyCheck;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -61,7 +61,6 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.OPENCONFIGHARDWARECOMPONENT;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.TRANSCEIVER;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.OpenconfigTerminalDeviceData;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDevice;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDeviceBuilder;
@@ -82,7 +81,6 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.comm
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPort;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPortBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALCHANNEL;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALPORTTYPE;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TRIBUTARYPROTOCOLTYPE;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
@@ -119,7 +117,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.term
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;

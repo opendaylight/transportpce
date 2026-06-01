@@ -34,11 +34,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
@@ -229,7 +229,7 @@ public final class TopologyUtils {
                     .filter(nt -> !nt.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE"))
                     .filter(nt -> nt
                         .augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1.class)
                         .getNodeType()
                         .equals(OpenroadmNodeType.ROADM))
                     .collect(Collectors.toList());
@@ -275,7 +275,7 @@ public final class TopologyUtils {
         LOG.info("Inside Checktp for node {}-{}", nodeIdTopo, nodeIdPortMap);
         String networkLcp = tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)
             ? tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1.class)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1.class)
                 .getAssociatedConnectionMapTp().iterator().next().getValue()
             : tp.getTpId().getValue();
         LOG.info("Network LCP associated = {}", networkLcp);

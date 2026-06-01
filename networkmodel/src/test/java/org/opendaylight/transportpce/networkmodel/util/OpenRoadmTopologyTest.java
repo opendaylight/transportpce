@@ -46,16 +46,16 @@ import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -222,7 +222,7 @@ public class OpenRoadmTopologyTest {
         String srcTp = "DEG1-CTP-TXRX";
         String destTp = "SRG1-CP-TXRX";
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1 link1 =
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1 link1 =
             new Link1Builder().build();
         Link link = new LinkBuilder()
             .setLinkId(linkId)
@@ -331,10 +331,10 @@ public class OpenRoadmTopologyTest {
         assertEquals(OpenroadmNodeType.DEGREE, node.augmentation(Node1.class).getNodeType());
         assertEquals(
             Uint16.valueOf(nodeNb),
-            node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1.class)
+            node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Node1.class)
                 .getDegreeAttributes().getDegreeNumber());
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Node1.class)
             .getDegreeAttributes().getAvailFreqMaps().values());
         assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
@@ -364,7 +364,7 @@ public class OpenRoadmTopologyTest {
         assertEquals("ROADMA01", supportingNodes.get(1).getNodeRef().getValue());
         assertEquals(OpenroadmNodeType.SRG, node.augmentation(Node1.class).getNodeType());
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Node1.class)
             .getSrgAttributes().getAvailFreqMaps().values());
         assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];

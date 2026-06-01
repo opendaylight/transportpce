@@ -31,7 +31,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.OperationalModeCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.OperationalModeCatalog;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
@@ -40,7 +40,8 @@ import org.slf4j.LoggerFactory;
 
 public class CatalogUtilsTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(CatalogUtilsTest.class);
-    private static final String CATALOG_FILE = "src/test/resources/apidocCatalog12_0-OptSpecV5_1.json";
+    private static final String CATALOG_FILE =
+            "src/test/resources/apidoc-operational-modes-to-catalog-17_0-optical-spec-9_0.json";
 
     private static OperationalModeCatalog omCatalog;
     private static Map<String, Double> outputImpairments = new HashMap<>();
@@ -249,12 +250,12 @@ public class CatalogUtilsTest extends AbstractTest {
             0.05,
             "Checking 300G OFEC 63.1 Gbauds RX margin in Range at min tolerated penalty");
         assertEquals(
-            0.5,
+            1.5,
             catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 23999.0, 24.9, 5.0, 21.0),
             0.05,
             "Checking 200G OFEC 63.1 Gbauds RX margin in Range at max tolerated penalty");
         assertEquals(
-            0.5,
+            1.5,
             catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 3999.0, 9.9, 1.0, 18.0),
             0.05,
             "Checking 200G OFEC 63.1 Gbauds RX margin in Range at min tolerated penalty");

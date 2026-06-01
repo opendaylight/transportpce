@@ -9,8 +9,8 @@
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ServiceEndpoint;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceEndpoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
 
 /**
  * Class for checking missing info on Tx/Rx for A/Z end.

@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250110.span.attributes.LinkConcatenation1.FiberType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.span.attributes.LinkConcatenation1.FiberType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNIT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;

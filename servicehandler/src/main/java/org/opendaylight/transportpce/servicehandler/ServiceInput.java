@@ -7,25 +7,25 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ServiceEndpoint;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.resiliency.ServiceResiliency;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceCreateInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceFeasibilityCheckInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceReconfigureInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceRerouteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceCreateInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.create.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.create.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceEndpoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.resiliency.ServiceResiliency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.create.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.create.input.ServiceZEndBuilder;
 
 /**
  * Super class of {@link ServiceCreateInput} and {@link TempServiceCreateInput}.
@@ -161,9 +161,9 @@ public class ServiceInput {
                 .setSdncRequestHeader(sdncRequestHeader)
                 .setHardConstraints(hardConstraints)
                 .setSoftConstraints(softConstraints)
-                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service
+                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.temp.service
                         .create.input.ServiceAEndBuilder(serviceAEnd).build())
-                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service
+                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.temp.service
                         .create.input.ServiceZEndBuilder(serviceZEnd).build())
                 .setCustomer(customer)
                 .setCustomerContact(customerContact)

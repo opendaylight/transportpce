@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping;
 
 import java.util.Objects;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 
 /**
  * Value object representing an OpenROADM termination point and its associated node identity.
