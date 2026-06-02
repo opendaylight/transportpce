@@ -190,10 +190,10 @@ def catlog_input():
                             "baud-rate": "65.7",
                             "modulation-format": "dp-qam16",
                             "min-RX-osnr-tolerance": "23.000",
-                            "min-central-frequency": "191.32500000",
-                            "max-central-frequency": "196.12500000",
+                            "min-edge-frequency": "191.32500000",
+                            "max-edge-frequency": "196.12500000",
                             "central-frequency-granularity": "12.50000",
-                            "min-spacing": "37.50000",
+                            "min-channel-width": "37.50000",
                             "line-rate": "505.1",
                             "min-TX-osnr": "36.000",
                             "TX-OOB-osnr": {
