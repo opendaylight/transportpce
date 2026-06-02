@@ -27,8 +27,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTU4TsAllocated;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTUCnTs;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250530.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250530.ODTUCnTs;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.networks.network.node.termination.point.XpdrTpPortConnectionAttributes;
