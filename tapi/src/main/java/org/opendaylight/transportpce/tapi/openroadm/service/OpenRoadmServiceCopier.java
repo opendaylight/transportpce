@@ -65,6 +65,7 @@ public class OpenRoadmServiceCopier {
                 Optional.ofNullable(tapiContext.getConnectivityServices()).orElse(new HashMap<>());
 
         if (tapiServiceExists(serviceName, connectivityServices)) {
+            LOG.info("Service {} already in TAPI data-store, abort copy of service from OR to TAPI DS", serviceName);
             return false;
         }
 
@@ -79,6 +80,8 @@ public class OpenRoadmServiceCopier {
                 this.networkTransactionService,
                 TapiProvider.TAPI_TOPO_UUID,
                 topologyUtils);
+
+        connectivityUtils.setConnectionCreationModeToActive(true);
 
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(
                 topologyUtils,

@@ -135,7 +135,6 @@ public class TapiRendererNotificationHandler {
             updateConnectionState(connection.getConnectionUuid());
         }
         updateConnectivityService(updtConnServ);
-        // TODO: need to send notification to kafka in case the topic exists!!
         sendNbiNotification(createNbiNotification(updtConnServ));
     }
 
@@ -205,7 +204,6 @@ public class TapiRendererNotificationHandler {
     }
 
     private void updateConnectionState(Uuid connectionUuid) {
-        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             // First read connection with connection uuid and update info
             DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn
@@ -234,14 +232,15 @@ public class TapiRendererNotificationHandler {
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID,
                     newConnection);
             this.networkTransactionService.commit().get();
+
             LOG.info("TAPI connection merged successfully.");
+
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI connection", e);
         }
     }
 
     private void updateConnectivityService(ConnectivityService updtConnServ) {
-        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             // First read connectivity service with connectivity service uuid and update info
             DataObjectIdentifier<ConnectivityService> connServIID = DataObjectIdentifier.builder(Context.class)
@@ -254,7 +253,7 @@ public class TapiRendererNotificationHandler {
             Optional<ConnectivityService> optConnServ =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connServIID).get();
             if (!optConnServ.isPresent()) {
-                LOG.error("Connection not found in tapi context");
+                LOG.error("Connectivity service not found in tapi context");
                 return;
             }
             ConnectivityService newConnServ = new ConnectivityServiceBuilder(updtConnServ).build();
