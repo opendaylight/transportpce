@@ -529,7 +529,6 @@
         <operational-state>inService</operational-state>
         <transponder-port>
           <port-power-capability-max-rx>13</port-power-capability-max-rx>
-          <port-power-capability-min-tx>-5</port-power-capability-min-tx>
           <port-power-capability-min-rx>-22</port-power-capability-min-rx>
           <port-power-capability-max-tx>0</port-power-capability-max-tx>
         </transponder-port>

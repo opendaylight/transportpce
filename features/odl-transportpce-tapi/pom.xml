@@ -25,7 +25,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <mdsal.version>16.0.3</mdsal.version>
     <netconf.version>11.0.0</netconf.version>
-    <transportpce.models.version>24.0.1-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>24.0.1</transportpce.models.version>
     <sft.skip>false</sft.skip>
   </properties>
 
