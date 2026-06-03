@@ -9,4 +9,5 @@ Transport PCE Documentation
 
    user-guide
    developer-guide
+   pce-mc-capabilities
    tox-guide
