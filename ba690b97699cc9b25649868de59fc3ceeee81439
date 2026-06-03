@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e4202bf_bcc259b9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2026-06-03T11:52:54Z",
+      "side": 1,
+      "message": "Not related to this change but this comment is a bit confusing now when power setup is also done for openconfig.",
+      "revId": "ba690b97699cc9b25649868de59fc3ceeee81439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
