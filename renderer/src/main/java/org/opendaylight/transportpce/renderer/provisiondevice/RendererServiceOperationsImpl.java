@@ -683,6 +683,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         RollbackProcessor rollbackProcessor = new RollbackProcessor();
         List<DeviceRenderingResult> renderingResults =
             deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
+            sendNotifications(
+                ServicePathNotificationTypes.ServiceImplementationRequest,
+                input.getServiceName(),
+                RpcStatusEx.Failed,
+                resultMessage(renderingResults));
+            return false;
+        }
         // TODO:The existing openconfig renderer support is for a back to back XPDR usecase and there were no specific
         //      power up/down sequence recommended by NEC documentation for enabling/disabling datapath for XPDRs.
         //      We can look at enhancing this in a future update.
@@ -699,14 +707,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     input.getServiceName(),
                     RpcStatusEx.Failed,
                     olmResultMessage(olmRenderingResults));
-            return false;
-        }
-        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceImplementationRequest,
-                input.getServiceName(),
-                RpcStatusEx.Failed,
-                resultMessage(renderingResults));
             return false;
         }
         // run service activation test twice - once on source node and once on
