@@ -40,6 +40,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-08-11 {
+    description
+      "Add XPDR number to mapping entries";
+  }
+
   revision 2026-06-12 {
     description
       "Add support for OpenROADM 13.1.1 and 17.1 models";
@@ -350,6 +355,11 @@ module transportpce-portmapping {
       }
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
+      leaf xpdr-number {
+        type uint16;
+        description
+          "XPDR index associated with this logical connection point.";
+      }
       leaf xpdr-type {
         type org-openroadm-common-node-types:xpdr-node-types;
       }

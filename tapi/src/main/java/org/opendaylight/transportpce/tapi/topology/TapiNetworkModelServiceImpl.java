@@ -54,11 +54,11 @@ import org.opendaylight.transportpce.tapi.topology.nep.DefaultRoadmNepFactory;
 import org.opendaylight.transportpce.tapi.topology.nep.RoadmNepFactory;
 import org.opendaylight.transportpce.tapi.utils.TapiDefaultTransferCharacteristics;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.SwitchingPoolLcpKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.XpdrNodeTypes;
@@ -721,9 +721,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .setSwitchingPoolNumber(entry.getKey().getSwitchingPoolNumber())
                         .setSwitchingPoolType(entry.getValue().getSwitchingPoolType());
                     Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
-                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811
                             .switching.pool.lcp.switching.pool.lcp.NonBlockingListKey, org.opendaylight.yang.gen.v1.http
-                            .org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.switching.pool.lcp
+                            .org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.switching.pool.lcp
                             .NonBlockingList> nblentry : entry.getValue().getNonBlockingList().entrySet()) {
                         Uint32 availBW = nblentry.getValue().getAvailableInterconnectBandwidth();
                         // TODO: Right now available BW is not in Device OR model. Correct next line when it will be
