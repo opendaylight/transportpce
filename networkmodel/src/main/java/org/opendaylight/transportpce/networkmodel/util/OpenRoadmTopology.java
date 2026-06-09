@@ -206,7 +206,12 @@ public final class OpenRoadmTopology {
                         .collect(Collectors.toList());
         List<Integer> tpdrList = new ArrayList<>();
         for (Mapping mapping : networkMappings) {
-            Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+
+            if (mapping.getXpdrNumber() == null) {
+                continue;
+            }
+            int xpdrNb = mapping.getXpdrNumber().toJava();
+
             if (!tpdrList.contains(xpdrNb)) {
                 tpdrList.add(xpdrNb);
                 List<Mapping> extractedMappings = mappingNode.nonnullMapping().values()
