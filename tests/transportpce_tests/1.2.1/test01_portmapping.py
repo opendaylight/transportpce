@@ -128,7 +128,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-admin-state': 'InService', 'supporting-port': '1',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT1',
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'OSvMgUyP+mE='},
+             'xpdr-number': 1, 'lcp-hash-val': 'OSvMgUyP+mE='},
             response['mapping'])
 
     def test_11_xpdr_portmapping_NETWORK2(self):
@@ -140,7 +140,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-admin-state': 'InService', 'supporting-port': '1',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT3',
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'OSvMgUyP+mI='},
+             'xpdr-number': 1, 'lcp-hash-val': 'OSvMgUyP+mI='},
             response['mapping'])
 
     def test_12_xpdr_portmapping_CLIENT1(self):
@@ -152,7 +152,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-admin-state': 'InService', 'supporting-port': 'C1',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK1',
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AO9UFkY/TLYw'},
+             'xpdr-number': 1, 'lcp-hash-val': 'AO9UFkY/TLYw'},
             response['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT2(self):
@@ -163,7 +163,8 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/C2-PLUG-CLIENT', 'rate': '0',
              'port-admin-state': 'InService', 'supporting-port': 'C2',
              'port-oper-state': 'InService', 'port-direction': 'bidirectional',
-             'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYz'},
+             'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client', 'xpdr-number': 1,
+             'lcp-hash-val': 'AO9UFkY/TLYz'},
             response['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT3(self):
@@ -175,7 +176,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-admin-state': 'InService', 'supporting-port': 'C3',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK2',
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
-             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYy'},
+             'port-qual': 'xpdr-client', 'xpdr-number': 1, 'lcp-hash-val': 'AO9UFkY/TLYy'},
             response['mapping'])
 
     def test_15_xpdr_portmapping_CLIENT4(self):
@@ -186,7 +187,8 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/C4-PLUG-CLIENT', 'rate': '0',
              'port-admin-state': 'InService', 'supporting-port': 'C4',
              'port-oper-state': 'InService', 'port-direction': 'bidirectional',
-             'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLY1'},
+             'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client', 'xpdr-number': 1,
+             'lcp-hash-val': 'AO9UFkY/TLY1'},
             response['mapping'])
 
     def test_16_xpdr_device_disconnection(self):
