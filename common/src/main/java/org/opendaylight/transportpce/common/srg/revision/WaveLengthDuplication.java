@@ -9,8 +9,8 @@
 package org.opendaylight.transportpce.common.srg.revision;
 
 import java.util.Map;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.shared.risk.group.SharedRiskGroup;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.shared.risk.group.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.shared.risk.group.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.shared.risk.group.SharedRiskGroupKey;
 
 /**
  * This interface is primarily intended to define methods implemented
@@ -21,9 +21,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 public interface WaveLengthDuplication {
 
     /**
-     * SRG in rev260529.
+     * SRG in rev260608.
      *
-     * @return a map of SharedRiskGroup in rev260529 format
+     * @return a map of SharedRiskGroup in rev260608 format
      */
     Map<SharedRiskGroupKey, SharedRiskGroup> srg();
 
