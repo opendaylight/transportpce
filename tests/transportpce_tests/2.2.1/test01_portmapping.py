@@ -137,7 +137,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT1',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
-             'port-qual': 'xpdr-network', 'lcp-hash-val': 'AMkDwQ7xTmRI'},
+             'port-qual': 'xpdr-network', 'xpdr-number': 1, 'lcp-hash-val': 'AMkDwQ7xTmRI'},
             response['mapping'])
 
     def test_12_xpdr_portmapping_XPDR2_NETWORK1(self):
@@ -150,7 +150,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT2',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
-             'port-qual': 'xpdr-network', 'lcp-hash-val': 'AMkDwQ7xTmRL'},
+             'port-qual': 'xpdr-network', 'xpdr-number': 1, 'lcp-hash-val': 'AMkDwQ7xTmRL'},
             response['mapping'])
 
     def test_13_xpdr_portmapping_XPDR1_CLIENT1(self):
@@ -163,7 +163,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK1',
              'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
-             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AJUUr6I5fALj'},
+             'port-qual': 'xpdr-client', 'xpdr-number': 1, 'lcp-hash-val': 'AJUUr6I5fALj'},
             response['mapping'])
 
     def test_14_xpdr_portmapping_XPDR1_CLIENT2(self):
@@ -176,7 +176,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK2',
              'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
              'port-direction': 'bidirectional', 'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALg'},
+             'xpdr-number': 1, 'lcp-hash-val': 'AJUUr6I5fALg'},
             response['mapping'])
 
     def test_15_spdr_device_connection(self):
@@ -289,7 +289,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
              'port-direction': 'bidirectional', 'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'Swfw02qXGyI='},
+             'xpdr-number': 1, 'lcp-hash-val': 'Swfw02qXGyI='},
             response['mapping'])
 
     def test_24_spdr_portmapping_XPDR2_CLIENT2(self):
@@ -321,7 +321,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
              'port-direction': 'bidirectional', 'xpdr-type': 'switch',
-             'port-qual': 'switch-network', 'lcp-hash-val': 'exT821pFtOQ='},
+             'port-qual': 'switch-network', 'xpdr-number': 2, 'lcp-hash-val': 'exT821pFtOQ='},
             response['mapping'])
 
     def test_26_spdr_portmapping_XPDR3_CLIENT3(self):
@@ -334,7 +334,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService',
              'supported-interface-capability': ['org-openroadm-port-types:if-1GE-ODU0'],
              'port-direction': 'bidirectional', 'xpdr-type': 'mpdr',
-             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AKsQ/HRQdtdN'},
+             'port-qual': 'xpdr-client', 'xpdr-number': 3, 'lcp-hash-val': 'AKsQ/HRQdtdN'},
             response['mapping'])
 
     def test_27_spdr_portmapping_XPDR3_NETWORK1(self):
@@ -347,7 +347,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-oper-state': 'InService',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
              'port-direction': 'bidirectional', 'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'ANnxoi7K8q30'},
+             'xpdr-number': 3, 'lcp-hash-val': 'ANnxoi7K8q30'},
             response['mapping'])
 
     def test_28_spdr_device_disconnection(self):
