@@ -5,17 +5,8 @@ Transport PCE Documentation
 ###########################
 
 .. toctree::
-   :maxdepth: 1
-
-   user-guide
-   developer-guide
-
-.. toctree::
    :maxdepth: 2
 
+   transportpce/index
    pce/index
-
-.. toctree::
-   :maxdepth: 1
-
-   tox-guide
+   tox/index
