@@ -28,7 +28,7 @@ equipment\_ and Optical Line Management (OLM) is associated with a generic block
 relying on open models, each of them communicating through published APIs.
 
 
-.. figure:: ./images/TransportPCE-Diagram-Sulfur.jpg
+.. figure:: ../images/TransportPCE-Diagram-Sulfur.jpg
    :alt: TransportPCE architecture
 
    TransportPCE architecture
@@ -358,16 +358,16 @@ Service handlermodule
 ServiceCreate
 ^^^^^^^^^^^^^
 
-`Happy path for ServiceCreate <./images/Notification_diagrams/Serverhandler/HappyPathServiceCreate.png>`__
+`Happy path for ServiceCreate <../images/Notification_diagrams/Serverhandler/HappyPathServiceCreate.png>`__
 
-`Very detailed pseudo sequence diagram <./images/Notification_diagrams/Serverhandler/ServiceCreateTimeSequenceDetailed.png>`__
+`Very detailed pseudo sequence diagram <../images/Notification_diagrams/Serverhandler/ServiceCreateTimeSequenceDetailed.png>`__
 
 ServiceDelete
 ^^^^^^^^^^^^^
 
-`Happy path for ServiceDelete <./images/Notification_diagrams/Serverhandler/HappyPathServiceDelete.png>`__
+`Happy path for ServiceDelete <../images/Notification_diagrams/Serverhandler/HappyPathServiceDelete.png>`__
 
-`Very detailed pseudo sequence diagram <images/Notification_diagrams/Serverhandler/ServiceDeleteTimeSequenceDetailed.png>`__
+`Very detailed pseudo sequence diagram <../images/Notification_diagrams/Serverhandler/ServiceDeleteTimeSequenceDetailed.png>`__
 
 NetworkModelNotificationHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -375,7 +375,7 @@ NetworkModelNotificationHandler
 * Listens to `TopologyUpdateResult` from the `NetworkModel` module.
 * Only outputs logs of the notification statuses.
 
-`Overview <images/Notification_diagrams/Serverhandler/NetworkModelNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Serverhandler/NetworkModelNotificationHandler.png>`__
 
 PceNotificationHandler
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -386,7 +386,7 @@ PceNotificationHandler
 * if this result is a sucessful `CancelResourceResult`, then it will delete the service fetched from the notification.
 * It will send `NbiNotifications` about the status of the deletion.
 
-`Overview <images/Notification_diagrams/Serverhandler/PceNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Serverhandler/PceNotificationHandler.png>`__
 
 RendererNotificationHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -406,7 +406,7 @@ For `service-delete-request` this applies:
 * if the request failed it forwards this as an `NbiNotification`
 * if the request unknown status (default), it logs this as an error.
 
-`Overview <images/Notification_diagrams/Serverhandler/RendererNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Serverhandler/RendererNotificationHandler.png>`__
 
 ServiceListener
 ^^^^^^^^^^^^^^^
@@ -422,7 +422,7 @@ ServiceListener
 * if `WRITE` with a node that is taken into service, and the `administrativeState` is `ìnService` then it
   forwards this as an `NbiNotification`.
 
-`Overview <images/Notification_diagrams/Serverhandler/ServiceListener.png>`__
+`Overview <../images/Notification_diagrams/Serverhandler/ServiceListener.png>`__
 
 Tapi module
 ~~~~~~~~~~~
@@ -435,7 +435,7 @@ TapiNetworkNotificationHandler
   then it updates the connections and the connectivity services with regards to the changes. It then sends an
   `NbiNotification` for each connectivityService updated.
 
-`Overview <images/Notification_diagrams/Tapi/TapiNetworkNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Tapi/TapiNetworkNotificationHandler.png>`__
 
 TapiPceNotificationHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -457,7 +457,7 @@ For a `cancel-resource-result` this applies:
 * If the result is successful, then it deletes the connections and connectivity associated with the servicename
   in the result.
 
-`Overview <images/Notification_diagrams/Tapi/TapiPceNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Tapi/TapiPceNotificationHandler.png>`__
 
 
 TapiRendererNotificationHandler
@@ -472,7 +472,7 @@ For a result of type `service-implementation-request` this applies:
 * If status is successful it will update the connections and connectivity of the associated service,
   and it will also send an `NbiNotification` that the service has been published to TAPI.
 
-`Overview <images/Notification_diagrams/Tapi/TapiRendererNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Tapi/TapiRendererNotificationHandler.png>`__
 
 
 TapiServiceNotificationHandler
@@ -481,7 +481,7 @@ TapiServiceNotificationHandler
 * Listens to `ServiceRpcResultSh` from the `servicehandler` module.
 * Whenever triggered it will log an error message "Avoid dataBroker error " and the name of the databroker.
 
-`Overview <images/Notification_diagrams/Tapi/TapiServiceNotificationHandler.png>`__
+`Overview <../images/Notification_diagrams/Tapi/TapiServiceNotificationHandler.png>`__
 
 
 Key APIs and Interfaces
@@ -1808,7 +1808,7 @@ network as defined in the reference implementation of T-API
 
 The figure below shows an example of TAPI abstractions as performed by TransportPCE starting from Aluminium SR2.
 
-.. figure:: ./images/TransportPCE-tapi-abstraction.jpg
+.. figure:: ../images/TransportPCE-tapi-abstraction.jpg
    :alt: Example of T0-multi-layer TAPI abstraction in TransportPCE
 
 In this specific case, as far as the "A" side is concerned, we connect TransportPCE to two xponder
@@ -2206,7 +2206,7 @@ The figure below shows an example of the application of tapi and nbinotification
 a connectivity service creation process. Depending on the status of the process a tapi-notification with the
 corresponding updated state of the connectivity service is sent to the topic "Service_UUID".
 
-.. figure:: ./images/TransportPCE-tapi-nbinotifications-service-example.jpg
+.. figure:: ../images/TransportPCE-tapi-nbinotifications-service-example.jpg
    :alt: Example of tapi connectivity service notifications using the feature nbinotifications in TransportPCE
 
 Additionally, when a connectivity service breaks down or is restored a tapi notification alarming the new status
@@ -2294,7 +2294,7 @@ the topic 'infrastructure'.
 The figure below shows an example of the application nbinotifications in order to notify the
 progress of a service creation.
 
-.. figure:: ./images/TransportPCE-nbinotifications-service-example.jpg
+.. figure:: ../images/TransportPCE-nbinotifications-service-example.jpg
    :alt: Example of service notifications using the feature nbinotifications in TransportPCE
 
 
