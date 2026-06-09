@@ -51,7 +51,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "AK+Cna4EclRH",
                     "supporting-port": "C1",
-                    "port-qual": "switch-client"
+                    "port-qual": "switch-client",
+                    "xpdr-number": 2
                 },
                 {
                     "logical-connection-point": "XPDR1-NETWORK1",
@@ -66,7 +67,8 @@
                     "xpdr-type": "tpdr",
                     "lcp-hash-val": "AIGiVAQ4gDil",
                     "supporting-port": "L1",
-                    "port-qual": "xpdr-network"
+                    "port-qual": "xpdr-network",
+                    "xpdr-number": 1
                 },
                 {
                     "logical-connection-point": "XPDR2-CLIENT2",
@@ -84,7 +86,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "AK+Cna4EclRE",
                     "supporting-port": "C1",
-                    "port-qual": "switch-client"
+                    "port-qual": "switch-client",
+                    "xpdr-number": 2
                 },
                 {
                     "logical-connection-point": "XPDR1-CLIENT1",
@@ -98,7 +101,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "AODABTVSOHH0",
                     "supporting-port": "C1",
-                    "port-qual": "xpdr-client"
+                    "port-qual": "xpdr-client",
+                    "xpdr-number": 1
                 },
                 {
                     "logical-connection-point": "XPDR2-NETWORK1",
@@ -112,7 +116,8 @@
                     "xpdr-type": "mpdr",
                     "lcp-hash-val": "LY9PxYJqUbw=",
                     "supporting-port": "L1",
-                    "port-qual": "switch-network"
+                    "port-qual": "switch-network",
+                    "xpdr-number": 2
                 }
             ],
             "mc-capabilities": [
@@ -279,7 +284,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "AP2/mp+mI1y5",
                     "supporting-port": "C1",
-                    "port-qual": "switch-client"
+                    "port-qual": "switch-client",
+                    "xpdr-number": 2
                 },
                 {
                     "logical-connection-point": "XPDR1-NETWORK1",
@@ -294,7 +300,8 @@
                     "xpdr-type": "tpdr",
                     "lcp-hash-val": "ZbICgmaBrJM=",
                     "supporting-port": "L1",
-                    "port-qual": "xpdr-network"
+                    "port-qual": "xpdr-network",
+                    "xpdr-number": 1
                 },
                 {
                     "logical-connection-point": "XPDR2-CLIENT2",
@@ -312,7 +319,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "AP2/mp+mI1y6",
                     "supporting-port": "C1",
-                    "port-qual": "switch-client"
+                    "port-qual": "switch-client",
+                    "xpdr-number": 2
                 },
                 {
                     "logical-connection-point": "XPDR1-CLIENT1",
@@ -326,7 +334,8 @@
                     "port-direction": "bidirectional",
                     "lcp-hash-val": "M5cViLS5z3o=",
                     "supporting-port": "C1",
-                    "port-qual": "xpdr-client"
+                    "port-qual": "xpdr-client",
+                    "xpdr-number": 1
                 },
                 {
                     "logical-connection-point": "XPDR2-NETWORK1",
@@ -340,7 +349,8 @@
                     "xpdr-type": "mpdr",
                     "lcp-hash-val": "Nmbu2MNHvc4=",
                     "supporting-port": "L1",
-                    "port-qual": "switch-network"
+                    "port-qual": "switch-network",
+                    "xpdr-number": 2
                 }
             ],
             "mc-capabilities": [

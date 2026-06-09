@@ -711,7 +711,7 @@ public class OCPortMappingVersion200 {
                 mappingMap.put(network, createXpdrMappingObject(null, null, null,
                         null, null, mapping, clientConnectionMapLcp,
                         null, null, null, null, null,
-                        null, null));
+                        null, null, null));
             }
         }
     }
@@ -818,7 +818,7 @@ public class OCPortMappingVersion200 {
                             mappingMap.put(clientLCPName, createXpdrMappingObject(null, null,
                                     null, null, null, mapping,
                                     networkConnectionMapLcp, null, null, null,
-                                    null, null, rate, operationalModeList));
+                                    null, null, rate, operationalModeList, null));
                         }
                     }
                 }
@@ -873,7 +873,8 @@ public class OCPortMappingVersion200 {
         Set<String> opticalChannels = getOpticalChannels(componentsList, supportingCircuitPackName);
         mappingMap.put(lcpName, createXpdrMappingObject(nodeId, portComponent, augmentationPort,
                 supportingCircuitPackName, lcpName, null, null, xpdrType,
-                supportedIfCapabilities, token, supportedInterfaceSet, opticalChannels, rate, operationalModeList));
+                supportedIfCapabilities, token, supportedInterfaceSet, opticalChannels, rate, operationalModeList,
+                xpdrIndex));
     }
 
     private static Set<String> getOpticalChannels(List<Component> componentsList, String supportingCircuitPackName) {
@@ -1164,14 +1165,14 @@ public class OCPortMappingVersion200 {
                                             Mapping mapping, String connectionMapLcp, XpdrType xpdrType,
                                             Set<SupportedIfCapability> supportedIfCapabilities, String token,
                                             Set<String> logicalChannelSet, Set<String> opticalChannels,
-                                            String rate, Set<String> operationalModeList) {
+                                            String rate, Set<String> operationalModeList, Integer xpdrNumber) {
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
         }
         return createNewXpdrMapping(nodeId, portComponent, augmentationPort,
                 supportingCircuitPackName, logicalConnectionPoint, xpdrType, supportedIfCapabilities,
-                token, logicalChannelSet, opticalChannels, rate, operationalModeList);
+                token, logicalChannelSet, opticalChannels, rate, operationalModeList, xpdrNumber);
     }
 
     /**
@@ -1206,7 +1207,7 @@ public class OCPortMappingVersion200 {
                                          String supportingCircuitPackName, String logicalConnectionPoint,
                                          XpdrType xpdrType, Set<SupportedIfCapability> supportedIfCapabilities,
                                          String token, Set<String> supportedInterfaceSet, Set<String> opticalChannels,
-                                         String rate, Set<String> operationalModeList) {
+                                         String rate, Set<String> operationalModeList, Integer xpdrNumber) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
@@ -1244,6 +1245,9 @@ public class OCPortMappingVersion200 {
         }
         if (supportedInterfaceSet != null && !supportedInterfaceSet.isEmpty()) {
             openconfigInfoBuilder.setSupportedInterfaces(supportedInterfaceSet);
+        }
+        if (xpdrNumber != null) {
+            mpBldr.setXpdrNumber(Uint16.valueOf(xpdrNumber));
         }
         mpBldr.setOpenconfigInfo(openconfigInfoBuilder.build());
         return mpBldr.build();

@@ -87,6 +87,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
             'connection-map-lcp': 'XPDR1-CLIENT1',
             'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
             'xpdr-type': 'tpdr',
+            'xpdr-number': 1,
             'lcp-hash-val': 'AIGiVAQ4gDil'
         }
         expected_sorted = test_utils.recursive_sort(expected)
@@ -109,6 +110,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
              'port-admin-state': 'InService',
              'connection-map-lcp': 'XPDR1-NETWORK1',
              'xpdr-type': 'tpdr',
+             'xpdr-number': 1,
              'lcp-hash-val': 'AODABTVSOHH0'
              },
             response['mapping']
@@ -130,6 +132,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
             'port-admin-state': 'InService',
             'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
             'xpdr-type': 'mpdr',
+            'xpdr-number': 2,
             'lcp-hash-val': 'LY9PxYJqUbw='
         }
         expected_sorted = test_utils.recursive_sort(expected)

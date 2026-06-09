@@ -262,8 +262,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 // populate degree and srg LCP map
                 for (String str : getRoadmNodelist(mappingList)) {
                     List<Mapping> interList = mappingList.stream()
-                            .filter(x -> x.getLogicalConnectionPoint().contains(str))
-                            .collect(Collectors.toList());
+                        .filter(x -> x.getLogicalConnectionPoint().contains(str))
+                        .collect(Collectors.toList());
                     if (str.contains("DEG")) {
                         mapDeg.put(str, interList);
                     } else if (str.contains("SRG")) {
@@ -274,18 +274,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 // Transform LCPs into ONEP
                 Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap =
-                        new HashMap<>(transformSrgToOnep(orNodeId, mapSrg));
+                    new HashMap<>(transformSrgToOnep(orNodeId, mapSrg));
                 LOG.debug("TNMSI:CreateTapiNode : TopologicalMode = {}", TOPOLOGICAL_MODE);
                 LOG.debug("TNMSI:CreateTapiNode : call transformSRGtoONEP (OrNodeId {} ", orNodeId);
                 LOG.debug("TNMSI:CreateTapiNode : SRG OTSNode of retrieved OnepMap {} ",
-                        onepMap.entrySet().stream()
-                                .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
-                                        .contains(
-                                                new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                                        .setNumberOfCepInstances(Uint64.ONE)
-                                                        .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                                                        .build()))
-                                .collect(Collectors.toList()));
+                    onepMap.entrySet().stream()
+                        .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
+                            .contains(
+                                new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                    .setNumberOfCepInstances(Uint64.ONE)
+                                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                                    .build()))
+                        .collect(Collectors.toList()));
                 if (!TOPOLOGICAL_MODE.equals("Full")) {
                     // create tapi Node
                     Node roadmNode = createRoadmTapiNode("ROADMINFRA", onepMap);
@@ -298,14 +298,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 onepMap.putAll(transformDegToOnep(orNodeId, mapDeg));
                 LOG.debug("TNMSI:CreateTapiNode : DEG+SRG OTSNode of retrieved OnepMap {} ",
-                        onepMap.entrySet().stream()
-                                .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
-                                        .contains(
-                                                new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                                        .setNumberOfCepInstances(Uint64.ONE)
-                                                        .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                                                        .build()))
-                                .collect(Collectors.toList()));
+                    onepMap.entrySet().stream()
+                        .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
+                            .contains(
+                                new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                    .setNumberOfCepInstances(Uint64.ONE)
+                                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                                    .build()))
+                        .collect(Collectors.toList()));
                 LOG.debug("TNMSI:CreateTapiNode : DEG+SRG complete retrieved OnepMap {} ", onepMap);
                 // create tapi Node
                 Node roadmNode = createRoadmTapiNode(orNodeId, onepMap);
@@ -317,11 +317,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 // rdm to rdm link creation if neighbour roadm is mounted
                 LOG.info("checking if neighbor roadm exists");
                 Map<LinkKey, Link> rdm2rdmLinks =
-                        this.linkDiscovery.readLLDP(
-                                new NodeId(orNodeId),
-                                node.getNodeInfo().getOpenroadmVersion().getIntValue(),
-                                this.tapiTopoUuid,
-                                topologyRepository);
+                    this.linkDiscovery.readLLDP(
+                        new NodeId(orNodeId),
+                        node.getNodeInfo().getOpenroadmVersion().getIntValue(),
+                        this.tapiTopoUuid,
+                        topologyRepository);
                 if (!rdm2rdmLinks.isEmpty()) {
                     Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
                     addCepToOnep(onepMap, cepMap);
@@ -335,29 +335,33 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 for (Mapping mapping : node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
                         .collect(Collectors.toList())) {
-                    Integer xpdrNb =
-                            Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
-                    String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNb;
-                    if (xpdrMap.containsKey(xpdrNb)) {
+
+                    if (mapping.getXpdrNumber() == null) {
+                        continue;
+                    }
+
+                    int xpdrNumber = mapping.getXpdrNumber().toJava();
+                    String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNumber;
+                    if (xpdrMap.containsKey(xpdrNumber)) {
                         continue;
                     }
                     List<Mapping> xpdrNetMaps = node.nonnullMapping().values().stream()
-                            .filter(k -> k.getLogicalConnectionPoint()
-                                    .contains("XPDR" + xpdrNb + TapiConstants.NETWORK))
-                            .collect(Collectors.toList());
+                        .filter(k -> k.getLogicalConnectionPoint()
+                            .contains("XPDR" + xpdrNumber + TapiConstants.NETWORK))
+                        .collect(Collectors.toList());
                     List<Mapping> xpdrClMaps = node.nonnullMapping().values().stream()
-                            .filter(k -> k.getLogicalConnectionPoint()
-                                    .contains("XPDR" + xpdrNb + TapiConstants.CLIENT))
-                            .collect(Collectors.toList());
-                    xpdrMap.put(xpdrNb, node.getNodeId());
+                        .filter(k -> k.getLogicalConnectionPoint()
+                            .contains("XPDR" + xpdrNumber + TapiConstants.CLIENT))
+                        .collect(Collectors.toList());
+                    xpdrMap.put(xpdrNumber, node.getNodeId());
                     // create switching pool
                     Map<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPoolMap =
-                            createSwitchPoolForAnyXpdr(node, mapping.getXpdrType(), xpdrNetMaps, xpdrNb);
+                        createSwitchPoolForAnyXpdr(node, mapping.getXpdrType(), xpdrNetMaps, xpdrNumber);
                     // add nodes and sips to tapi context
                     mergeNodeinTopology(new HashMap<>(
-                            // node transformation
-                            transformXpdrToTapiNode(
-                                    node, nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXpdrType(), oduSwPoolMap)));
+                        // node transformation
+                        transformXpdrToTapiNode(
+                            node, nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXpdrType(), oduSwPoolMap)));
                     mergeSipsinContext(this.sipMap);
                 }
                 LOG.info("TAPI node for XPDR node {} successfully merged", orNodeId);
@@ -647,13 +651,17 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                  SWITCH -> {
                 LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
 
-                int nbNumber = Integer.parseInt(
-                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+                if (mapping.getXpdrNumber() == null) {
+                    LOG.error("Unable to update TAPI XPDR node for mapping {} of node {}: missing xpdr-number.",
+                            mapping.getLogicalConnectionPoint(), nodeId);
+                    return new ArrayList<>();
+                }
 
+                int xpdrNumber = mapping.getXpdrNumber().toJava();
 
                 return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId
-                                + TapiConstants.XXPDR
-                                + nbNumber,
+                        + TapiConstants.XXPDR
+                        + xpdrNumber,
                         TapiConstants.XPDR)));
             }
             case null, default -> {
@@ -702,7 +710,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Map<OduSwitchingPoolsKey,OduSwitchingPools> createSwitchPoolForAnyXpdr(Nodes node,
-            XpdrNodeTypes xpdrType, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
+            XpdrNodeTypes xpdrType, List<Mapping> xpdrNetMaps, Integer xpdrNumber) {
         Map<OduSwitchingPoolsKey,OduSwitchingPools> oduSwPoolMap = new HashMap<>();
         OduSwitchingPools oduswpool;
         switch (xpdrType) {
@@ -752,7 +760,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformSrgToOnep(
-            String orNodeId, Map<String, List<Mapping>> mapSrg) {
+                String orNodeId, Map<String, List<Mapping>> mapSrg) {
         LOG.debug("TNMSI:transformSrgToOnep, ListOfMapping {}, of NodeId {} ", mapSrg, orNodeId);
         Map<String, TerminationPoint1> tpMap = new HashMap<>();
         //List<TerminationPoint> tpList = new ArrayList<>();
@@ -1435,7 +1443,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         }
                     }
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
-                            false, Double.valueOf(rate), 1, lpqSet));
+                        false, Double.valueOf(rate), 1, lpqSet));
                     onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                         this.tapiFactory.createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
                 }
@@ -2142,10 +2150,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     LOG.info("Service using SIP of node {} identified. Update state of service", nodeId);
                     updateConnectivityService(
                         new ConnectivityServiceBuilder(service)
-                        .setAdministrativeState(AdministrativeState.LOCKED)
-                        .setOperationalState(OperationalState.DISABLED)
-                        .setLifecycleState(LifecycleState.PENDINGREMOVAL)
-                        .build());
+                            .setAdministrativeState(AdministrativeState.LOCKED)
+                            .setOperationalState(OperationalState.DISABLED)
+                            .setLifecycleState(LifecycleState.PENDINGREMOVAL)
+                            .build());
                 }
             }
         }

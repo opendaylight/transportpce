@@ -581,7 +581,11 @@ public final class OpenRoadmOtnTopology {
                 .collect(Collectors.toList());
         Map<Integer, OtnTopoNode> xpdrMap = new HashMap<>();
         for (Mapping mapping : networkMappings) {
-            Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+
+            if (mapping.getXpdrNumber() == null) {
+                continue;
+            }
+            int xpdrNb = mapping.getXpdrNumber().toJava();
             if (!xpdrMap.containsKey(xpdrNb)) {
                 List<Mapping> xpdrNetMaps =
                     mappingNode.nonnullMapping().values().stream()
