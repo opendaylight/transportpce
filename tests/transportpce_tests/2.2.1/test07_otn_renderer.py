@@ -37,7 +37,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                            ],
                            'port-direction': 'bidirectional',
                            'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
-                           'lcp-hash-val': 'Swfw02qXGyI='}
+                           'xpdr-number': 1, 'lcp-hash-val': 'Swfw02qXGyI='}
     NODE_VERSION = '2.2.1'
 
     @classmethod

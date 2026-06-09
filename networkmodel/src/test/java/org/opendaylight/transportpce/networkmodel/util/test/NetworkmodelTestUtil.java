@@ -292,7 +292,8 @@ public final class NetworkmodelTestUtil {
                 .setSupportedInterfaceCapability(new HashSet<>(Set.of(IfOCH.VALUE)))
                 .setConnectionMapLcp("XPDR1-CLIENT" + i)
                 .setPortQual(PortQual.XpdrNetwork.getName())
-                .setSupportingCircuitPackName("1/0/" + i + "-PLUG-NET");
+                .setSupportingCircuitPackName("1/0/" + i + "-PLUG-NET")
+                .setXpdrNumber(Uint16.valueOf(1));
             if (xpdrNodeType != null) {
                 mappingBldr.setXpdrType(xpdrNodeType);
             }
@@ -308,6 +309,7 @@ public final class NetworkmodelTestUtil {
                 .setConnectionMapLcp("XPDR1-NETWORK" + i)
                 .setPortQual(PortQual.XpdrClient.getName())
                 .setSupportingCircuitPackName("1/0/" + i + "-PLUG-CLIENT")
+                .setXpdrNumber(Uint16.valueOf(1))
                 .build();
             mappingMap.put(mapping.key(),mapping);
         }
