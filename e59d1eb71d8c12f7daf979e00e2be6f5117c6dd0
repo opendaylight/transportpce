@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "663d9b9e_e8828c48",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87407bda_66c2c6d6",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 100
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faa4a339_8925fdcb",
@@ -54,6 +78,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 99
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e249aba2_8a379fe1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faa4a339_8925fdcb",
       "range": {
         "startLine": 172,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad17d34d_244a4eab",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a0ea457_f8a7b016",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 62
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c014afd_b93e90cf",
@@ -100,6 +172,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 62
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aa98fa1_a5d5993d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c014afd_b93e90cf",
       "range": {
         "startLine": 200,
         "startChar": 0,
@@ -127,6 +223,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f67a444f_8552bbd2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1de6a88e_04454fa6",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38419b37_1fef65ac",
@@ -140,6 +254,24 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "Fully qualified names for `Context.class`, `Context1.class` and `TopologyContext.class` can be replaced with imports.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c12762a6_db027ea9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38419b37_1fef65ac",
       "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -161,6 +293,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ad0afb_b4c77308",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Now directly refers to Tapi.Constants relevant UUID constant. Remains hardcoded, but centralized so easier to trace, complete, modify.",
+      "parentUuid": "116a0359_ef322639",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c795e86f_46accb9b",
@@ -174,6 +324,24 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "Remove extra empty line.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0f0664_4cad6dde",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c795e86f_46accb9b",
       "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -220,6 +388,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3f749afc_8e7f09e4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Points now to TapiConstants relevant constant. Still hardcoded but centralized.",
+      "parentUuid": "3bc3422f_e47354a4",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bda8aca7_ab45f4fb",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
         "patchSetId": 15
@@ -252,6 +438,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "585a27a1_b938d381",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f814756_d5ba3183",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08762d0b_54674de9",
@@ -265,6 +469,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "`.dataAfter()` is deprecated since 15.0.0. The interface suggests \"Use a enhanced switch over DataObjectModification type hierarchy instead\".\n\nMaybe something along these lines? However, it\u0027s untested, so I actually have no idea whether it works as replacement for `.dataAfter()`.\n\n```\nimport org.opendaylight.mdsal.binding.api.DataObjectDeleted;\nimport org.opendaylight.mdsal.binding.api.DataObjectModification;\n\n...\n\nfor (DataTreeModification\u003cTopology\u003e change : changes) {\n\n    switch (change.getRootNode()) {\n        case DataObjectDeleted\u003cTopology\u003e ignored -\u003e {\n            continue;  // topology deleted, nothing to update\n        }\n        case DataObjectModification.WithDataAfter\u003cTopology\u003e mod -\u003e {\n            Topology updatedTopo \u003d mod.dataAfter();  // @NonNull — no null check needed\n            if (updatedTopo.getNode() \u003d\u003d null) {\n                continue;\n            }\n            // ... rest of logic\n            Topology oldTopo \u003d mod.dataBefore();     // still @Nullable\n            // ...\n        }\n    }\n}\n```",
+      "range": {
+        "startLine": 109,
+        "startChar": 55,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ef3b3a4_74140e44",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "You are right. Unfortunately, I can\u0027t do it in a clean way from my side, as my editor has some issues with switch cases latest java implem. Don\u0027t know why, but it seems it does not recognize latest evolution. As a result it generates a lot of errors, so that I can\u0027t check inline that what I type is correct. \n@gilles.thouenon@orange.com\nWill probably let Gilles pursue his global refacto for that one",
+      "parentUuid": "08762d0b_54674de9",
       "range": {
         "startLine": 109,
         "startChar": 55,
@@ -294,6 +522,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc67c03e_99f87aa7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Right. Applied correction",
+      "parentUuid": "e0a537d3_baf70afb",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f03dbb20_e2aa3539",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
         "patchSetId": 15
@@ -305,6 +551,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "`.collect(Collectors.toList())` can be simplified with `.toList()`.\n\nAlso, I think these lines could use more line breaks, e.g.:\n\n```\nList\u003cNodeKey\u003e newNodeUuidList \u003d updatedTopo\n    .getNode()\n    .entrySet()\n    .stream()\n    .map(Map.Entry\u003cNodeKey, Node\u003e::getKey)\n    .toList();\n```",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 0
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62e303c5_61bdcb1d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": ".ToList Done, but applying our style!",
+      "parentUuid": "f03dbb20_e2aa3539",
       "range": {
         "startLine": 113,
         "startChar": 0,
@@ -332,6 +602,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcae94c4_7f0d2562",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "ToList done, but applying our code style",
+      "parentUuid": "42a93d42_5bbd9f6e",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9cb95f9_23962be7",
@@ -345,6 +633,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "1. Use `nonnullOwnedNodeEdgePoint()` instead of `.getOwnedNodeEdgePoint()` to avoid  `.values()` potentially throwing a NPE.\n2. Use `nonnullName()` instead of `.getName()` to avoid `.entrySet()` potentially throwing a NPE.\n3. Probably need to guard against empty `onepName` as well.\n\n```\nfor (OwnedNodeEdgePoint onep : \n        oldNode.getValue().nonnullOwnedNodeEdgePoint().values())  {\n\n    onepName \u003d onep\n            .nonnullName()\n            .entrySet()\n            .iterator()\n            .next()\n            .getValue()\n            .getValue();\n\n    if (onepName !\u003d null \u0026\u0026 !onepName.isEmpty()) {\n        LOG.info(\"{} remove TP {} from TAPI-SBI-ABS-NODE\",\n                removeTpFromTapiAbsSbiNode(\n                        new TpId(onepName),\n                        identifyTpType(onep)),\n                onepName);\n    }\n    ...\n```",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 0
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4403bdb_df153468",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9cb95f9_23962be7",
       "range": {
         "startLine": 128,
         "startChar": 0,
@@ -378,6 +690,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e224e51_d4b414d4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9c545d8_65b62641",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 25
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6337f664_86714f91",
@@ -391,6 +727,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 21
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04880c4b_41948a86",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6337f664_86714f91",
       "range": {
         "startLine": 153,
         "startChar": 0,
@@ -424,6 +784,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d73e2433_45bba8b0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "You are right!",
+      "parentUuid": "db21ae0b_f87da1d0",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5d3782d_a7709ff3",
@@ -441,6 +825,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b0a7bf_b402d615",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5d3782d_a7709ff3",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6836e3c9_cc09c340",
@@ -454,6 +856,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "1. Replace `.getName()` with `.nonnullName()` to avoid potential NPE.\n2. Searching for specific substrings in the name make me somewhat concerned. I tried to replace this with some kind of \"type\" object, but there doesn\u0027t seem to be one in TAPI in the same way as it does in OpenROADM. \nHowever, I wonder if using the \"value name\" would improve things ever so slightly? If I\u0027m not mistaken, the value name is set entirely by the TAPI code, no? This is completely untested, but perhaps something like this:\n\n```\n  private OpenroadmTpType identifyTpType(OwnedNodeEdgePoint onep) {\n      String nameKey \u003d onep.getName().entrySet().iterator().next().getValue().getValueName();\n      return switch (nameKey) {\n          case \"eNodeEdgePoint\"    -\u003e OpenroadmTpType.XPONDERNETWORK;\n          case \"eNodeEdgePoint_N\", \"NodeEdgePoint_C\", \"100G-tpdr\" -\u003e OpenroadmTpType.XPONDERCLIENT;\n          case \"PHOTONIC_MEDIA_OTSNodeEdgePoint\" -\u003e {\n              var sips \u003d onep.getMappedServiceInterfacePoint();\n              yield (sips !\u003d null \u0026\u0026 !sips.isEmpty())\n                  ? OpenroadmTpType.SRGTXRXPP\n                  : OpenroadmTpType.DEGREETXRXTTP;\n          }\n          default -\u003e null;\n      };\n  }\n```",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 5
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19f37b1f_3c36f673",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done for nonNullName.\nYour suggestion makes sense, but we don\u0027t know at that time if SouthBound controller will provide or not SIPs for degree TTP. It may be that OMS/OTS creation will trigger some.\nI think this should be handled globally through a larger refacto. Yes ValueName are set by the TAPI code. But as we master Value-name, which will not correspond to what we will get from NMS interconnected through SBI, we also master the way we may reformat values to make them compliant with our code. Whatever happens, the features we develop should not be affected by the naming convention we use. In other terms, we will not touch Uuid which will be use as reference for interactions with South Bound NMS, and what we do in our internal Datastore is our \"own cooking\". \nAnyway agree with the fact that we may make at a later step a global refacto, but this will make more sense when the TAPI-SBI interface will have been developed.",
+      "parentUuid": "6836e3c9_cc09c340",
       "range": {
         "startLine": 246,
         "startChar": 0,
@@ -504,6 +930,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0032fd_164f1c6f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Sorry, I prefer it like that, even if it does not look \"professional\" this is quite straight forward and understandable.",
+      "parentUuid": "33fe371e_26ae06e2",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fb80d14_6a1c5177",
@@ -517,6 +961,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "These seems almost redundant, since we\u0027re immediately overwriting one of them, but only one of them?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 83
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43a91c3c_55037ad9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Yes, this is the way it works. We set default value, and then correct only the end that is connected to TAPI-SBI-ABS-NODE, because for this last, the node id is not the node id that appears in the detailed topology.",
+      "parentUuid": "9fb80d14_6a1c5177",
       "range": {
         "startLine": 243,
         "startChar": 0,
@@ -550,6 +1018,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c36a756_32fa0a56",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f87a08e_2385488c",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 9
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "939470e1_1e4d8ec0",
@@ -563,6 +1055,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "1. Replace qualified name with import (`TerminationPoint1`)\n2. `optTp` may be `null`, guard with `Optional.ofNullabe(...).orElse(Optional.empty())`\n\n```\nimport org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.TerminationPoint1;\n\n...\n\nOptional\u003cTerminationPoint1\u003e optTp \u003d Optional.ofNullable(\n        networkTransactionService.read(\n                    LogicalDatastoreType.CONFIGURATION,\n                    tpIID).get())\n        .orElse(Optional.empty());\nif (optTp.isPresent()) {\n...\n```",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c74d9b0_9a2a094b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "939470e1_1e4d8ec0",
       "range": {
         "startLine": 266,
         "startChar": 0,
@@ -596,6 +1112,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "369b62c4_c142cc03",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e8686d3_c69937a4",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 99
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f46cab9_1e2311f9",
@@ -613,6 +1153,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85f50390_4a199926",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f46cab9_1e2311f9",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a15a2d03_51c0c3dc",
@@ -626,6 +1184,24 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "Please add javadoc explaining what this method does. Also, there is an extra line break between these two methods.",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "291a036e_506b0880",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-09T09:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a15a2d03_51c0c3dc",
       "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
