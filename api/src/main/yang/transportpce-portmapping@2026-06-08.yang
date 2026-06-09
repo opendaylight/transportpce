@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-06-08 {
+    description
+      "Add XPDR number to mapping entries";
+  }
+
   revision 2025-09-05 {
     description
       "Add wavelength duplication support for SRG";
@@ -329,6 +334,11 @@ module transportpce-portmapping {
       }
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
+      leaf xpdr-number {
+        type uint16;
+        description
+          "XPDR index associated with this logical connection point.";
+      }
       leaf xpdr-type {
         type org-openroadm-device-types:xpdr-node-types;
       }
