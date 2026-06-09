@@ -52,11 +52,11 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.SwitchingPoolLcpKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.XpdrNodeTypes;
@@ -77,6 +77,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250530.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -718,9 +719,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .setSwitchingPoolNumber(entry.getKey().getSwitchingPoolNumber())
                         .setSwitchingPoolType(entry.getValue().getSwitchingPoolType());
                     Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
-                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811
                             .switching.pool.lcp.switching.pool.lcp.NonBlockingListKey, org.opendaylight.yang.gen.v1.http
-                            .org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.switching.pool.lcp
+                            .org.opendaylight.transportpce.portmapping.rev260811.switching.pool.lcp.switching.pool.lcp
                             .NonBlockingList> nblentry : entry.getValue().getNonBlockingList().entrySet()) {
                         Uint32 availBW = nblentry.getValue().getAvailableInterconnectBandwidth();
                         // TODO: Right now available BW is not in Device OR model. Correct next line when it will be
@@ -879,12 +880,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
 
         OpenroadmNodeType nodeType = getOpenRoadmNodeType(nodeId);
-        if (nodeType == null) {
-            LOG.error("Couldnt find node type for {}", nodeId);
-            return;
-        }
 
         switch (nodeType) {
+            case null -> {
+                LOG.warn("Node contained no nodeType.");
+            }
             case OpenroadmNodeType.ROADM -> {
                 if (TOPOLOGICAL_MODE.equals("Full")) {
                     deleteNodeFromTopo(createTapiUuidFromRoadmId(nodeId, TapiConstants.PHTNC_MEDIA));
@@ -907,6 +907,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
             default -> {
                 //Do nothing
+                LOG.debug("Nothing to delete for nodeType: " + nodeType.getName());
             }
         }
 
@@ -967,14 +968,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         getOpenRoadmNode(String nodeId) {
         try {
             Network net = readTopology(InstanceIdentifiers.OPENROADM_NETWORK_II);
-            Optional<Entry<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
-                    .network.NodeKey,
-                    org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
-                            .Node>> nodeEntryOptional = net.getNode().entrySet().stream()
-                    .filter(entry -> nodeId.equals(entry.getValue().getNodeId().getValue()))
-                    .findFirst();
-            if (nodeEntryOptional.isPresent()) {
-                return nodeEntryOptional.orElse(null).getValue();
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey
+                    nodeKey = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.NodeKey(
+                            new  org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                    .NodeId(nodeId));
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                    .Node node = net.getNode().get(nodeKey);
+            if (node != null) {
+                return node;
             }
         } catch (TapiTopologyException e) {
             return null;
@@ -995,17 +997,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
         Network topology = null;
-        ListenableFuture<Optional<Network>> topologyFuture = networkTransactionService
-                .read(LogicalDatastoreType.CONFIGURATION, networkIID);
-        try {
-            topology = topologyFuture.get().orElseThrow();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
-        } catch (ExecutionException e) {
-            throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        NetworkKey networkKey = networkIID.firstKeyOf(Network.class);
+
+        if (networkKey != null) {
+            ListenableFuture<Optional<Network>> topologyFuture = networkTransactionService
+                    .read(LogicalDatastoreType.CONFIGURATION, networkIID);
+            try {
+                topology = topologyFuture.get().orElseThrow();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new TapiTopologyException("Unable to get from mdsal topology: "
+                        + networkKey.getNetworkId().getValue(), e);
+            } catch (ExecutionException e) {
+                throw new TapiTopologyException("Unable to get from mdsal topology: "
+                        + networkKey.getNetworkId().getValue(), e);
+            }
         }
         return topology;
     }
