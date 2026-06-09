@@ -40,6 +40,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                                'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
                            ],
                            'xpdr-type': 'mpdr',
+                           'xpdr-number': 2,
                            'lcp-hash-val': 'LY9PxYJqUbw='}
     NODE_VERSION = '7.1'
 
