@@ -43,6 +43,7 @@ class TestTransportPCERendererOrModes(unittest.TestCase):
                                'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
                            ],
                            'xpdr-type': 'tpdr',
+                           'xpdr-number': 3,
                            'supporting-otucn': 'XPDR3-NETWORK1-OTUC1',
                            'lcp-hash-val': 'FDvaQIf2Z08='}
     CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-100GE",
@@ -620,6 +621,7 @@ class TestTransportPCERendererOrModes(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
+        self.NETWORK1_CHECK_DICT["xpdr-number"] = 2
         del self.NETWORK1_CHECK_DICT["connection-map-lcp"]
         expected_sorted = test_utils.recursive_sort(self.NETWORK1_CHECK_DICT)
         response_sorted = [
