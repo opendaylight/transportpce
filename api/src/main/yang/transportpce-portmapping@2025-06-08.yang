@@ -12,12 +12,12 @@ module transportpce-portmapping {
     revision-date 2020-05-29;
   }
   import org-openroadm-device-types {
-     prefix org-openroadm-device-types;
-     revision-date 2019-11-29;
+    prefix org-openroadm-device-types;
+    revision-date 2019-11-29;
   }
   import org-openroadm-otn-common-types {
-      prefix org-openroadm-otn-common-types;
-      revision-date 2020-03-27;
+    prefix org-openroadm-otn-common-types;
+    revision-date 2020-03-27;
   }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
@@ -28,7 +28,6 @@ module transportpce-portmapping {
     revision-date 2025-05-30;
   }
 
-
   organization
     "transportPCE";
   contact
@@ -38,6 +37,11 @@ module transportpce-portmapping {
      Copyright (c) 2017 AT&T and others. All rights reserved.
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
+
+  revision 2026-06-08 {
+    description
+      "Add XPDR number to mapping entries";
+  }
 
   revision 2025-09-05 {
     description
@@ -64,11 +68,11 @@ module transportpce-portmapping {
   }
   revision 2023-12-21 {
     description
-       "Add leaflist supported-operational-mode to lcp";
+      "Add leaflist supported-operational-mode to lcp";
   }
   revision 2022-09-22 {
     description
-       "Add initial support to regenerators functionality; Modify the attribute
+      "Add initial support to regenerators functionality; Modify the attribute
        xponder-type to xpdr-type";
   }
   revision 2022-03-16 {
@@ -156,9 +160,9 @@ module transportpce-portmapping {
       }
     }
     description
-        "YANG enumerations for OpenROADM models;
-         enums should be same as OpenROADM models
-         defined in org-openroadm-common-types";
+      "YANG enumerations for OpenROADM models;
+       enums should be same as OpenROADM models
+       defined in org-openroadm-common-types";
   }
 
   typedef openconfig-node-version {
@@ -192,7 +196,7 @@ module transportpce-portmapping {
       }
     }
     description
-          "YANG enumerations for indicating the type of datamodel supported by a node";
+      "YANG enumerations for indicating the type of datamodel supported by a node";
   }
 
   grouping node-info {
@@ -291,21 +295,21 @@ module transportpce-portmapping {
           "Ethernet interface provisioned on the port";
       }
       leaf supporting-otu4 {
-          type string;
-          description
-            "OTU4 interface provisioned on the port";
-        }
+        type string;
+        description
+          "OTU4 interface provisioned on the port";
+      }
       leaf supporting-otucn {
-          type string;
-          description
-            "OTUCn interface provisioned on the port for B100G support. This includes
-            OTUC2, OTUC3, OTUC4";
-        }
+        type string;
+        description
+          "OTUCn interface provisioned on the port for B100G support. This includes
+           OTUC2, OTUC3, OTUC4";
+      }
       leaf supporting-odu4 {
-          type string;
-          description
-            "ODU4 interface provisioned on the port";
-        }
+        type string;
+        description
+          "ODU4 interface provisioned on the port";
+      }
       leaf supporting-oducn {
         type string;
         description
@@ -329,6 +333,11 @@ module transportpce-portmapping {
       }
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
+      leaf xpdr-number {
+        type uint16;
+        description
+          "XPDR index associated with this logical connection point.";
+      }
       leaf xpdr-type {
         type org-openroadm-device-types:xpdr-node-types;
       }
@@ -373,7 +382,7 @@ module transportpce-portmapping {
       leaf-list regen-profile {
         description
           "Supported regen profile, these are otsi-group-capabilities profile";
-          type string;
+        type string;
       }
     }
   }
@@ -387,14 +396,14 @@ module transportpce-portmapping {
         be wrong, meaning if the supported-interface-capabilities include, if-100GE-ODU4, if-OTU4-ODU4,
         if-200GE-oduflexcbr, then min/max-trib-slot could be different";
       leaf min-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+          "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
       }
       leaf max-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+          "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
       }
     }
   }
