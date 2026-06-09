@@ -337,7 +337,7 @@ public class PortMappingVersion710 {
                 portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping,
                         //dlcp
                         lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null,
-                        null));
+                        null, null));
             }
         }
         if (device.getOduSwitchingPools() != null) {
@@ -1050,18 +1050,19 @@ public class PortMappingVersion710 {
 
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
-            XpdrNodeTypes xpdrNodeType) {
+            XpdrNodeTypes xpdrNodeType, Integer xponderNb) {
 
         //TODO some divergens here with 2.2.1
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
         }
-        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp, xpdrNodeType);
+        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp, xpdrNodeType,
+                xponderNb);
     }
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
-            String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
+            String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType, Integer xponderNb) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
@@ -1077,6 +1078,9 @@ public class PortMappingVersion710 {
         }
         if (partnerLcp != null) {
             mpBldr.setPartnerLcp(partnerLcp);
+        }
+        if (xponderNb != null) {
+            mpBldr.setXpdrNumber(Uint16.valueOf(xponderNb));
         }
         Collection<SupportedInterfaceCapability> supIntfCapaList = getSupIntfCapaList(port);
         int maxRate = 0;
@@ -1249,9 +1253,11 @@ public class PortMappingVersion710 {
         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
         lcpMap.put(circuitPackName2 + '+' + port2.getPortName(), lcp2);
         mappingMap.put(lcp1,
-                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null, xponderType));
+                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null,
+                        xponderType, xponderNb));
         mappingMap.put(lcp2,
-                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null, xponderType));
+                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null,
+                        xponderType, xponderNb));
         return;
     }
 
@@ -1273,7 +1279,8 @@ public class PortMappingVersion710 {
                     PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                 mappingMap.put(lcp0,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, xponderType));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null,
+                            null, xponderType, xponderNb));
                 client++;
                 break;
 
@@ -1304,7 +1311,8 @@ public class PortMappingVersion710 {
                     PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                 mappingMap.put(lcp,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null, xponderType));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
+                            null, xponderType, xponderNb));
                 line++;
                 break;
 

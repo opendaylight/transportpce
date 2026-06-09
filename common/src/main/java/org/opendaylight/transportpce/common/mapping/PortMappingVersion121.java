@@ -252,7 +252,7 @@ public class PortMappingVersion121 {
             mappingMap.remove(slcp);
             portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping,
                 //dlcp
-                lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null));
+                lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null, null));
         }
 
         mappingMap.forEach((k,v) -> portMapList.add(v));
@@ -643,17 +643,17 @@ public class PortMappingVersion121 {
     }
 
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
-            String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp) {
+            String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp, Integer nbNumber) {
 
         if (mapping != null && assoLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(assoLcp).build();
         }
-        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp);
+        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp, nbNumber);
     }
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
-            String logicalConnectionPoint, String partnerLcp) {
+            String logicalConnectionPoint, String partnerLcp, Integer nbNumber) {
         Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability> supportedIntf =
             new HashSet<>();
         Integer maxrate = 0;
@@ -689,6 +689,9 @@ public class PortMappingVersion121 {
         }
         if (port.getOperationalState() != null) {
             mpBldr.setPortOperState(port.getOperationalState().name());
+        }
+        if (nbNumber != null) {
+            mpBldr.setXpdrNumber(Uint16.valueOf(nbNumber));
         }
         return mpBldr.build();
     }
@@ -757,9 +760,11 @@ public class PortMappingVersion121 {
         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
         lcpMap.put(circuitPackName2 + '+' + port2.getPortName(), lcp2);
         mappingMap.put(lcp1,
-                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null));
+                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null,
+                        xponderNb));
         mappingMap.put(lcp2,
-                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null));
+                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null,
+                        xponderNb));
         return;
     }
 
@@ -780,7 +785,8 @@ public class PortMappingVersion121 {
                     PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                 mappingMap.put(lcp0,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null,
+                            null, xponderNb));
                 client++;
                 break;
 
@@ -810,7 +816,8 @@ public class PortMappingVersion121 {
                     PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                 mappingMap.put(lcp,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
+                            null, xponderNb));
                 line++;
                 break;
 
