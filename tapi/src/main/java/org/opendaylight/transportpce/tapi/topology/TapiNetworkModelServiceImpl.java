@@ -334,24 +334,28 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 for (Mapping mapping : node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
                         .collect(Collectors.toList())) {
-                    Integer xpdrNb =
-                        Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
-                    String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNb;
-                    if (xpdrMap.containsKey(xpdrNb)) {
+
+                    if (mapping.getXpdrNumber() == null) {
+                        continue;
+                    }
+
+                    int xpdrNumber = mapping.getXpdrNumber().toJava();
+                    String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNumber;
+                    if (xpdrMap.containsKey(xpdrNumber)) {
                         continue;
                     }
                     List<Mapping> xpdrNetMaps = node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint()
-                            .contains("XPDR" + xpdrNb + TapiConstants.NETWORK))
+                            .contains("XPDR" + xpdrNumber + TapiConstants.NETWORK))
                         .collect(Collectors.toList());
                     List<Mapping> xpdrClMaps = node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint()
-                            .contains("XPDR" + xpdrNb + TapiConstants.CLIENT))
+                            .contains("XPDR" + xpdrNumber + TapiConstants.CLIENT))
                         .collect(Collectors.toList());
-                    xpdrMap.put(xpdrNb, node.getNodeId());
+                    xpdrMap.put(xpdrNumber, node.getNodeId());
                     // create switching pool
                     Map<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPoolMap =
-                        createSwitchPoolForAnyXpdr(node, mapping.getXpdrType(), xpdrNetMaps, xpdrNb);
+                        createSwitchPoolForAnyXpdr(node, mapping.getXpdrType(), xpdrNetMaps, xpdrNumber);
                     // add nodes and sips to tapi context
                     mergeNodeinTopology(new HashMap<>(
                         // node transformation
@@ -646,13 +650,17 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                  SWITCH -> {
                 LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
 
-                int nbNumber = Integer.parseInt(
-                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+                if (mapping.getXpdrNumber() == null) {
+                    LOG.error("Unable to update TAPI XPDR node for mapping {} of node {}: missing xpdr-number.",
+                            mapping.getLogicalConnectionPoint(), nodeId);
+                    return new ArrayList<>();
+                }
 
+                int xpdrNumber = mapping.getXpdrNumber().toJava();
 
                 return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId
                         + TapiConstants.XXPDR
-                        + nbNumber,
+                        + xpdrNumber,
                         TapiConstants.XPDR)));
             }
             case null, default -> {
@@ -701,7 +709,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Map<OduSwitchingPoolsKey,OduSwitchingPools> createSwitchPoolForAnyXpdr(Nodes node,
-            XpdrNodeTypes xpdrType, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
+            XpdrNodeTypes xpdrType, List<Mapping> xpdrNetMaps, Integer xpdrNumber) {
         Map<OduSwitchingPoolsKey,OduSwitchingPools> oduSwPoolMap = new HashMap<>();
         OduSwitchingPools oduswpool;
         switch (xpdrType) {
