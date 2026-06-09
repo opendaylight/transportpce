@@ -334,8 +334,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 for (Mapping mapping : node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
                         .collect(Collectors.toList())) {
-                    Integer xpdrNb =
-                        Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+
+                    if (mapping.getXpdrNumber() == null) {
+                        continue;
+                    }
+
+                    int xpdrNb = mapping.getXpdrNumber().toJava();
                     String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNb;
                     if (xpdrMap.containsKey(xpdrNb)) {
                         continue;
@@ -646,9 +650,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                  SWITCH -> {
                 LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
 
-                int nbNumber = Integer.parseInt(
-                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+                if (mapping.getXpdrNumber() == null) {
+                    LOG.error("Unable to update TAPI XPDR node for mapping {} of node {}: missing xpdr-number.",
+                            mapping.getLogicalConnectionPoint(), nodeId);
+                    return new ArrayList<>();
+                }
 
+                int nbNumber = mapping.getXpdrNumber().toJava();
 
                 return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId
                         + TapiConstants.XXPDR
