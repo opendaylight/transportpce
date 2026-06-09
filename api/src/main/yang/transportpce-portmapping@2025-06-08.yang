@@ -12,12 +12,12 @@ module transportpce-portmapping {
     revision-date 2020-05-29;
   }
   import org-openroadm-device-types {
-     prefix org-openroadm-device-types;
-     revision-date 2019-11-29;
+    prefix org-openroadm-device-types;
+    revision-date 2019-11-29;
   }
   import org-openroadm-otn-common-types {
-      prefix org-openroadm-otn-common-types;
-      revision-date 2020-03-27;
+    prefix org-openroadm-otn-common-types;
+    revision-date 2020-03-27;
   }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
@@ -28,16 +28,20 @@ module transportpce-portmapping {
     revision-date 2025-05-30;
   }
 
-
   organization
     "transportPCE";
   contact
     "transportPCE committers - ODL";
   description
     "YANG definitions for defining port mapping in TransportPCE.
-     Copyright (c) 2017 AT&T and others. All rights reserved.
-     authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
-              Balagangadhar Bathula ( bb4341@att.com )";
+    Copyright (c) 2017 AT&T and others. All rights reserved.
+    authors: Dhruv Bhardwaj ( [db929a@att.com](mailto:db929a@att.com) ) Shweta Vachhani ( [sv111y@att.com](mailto:sv111y@att.com) )
+    Balagangadhar Bathula ( [bb4341@att.com](mailto:bb4341@att.com) )";
+
+  revision 2026-06-08 {
+    description
+      "Add XPDR number to mapping entries";
+  }
 
   revision 2025-09-05 {
     description
@@ -52,7 +56,7 @@ module transportpce-portmapping {
   revision 2025-03-25 {
     description
       "Added openconfig-info container,
-       move supported-optical-channels and supported-interfaces in it";
+      move supported-optical-channels and supported-interfaces in it";
   }
   revision 2025-01-15 {
     description
@@ -64,12 +68,12 @@ module transportpce-portmapping {
   }
   revision 2023-12-21 {
     description
-       "Add leaflist supported-operational-mode to lcp";
+      "Add leaflist supported-operational-mode to lcp";
   }
   revision 2022-09-22 {
     description
-       "Add initial support to regenerators functionality; Modify the attribute
-       xponder-type to xpdr-type";
+      "Add initial support to regenerators functionality; Modify the attribute
+      xponder-type to xpdr-type";
   }
   revision 2022-03-16 {
     description
@@ -99,7 +103,7 @@ module transportpce-portmapping {
   revision 2021-03-10 {
     description
       "Add operational and administrative state of device port
-       in mapping";
+      in mapping";
   }
   revision 2020-10-12 {
     description
@@ -108,7 +112,7 @@ module transportpce-portmapping {
   revision 2020-08-27 {
     description
       "Add support to differentiate flexible and fixed
-       grid capabilities with mc-capabilities";
+      grid capabilities with mc-capabilities";
   }
   revision 2020-04-29 {
     description
@@ -117,12 +121,12 @@ module transportpce-portmapping {
   revision 2020-01-28 {
     description
       "Add necessary parameters to consolidate OTN
-       and address ONAP MDONS use case";
+      and address ONAP MDONS use case";
   }
   revision 2020-01-13 {
     description
       "Add OTN data from device and necessary
-       to build node inside otn topology";
+      to build node inside otn topology";
   }
   revision 2019-11-15 {
     description
@@ -156,9 +160,9 @@ module transportpce-portmapping {
       }
     }
     description
-        "YANG enumerations for OpenROADM models;
-         enums should be same as OpenROADM models
-         defined in org-openroadm-common-types";
+      "YANG enumerations for OpenROADM models;
+      enums should be same as OpenROADM models
+      defined in org-openroadm-common-types";
   }
 
   typedef openconfig-node-version {
@@ -192,7 +196,7 @@ module transportpce-portmapping {
       }
     }
     description
-          "YANG enumerations for indicating the type of datamodel supported by a node";
+      "YANG enumerations for indicating the type of datamodel supported by a node";
   }
 
   grouping node-info {
@@ -239,7 +243,7 @@ module transportpce-portmapping {
       key "logical-connection-point";
       description
         "Mapping for Physical circuit pack/port/parent interfaces corresponding
-         to each logical connection point present in the node.";
+        to each logical connection point present in the node.";
       leaf logical-connection-point {
         type string;
       }
@@ -267,13 +271,13 @@ module transportpce-portmapping {
         type string;
         description
           "Useful for line port of XPDR, for which there is no indication
-           in its logical-termination-point naming";
+          in its logical-termination-point naming";
       }
       leaf port-qual {
         type string;
         description
           "Useful to identify from portmapping client from network ports
-           of XPDR";
+          of XPDR";
       }
       leaf port-admin-state {
         type string;
@@ -291,26 +295,26 @@ module transportpce-portmapping {
           "Ethernet interface provisioned on the port";
       }
       leaf supporting-otu4 {
-          type string;
-          description
-            "OTU4 interface provisioned on the port";
-        }
+        type string;
+        description
+          "OTU4 interface provisioned on the port";
+      }
       leaf supporting-otucn {
-          type string;
-          description
-            "OTUCn interface provisioned on the port for B100G support. This includes
-            OTUC2, OTUC3, OTUC4";
-        }
+        type string;
+        description
+          "OTUCn interface provisioned on the port for B100G support. This includes
+          OTUC2, OTUC3, OTUC4";
+      }
       leaf supporting-odu4 {
-          type string;
-          description
-            "ODU4 interface provisioned on the port";
-        }
+        type string;
+        description
+          "ODU4 interface provisioned on the port";
+      }
       leaf supporting-oducn {
         type string;
         description
           "ODUCn interface provisioned on the port for B100G support. This includes
-           ODUC2, ODUC3, ODUC4";
+          ODUC2, ODUC3, ODUC4";
       }
       leaf rate {
         type string;
@@ -329,6 +333,11 @@ module transportpce-portmapping {
       }
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
+      leaf xpdr-number {
+        type uint16;
+        description
+          "XPDR index associated with this logical connection point.";
+      }
       leaf xpdr-type {
         type org-openroadm-device-types:xpdr-node-types;
       }
@@ -336,19 +345,19 @@ module transportpce-portmapping {
         type string;
         description
           "For XPDR, associate two logical-connection-points from device/connnection-map
-           data";
+          data";
       }
       leaf partner-lcp {
         type string;
         description
           "For XPDR unidirectional NETWORK port, associate two logical-connection-points
-           from device/partner port data";
+          from device/partner port data";
       }
       leaf lcp-hash-val {
         type string;
         description
           "Hash value generated from node-id and lcp. This value will be used to map-
-           back SAPI and DAPI resource";
+          back SAPI and DAPI resource";
       }
       container openconfig-info {
         leaf-list supported-optical-channels {
@@ -373,7 +382,7 @@ module transportpce-portmapping {
       leaf-list regen-profile {
         description
           "Supported regen profile, these are otsi-group-capabilities profile";
-          type string;
+        type string;
       }
     }
   }
@@ -387,14 +396,14 @@ module transportpce-portmapping {
         be wrong, meaning if the supported-interface-capabilities include, if-100GE-ODU4, if-OTU4-ODU4,
         if-200GE-oduflexcbr, then min/max-trib-slot could be different";
       leaf min-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+          "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
       }
       leaf max-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+          "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
       }
     }
   }
@@ -409,9 +418,9 @@ module transportpce-portmapping {
         type string;
         description
           "Name of the node, it has the format of DEGi-TTP or SRGj-PP
-           Where i, and j are the degree and SRG numbers respectively.
-           For XPDR type it will have one element in the leaf-list,
-           with name XPDR-mcprofile";
+          Where i, and j are the degree and SRG numbers respectively.
+          For XPDR type it will have one element in the leaf-list,
+          with name XPDR-mcprofile";
       }
       leaf slot-width-granularity {
         type org-openroadm-common-optical-channel-types:frequency-GHz;
@@ -445,7 +454,7 @@ module transportpce-portmapping {
       key "circuit-pack-name";
       description
         "This mapping helps locate degree number of the circuitpack that
-         does lldp protocol management";
+        does lldp protocol management";
       leaf circuit-pack-name {
         type string;
       }
@@ -463,7 +472,7 @@ module transportpce-portmapping {
       key "switching-pool-number";
       description
         "For MUXPDR and SWITCH, associates from device/odu-switching-pools data,
-         the logical-connection-points";
+        the logical-connection-points";
       leaf switching-pool-number {
         type uint16;
         description
@@ -483,20 +492,20 @@ module transportpce-portmapping {
           type uint32;
           description
             "Switch fabric interconnect bandwidth unit rate in bits per second.
-             Represents granularity of switch fabric";
+            Represents granularity of switch fabric";
         }
         leaf interconnect-bandwidth {
           type uint32;
           description
             "Total interconnect bandwidth for a non-blocking element expressed as
-             number of inter-connect-bandwidth units : corresponds to capable-
-             inter-connect bandwidth";
+            number of inter-connect-bandwidth units : corresponds to capable-
+            inter-connect bandwidth";
         }
         leaf available-interconnect-bandwidth {
           type uint32;
           description
             "Total interconnect bandwidth available for a non-blocking element can use as
-             number of inter-connect-bandwidth units";
+            number of inter-connect-bandwidth units";
         }
         leaf-list lcp-list {
           type string;
