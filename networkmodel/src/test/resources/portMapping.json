@@ -14,7 +14,8 @@
                             "org-openroadm-port-types:if-OCH"
                         ],
                         "lcp-hash-val": "AMkDwQ7xTmRL",
-                        "supporting-circuit-pack-name": "1/0/2-PLUG-NET"
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-NET",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-NETWORK1",
@@ -26,7 +27,8 @@
                             "org-openroadm-port-types:if-OCH"
                         ],
                         "lcp-hash-val": "AMkDwQ7xTmRI",
-                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT1",
@@ -38,7 +40,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AJUUr6I5fALj",
-                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT2",
@@ -50,7 +53,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AJUUr6I5fALg",
-                        "supporting-circuit-pack-name": "1/0/2-PLUG-CLIENT"
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-CLIENT",
+                        "xpdr-number": "1"
                     }
                 ],
                 "node-info": {
@@ -153,7 +157,8 @@
                         ],
                         "lcp-hash-val": "Swfw02qXGyI=",
                         "xpdr-type": "mpdr",
-                        "supporting-circuit-pack-name": "CP1-CFP0"
+                        "supporting-circuit-pack-name": "CP1-CFP0",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR2-CLIENT4",
@@ -165,7 +170,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AN/WSSRXne3r",
-                        "supporting-circuit-pack-name": "CP2-QSFP4"
+                        "supporting-circuit-pack-name": "CP2-QSFP4",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-CLIENT2",
@@ -177,7 +183,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AN/WSSRXne3t",
-                        "supporting-circuit-pack-name": "CP2-QSFP2"
+                        "supporting-circuit-pack-name": "CP2-QSFP2",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-CLIENT3",
@@ -189,7 +196,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AN/WSSRXne3s",
-                        "supporting-circuit-pack-name": "CP2-QSFP3"
+                        "supporting-circuit-pack-name": "CP2-QSFP3",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-CLIENT1",
@@ -201,7 +209,8 @@
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AN/WSSRXne3u",
-                        "supporting-circuit-pack-name": "CP2-QSFP1"
+                        "supporting-circuit-pack-name": "CP2-QSFP1",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT2",
@@ -213,7 +222,8 @@
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
                         "lcp-hash-val": "FqlcrxV7p38=",
-                        "supporting-circuit-pack-name": "CP1-SFP2"
+                        "supporting-circuit-pack-name": "CP1-SFP2",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT3",
@@ -226,7 +236,8 @@
                             "org-openroadm-port-types:if-10GE"
                         ],
                         "lcp-hash-val": "FqlcrxV7p3g=",
-                        "supporting-circuit-pack-name": "CP1-SFP3"
+                        "supporting-circuit-pack-name": "CP1-SFP3",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT4",
@@ -239,7 +250,8 @@
                             "org-openroadm-port-types:if-10GE"
                         ],
                         "lcp-hash-val": "FqlcrxV7p30=",
-                        "supporting-circuit-pack-name": "CP1-SFP4"
+                        "supporting-circuit-pack-name": "CP1-SFP4",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR1-CLIENT1",
@@ -251,7 +263,8 @@
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
                         "lcp-hash-val": "FqlcrxV7p34=",
-                        "supporting-circuit-pack-name": "CP1-SFP1"
+                        "supporting-circuit-pack-name": "CP1-SFP1",
+                        "xpdr-number": "1"
                     },
                     {
                         "logical-connection-point": "XPDR2-NETWORK2",
@@ -263,7 +276,8 @@
                         ],
                         "lcp-hash-val": "exT821pFtOQ=",
                         "xpdr-type": "switch",
-                        "supporting-circuit-pack-name": "CP6-CFP"
+                        "supporting-circuit-pack-name": "CP6-CFP",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-NETWORK1",
@@ -275,7 +289,8 @@
                         ],
                         "lcp-hash-val": "exT821pFtOc=",
                         "xpdr-type": "switch",
-                        "supporting-circuit-pack-name": "CP5-CFP"
+                        "supporting-circuit-pack-name": "CP5-CFP",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-NETWORK4",
@@ -287,7 +302,8 @@
                         ],
                         "lcp-hash-val": "exT821pFtOI=",
                         "xpdr-type": "switch",
-                        "supporting-circuit-pack-name": "CP8-CFP"
+                        "supporting-circuit-pack-name": "CP8-CFP",
+                        "xpdr-number": "2"
                     },
                     {
                         "logical-connection-point": "XPDR2-NETWORK3",
@@ -299,7 +315,8 @@
                         ],
                         "lcp-hash-val": "exT821pFtOU=",
                         "xpdr-type": "switch",
-                        "supporting-circuit-pack-name": "CP7-CFP"
+                        "supporting-circuit-pack-name": "CP7-CFP",
+                        "xpdr-number": "2"
                     }
                 ]
             }
