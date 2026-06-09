@@ -357,7 +357,8 @@ class TransportPCEOC200End2EndTesting(unittest.TestCase):
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
                 'port-direction': 'bidirectional',
                 'port-admin-state': 'ENABLED',
-                'supporting-port': 'linecard-1-line-port-1'
+                'supporting-port': 'linecard-1-line-port-1',
+                'xpdr-number': 1
             },
             response['mapping'])
 
@@ -380,7 +381,8 @@ class TransportPCEOC200End2EndTesting(unittest.TestCase):
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
                 'port-direction': 'bidirectional',
                 'port-admin-state': 'ENABLED',
-                'supporting-port': 'linecard-1-line-port-1'
+                'supporting-port': 'linecard-1-line-port-1',
+                'xpdr-number': 1
             },
             response['mapping'])
 
@@ -409,7 +411,8 @@ class TransportPCEOC200End2EndTesting(unittest.TestCase):
             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
             'port-direction': 'bidirectional',
             'port-admin-state': 'DISABLED',
-            'supporting-port': 'linecard-1-client-port-1'
+            'supporting-port': 'linecard-1-client-port-1',
+            'xpdr-number': 1
         }
         expected_sorted = test_utils.recursive_sort(expected)
         response_sorted = [
@@ -432,7 +435,8 @@ class TransportPCEOC200End2EndTesting(unittest.TestCase):
             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
             'port-direction': 'bidirectional',
             'port-admin-state': 'DISABLED',
-            'supporting-port': 'linecard-1-client-port-1'
+            'supporting-port': 'linecard-1-client-port-1',
+            'xpdr-number': 1
         }
         expected_sorted = test_utils.recursive_sort(expected)
         response_sorted = [

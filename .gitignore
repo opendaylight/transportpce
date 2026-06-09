@@ -20,10 +20,16 @@ classes
 .DS_STORE
 .metadata
 ordmodels/src/main/java
+
+# Tests
 tests/allure-report/
 tests/config.xml
 tests/models
 tests/test-requirements.txt
+tests/sample_configs/openroadm
+tests/lightynode
+tests/.venv
+# Logs
 *.log
 *.log.*
 __pycache__

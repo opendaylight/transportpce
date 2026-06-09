@@ -31,20 +31,20 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.cp.to.degree.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.cp.to.degree.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.cp.to.degree.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.cp.to.degree.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.cp.to.degree.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.cp.to.degree.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
@@ -252,7 +252,7 @@ public class PortMappingVersion121 {
             mappingMap.remove(slcp);
             portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping,
                 //dlcp
-                lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null));
+                lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null, null));
         }
 
         mappingMap.forEach((k,v) -> portMapList.add(v));
@@ -643,17 +643,17 @@ public class PortMappingVersion121 {
     }
 
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
-            String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp) {
+            String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp, Integer xpdrNumber) {
 
         if (mapping != null && assoLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(assoLcp).build();
         }
-        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp);
+        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp, xpdrNumber);
     }
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
-            String logicalConnectionPoint, String partnerLcp) {
+            String logicalConnectionPoint, String partnerLcp, Integer xpdrNumber) {
         Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability> supportedIntf =
             new HashSet<>();
         Integer maxrate = 0;
@@ -689,6 +689,9 @@ public class PortMappingVersion121 {
         }
         if (port.getOperationalState() != null) {
             mpBldr.setPortOperState(port.getOperationalState().name());
+        }
+        if (xpdrNumber != null) {
+            mpBldr.setXpdrNumber(Uint16.valueOf(xpdrNumber));
         }
         return mpBldr.build();
     }
@@ -739,17 +742,17 @@ public class PortMappingVersion121 {
     }
 
     private void putXpdrLcpsInMaps(int line, String nodeId,
-            Integer xponderNb,
+            Integer xpdrNumber,
             String circuitPackName, String circuitPackName2, Ports port, Ports port2,
             Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
         String lcp1 =
-            PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+            PortMappingUtils.createXpdrLogicalConnectionPort(xpdrNumber, line, StringConstants.NETWORK_TOKEN);
         if (lcpMap.containsKey(lcp1)) {
             LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "add", lcp1 + " - already exist");
             return;
         }
         String lcp2 =
-            PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line + 1, StringConstants.NETWORK_TOKEN);
+            PortMappingUtils.createXpdrLogicalConnectionPort(xpdrNumber, line + 1, StringConstants.NETWORK_TOKEN);
         if (lcpMap.containsKey(lcp2)) {
             LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "add", lcp2 + " - already exist");
             return;
@@ -757,14 +760,16 @@ public class PortMappingVersion121 {
         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
         lcpMap.put(circuitPackName2 + '+' + port2.getPortName(), lcp2);
         mappingMap.put(lcp1,
-                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null));
+                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null,
+                        xpdrNumber));
         mappingMap.put(lcp2,
-                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null));
+                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null,
+                        xpdrNumber));
         return;
     }
 
     private int[] fillXpdrLcpsMaps(int line, int client, String nodeId,
-            Integer xponderNb,
+            Integer xpdrNumber,
             String circuitPackName,  Ports port,
             List<CircuitPacks> circuitPackList, Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
 
@@ -777,16 +782,17 @@ public class PortMappingVersion121 {
 
             case XpdrClient:
                 String lcp0 =
-                    PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
+                    PortMappingUtils.createXpdrLogicalConnectionPort(xpdrNumber, client, StringConstants.CLIENT_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                 mappingMap.put(lcp0,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null,
+                            null, xpdrNumber));
                 client++;
                 break;
 
             case XpdrNetwork:
                 line = fillXpdrNetworkLcpsMaps(line, nodeId,
-                        xponderNb,
+                        xpdrNumber,
                         circuitPackName,  port,
                         circuitPackList,  lcpMap, mappingMap);
                 break;
@@ -799,7 +805,7 @@ public class PortMappingVersion121 {
     }
 
     private int fillXpdrNetworkLcpsMaps(int line, String nodeId,
-            Integer xponderNb,
+            Integer xpdrNumber,
             String circuitPackName,  Ports port,
             List<CircuitPacks> circuitPackList, Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
 
@@ -807,10 +813,11 @@ public class PortMappingVersion121 {
 
             case Bidirectional:
                 String lcp =
-                    PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+                    PortMappingUtils.createXpdrLogicalConnectionPort(xpdrNumber, line, StringConstants.NETWORK_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                 mappingMap.put(lcp,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
+                            null, xpdrNumber));
                 line++;
                 break;
 
@@ -825,7 +832,7 @@ public class PortMappingVersion121 {
                     return line;
                 }
 
-                putXpdrLcpsInMaps(line, nodeId, xponderNb,
+                putXpdrLcpsInMaps(line, nodeId, xpdrNumber,
                         circuitPackName, circuitPackName2.toString(), port, port2,
                         lcpMap, mappingMap);
 

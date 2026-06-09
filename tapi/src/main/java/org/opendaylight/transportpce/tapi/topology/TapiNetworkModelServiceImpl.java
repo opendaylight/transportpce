@@ -52,11 +52,12 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
@@ -333,8 +334,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 for (Mapping mapping : node.nonnullMapping().values().stream()
                         .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
                         .collect(Collectors.toList())) {
-                    Integer xpdrNb =
-                        Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+
+                    if (mapping.getXpdrNumber() == null) {
+                        continue;
+                    }
+
+                    int xpdrNb = mapping.getXpdrNumber().toJava();
                     String nodeId = node.getNodeId() + TapiConstants.XXPDR + xpdrNb;
                     if (xpdrMap.containsKey(xpdrNb)) {
                         continue;
@@ -645,13 +650,17 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                  SWITCH -> {
                 LOG.debug("TNMSI:getChangedNodeUuids: ANALYSING change in {}", nodeId);
 
-                int nbNumber = Integer.parseInt(
-                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+                if (mapping.getXpdrNumber() == null) {
+                    LOG.error("Unable to update TAPI XPDR node for mapping {} of node {}: missing xpdr-number.",
+                            mapping.getLogicalConnectionPoint(), nodeId);
+                    return new ArrayList<>();
+                }
 
+                int xpdrNumber = mapping.getXpdrNumber().toJava();
 
                 return new ArrayList<>(List.of(createTapiUuidFromRoadmId(nodeId
                         + TapiConstants.XXPDR
-                        + nbNumber,
+                        + xpdrNumber,
                         TapiConstants.XPDR)));
             }
             default -> {
@@ -717,9 +726,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .setSwitchingPoolNumber(entry.getKey().getSwitchingPoolNumber())
                         .setSwitchingPoolType(entry.getValue().getSwitchingPoolType());
                     Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
-                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+                    for (Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260608
                             .switching.pool.lcp.switching.pool.lcp.NonBlockingListKey, org.opendaylight.yang.gen.v1.http
-                            .org.opendaylight.transportpce.portmapping.rev260529.switching.pool.lcp.switching.pool.lcp
+                            .org.opendaylight.transportpce.portmapping.rev260608.switching.pool.lcp.switching.pool.lcp
                             .NonBlockingList> nblentry : entry.getValue().getNonBlockingList().entrySet()) {
                         Uint32 availBW = nblentry.getValue().getAvailableInterconnectBandwidth();
                         // TODO: Right now available BW is not in Device OR model. Correct next line when it will be
