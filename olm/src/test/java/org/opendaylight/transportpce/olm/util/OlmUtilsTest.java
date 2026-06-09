@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260811.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.olm.get.pm.input.ResourceIdentifierBuilder;
 
 public class OlmUtilsTest {
