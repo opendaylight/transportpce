@@ -33,6 +33,7 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscription;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
@@ -100,20 +101,22 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             }
             case DataObjectDeleted<Node> deletedNode -> {
                 String nodeId = deletedNode.dataBefore().key().getNodeId().getValue();
-                NodeDatamodelType type = null;
-                if (portMapping.getNode(nodeId) != null) {
-                    type = portMapping.getNode(nodeId).getDatamodelType();
-                }
+                Nodes portmappingNode = portMapping.getNode(nodeId);
+                NodeDatamodelType type = portmappingNode != null ? portmappingNode.getDatamodelType() : null;
+                boolean cleanupOk;
                 if (type != null && type.getName().equalsIgnoreCase("OPENCONFIG")) {
-                    if (this.networkModelService.deleteOpenConfignode(nodeId)) {
-                        onDeviceDisConnected(nodeId);
-                        LOG.info("Device {} correctly disconnected from controller", nodeId);
-                    }
+                    cleanupOk = this.networkModelService.deleteOpenConfignode(nodeId);
                 } else {
-                    if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
-                        onDeviceDisConnected(nodeId);
-                        LOG.info("Device {} correctly disconnected from controller", nodeId);
-                    }
+                    cleanupOk = this.networkModelService.deleteOpenRoadmnode(nodeId);
+                }
+                // Unregister listeners unconditionally — the netconf node is gone regardless
+                // of whether the TPCE datastore cleanup succeeded.
+                onDeviceDisConnected(nodeId);
+                if (cleanupOk) {
+                    LOG.info("Device {} correctly disconnected from controller", nodeId);
+                } else {
+                    LOG.warn("Device {} disconnected but TPCE datastore cleanup failed; stale entries may remain",
+                        nodeId);
                 }
             }
             case DataObjectModified<Node> modifiedNode -> {
