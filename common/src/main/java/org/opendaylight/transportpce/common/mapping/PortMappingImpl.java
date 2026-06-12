@@ -23,6 +23,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -200,19 +201,25 @@ public class PortMappingImpl implements PortMapping {
 
 
     @Override
-    public void deletePortMappingNode(String nodeId) {
+    public boolean deletePortMappingNode(String nodeId) {
         LOG.info("Deleting Mapping Data corresponding at node '{}'", nodeId);
+        boolean success = true;
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
         DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId))
             .build();
         rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
         try {
-            rw.commit().get(1, TimeUnit.SECONDS);
+            rw.commit().get(Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT, Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT_UNIT);
             LOG.info("Port mapping removal for node '{}'", nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error for removing port mapping infos for node '{}'", nodeId, e);
+            success = false;
         }
+        return success;
     }
 
     @Override

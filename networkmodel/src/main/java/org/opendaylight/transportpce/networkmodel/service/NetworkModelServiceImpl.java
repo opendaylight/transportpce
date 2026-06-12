@@ -25,6 +25,7 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -216,26 +217,37 @@ public class NetworkModelServiceImpl implements NetworkModelService {
      */
     @Override
     public boolean deleteOpenRoadmnode(String nodeId) {
-        if (!this.portMapping.isNodeExist(nodeId)) {
-            return false;
+        Nodes portmappingNode = this.portMapping.getNode(nodeId);
+        if (portmappingNode == null) {
+            // The portmapping entry is deleted last, so it may already be gone if a previous
+            // deletion attempt failed halfway through. Proceed anyway so the remaining datastores
+            // get cleaned up and the deletion can be retried to completion.
+            LOG.warn("deleteOpenROADMnode: no portmapping data for {}, cleaning up remaining datastores", nodeId);
+        } else {
+            LOG.info("deleteOpenROADMnode: {} version {}", nodeId,
+                portmappingNode.getNodeInfo().getOpenroadmVersion().getName());
         }
-        OpenroadmNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        LOG.info("deleteOpenROADMnode: {} version {}", nodeId, deviceVersion.getName());
         removeNodeFromOpenroadmNetwork(nodeId);
         removeNodeFromOpenroadmTopology(nodeId);
-        NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeType();
-        if (NodeTypes.Xpdr.equals(nodeType) && !OpenroadmNodeVersion._121.equals(deviceVersion)) {
+        // Without portmapping data the node type is unknown; removeNodeFromOtnTopology is a no-op
+        // for nodes without an OTN topology shard, so call it for the cleanup-retry case too.
+        if (portmappingNode == null
+                || (NodeTypes.Xpdr.equals(portmappingNode.getNodeInfo().getNodeType())
+                    && !OpenroadmNodeVersion._121.equals(portmappingNode.getNodeInfo().getOpenroadmVersion()))) {
             removeNodeFromOtnTopology(nodeId);
         }
         try {
-            this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
+            this.networkTransactionService.commit().get(Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT,
+                Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT_UNIT);
             LOG.info("all nodes and links deleted in topologies! ");
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error when trying to delete node : {}", nodeId, e);
             return false;
         }
-        this.portMapping.deletePortMappingNode(nodeId);
-        return true;
+        return this.portMapping.deletePortMappingNode(nodeId);
     }
 
     /**
@@ -243,27 +255,37 @@ public class NetworkModelServiceImpl implements NetworkModelService {
      */
     @Override
     public boolean deleteOpenConfignode(String nodeId) {
-        if (!this.portMapping.isNodeExist(nodeId)) {
-            return false;
+        Nodes portmappingNode = this.portMapping.getNode(nodeId);
+        if (portmappingNode == null) {
+            // The portmapping entry is deleted last, so it may already be gone if a previous
+            // deletion attempt failed halfway through. Proceed anyway so the remaining datastores
+            // get cleaned up and the deletion can be retried to completion.
+            LOG.warn("deleteOpenConfignode: no portmapping data for {}, cleaning up remaining datastores", nodeId);
+        } else {
+            LOG.info("deleteOpenConfignode: {} version {}", nodeId,
+                portmappingNode.getNodeInfo().getOpenconfigVersion().getName());
         }
-        NodeInfo nodeInfo = this.portMapping.getNode(nodeId).getNodeInfo();
-        LOG.info("deleteOpenConfignode: {} version {}", nodeId, nodeInfo.getOpenconfigVersion().getName());
 
         removeNodeFromOpenroadmNetwork(nodeId);
         removeNodeFromOpenroadmTopology(nodeId);
-        if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())) {
+        // Without portmapping data the node type is unknown; removeNodeFromOtnTopology is a no-op
+        // for nodes without an OTN topology shard, so call it for the cleanup-retry case too.
+        if (portmappingNode == null || NodeTypes.Xpdr.equals(portmappingNode.getNodeInfo().getNodeType())) {
             removeNodeFromOtnTopology(nodeId);
         }
         try {
-            this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
+            this.networkTransactionService.commit().get(Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT,
+                Timeouts.NODE_CLEANUP_COMMIT_TIMEOUT_UNIT);
             LOG.info("all nodes and links deleted in topologies! ");
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error when trying to delete node : {}", nodeId, e);
             return false;
         }
-        this.portMapping.deletePortMappingNode(nodeId);
-        return true;
+        return this.portMapping.deletePortMappingNode(nodeId);
     }
 
     @Override

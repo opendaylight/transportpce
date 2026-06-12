@@ -22,6 +22,14 @@ public final class Timeouts {
     public static final long SERVICE_ACTIVATION_TEST_RETRY_TIME = 20000;
 
     /**
+     * Commit timeout in seconds for node deletion cleanup transactions. A timeout does not abort
+     * the commit, which may still apply afterwards, so it must be generous enough that an expiry
+     * almost certainly means a real failure rather than a slow datastore.
+     */
+    public static final long NODE_CLEANUP_COMMIT_TIMEOUT = 5;
+    public static final TimeUnit NODE_CLEANUP_COMMIT_TIMEOUT_UNIT = TimeUnit.SECONDS;
+
+    /**
      * Device read timeout in seconds.
      */
     public static final long DEVICE_READ_TIMEOUT = 240;

@@ -63,8 +63,9 @@ public interface PortMapping {
      *
      * @param nodeId
      *            node ID
+     * @return true/false based on whether the operation completed successfully
      */
-    void deletePortMappingNode(String nodeId);
+    boolean deletePortMappingNode(String nodeId);
 
     /**
      * This method for a given node's termination point returns the Mapping object
