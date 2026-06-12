@@ -125,16 +125,31 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 }
             }
             case DataObjectModified<Node> modifiedNode -> {
-                NetconfNode netconfNodeBefore = modifiedNode.dataBefore().augmentation(NetconfNodeAugment.class)
-                        .getNetconfNode();
-                NetconfNode netconfNodeAfter = modifiedNode.dataAfter().augmentation(NetconfNodeAugment.class)
-                        .getNetconfNode();
-                String nodeId = modifiedNode.dataBefore().key().getNodeId().getValue();
+                Node nodeBeforeChange = modifiedNode.dataBefore();
+                if (nodeBeforeChange == null) {
+                    LOG.error("Received modify event without prior state: {}", modifiedNode.step());
+                    return;
+                }
+                NetconfNodeAugment nodeBeforeAugment = nodeBeforeChange.augmentation(NetconfNodeAugment.class);
+                if (nodeBeforeAugment == null) {
+                    LOG.error("Node {} modify event: NetconfNodeAugment absent in prior state",
+                        nodeBeforeChange.key().getNodeId().getValue());
+                    return;
+                }
+                NetconfNode netconfNodeBefore = nodeBeforeAugment.getNetconfNode();
+                NetconfNodeAugment nodeAfterAugment = modifiedNode.dataAfter().augmentation(NetconfNodeAugment.class);
+                if (nodeAfterAugment == null) {
+                    LOG.error("Node {} modify event: NetconfNodeAugment absent in updated state",
+                        nodeBeforeChange.key().getNodeId().getValue());
+                    return;
+                }
+                NetconfNode netconfNodeAfter = nodeAfterAugment.getNetconfNode();
+                String nodeId = nodeBeforeChange.key().getNodeId().getValue();
                 if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                         && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                     LOG.info("Connecting Node: {}", nodeId);
                     Optional<AvailableCapability> deviceCapability = netconfNodeAfter
-                            .getAvailableCapabilities().getAvailableCapability().stream()
+                            .getAvailableCapabilities().nonnullAvailableCapability().stream()
                                     .filter(cp -> cp.getCapability()
                                             .contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)
                                                 && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
@@ -146,7 +161,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                         onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
                         LOG.info("OpenRoadm device {} correctly connected to controller", nodeId);
                     } else {
-                        deviceCapability = netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                        deviceCapability = netconfNodeAfter.getAvailableCapabilities().nonnullAvailableCapability().stream()
                                 .filter(cp -> cp.getCapability()
                                         .matches("(.*)" + StringConstants.OPENCONFIG_XPDR_DEVICE_MODEL))
                                 .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
