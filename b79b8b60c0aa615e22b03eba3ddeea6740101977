@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b882f8_3713e4fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-15T05:42:24Z",
+      "side": 1,
+      "message": "I will change the rows that are wrong back to right, but I wont change the correct rows back to something wrong.\n\nThey should never have been committed with the wrong indentation in the first place.",
+      "revId": "b79b8b60c0aa615e22b03eba3ddeea6740101977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "564551a8_95e81405",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e393a418_40af3a03",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-15T05:42:24Z",
+      "side": 1,
+      "message": "Just to be clear: You want me to change these correctly indented rows back to the wrongfully indented rows?\n\nJust to be clear: You want me to change something that is correct, back to something that is wrong?",
+      "parentUuid": "564551a8_95e81405",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 29
+      },
+      "revId": "b79b8b60c0aa615e22b03eba3ddeea6740101977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0552eb9_4f2e4742",
         "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
         "patchSetId": 4
@@ -54,6 +95,30 @@
       "writtenOn": "2026-06-11T11:54:05Z",
       "side": 1,
       "message": "Unrelated formatting changes. These lines are outside the scope of this change and should be reverted.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 71
+      },
+      "revId": "b79b8b60c0aa615e22b03eba3ddeea6740101977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed7fb67_adc8af17",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-15T05:42:24Z",
+      "side": 1,
+      "message": "I will change these back, only because i\u0027m not sure whether they are correct or not.",
+      "parentUuid": "f0552eb9_4f2e4742",
       "range": {
         "startLine": 37,
         "startChar": 0,
