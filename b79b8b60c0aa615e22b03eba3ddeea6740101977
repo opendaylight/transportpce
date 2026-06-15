@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9095f4a7_f033712c",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-15T06:02:57Z",
+      "side": 1,
+      "message": "That’s not what I’m saying. I’m saying these indentation changes are unrelated to the functional change being reviewed and therefore don’t belong in this commit.\n\nIf the indentation is incorrect and should be fixed, that’s fine, but it should be done in a separate change dedicated to formatting/cleanup.",
+      "parentUuid": "e393a418_40af3a03",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 29
+      },
+      "revId": "b79b8b60c0aa615e22b03eba3ddeea6740101977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0552eb9_4f2e4742",
         "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
         "patchSetId": 4
