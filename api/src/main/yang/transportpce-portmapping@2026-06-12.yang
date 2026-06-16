@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-06-12 {
+    description
+      "Add support for OpenROADM 13.1.1 and 17.1 models";
+  }
+
   revision 2025-09-05 {
     description
       "Add wavelength duplication support for SRG";
@@ -153,6 +158,16 @@ module transportpce-portmapping {
         value 3;
         description
           "Version 7.1";
+      }
+      enum 13.1.1 {
+        value 4;
+        description
+          "Version 13.1.1";
+      }
+      enum 17.1 {
+        value 5;
+        description
+          "Version 17.1";
       }
     }
     description
