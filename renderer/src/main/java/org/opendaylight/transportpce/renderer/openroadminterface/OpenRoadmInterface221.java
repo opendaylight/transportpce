@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -267,7 +267,8 @@ public class OpenRoadmInterface221 {
         oduInterfaceBldr.addAugmentation(
                 createOdu4HOInterface1(
                         // For TPDR it can be both CTP and TTP - For switch-ponder we still use TTP
-                        mapping.getXpdrType() == XpdrNodeTypes.Tpdr ? ODUTTPCTP.VALUE : ODUTTP.VALUE,
+                        mapping.getXpdrType().getName()
+                                .equals(XpdrNodeTypes.Tpdr.getName()) ? ODUTTPCTP.VALUE : ODUTTP.VALUE,
                         MonitoringMode.Terminated,
                         new OpuBuilder()
                                 .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))

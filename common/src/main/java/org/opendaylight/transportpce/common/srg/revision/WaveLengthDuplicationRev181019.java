@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.shared.risk.group.SharedRiskGroupBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.WavelengthDuplicationType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.shared.risk.group.SharedRiskGroupBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 
@@ -31,15 +31,15 @@ public class WaveLengthDuplicationRev181019 implements WaveLengthDuplication {
     }
 
     @Override
-    public Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+    public Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                     .shared.risk.group.SharedRiskGroupKey,
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                     .shared.risk.group.SharedRiskGroup> srg() {
 
-        Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+        Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                         .shared.risk.group.SharedRiskGroupKey,
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
-                        .shared.risk.group.SharedRiskGroup> rev260529ShareRiskGroups = new HashMap<>();
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+                        .shared.risk.group.SharedRiskGroup> rev260612ShareRiskGroups = new HashMap<>();
 
         for (Map.Entry<SharedRiskGroupKey, SharedRiskGroup> entries : sharedRiskGroupsRev181019.entrySet()) {
             SharedRiskGroup srgRev181019 = entries.getValue();
@@ -48,9 +48,9 @@ public class WaveLengthDuplicationRev181019 implements WaveLengthDuplication {
                     .setWavelengthDuplication(
                             WavelengthDuplicationType.forName(srgRev181019.getWavelengthDuplication().getName()))
                     .build();
-            rev260529ShareRiskGroups.put(rev260529Srg.key(), rev260529Srg);
+            rev260612ShareRiskGroups.put(rev260529Srg.key(), rev260529Srg);
         }
-        return rev260529ShareRiskGroups;
+        return rev260612ShareRiskGroups;
     }
 
     public static WaveLengthDuplication instantiate(List<SharedRiskGroup> sharedRiskGroupsRev181019) {

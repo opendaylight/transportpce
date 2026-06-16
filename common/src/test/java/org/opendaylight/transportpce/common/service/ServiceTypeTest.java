@@ -13,10 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class ServiceTypeTest {
@@ -74,7 +73,8 @@ public class ServiceTypeTest {
         mapping = new MappingBuilder()
             .setLogicalConnectionPoint("logicalConnectionPoint")
             .setPortQual(PortQual.SwitchClient.getName())
-            .setXpdrType(XpdrNodeTypes.Switch)
+            .setXpdrType(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                    .node.types.rev210528.XpdrNodeTypes.Switch)
             .build();
         serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.valueOf(100), mapping, null);
         assertEquals("100GEs", serviceType, "service-type should be 100GEs");

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.shared.risk.group.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.shared.risk.group.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupBuilder;
@@ -40,12 +40,11 @@ class WaveLengthDuplicationRev181019Test {
                 Map.of(sharedRiskGroup.key(), sharedRiskGroup)
         );
         Map<SharedRiskGroupKey, org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
-                .rev260529.shared.risk.group.SharedRiskGroup> srg = wldRev181019.srg();
-
+                .rev260612.shared.risk.group.SharedRiskGroup> srg = wldRev181019.srg();
         assertNotNull(srg);
         assertEquals(1, srg.size());
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
-                .rev260529.shared.risk.group.SharedRiskGroup firstItem = srg.values().iterator().next();
+                .rev260612.shared.risk.group.SharedRiskGroup firstItem = srg.values().iterator().next();
         assertEquals(Uint16.valueOf("1"), firstItem.getSrgNumber());
         assertEquals("one-per-degree", firstItem.getWavelengthDuplication().getName());
     }
