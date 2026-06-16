@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz.getDefaultInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +18,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.DegreeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.McCapabilityProfile;
@@ -41,7 +42,8 @@ class PortMappingVersion710Test {
                 .setProfileName("mcProfile")
                 .setMinSlots(Uint32.valueOf(3))
                 .setMaxSlots(Uint32.valueOf(16))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
+                .setCenterFreqGranularity(getDefaultInstance("6.25"))
+                .setSlotWidthGranularity(getDefaultInstance("12.5"))
                 .build();
 
         Map<McCapabilityProfileKey, McCapabilityProfile> avaialableMcProfiles = new HashMap<>();
@@ -55,19 +57,23 @@ class PortMappingVersion710Test {
         Map<Integer, Degree> degrees = new HashMap<>();
         degrees.put(d1.getDegreeNumber().intValue(), d1);
 
-        McCapabilitiesKey expectedKey = new McCapabilitiesKey("DEG1-TTP-McCapabilityProfile{maxSlots=16, minSlots=3,"
-                + " profileName=mcProfile, slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+        McCapabilitiesKey expectedKey = new McCapabilitiesKey("DEG1-TTP-McCapabilityProfile{"
+                + "centerFreqGranularity=FrequencyGHz{value=6.25, UNITS=GHz}, "
+                + "maxSlots=16, minSlots=3, "
+                + "profileName=mcProfile, "
+                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+
         McCapabilities expected = new McCapabilitiesBuilder()
                 .withKey(expectedKey)
                 .setMinSlots(Uint32.valueOf(3))
                 .setMaxSlots(Uint32.valueOf(16))
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("6.25"))
                 .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
                 .build();
 
         Map<McCapabilitiesKey, McCapabilities> result = portMappingVersion710.createMcCapDegreeObject(
                 degrees, avaialableMcProfiles, "node1");
-
-        assertEquals(Map.of(expectedKey, expected), result);
+        assertEquals(Map.of(expected.key(), expected), result);
     }
 
     @Test
@@ -77,7 +83,8 @@ class PortMappingVersion710Test {
                 .setProfileName("mcProfile1")
                 .setMinSlots(Uint32.valueOf(3))
                 .setMaxSlots(Uint32.valueOf(16))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
+                .setCenterFreqGranularity(getDefaultInstance("6.25"))
+                .setSlotWidthGranularity(getDefaultInstance("12.5"))
                 .build();
 
         Map<McCapabilityProfileKey, McCapabilityProfile> avaialableMcProfiles = new HashMap<>();
@@ -87,7 +94,8 @@ class PortMappingVersion710Test {
                 .setProfileName("mcProfile2")
                 .setMinSlots(Uint32.valueOf(4))
                 .setMaxSlots(Uint32.valueOf(8))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
+                .setCenterFreqGranularity(getDefaultInstance("6.25"))
+                .setSlotWidthGranularity(getDefaultInstance("12.5"))
                 .build();
         avaialableMcProfiles.put(mcProfile2.key(), mcProfile2);
 
@@ -105,21 +113,31 @@ class PortMappingVersion710Test {
         degrees.put(d1.getDegreeNumber().intValue(), d1);
         degrees.put(d2.getDegreeNumber().intValue(), d2);
 
-        McCapabilitiesKey expectedKey1 = new McCapabilitiesKey("DEG1-TTP-McCapabilityProfile{maxSlots=16, minSlots=3,"
-                + " profileName=mcProfile1, slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+        McCapabilitiesKey expectedKey1 = new McCapabilitiesKey("DEG1-TTP-McCapabilityProfile{"
+                + "centerFreqGranularity=FrequencyGHz{value=6.25, UNITS=GHz}, "
+                + "maxSlots=16, "
+                + "minSlots=3, "
+                + "profileName=mcProfile1, "
+                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
         McCapabilities expected1 = new McCapabilitiesBuilder()
                 .withKey(expectedKey1)
                 .setMinSlots(Uint32.valueOf(3))
                 .setMaxSlots(Uint32.valueOf(16))
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("6.25"))
                 .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
                 .build();
 
-        McCapabilitiesKey expectedKey2 = new McCapabilitiesKey("DEG2-TTP-McCapabilityProfile{maxSlots=8, minSlots=4,"
-                + " profileName=mcProfile2, slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+        McCapabilitiesKey expectedKey2 = new McCapabilitiesKey("DEG2-TTP-McCapabilityProfile{"
+                + "centerFreqGranularity=FrequencyGHz{value=6.25, UNITS=GHz}, "
+                + "maxSlots=8, "
+                + "minSlots=4, "
+                + "profileName=mcProfile2, "
+                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
         McCapabilities expected2 = new McCapabilitiesBuilder()
                 .withKey(expectedKey2)
                 .setMinSlots(Uint32.valueOf(4))
                 .setMaxSlots(Uint32.valueOf(8))
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("6.25"))
                 .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("12.5"))
                 .build();
 
