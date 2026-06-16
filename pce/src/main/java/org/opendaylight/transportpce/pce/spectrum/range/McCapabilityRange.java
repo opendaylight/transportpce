@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.pce.spectrum.range;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.BitSet;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyTHz;
 
 /**
  * A {@link FrequencyRange} bounded by explicit minimum- and maximum-edge frequencies.

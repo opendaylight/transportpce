@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.BitSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyTHz;
 
 class McCapabilityRangeTest {
 

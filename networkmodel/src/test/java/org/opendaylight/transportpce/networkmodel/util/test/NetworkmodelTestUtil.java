@@ -16,16 +16,16 @@ import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
@@ -72,7 +72,7 @@ public final class NetworkmodelTestUtil {
      * @param clli a {@link java.lang.String} object
      * @param degNb a int
      * @param srgNbs a {@link java.util.List} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
      *      .network.Nodes} object
      */
     public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, List<Integer> srgNbs) {
@@ -97,7 +97,7 @@ public final class NetworkmodelTestUtil {
      * @param clientPortNb a int
      * @param xpdrNodeType a {@link org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
      *      .XpdrNodeTypes} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
      *      .network.Nodes} object
      */
     public static Nodes createMappingForXpdr(
