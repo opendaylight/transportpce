@@ -40,12 +40,12 @@ import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
@@ -236,8 +236,8 @@ public class PceCalculation {
         serviceType = ServiceTypes.getServiceType(
             serviceFormatA,
             serviceRate,
-            portMapping.getNode(input.getServiceAEnd().getNodeId()) != null && NodeTypes.Xpdr.equals(
-                portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+            portMapping.getNode(input.getServiceAEnd().getNodeId()) != null && NodeTypes.Xpdr.getName().equals(
+                portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType().getName())
                     && checkAendInputTxPortName()
                 ? portMapping.getMapping(
                     input.getServiceAEnd().getNodeId(),
