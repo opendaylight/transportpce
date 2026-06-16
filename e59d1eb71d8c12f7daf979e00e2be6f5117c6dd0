@@ -538,6 +538,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da117878_64bc2ddd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-16T08:42:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc67c03e_99f87aa7",
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f03dbb20_e2aa3539",
@@ -903,6 +921,30 @@
       "writtenOn": "2026-05-25T18:31:46Z",
       "side": 1,
       "message": "`TP_TYPE_LAYERS.get(tpType)` could be `null`. May I suggest something `null`-safe like:\n\n    private List\u003cString\u003e evaluateLayers(OpenroadmTpType tpType) {\n        List\u003cString\u003e strings \u003d TP_TYPE_LAYERS.get(tpType);\n        if (strings !\u003d null) {\n            new ArrayList\u003c\u003e(strings);\n        }\n\n        return new ArrayList\u003c\u003e();\n    }",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 5
+      },
+      "revId": "e59d1eb71d8c12f7daf979e00e2be6f5117c6dd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead317ae_09df0d35",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/SbiTapiTopoListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-16T08:42:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57e504a5_75b52eb6",
       "range": {
         "startLine": 259,
         "startChar": 0,
