@@ -42,7 +42,7 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.comm
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.FrequencyType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev230126.EthernetCsmacd;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;

@@ -23,15 +23,15 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.NodeDatamodelType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.OpenconfigNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.mapping.OpenconfigInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.OpenconfigNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.mapping.OpenconfigInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlistBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.MeasurementsBuilder;
@@ -135,7 +135,7 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
             .Nodes getMappingNodeTpdr(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
         Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
@@ -146,7 +146,7 @@ public final class OlmPowerServiceRpcImplUtil {
                     .build();
             mappings.put(mapping.key(), mapping);
         }
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
                 .NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
@@ -157,7 +157,7 @@ public final class OlmPowerServiceRpcImplUtil {
             .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
             .Nodes getMappingNodeRdm(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
         Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
@@ -171,7 +171,7 @@ public final class OlmPowerServiceRpcImplUtil {
             }
             mappings.put(mappingBldr.build().key(), mappingBldr.build());
         }
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
                     .NodesBuilder()
                 .setNodeId(nodeId)
                 .setNodeInfo(new NodeInfoBuilder()
@@ -182,9 +182,9 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
             .Nodes getMappingNodeIla() {
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
                     .NodesBuilder()
                 .setNodeId("ila node")
                 .setNodeInfo(new NodeInfoBuilder()
@@ -271,7 +271,7 @@ public final class OlmPowerServiceRpcImplUtil {
         return input;
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
             .Nodes getMappingNodeTpdrOpenConfig(String nodeId, OpenconfigNodeVersion nodeVersion, List<String> lcps,
                     Set<String> opticalChannels, Set<String> operationalModes) {
         Map<MappingKey, Mapping> mappings = new HashMap<>();
@@ -291,7 +291,7 @@ public final class OlmPowerServiceRpcImplUtil {
             Mapping mapping = mappingBuilder.build();
             mappings.put(mapping.key(), mapping);
         }
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network
                 .NodesBuilder()
             .setNodeId(nodeId)
             .setDatamodelType(NodeDatamodelType.OPENCONFIG)

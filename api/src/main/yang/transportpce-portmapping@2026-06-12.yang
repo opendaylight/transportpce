@@ -9,15 +9,16 @@ module transportpce-portmapping {
   }
   import org-openroadm-common-optical-channel-types {
     prefix org-openroadm-common-optical-channel-types;
-    revision-date 2020-05-29;
+    revision-date 2025-03-28;
   }
-  import org-openroadm-device-types {
-     prefix org-openroadm-device-types;
-     revision-date 2019-11-29;
+  import org-openroadm-common-node-types {
+    prefix org-openroadm-common-node-types;
+    revision-date 2021-05-28;
   }
   import org-openroadm-otn-common-types {
       prefix org-openroadm-otn-common-types;
-      revision-date 2020-03-27;
+      // This is the original revision-date in public release 2021-09-24;
+      revision-date 2025-05-30; // This is local change made by TPCE
   }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
@@ -39,6 +40,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-06-12 {
+    description
+      "Add support for OpenROADM 13.1.1 and 17.1 models";
+  }
   revision 2026-05-29 {
     description
       "Add min-edge-freq and max-edge-freq to mc-capabilities";
@@ -159,6 +164,16 @@ module transportpce-portmapping {
         description
           "Version 7.1";
       }
+      enum 13.1.1 {
+        value 4;
+        description
+          "Version 13.1.1";
+      }
+      enum 17.1 {
+        value 5;
+        description
+          "Version 17.1";
+      }
     }
     description
         "YANG enumerations for OpenROADM models;
@@ -202,7 +217,7 @@ module transportpce-portmapping {
 
   grouping node-info {
     leaf node-type {
-      type org-openroadm-device-types:node-types;
+      type org-openroadm-common-node-types:node-types;
       description
         "Identifier for node-type e.g Roadm, xponder";
     }
@@ -335,7 +350,7 @@ module transportpce-portmapping {
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
       leaf xpdr-type {
-        type org-openroadm-device-types:xpdr-node-types;
+        type org-openroadm-common-node-types:xpdr-node-types;
       }
       leaf connection-map-lcp {
         type string;

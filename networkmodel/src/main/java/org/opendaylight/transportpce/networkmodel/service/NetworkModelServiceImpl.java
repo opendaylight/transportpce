@@ -45,10 +45,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.DataModelEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -158,7 +158,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             // nodes/links creation in openroadm-topology
             addNodeInOpenroadmTopology(mappingNode, firstMount);
             // nodes/links creation in otn-topology
-            if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())
+            if (NodeTypes.Xpdr.getName().equals(nodeInfo.getNodeType().getName())
                     && !OpenroadmNodeVersion._121.equals(nodeInfo.getOpenroadmVersion())) {
                 addNodeInOtnTopology(nodeId);
             }
@@ -189,7 +189,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         // nodes/links creation in openroadm-topology
         addNodeInOpenroadmTopology(mappingNode, true);
         // nodes/links creation in otn-topology
-        if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())) {
+        if (NodeTypes.Xpdr.getName().equals(nodeInfo.getNodeType().getName())) {
             addNodeInOtnTopology(nodeId);
         }
 
@@ -232,7 +232,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         // Without portmapping data the node type is unknown; removeNodeFromOtnTopology is a no-op
         // for nodes without an OTN topology shard, so call it for the cleanup-retry case too.
         if (portmappingNode == null
-                || (NodeTypes.Xpdr.equals(portmappingNode.getNodeInfo().getNodeType())
+                || (NodeTypes.Xpdr.getName().equals(portmappingNode.getNodeInfo().getNodeType().getName())
                     && !OpenroadmNodeVersion._121.equals(portmappingNode.getNodeInfo().getOpenroadmVersion()))) {
             removeNodeFromOtnTopology(nodeId);
         }
@@ -270,7 +270,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         removeNodeFromOpenroadmTopology(nodeId);
         // Without portmapping data the node type is unknown; removeNodeFromOtnTopology is a no-op
         // for nodes without an OTN topology shard, so call it for the cleanup-retry case too.
-        if (portmappingNode == null || NodeTypes.Xpdr.equals(portmappingNode.getNodeInfo().getNodeType())) {
+        if (portmappingNode == null || NodeTypes.Xpdr.getName()
+                .equals(portmappingNode.getNodeInfo().getNodeType().getName())) {
             removeNodeFromOtnTopology(nodeId);
         }
         try {

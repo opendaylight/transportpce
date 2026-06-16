@@ -154,8 +154,8 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
         self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
         self.assertEqual('mpdr', res['mapping'][0]['xpdr-type'])
-        self.assertEqual(1.1, float(res['mapping'][0]['mpdr-restrictions']['min-trib-slot']))
-        self.assertEqual(1.2, float(res['mapping'][0]['mpdr-restrictions']['max-trib-slot']))
+        self.assertEqual('1.1', res['mapping'][0]['mpdr-restrictions']['min-trib-slot'])
+        self.assertEqual('1.20', res['mapping'][0]['mpdr-restrictions']['max-trib-slot'])
 
     # Added test to check mc-capability-profile for a transponder
     def test_08_check_mccapprofile(self):

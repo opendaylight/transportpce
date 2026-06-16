@@ -27,7 +27,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.TrailTraceOther.TimDetectMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
@@ -670,7 +670,7 @@ public class OpenRoadmInterface710 {
                                     .setRate(ODUCn.VALUE)
                                     .setOducnNRate(Uint16.valueOf(oducnrate));
 
-        if (portMap.getXpdrType() == XpdrNodeTypes.Regen) {
+        if (portMap.getXpdrType().getName().equals(XpdrNodeTypes.Regen.getName())) {
             LOG.info("Regen mode only supports not-terminated or monitored");
             oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
                     .setOduFunction(ODUCTP.VALUE);
@@ -738,7 +738,7 @@ public class OpenRoadmInterface710 {
                 .setRate(ODUCn.VALUE)
                 .setOducnNRate(Uint16.valueOf(oducnrate));
 
-        if (portMapA.getXpdrType() == XpdrNodeTypes.Regen) {
+        if (portMapA.getXpdrType().getName().equals(XpdrNodeTypes.Regen.getName())) {
             LOG.info("Regen mode only supports not-terminated or monitored");
             oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
                     // For regen-mode ODU-function is set to CTP
@@ -981,7 +981,7 @@ public class OpenRoadmInterface710 {
                 .setRate(ODUCn.VALUE)
                 .setOducnNRate(Uint16.valueOf(oducnrate));
 
-        if (portMap.getXpdrType() == XpdrNodeTypes.Regen) {
+        if (portMap.getXpdrType().getName().equals(XpdrNodeTypes.Regen.getName())) {
             LOG.info("Regen mode only supports not-terminated or monitored");
             oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
                     .setOduFunction(ODUCTP.VALUE);
@@ -1052,7 +1052,7 @@ public class OpenRoadmInterface710 {
                 .setRate(ODUCn.VALUE)
                 .setOducnNRate(Uint16.valueOf(oducnrate));
 
-        if (portMapA.getXpdrType() == XpdrNodeTypes.Regen) {
+        if (portMapA.getXpdrType().getName().equals(XpdrNodeTypes.Regen.getName())) {
             LOG.info("Regen mode only supports not-terminated or monitored");
             oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
                     // For regen-mode ODU-function is set to CTP
