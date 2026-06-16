@@ -45,7 +45,7 @@ import org.opendaylight.transportpce.pce.spectrum.slot.UnconstrainedMcCapability
 import org.opendaylight.transportpce.pce.spectrum.slot.XpdrMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -237,8 +237,8 @@ public class PceCalculation {
         serviceType = ServiceTypes.getServiceType(
             serviceFormatA,
             serviceRate,
-            portMapping.getNode(input.getServiceAEnd().getNodeId()) != null && NodeTypes.Xpdr.equals(
-                portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+            portMapping.getNode(input.getServiceAEnd().getNodeId()) != null && NodeTypes.Xpdr.getName().equals(
+                portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType().getName())
                     && checkAendInputTxPortName()
                 ? portMapping.getMapping(
                     input.getServiceAEnd().getNodeId(),

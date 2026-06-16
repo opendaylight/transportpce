@@ -32,8 +32,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.NodeDatamodelType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscription;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
@@ -199,7 +199,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         return new ArrayList<>(List.of(
                 "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device",
                 "(http://org/openroadm/device?revision=2018-10-19)org-openroadm-device",
-                "(http://org/openroadm/device?revision=2020-05-29)org-openroadm-device"));
+                "(http://org/openroadm/device?revision=2020-05-29)org-openroadm-device",
+                "(http://org/openroadm/device?revision=2025-01-10)org-openroadm-device",
+                "(http://org/openroadm/device?revision=2025-05-30)org-openroadm-device"));
     }
 
     private void onDeviceConnected(final String nodeId, String openRoadmVersion) {

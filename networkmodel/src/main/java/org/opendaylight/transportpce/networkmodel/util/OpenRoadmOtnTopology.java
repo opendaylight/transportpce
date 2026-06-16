@@ -21,10 +21,10 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.switching.pool.lcp.SwitchingPoolLcpKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -599,7 +599,9 @@ public final class OpenRoadmOtnTopology {
                         xpdrNb,
                         mapping.getXpdrType() == null
                             ? XpdrNodeTypes.Tpdr
-                            : mapping.getXpdrType(),
+                                // TODO: This needs to be updated to OpenROADM network models 17.1.0
+                            : org.opendaylight.yang.gen.v1.http.org.openroadm.device.types
+                                .rev191129.XpdrNodeTypes.forName(mapping.getXpdrType().getName()),
                         fillConnectionMapLcp(xpdrNetMaps),
                         fillConnectionMapLcp(xpdrClMaps),
                         xpdrNetMaps,
@@ -766,9 +768,9 @@ public final class OpenRoadmOtnTopology {
         Map<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPoolMap = new HashMap<>();
         for (Map.Entry<SwitchingPoolLcpKey, SwitchingPoolLcp> oslp : oslpMap.entrySet()) {
             Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
-            for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+            for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                     .switching.pool.lcp.switching.pool.lcp.NonBlockingListKey,
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260529
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                         .switching.pool.lcp.switching.pool.lcp.NonBlockingList> nblEntry : oslp
                             .getValue().getNonBlockingList().entrySet()) {
                 Set<TpId> tpList = new HashSet<>();
