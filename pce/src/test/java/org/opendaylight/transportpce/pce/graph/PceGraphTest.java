@@ -125,7 +125,7 @@ public class PceGraphTest extends AbstractTest {
     private static final String MAPPING_FILE = "src/test/resources/topologyData/portMapping2.json";
     private static OperationalModeCatalog omCatalog;
     private static org.opendaylight.yang.gen.v1.http.org.opendaylight
-            .transportpce.portmapping.rev260529.Network networkNode;
+            .transportpce.portmapping.rev260612.Network networkNode;
     private DataBroker dataBroker;
     private MountPoint mountPoint;
     private MountPointService mountPointService;
@@ -189,18 +189,18 @@ public class PceGraphTest extends AbstractTest {
         try (Reader reader = Files.newBufferedReader(Path.of(MAPPING_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.portmapping.rev260529.Network) getDataStoreContextUtil()
+                    .transportpce.portmapping.rev260612.Network) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()
                 .fromNormalizedNode(
                     YangInstanceIdentifier.of(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev260529.Network.QNAME), normalizedNode)
+                        .transportpce.portmapping.rev260612.Network.QNAME), normalizedNode)
                 .getValue();
             @NonNull
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
                     DataObjectIdentifier.builder(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev260529.Network.class).build(), networkNode);
+                        .transportpce.portmapping.rev260612.Network.class).build(), networkNode);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {
             LOG.error("Cannot load OpenROADM part of Operational Mode Catalog ", e);
