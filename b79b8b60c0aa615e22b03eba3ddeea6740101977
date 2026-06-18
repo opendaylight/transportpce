@@ -132,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0707aa59_41532ff4",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-18T12:08:13Z",
+      "side": 1,
+      "message": "Not quite. Rejecting unrelated changes in this change set only means I don’t think they belong in this particular review. It shouldn’t be taken as a commitment on my part to address them in a separate change later.\n\nMy point is simply that whitespace changes are outside the scope of the functional change being reviewed. If the indentation should be corrected, that can be handled in a separate formatting/cleanup change.",
+      "parentUuid": "aa02841f_e42f544b",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 29
+      },
+      "revId": "b79b8b60c0aa615e22b03eba3ddeea6740101977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0552eb9_4f2e4742",
         "filename": "api/src/main/yang/transportpce-portmapping@2025-06-08.yang",
         "patchSetId": 4
