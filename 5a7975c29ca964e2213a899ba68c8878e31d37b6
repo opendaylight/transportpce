@@ -33,6 +33,24 @@
       "message": "Can we create the UUID from a string instead?",
       "revId": "5a7975c29ca964e2213a899ba68c8878e31d37b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d620db_a1ccffcf",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-06-18T08:30:04Z",
+      "side": 1,
+      "message": "Prefer to let it like others for now.",
+      "parentUuid": "d169a0c0_459bd959",
+      "revId": "5a7975c29ca964e2213a899ba68c8878e31d37b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
