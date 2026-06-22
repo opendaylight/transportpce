@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7386a492_2b08d8c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-22T08:58:15Z",
+      "side": 1,
+      "message": "reverted back to FAULTY indents in the yang file.",
+      "revId": "9e8ea8a6e9ac51de969ab61784895cb17a5e0a34",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
