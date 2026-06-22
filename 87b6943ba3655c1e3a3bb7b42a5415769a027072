@@ -65,6 +65,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1998f445_500c1686",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-22T10:21:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35083742_2134f5f4",
+      "range": {
+        "startLine": 934,
+        "startChar": 48,
+        "endLine": 934,
+        "endChar": 56
+      },
+      "revId": "87b6943ba3655c1e3a3bb7b42a5415769a027072",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c412163_d31144c5",
@@ -78,6 +102,30 @@
       "writtenOn": "2026-06-15T14:48:43Z",
       "side": 1,
       "message": "idem everywhere...",
+      "range": {
+        "startLine": 940,
+        "startChar": 16,
+        "endLine": 940,
+        "endChar": 24
+      },
+      "revId": "87b6943ba3655c1e3a3bb7b42a5415769a027072",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0519cb0_04deda64",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-22T10:21:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c412163_d31144c5",
       "range": {
         "startLine": 940,
         "startChar": 16,

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1feb7b2_f464e41d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-06-22T10:21:45Z",
+      "side": 1,
+      "message": "Renamed occurences of nbNumber and xponderNb to xpdrNumber.",
+      "revId": "5cbbae04bd06fe37323428404c7ad7c25efca41c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
