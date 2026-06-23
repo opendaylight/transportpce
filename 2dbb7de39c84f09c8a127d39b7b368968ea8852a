@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a05923_d9abb42f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T16:07:00Z",
+      "side": 1,
+      "message": "Hello Bala,\nAs discussed during our last meeting, could you please change the status to WIP as soon as this is still under work.\nThanks",
+      "revId": "2dbb7de39c84f09c8a127d39b7b368968ea8852a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
