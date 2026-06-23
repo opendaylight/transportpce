@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9790212_296a3f8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T16:04:36Z",
+      "side": 1,
+      "message": "Hi Jimmi,\nI updated oc portmapping test to adapt it to your change.",
+      "revId": "5aab4f2c382901a9fe40d27329b50f86ed754d0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
