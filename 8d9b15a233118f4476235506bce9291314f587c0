@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f2c09b1_e723ae30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "Thanks Roshan for this end to end test. Please find my review with minor comments. I reduced the WAITING timer from 60 to 20 to speed up the test process. It seems to be working correctly.",
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c4ba54_697d4bf4",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "You could remove oc-mpdra and oc-mpdrc as they are non longer used for oc200.",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 170
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d0bafee_19eafaae",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "Maybe you can put oc200-mpdr-A instead or rather keep the naming convention used for 1.9.0 as oc-mpdra and oc-mpdrc ?",
+      "range": {
+        "startLine": 38,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eedb0473_927d6b51",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "Perhaps we could keep the same logic and reuse port 19840 that was used for 1.9.0 ?",
+      "range": {
+        "startLine": 38,
+        "startChar": 39,
+        "endLine": 38,
+        "endChar": 43
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8526011_a650024b",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "19844 ?",
+      "range": {
+        "startLine": 39,
+        "startChar": 41,
+        "endLine": 39,
+        "endChar": 46
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48fd1549_2a871e87",
+        "filename": "tests/transportpce_tests/oc200/test04_end2end.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:19:54Z",
+      "side": 1,
+      "message": "update it to 2026 ?",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 18
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
