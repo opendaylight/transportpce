@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9a1f616_bb916808",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/transaction/DeviceTransceiver.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-23T15:07:28Z",
+      "side": 1,
+      "message": "Could you please update the Copyright ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 31
+      },
+      "revId": "765c1de2bfe3c18f615ef9f29137d79b4055c6d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
