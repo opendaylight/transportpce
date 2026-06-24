@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>24.0.1</transportpce.models.version>
+    <transportpce.models.version>25.0.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -74,6 +74,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openconfig-200</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-platform-5.6.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-terminal-device-5.6.0</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
