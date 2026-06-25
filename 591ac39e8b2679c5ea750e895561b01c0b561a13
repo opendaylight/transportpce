@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe4aba8_db958801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T12:29:28Z",
+      "side": 1,
+      "message": "Hi Jimmi,\nThe change is passed the gate now :-)\nYour change had lots of impacts on the func tests.",
+      "revId": "591ac39e8b2679c5ea750e895561b01c0b561a13",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
