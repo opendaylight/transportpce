@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "266c9f30_69221e4c",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-06-25T04:22:25Z",
+      "side": 1,
+      "message": "Updated",
+      "parentUuid": "8ad72686_8c11c2f5",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 170
+      },
+      "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a3e61c3_95a22e89",
@@ -54,6 +78,30 @@
       "writtenOn": "2026-06-23T15:07:28Z",
       "side": 1,
       "message": "I propose to remove this, as soon as oc190 is no longer supported.",
+      "range": {
+        "startLine": 180,
+        "startChar": 12,
+        "endLine": 183,
+        "endChar": 101
+      },
+      "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77ad38ce_423fc29b",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-06-25T04:22:25Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "1a3e61c3_95a22e89",
       "range": {
         "startLine": 180,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91cc4de1_23b65fe7",
+        "filename": "tests/transportpce_tests/common/test_utils_oc.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-06-25T04:22:25Z",
+      "side": 1,
+      "message": "Removed this print",
+      "parentUuid": "daee6d6c_6cc3341d",
+      "range": {
+        "startLine": 542,
+        "startChar": 2,
+        "endLine": 542,
+        "endChar": 74
+      },
+      "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d498c14_5f0e8fe4",
@@ -104,6 +176,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d0333d_c6e1e4c1",
+        "filename": "tests/transportpce_tests/common/test_utils_oc.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-06-25T04:22:25Z",
+      "side": 1,
+      "message": "Removed this print",
+      "parentUuid": "2d498c14_5f0e8fe4",
+      "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f08ec31_e878c5a1",
@@ -117,6 +207,24 @@
       "writtenOn": "2026-06-23T15:07:28Z",
       "side": 1,
       "message": "could you please update sample-openconfig200-mpdr.xml to make it vendor agnostic ?",
+      "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2960b97e_328997ad",
+        "filename": "tests/transportpce_tests/oc200/test01_portmapping.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-06-25T04:22:25Z",
+      "side": 1,
+      "message": "Updated",
+      "parentUuid": "6f08ec31_e878c5a1",
       "revId": "a08115b34aaa42ff7efcb44d79b837a34c88ea57",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
