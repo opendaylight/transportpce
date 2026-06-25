@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d620e621_6162589a",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09c4ba54_697d4bf4",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 170
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d0bafee_19eafaae",
@@ -87,6 +111,54 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f6ebeb_d4e0c287",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "I took the same convention as for 1.9.0",
+      "parentUuid": "6d0bafee_19eafaae",
+      "range": {
+        "startLine": 38,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ba1c98_c37776eb",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eedb0473_927d6b51",
+      "range": {
+        "startLine": 38,
+        "startChar": 39,
+        "endLine": 38,
+        "endChar": 43
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8526011_a650024b",
@@ -110,6 +182,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff2b98e1_e8ccbf88",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8526011_a650024b",
+      "range": {
+        "startLine": 39,
+        "startChar": 41,
+        "endLine": 39,
+        "endChar": 46
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48fd1549_2a871e87",
@@ -123,6 +219,30 @@
       "writtenOn": "2026-06-23T15:19:54Z",
       "side": 1,
       "message": "update it to 2026 ?",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 18
+      },
+      "revId": "8d9b15a233118f4476235506bce9291314f587c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38d6239_649ddf61",
+        "filename": "tests/transportpce_tests/oc200/test04_end2end.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48fd1549_2a871e87",
       "range": {
         "startLine": 3,
         "startChar": 14,

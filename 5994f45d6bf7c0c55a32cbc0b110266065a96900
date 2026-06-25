@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02db5f2c_06077a12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-06-25T08:15:59Z",
+      "side": 1,
+      "message": "Hi Roshan,\nI did some adjustments on the functional tests and rebase it on top of 120829.\nI also added the corresponding JIRA ticket.",
+      "revId": "5994f45d6bf7c0c55a32cbc0b110266065a96900",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
