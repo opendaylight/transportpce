@@ -17,6 +17,24 @@
       "message": "Turns out I was wrong and jumped to the wrong conclusion at yesterday’s meeting. I had a completely different context in mind, which led me to the wrong assumption.\n\nIt wasn’t a mock issue after all. The McCapabilityProfile was simply missing CenterFrequencyGranularity. Because of that, this call failed:\n\n`mcCapabilityProfile.getCenterFreqGranularity()`\n\non line 898 in PortMappingVersion710.",
       "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "140c14f2_6b42d65f",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710Test.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T06:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05e34e76_36893b67",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
