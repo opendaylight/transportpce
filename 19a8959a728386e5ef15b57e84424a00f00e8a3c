@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1782455073 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1782455073-AB7F2DCEC6FB371AE1BE4FE871804043EB178ECA\n\n0000000000000000000000000000000000000000 19a8959a728386e5ef15b57e84424a00f00e8a3c refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmo+GyEACgkQX735uTFP\nrXHTxg//XNYS4+JDJ1Eft/fIufcBndHJ/yZhO+Gpk3gqXEFcBFDjVPH9j+XT7cHM\npMSESiVm2viJ8CGmjSn3KA8u8nbo+M07l2DYls1WUMyHyOgeno71JVpGal/MUgpg\n9rM7c/BQWJTNWZWh98HxyM1QpxWjo+jhIwPGmCtoehe7G3bOwZCGdj62IGdIpDrx\nsqtAAqR7hNok/qYTjHGQHdLRyQ5gpfGpLbJHarTSAlUOBN2EwQQib9cf9lc/Y98x\nsJ6l2ZFTzifJS+gFLnd9fWe0JsmzsA3bbQF7JDZFw3chq8nxwj6r+VCSK2LoWNTb\nZ3wqeZKmyg0Sbddxre5AapvHwyJhGvdF361tBSqC4utEMMbjcIAg4oT8+M5+APSu\nm2ADfCWh/UMa0UQ7SFSeV4nN2OefIVzfrjvwxIGfxYMtZWnLxrfllewW7uxLN2PS\ngrlVvW2ifdlP+PROVHXY1nbjOIu41Z1idHfV+2h69phuf3CSEIMxEVzX59lE1sMc\nLUYoYf0CjzZIOsPcdnXT/hvZcCVtlB6kF6SsW2fOcGF+8rZc/lcj4mMEUTZWH7WU\nfuEM45jBUDMUmeIaFIYPiSyOS4fCqd1Xb90bOOL3RpI3gqi+hVduG5IDvUH7KRcO\n1YLOUoQh1W1l7CX4PAuh1XWVqfZ/2NIA1nGzBCuphbfX1kvw43g\u003d\n\u003d/b8f\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05e34e76_36893b67",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710Test.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T06:28:27Z",
+      "side": 1,
+      "message": "Turns out I was wrong and jumped to the wrong conclusion at yesterday’s meeting. I had a completely different context in mind, which led me to the wrong assumption.\n\nIt wasn’t a mock issue after all. The McCapabilityProfile was simply missing CenterFrequencyGranularity. Because of that, this call failed:\n\n`mcCapabilityProfile.getCenterFreqGranularity()`\n\non line 898 in PortMappingVersion710.",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
