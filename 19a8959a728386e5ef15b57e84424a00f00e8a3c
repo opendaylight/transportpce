@@ -4,6 +4,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b00c366_bc67b0ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "This headline undersells the change. I think the version numbers should be included, for example:\n\n`Add support for OpenROADM 13.1.1 and 17.1.0 models`\n\nI wonder whether it would make sense to split the 13.1.1 and 17.1 models into separate revisions and Gerrit changes (commits). As it stands, mixing changes for both versions into a single revision can make it difficult to tell which changes belong to which version.\n\nSince this is still a work in progress, I imagine more changes may be added, making it even harder to distinguish between the two versions.",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1b2ee0d_bec59342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "I’m aware this is still work in progress, so apologies for reviewing a bit prematurely. I figured I’d share a few observations now in case they’re useful while the change is still evolving.",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05e34e76_36893b67",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710Test.java",
         "patchSetId": 6
@@ -33,6 +67,98 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "05e34e76_36893b67",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3390fec_89787fc6",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/service/ServiceTypeTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "Consider adding a line break after `rev210528` instead of `common`, if it\u0027s possible. The makes it easier to find the revision and adjust it in future revision changes, since it allows the user to search and replace \n`org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528`\n\n```\n.setXpdrType(org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528\n        .XpdrNodeTypes.Switch)\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 63
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bd91386_4f707d2a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "Line break after `rev191129`:\n\n```\norg.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129\n  .XpdrNodeTypes.forName(mapping.getXpdrType().getName()),            \n```",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 605,
+        "endChar": 0
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d72170c_94413f7f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "Another instance where it would be helpful if the line break appeared after `rev250328` (instead of after `.optical`), making it easier to change the revision in the future. However, Checkstyle makes it difficult to break the line after `rev250328` because the line would become too long.\n\nI suppose there are four options in this case:\n\n1. Remove the line break after `.optical`, add a line break after `rev250328` and solve the checkstyle issue by adding a `@SuppressWarnings(\"checkstyle:LineLength\")` above the method `public static SharedRiskGroup sharedRiskGroup()`\n2. Add two line breaks, like this:\n```\n.setWavelengthDuplication(                                                                    \n        org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250328\n    .WavelengthDuplicationType.OnePerSrg)                                         \n```\n3. Remove the fully qualified name altogether since `.WavelengthDuplicationType` revision `rev250328` is already imported:\n```\n.setWavelengthDuplication(WavelengthDuplicationType.OnePerSrg)\n```\n4. Admit defeat and leave it as is\n\nPersonally, I\u0027m leaning heavily towards option 3. I’m not sure why the fully qualified name was used in the first place. Maybe there was originally a naming collision that has since disappeared, or perhaps it was simply a mistake from the start.",
+      "range": {
+        "startLine": 400,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 85
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "431c16cc_9f4ee7b0",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/TransactionUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-26T10:36:06Z",
+      "side": 1,
+      "message": "Perhaps nit-picky, but we don\u0027t \"need\" the extra line break on line 402, imho.",
+      "range": {
+        "startLine": 402,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 114
+      },
       "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
