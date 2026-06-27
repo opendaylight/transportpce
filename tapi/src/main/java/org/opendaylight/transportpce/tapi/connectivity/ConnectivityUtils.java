@@ -462,6 +462,7 @@ public final class ConnectivityUtils {
         // called form other module, it needs to be populated as method called here requires this parameters.
         this.serviceName = servName;
         this.serviceUuid = servUuid;
+        this.connectionFullMap.clear();
         if (servicesMap == null || servicesMap.isEmpty()
                 || servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
                     .collect(Collectors.toList()).isEmpty()) {
