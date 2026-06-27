@@ -12,9 +12,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.
+//  networks.network.LinkKey;
 
 public class OpenRoadmLinkStateResolver implements LinkStateResolver {
 
@@ -34,35 +35,38 @@ public class OpenRoadmLinkStateResolver implements LinkStateResolver {
             linkAdmState = linkAugmentation.getAdministrativeState();
             linkOpState = linkAugmentation.getOperationalState();
 
-            if (linkAugmentation.getOppositeLink() != null) {
-                if (topology == null) {
-                    return new LinkStateAttributes(null, null);
-                }
+// Disactivate the following lines which are not compatible with Unidir implementation in TAPI and makes tapi func test
+// 3 (tapi_device_change_notifications) fail.
 
-                Network1 network1 = topology.augmentation(Network1.class);
-                if (network1 == null) {
-                    return new LinkStateAttributes(null, null);
-                }
-
-                Link oppositeLink = network1.nonnullLink().get(new LinkKey(linkAugmentation.getOppositeLink()));
-
-                if (oppositeLink == null) {
-                    return new LinkStateAttributes(null, null);
-                }
-
-                Link1 oppositeLinkAug = oppositeLink.augmentation(Link1.class);
-                if (oppositeLinkAug == null) {
-                    return new LinkStateAttributes(null, null);
-                }
-
-                return new LinkStateAttributes(
-                        linkStateMapper.toTapiAdminState(
-                                linkAdmState,
-                                oppositeLinkAug.getAdministrativeState()),
-                        linkStateMapper.toTapiOperationalState(
-                                linkOpState,
-                                oppositeLinkAug.getOperationalState()));
-            }
+//            if (linkAugmentation.getOppositeLink() != null) {
+//                if (topology == null) {
+//                    return new LinkStateAttributes(null, null);
+//                }
+//
+//                Network1 network1 = topology.augmentation(Network1.class);
+//                if (network1 == null) {
+//                    return new LinkStateAttributes(null, null);
+//                }
+//
+//                Link oppositeLink = network1.nonnullLink().get(new LinkKey(linkAugmentation.getOppositeLink()));
+//
+//                if (oppositeLink == null) {
+//                    return new LinkStateAttributes(null, null);
+//                }
+//
+//                Link1 oppositeLinkAug = oppositeLink.augmentation(Link1.class);
+//                if (oppositeLinkAug == null) {
+//                    return new LinkStateAttributes(null, null);
+//                }
+//
+//                return new LinkStateAttributes(
+//                        linkStateMapper.toTapiAdminState(
+//                                linkAdmState,
+//                                oppositeLinkAug.getAdministrativeState()),
+//                        linkStateMapper.toTapiOperationalState(
+//                                linkOpState,
+//                                oppositeLinkAug.getOperationalState()));
+//            }
         }
 
         return new LinkStateAttributes(
