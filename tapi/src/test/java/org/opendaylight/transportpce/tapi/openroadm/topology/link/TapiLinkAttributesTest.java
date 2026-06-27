@@ -132,7 +132,7 @@ class TapiLinkAttributesTest {
 
         TapiLinkAttributes attrs = TapiLinkAttributes.fromOpenRoadmLink(link);
 
-        assertEquals(TapiConstants.OMS_XPDR_RDM_LINK, attrs.tapiLinkType());
+        assertEquals(TapiConstants.OTS_RDM_XPDR_LINK, attrs.tapiLinkType());
         assertEquals(TapiConstants.PHTNC_MEDIA, attrs.sourceNodeQualifier());
         assertEquals(TapiConstants.XPDR, attrs.destinationNodeQualifier());
         assertEquals(TapiConstants.PHTNC_MEDIA_OTS, attrs.sourceTpQualifier());
@@ -150,7 +150,7 @@ class TapiLinkAttributesTest {
 
         TapiLinkAttributes attrs = TapiLinkAttributes.fromOpenRoadmLink(link);
 
-        assertEquals(TapiConstants.OMS_XPDR_RDM_LINK, attrs.tapiLinkType());
+        assertEquals(TapiConstants.OTS_XPDR_RDM_LINK, attrs.tapiLinkType());
         assertEquals(TapiConstants.XPDR, attrs.sourceNodeQualifier());
         assertEquals(TapiConstants.PHTNC_MEDIA, attrs.destinationNodeQualifier());
         assertEquals(TapiConstants.PHTNC_MEDIA_OTS, attrs.sourceTpQualifier());
