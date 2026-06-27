@@ -76,22 +76,18 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
                     .buildFuture();
         }
 
-        Link link = this.tapiLink.createTapiLink(
-                sourceNode,
-                sourceTp,
-                destTopologyNode,
-                destTp,
-                network,
-                tapiTopoUuid,
-                new OpenRoadmLinkResolver());
-        if (link == null) {
+        Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destTopologyNode, destTp,
+                network, tapiTopoUuid, new OpenRoadmLinkResolver());
+        Link link2 = this.tapiLink.createTapiLink(destTopologyNode, destTp, sourceNode, sourceTp,
+            network, tapiTopoUuid, new OpenRoadmLinkResolver());
+        if (link == null || link2 == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
         InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
-        if (putLinkInTopology(link)) {
+        if (putLinkInTopology(link) && putLinkInTopology(link2)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
