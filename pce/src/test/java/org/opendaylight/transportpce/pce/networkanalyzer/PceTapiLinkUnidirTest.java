@@ -36,9 +36,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.spectrum.range.EntireGridRange;
-import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
-import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
+import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
+import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
@@ -63,15 +62,15 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PceTapiLinkTest  extends AbstractTest {
+public class PceTapiLinkUnidirTest  extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceTapiLinkTest.class);
-    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFull.xml";
+    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFullUnidirLink.xml";
     private static Context tapiContext;
     private String serviceType;
     private static String version = "2.4.0";
-    private static McCapability mcCapability = new InterfaceMcCapability(
-        BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768, new EntireGridRange());
+    private static McCapability mcCapability = new NodeMcCapability(
+        BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
     private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
     private Uuid anodeId;
     private Uuid znodeId;
@@ -252,9 +251,10 @@ public class PceTapiLinkTest  extends AbstractTest {
         }
         // As port NETWORK1 already used on SPDR-SA1, it is not available for WDM service creation. As a result
         // The corresponding OTS NEP does not appear as a valid port in SPDR-SA1 and the Link from it to
-        // the ROADM A-SRG can not be validated because.
-        assertNotNull(rdm2tspLink);
-        assertFalse(rdm2tspLink.isValid(), "RDM to RDM Link shall not be valid)");
+        // the ROADM A-SRG can not be validated. Additionaly,as the PP1-ROADM NEP has nn null occupied spectrum,
+        // DisagNodeX is null and link returned by getTapiOpticalLinkFromId is also null
+        assertNull(rdm2tspLink);
+
     }
 
     @Test
@@ -744,7 +744,6 @@ public class PceTapiLinkTest  extends AbstractTest {
                         .map(BasePceNep:: getNepCepUuid)
                         .toList()
                         .contains(nepXUuid)) {
-                    LOG.info("PceTapiLInkTest Line 293, PTON is  {}", entry.getValue().getNodeId());
                     disagNodeXUuid = entry.getKey();
                 }
             }
@@ -762,7 +761,6 @@ public class PceTapiLinkTest  extends AbstractTest {
                         .map(BasePceNep:: getNepCepUuid)
                         .toList()
                         .contains(nepYUuid)) {
-                    LOG.info("PceTapiLInkTest Line 301, PTON is  {}", entry.getValue().getNodeId());
                     disagNodeYUuid = entry.getKey();
                 }
             }
