@@ -283,32 +283,38 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         Uuid srcTopoUuid;
         Uuid dstTopoUuid;
         if (tapiSBIend.equals("Z")) {
-            srcTpUuid = new Uuid(
-                UUID.nameUUIDFromBytes(srcTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
-            srcNodeUuid = new Uuid(
-                UUID.nameUUIDFromBytes(srcNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            srcTpUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+",
+                    srcNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA_OTS, srcTpId.getValue())
+                .getBytes(StandardCharsets.UTF_8)).toString());
+            srcNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", srcNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
+                .getBytes(StandardCharsets.UTF_8)).toString());
             srcTopoUuid = this.tapiTopoUuid;
             dstTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             dstTpUuid = new Uuid(tapiTp.getTpUuid());
             dstNodeUuid = new Uuid(tapiTp.getSupportingNodeUuid());
         } else {
-            dstTpUuid = new Uuid(
-                UUID.nameUUIDFromBytes(dstTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
-            dstNodeUuid = new Uuid(
-                UUID.nameUUIDFromBytes(dstNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            dstTpUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+",
+                    dstNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA_OTS, dstTpId.getValue())
+                .getBytes(StandardCharsets.UTF_8)).toString());
+            dstNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", dstNode.getValue().split("-DEG")[0], TapiConstants.PHTNC_MEDIA)
+                .getBytes(StandardCharsets.UTF_8)).toString());
             dstTopoUuid = this.tapiTopoUuid;
             srcTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
             srcTpUuid = new Uuid(tapiTp.getTpUuid());
             srcNodeUuid = new Uuid(tapiTp.getSupportingNodeUuid());
         }
+
         if (!putTapiInterDomainLinkInTopology(StringConstants.SBI_TAPI_TOPOLOGY_UUID,
-                this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
-                srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid))) {
+                this.tapiLink.createInterDomainTapiLink(link.getLinkId(), String.join("to", aendName, zendName),
+                    srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid))) {
             return false;
         }
         return putTapiInterDomainLinkInTopology(StringConstants.T0_FULL_MULTILAYER_UUID,
-                    this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
-                        srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid));
+                this.tapiLink.createInterDomainTapiLink(link.getLinkId(), String.join("to", aendName, zendName),
+                    srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid));
+
     }
 
     private void putTapiLinkInTopology(
