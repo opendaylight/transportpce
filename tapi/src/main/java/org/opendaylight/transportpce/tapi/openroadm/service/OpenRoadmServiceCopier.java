@@ -80,6 +80,8 @@ public class OpenRoadmServiceCopier {
                 TapiProvider.TAPI_TOPO_UUID,
                 topologyUtils);
 
+        connectivityUtils.setConnectionCreationModeToActive(true);
+
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(
                 topologyUtils,
                 connectivityUtils,
