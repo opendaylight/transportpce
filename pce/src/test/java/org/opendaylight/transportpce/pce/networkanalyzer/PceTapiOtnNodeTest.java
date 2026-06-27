@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 @Execution(ExecutionMode.SAME_THREAD)
 public class PceTapiOtnNodeTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(PceTapiOtnNodeTest.class);
-    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFull.xml";
+    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFullUnidirLink.xml";
     private static Context tapiContext;
     private static String version = "2.4.0";
     private static McCapability mcCapability = new InterfaceMcCapability(
