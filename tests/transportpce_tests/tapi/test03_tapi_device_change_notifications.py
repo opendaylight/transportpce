@@ -838,7 +838,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
-        time.sleep(2)
+        time.sleep(10)
 
     def test_57_check_update_portmapping(self):
         response = test_utils.get_portmapping_node_attr("ROADM-A1", None, None)
