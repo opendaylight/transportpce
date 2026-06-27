@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 
 public class PceTapiOpticalNodeTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(PceTapiOpticalNodeTest.class);
-    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFull.xml";
+    private static final String TOPOLOGY_FILE = "src/test/resources/topologyData/refTopoTapiFullUnidirLink.xml";
     private static Context tapiContext;
 //    private TapiOpticalNode tapiONroadmA;
     private static String version = "2.4.0";
@@ -240,11 +240,11 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
                 .toList()
                 .size(),
                 "Spectrum shall be fully available for both SRG nodes");
-        assertEquals(2, pceTapiDegNodes.stream()
+        assertEquals(1, pceTapiDegNodes.stream()
                 .filter(rdm -> rdm.getBitSetData().equals(freqBitSet))
                 .toList()
                 .size(),
-                "Spectrum shall be fully available for both DEG nodes");
+                "Spectrum shall be fully available for one DEG nodes, the other supporting 3 photonic services");
     }
 
 
