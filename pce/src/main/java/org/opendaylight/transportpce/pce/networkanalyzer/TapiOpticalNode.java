@@ -2460,7 +2460,7 @@ public class TapiOpticalNode {
             } else {
                 LOG.debug("Nep {} not included in interconnecMap, this nep may not be connected to existing link",
                     nep1.getKey());
-                break;
+                continue;
             }
             LOG.debug("TON:createIrgPartialMesh : orgNodeType {}", orgNodeType);
             Uuid orgVnepUuid = orgBpn.getVirtualNep().entrySet().iterator().next().getKey();
@@ -2482,7 +2482,7 @@ public class TapiOpticalNode {
                 } else {
                     LOG.debug("Nep {} not included in interconnecMap, this nep may not be connected to existing link",
                         nep2.getKey());
-                    break;
+                    continue;
                 }
 
                 Uuid destVnepUuid = destBpn.getVirtualNep().entrySet().iterator().next().getKey();
