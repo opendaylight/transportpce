@@ -15,6 +15,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.link.state.OpenRoad
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -215,7 +216,8 @@ public interface TapiLink {
     /**
      * Builds and return returns an inter-domain TAPI Unidirectional link from input parameters.
      *
-     * @param linkId The link Id used as the name value of Tapi Link Name (value-name = "tapi-interdomain-link")
+     * @param orlinkId linkId as it appears in OpenRoadm Topology
+     * @param tapilinkId used as the name value of Tapi Link Name (value-name = "tapi-interdomain-link")
      * @param srcNodeUuid Uuid of source node
      * @param srcTpUuid source termination point Uuid
      * @param dstNodeUuid Uuid of destination node
@@ -224,7 +226,6 @@ public interface TapiLink {
      * @param dstTapiTopoUuid UUID of the TAPI topology containing the destination NEP
      * @return a Tapi interdomain Link
      */
-    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+    Link createInterDomainTapiLink(LinkId orlinkId, String tapilinkId, Uuid srcNodeUuid, Uuid srcTpUuid,
             Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
-
 }
