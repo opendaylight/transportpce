@@ -119,7 +119,7 @@ public record TapiLinkAttributes(
 
             case XPONDERINPUT -> {
                 return new TapiLinkAttributes(
-                        TapiConstants.OMS_XPDR_RDM_LINK,
+                        TapiConstants.OTS_RDM_XPDR_LINK,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.XPDR,
                         TapiConstants.PHTNC_MEDIA_OTS,
@@ -129,7 +129,7 @@ public record TapiLinkAttributes(
 
             case XPONDEROUTPUT -> {
                 return new TapiLinkAttributes(
-                        TapiConstants.OMS_XPDR_RDM_LINK,
+                        TapiConstants.OTS_XPDR_RDM_LINK,
                         TapiConstants.XPDR,
                         TapiConstants.PHTNC_MEDIA,
                         TapiConstants.PHTNC_MEDIA_OTS,
