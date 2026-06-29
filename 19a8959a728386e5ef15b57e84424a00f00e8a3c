@@ -19,6 +19,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ba5900_0880adc2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-06-29T16:32:45Z",
+      "side": 1,
+      "message": "Hi Joakim,\n\nThanks for the excellent feedback on this. Really appreciate you taking time and helping me to make this change better. I will change the commit message to indicate the model numbers clearly.\n\nRegarding the separating them, I feel that it should be okay to have both here. This change is in port-mapping, where we are adding the enum for 13.1.1 and 17.1.0. OpenROADM model support is already there in TPCE/models.\n\nHaving both together makes it convenient, because we use the latest model revision number in port-mapping (for instance 17.1.0 revision dates will be used).\n\nIf I have to separate them, then we again have to change the revision dates in port-mapping YANG file, corresponding to reflect 17.1.0. \n\nKindly let me know what you think!",
+      "parentUuid": "1b00c366_bc67b0ee",
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f1b2ee0d_bec59342",
@@ -94,6 +112,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d1a91b7_9af04ceb",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/service/ServiceTypeTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-06-29T16:32:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a3390fec_89787fc6",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 63
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bd91386_4f707d2a",
@@ -107,6 +149,30 @@
       "writtenOn": "2026-06-26T10:36:06Z",
       "side": 1,
       "message": "Line break after `rev191129`:\n\n```\norg.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129\n  .XpdrNodeTypes.forName(mapping.getXpdrType().getName()),            \n```",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 605,
+        "endChar": 0
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f21d92_46f877d0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-06-29T16:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bd91386_4f707d2a",
       "range": {
         "startLine": 603,
         "startChar": 0,
@@ -140,6 +206,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b90b1b_77afd84d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-06-29T16:32:45Z",
+      "side": 1,
+      "message": "haha I like the option 4), I was just kidding. I have modified it as per the option 3. Sorry I guess this was overlook on my part.",
+      "parentUuid": "5d72170c_94413f7f",
+      "range": {
+        "startLine": 400,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 85
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "431c16cc_9f4ee7b0",
@@ -153,6 +243,30 @@
       "writtenOn": "2026-06-26T10:36:06Z",
       "side": 1,
       "message": "Perhaps nit-picky, but we don\u0027t \"need\" the extra line break on line 402, imho.",
+      "range": {
+        "startLine": 402,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 114
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26cf6b7d_13c6f25f",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/TransactionUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-06-29T16:32:45Z",
+      "side": 1,
+      "message": "You are not nit-picky! I need this kind of feedback 😊",
+      "parentUuid": "431c16cc_9f4ee7b0",
       "range": {
         "startLine": 402,
         "startChar": 0,
