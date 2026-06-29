@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029c58dd_d1f8905b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLinkTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "This log seems redundant to me and could be removed. The asserts below already verifies all aspects of it with information messages as to what to expect, if I\u0027m not mistaken.",
+      "range": {
+        "startLine": 354,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 89
+      },
+      "revId": "904e9562d8940048632c17d94c7daaf19707948e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c53addca_0d15583b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "Calling `getORLinkFromLinkId(orlinkId)` twice. Once here and once more on line 467. Perhaps store the result into a variable instead.",
+      "revId": "904e9562d8940048632c17d94c7daaf19707948e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47544bb2_bd7bd438",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "May I suggest changing the method signature from `public Link create...()` to `public Optional\u003cLink\u003e create...()` and returning `Optional.empty()` here instead of `null`?\n\nThe advantage is the method signature clearly communicates that the method may or may not return a value. Returning `null` will compile, but the current method signature doesn\u0027t communicate the client may need to guard against NPEs.",
+      "revId": "904e9562d8940048632c17d94c7daaf19707948e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

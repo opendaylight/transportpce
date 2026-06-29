@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7941a848_52e1c840",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "This section feels a bit dense. Consider extracting the construction of the two debug strings into helper methods. That would make `analyzeTapiNw()` easier to follow, and wrapping the logging in `LOG.isDebugEnabled()` avoids building the strings when debug logging is disabled. Something along these lines:\n\n```\n//Log only if debugging is enabled, preventing stringbuilding unless necessary\nif (LOG.isDebugEnabled()) {\n    LOG.debug(\"PceCalculation:analyzeTapiNw : AllPceLinksAsFollow {}\", formatPceTapiLinks(allPceLinks));\n    LOG.debug(\"PceCalculation:analyzeTapiNw : AllPceNodesAsFollow {}\", formatPceNodes(allPceNodes));\n}\n...\n//Helper methods\nprivate String formatPceTapiLinks(Map\u003cLinkId, PceLink\u003e pceLinks) {\n    return pceLinks\n        .values()\n        .stream()\n        .filter(PceTapiLink.class::isInstance)\n        .map(PceTapiLink.class::cast)\n        .map(link -\u003e \"Link: \" + link.getLinkName().getValue()\n            + \" of UUid \u003d \" + link.getLinkId()\n            + \" Valid \u003d \" + link.isValid()\n            + \" and opposite Link Id \u003d \" + link.getOppositeLinkId()\n            + \" State \u003d \" + link.getAdministrativeState()\n            + \" OpState \u003d \" + link.getOperationalState()\n            + \" type \u003d \" + link.getlinkType())\n        .collect(Collectors.joining(\" || \"));\n}\n\nprivate String formatPceNodes(Map\u003cNodeId, PceNode\u003e pceNodes) {\n    return pceNodes\n        .values()\n        .stream()\n        .map(node -\u003e \"Node: \" + node.getNodeId()\n            + \" of UUid \u003d \" + node.getNodeUuid()\n            + \" outgoingLink \u003d \" + node.getOutgoingLinks()\n            + \" State \u003d \" + node.getAdminState()\n            + \" OpState \u003d \" + node.getOperationalState()\n            + \" type \u003d \" + node.getPceNodeType())\n        .collect(Collectors.joining(\" || \"));\n}\n```\n\nNote: is `allPceLinks` guaranteed to contain only `PceTapiLink` instances in this path? If not, we may need to filter before casting, as in the example above.",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 709,
+        "endChar": 94
+      },
+      "revId": "6861fee21e2921243073ca92f78fb8d882c43111",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b997897_3eaae1c6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "I\u0027m not fully up to speed on what we\u0027re trying to accomplish here, but a few things stood out to me:\n\n1. The `.split(\"\\\\+\")[0]` string processing seems a bit fragile. Could we use `source.getSupNetworkNodeId()` and `dest.getSupNetworkNodeId()` instead?\n2. `link.getName().values()` may throw an NPE if `getName()` is null. It may be worth guarding this before streaming.\n3. `.orElseThrow()` may make this path fail hard if no matching name is found. Would `.orElse(null)` or an early return be more appropriate here?\n4. Consider declaring `srcNodeName`, `dstNodeName`, and `sourceNode` closer to where they are used.\n\ne.g.\n\n```\nif (link.getName() \u003d\u003d null || link.getName().isEmpty()) {\n    LOG.debug(\"PceCalculation:validateTapiLink : Link has no name, skipping direction check\");\n    return processTapiLink(link, topoUuid, source, dest);\n}\n\nString linkName \u003d link\n    .getName()\n    .values()\n    .stream()\n    .filter(name -\u003e name.getValueName().equals(\"OMS link name\")\n        || name.getValueName().equals(\"tapi-interdomain-link\")\n        || name.getValueName().equals(\"roadm to xpdr link name\")\n        || name.getValueName().equals(\"xpdr to roadm link name\"))\n    .map(Name::getValue)\n    .findFirst()\n    .orElse(null);\n\nString srcNodeName \u003d source.getSupNetworkNodeId();\nString dstNodeName \u003d dest.getSupNetworkNodeId();\nString sourceNode \u003d \"NodeY\";\n```",
+      "range": {
+        "startLine": 924,
+        "startChar": 0,
+        "endLine": 932,
+        "endChar": 57
+      },
+      "revId": "6861fee21e2921243073ca92f78fb8d882c43111",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65017955_8a21161c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-06-29T08:21:54Z",
+      "side": 1,
+      "message": "`connection.getName()` could throw NPE. A bit hard to read too. How about:\n\n```\n        if (connection.getName() !\u003d null) {\n            String connectionName \u003d connection\n                    .getName()\n                    .values()\n                    .stream()\n                    .map(Name::getValue)\n                    .findFirst()\n                    .orElse(null);\n            if (connectionName !\u003d null \u0026\u0026 !connectionName.isBlank()\n                    \u0026\u0026 !isLinkNameReverted(srcNodeName, dstNodeName, connectionName)) {\n                sourceNode \u003d \"NodeX\";\n            }\n        }\n```",
+      "range": {
+        "startLine": 982,
+        "startChar": 0,
+        "endLine": 989,
+        "endChar": 0
+      },
+      "revId": "6861fee21e2921243073ca92f78fb8d882c43111",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
