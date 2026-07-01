@@ -18,6 +18,57 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1b2ad7_d5012fbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-07-01T08:10:31Z",
+      "side": 1,
+      "message": "Hi Olivier, I have added some questions in this change request. Please take a look as you get time. If valid, we could work on them as a separate change request later as well.",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "539eddf7_3d6fa6a7",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-07-01T08:10:31Z",
+      "side": 1,
+      "message": "Is it enough to keep this module under \"service_path\"?\n\nIsn\u0027t it better to define as a top-level yang?",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5da62eb_53f2e6d1",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-07-01T08:10:31Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to add a list of sbi controller details here?\nFor now, we can define it as a list with max elements as 1.\nAnd define url, userid, password, tapi-version, controller-type etc.\n\nOr, do you prefer keeping it outside of this?",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8142dd47_674a3020",
