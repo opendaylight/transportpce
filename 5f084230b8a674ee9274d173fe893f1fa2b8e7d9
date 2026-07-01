@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "5f084230b8a674ee9274d173fe893f1fa2b8e7d9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c2219f_54837996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-01T09:00:33Z",
+      "side": 1,
+      "message": "This change appears to combine several independent pieces of work that I think would benefit from being split into separate commits. Keeping commits focused on a single logical change makes them easier to review, bisect, and revert when needed.\n\nThe SBI TAPI topology listener is grouped together with the inter-domain link builder utilities and inter-domain link handling changes, even though those can be reviewed independently.\n\nAs a proposed way forward, I’ve split this into focused commits without changing the implementation. The original authorship has been preserved; I only reorganized the changes into separate commits:\n\n- tapi: add inter-domain link builder and ID utils https://git.opendaylight.org/gerrit/c/transportpce/+/123800\n- Fix inter-domain link handling https://git.opendaylight.org/gerrit/c/transportpce/+/123801\n- Add SBI TAPI topology listener https://git.opendaylight.org/gerrit/c/transportpce/+/123802\n\nI’m happy to discuss this further so we can converge on a common approach for structuring changes going forward.",
+      "revId": "5f084230b8a674ee9274d173fe893f1fa2b8e7d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
