@@ -73,7 +73,7 @@ class TestTransportPCEPce(unittest.TestCase):
             with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r', encoding='utf-8') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                             "..", "..", "sample_configs", "pce_portmapping_121.json")
+                                             "..", "..", "sample_configs", "pce_portmapping_221.json")
             with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
@@ -266,6 +266,10 @@ class TestTransportPCEPce(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
+        atozList = len(response['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'])
+        ztoaList = len(response['output']['response-parameters']['path-description']['zToA-direction']['zToA'])
+        self.assertEqual(atozList, 31)
+        self.assertEqual(ztoaList, 31)
 
         time.sleep(4)
 
@@ -283,10 +287,10 @@ class TestTransportPCEPce(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
-        self.assertEqual(5, response['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-wavelength-number'])
-        self.assertEqual(5, response['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-wavelength-number'])
+        atozList = len(response['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'])
+        ztoaList = len(response['output']['response-parameters']['path-description']['zToA-direction']['zToA'])
+        self.assertEqual(atozList, 47)
+        self.assertEqual(ztoaList, 47)
         time.sleep(4)
 
     # Test3 success path computation with hard-constraints exclude
@@ -299,10 +303,10 @@ class TestTransportPCEPce(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
-        self.assertEqual(9, response['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-wavelength-number'])
-        self.assertEqual(9, response['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-wavelength-number'])
+        atozList = len(response['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'])
+        ztoaList = len(response['output']['response-parameters']['path-description']['zToA-direction']['zToA'])
+        self.assertEqual(atozList, 63)
+        self.assertEqual(ztoaList, 63)
         time.sleep(4)
 
     # Path computation before deleting oms-attribute of the link :openroadm1-3 to openroadm1-2

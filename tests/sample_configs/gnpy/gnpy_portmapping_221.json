@@ -4,7 +4,7 @@
       "node-id": "XPONDER-1",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -19,7 +19,7 @@
       "node-id": "XPONDER-2",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -34,7 +34,7 @@
       "node-id": "XPONDER-3",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -49,7 +49,7 @@
       "node-id": "XPONDER-4",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -64,7 +64,7 @@
       "node-id": "XPONDER-5",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -79,7 +79,7 @@
       "node-id": "OpenROADM-1",
       "node-info": {
         "node-type": "rdm",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -94,7 +94,7 @@
       "node-id": "OpenROADM-2",
       "node-info": {
         "node-type": "rdm",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -109,7 +109,7 @@
       "node-id": "OpenROADM-3",
       "node-info": {
         "node-type": "rdm",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -124,7 +124,7 @@
       "node-id": "OpenROADM-4",
       "node-info": {
         "node-type": "rdm",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -139,7 +139,7 @@
       "node-id": "OpenROADM-5",
       "node-info": {
         "node-type": "rdm",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",
@@ -154,7 +154,7 @@
       "node-id": "XPONDER",
       "node-info": {
         "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
+        "openroadm-version": "2.2.1",
         "node-clli": "NodeX",
         "node-vendor": "vendorA",
         "node-model": "model1",

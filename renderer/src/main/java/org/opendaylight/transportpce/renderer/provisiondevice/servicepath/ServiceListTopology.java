@@ -13,7 +13,7 @@ import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.TopologyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.get.connection.port.trail.output.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250530.resource.DeviceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250530.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250530.resource.ResourceTypeBuilder;

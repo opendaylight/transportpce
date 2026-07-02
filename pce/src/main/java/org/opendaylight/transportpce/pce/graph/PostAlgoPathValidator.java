@@ -1124,9 +1124,6 @@ public class PostAlgoPathValidator {
             mcCapabilityCollection.add(mcCapability);
 
             String pceNodeVersion = pceNode.getVersion();
-            if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
-                isFlexGrid = false;
-            }
 
             LOG.debug("Node {}: version is {}, mc-capabilities: {}, flex grid = {}",
                 pceNode.getNodeId(), pceNodeVersion, mcCapability, isFlexGrid);
