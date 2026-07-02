@@ -65,14 +65,14 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     void testGetPm() {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
-            .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
+            .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
-            .thenReturn(Optional.of(OlmPowerServiceRpcImplUtil.getCurrentPmList121()));
+            .thenReturn(Optional.of(OlmPowerServiceRpcImplUtil.getCurrentPmList221()));
 
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
         GetPmOutput result = this.olmPowerService.getPm(input);
         assertEquals(
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity._15min,
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.PmGranularity._15min,
             result.getGranularity());
         assertEquals(
             PmNamesEnum.OpticalPowerInput.toString(),

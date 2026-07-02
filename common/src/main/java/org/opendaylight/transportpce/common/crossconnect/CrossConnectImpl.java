@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.common.crossconnect;
 
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
@@ -18,8 +17,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.otn.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -33,7 +31,6 @@ public class CrossConnectImpl implements CrossConnect {
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl.class);
 
     private final MappingUtils mappingUtils;
-    private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
     private CrossConnectImpl710 crossConnectImpl710;
 
@@ -41,26 +38,21 @@ public class CrossConnectImpl implements CrossConnect {
     public CrossConnectImpl(@Reference DeviceTransactionManager deviceTransactionManager,
                             @Reference MappingUtils mappingUtils) {
         this(deviceTransactionManager, mappingUtils,
-            new CrossConnectImpl121(deviceTransactionManager),
             new CrossConnectImpl221(deviceTransactionManager),
             new CrossConnectImpl710(deviceTransactionManager));
     }
 
     // TODO: DeviceTransactionManager is not used here
     public CrossConnectImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
-                            CrossConnectImpl121 crossConnectImpl121,
                             CrossConnectImpl221 crossConnectImpl221,
                             CrossConnectImpl710 crossConnectImpl710) {
         this.mappingUtils = mappingUtils;
-        this.crossConnectImpl121 = crossConnectImpl121;
         this.crossConnectImpl221 = crossConnectImpl221;
         this.crossConnectImpl710 = crossConnectImpl710;
     }
 
     public Optional<?> getCrossConnect(String nodeId, String connectionNumber) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                return crossConnectImpl121.getCrossConnect(nodeId,connectionNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
             case OPENROADM_DEVICE_VERSION_7_1:
@@ -76,9 +68,6 @@ public class CrossConnectImpl implements CrossConnect {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Cross Connect post request received for node {} with version {}", nodeId, openRoadmVersion);
         switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.info("Device Version is 1.2.1");
-                return crossConnectImpl121.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 LOG.info("Device Version is 2.2.1");
                 return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
@@ -94,8 +83,6 @@ public class CrossConnectImpl implements CrossConnect {
 
     public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
             case OPENROADM_DEVICE_VERSION_7_1:
@@ -109,9 +96,6 @@ public class CrossConnectImpl implements CrossConnect {
             int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                return crossConnectImpl121
-                    .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221
                     .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
@@ -126,12 +110,6 @@ public class CrossConnectImpl implements CrossConnect {
     @Override
     public boolean setPowerLevel(String nodeId, String mode, Decimal64 powerValue, String connectionNumber) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                if (OpticalControlMode.forName(mode) == null) {
-                    return false;
-                }
-                return crossConnectImpl121.setPowerLevel(nodeId, OpticalControlMode.forName(mode), powerValue,
-                        connectionNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
                         .forName(mode) == null) {

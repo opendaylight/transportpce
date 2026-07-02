@@ -4,7 +4,7 @@ module transportpce-common-types {
 
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
-    revision-date 2016-10-14;
+    revision-date 2018-10-19;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
@@ -20,6 +20,10 @@ module transportpce-common-types {
       prefix org-openroadm-otn-common-types;
   }
 
+  revision 2026-07-07 {
+     description
+        "Update org-openroadm-common-types to 2.2.1 version";
+  }
   revision 2025-10-22 {
       description
         "separate aend from zend optical-operational-mode in service-result-rpc-common-parameters";
