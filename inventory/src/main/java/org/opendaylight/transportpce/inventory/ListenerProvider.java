@@ -74,8 +74,8 @@ public class ListenerProvider {
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 InstanceIdentifiers.CLLI_NETWORK_II, clliNetworkChangeListener));
         LOG.info("CLLI network change listener was successfully registered");
-        INode121 inode121 = new INode121(dataSource, deviceTransactionManager);
-        INode inode = new INode(dataSource, inode121);
+        INode221 inode221 = new INode221(dataSource, deviceTransactionManager);
+        INode inode = new INode(dataSource, inode221);
         DeviceInventory deviceInventory = new DeviceInventory(dataSource, inode);
         DeviceListener deviceListener = new DeviceListener(deviceInventory);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,

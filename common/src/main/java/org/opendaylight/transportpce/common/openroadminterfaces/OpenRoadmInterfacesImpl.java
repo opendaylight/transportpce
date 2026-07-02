@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
@@ -16,7 +15,6 @@ import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,7 +26,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
 
-    OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
     MappingUtils mappingUtils;
@@ -37,17 +34,14 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public OpenRoadmInterfacesImpl(@Reference DeviceTransactionManager deviceTransactionManager,
                                    @Reference MappingUtils mappingUtils, @Reference PortMapping portMapping) {
         this(deviceTransactionManager, mappingUtils,
-            new OpenRoadmInterfacesImpl121(deviceTransactionManager),
             new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping),
             new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping));
     }
 
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
-                                   OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,
                                    OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221,
                                    OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710) {
         this.mappingUtils = mappingUtils;
-        this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
         this.openRoadmInterfacesImpl221 = openRoadmInterfacesImpl221;
         this.openRoadmInterfacesImpl710 = openRoadmInterfacesImpl710;
     }
@@ -56,11 +50,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public <T> void postInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.info("postInterface for 1.2.1 device {}", nodeId);
-                InterfaceBuilder ifBuilder121 = convertInstanceOfInterface(ifBuilder, InterfaceBuilder.class);
-                openRoadmInterfacesImpl121.postInterface(nodeId,ifBuilder121);
-                return;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 LOG.info("postInterface for 2.2.1 device {}", nodeId);
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder
@@ -88,8 +77,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Interface get request received for node {} with version {}", nodeId, openRoadmVersion);
         switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                return (Optional<T>) openRoadmInterfacesImpl121.getInterface(nodeId,interfaceName);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
             case OPENROADM_DEVICE_VERSION_7_1:
@@ -107,9 +94,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Interface delete request received for node {} with version {}", nodeId, openRoadmVersion);
         switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                openRoadmInterfacesImpl121.deleteInterface(nodeId,interfaceName);
-                return;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
                 return;
@@ -130,9 +114,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         LOG.info("Request received for node {} with version {} to change equipment-state of cp {}.",
             nodeId,openRoadmVersion, circuitPackName);
         switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                openRoadmInterfacesImpl121.postEquipmentState(nodeId, circuitPackName, activate);
-                return;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
@@ -150,9 +131,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("postOTNInterface unsupported ordm version 1.2.1 error device {}", nodeId);
-                return;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder
                     ifBuilder22 = (org.opendaylight.yang.gen.v1
@@ -176,9 +154,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("postOTNEquipmentState unsupported ordm version 1.2.1 error device {}", nodeId);
-                return;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
@@ -203,9 +178,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public String getSupportedInterface(String nodeId, String interfaceName) {
         String supportedInterface = "";
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_1_2_1:
-                supportedInterface = openRoadmInterfacesImpl121.getSupportedInterface(nodeId,interfaceName);
-                break;
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 supportedInterface = openRoadmInterfacesImpl221.getSupportedInterface(nodeId,interfaceName);
                 break;
