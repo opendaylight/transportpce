@@ -20,7 +20,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.olm.get.pm.input.ResourceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +55,6 @@ public final class OlmUtils {
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
         List<Measurements> measurements = new ArrayList<>();
         switch (openRoadmVersion) {
-            case OpenroadmNodeVersion._121:
-                measurements = OlmUtils121.pmFetch(input, deviceTransactionManager);
-                break;
             case OpenroadmNodeVersion._221:
                 measurements = OlmUtils221.pmFetch(input, deviceTransactionManager);
                 break;
@@ -103,9 +100,6 @@ public final class OlmUtils {
                 input.getResourceType(), input.getResourceIdentifier());
         Map<String, List<GetPmOutput>> pmOutputMap;
         switch (openRoadmVersion) {
-            case OpenroadmNodeVersion._121:
-                pmOutputMap = OlmUtils121.pmFetchAll(input, deviceTransactionManager);
-                break;
             case OpenroadmNodeVersion._221:
                 pmOutputMap = OlmUtils221.pmFetchAll(input, deviceTransactionManager);
                 break;
@@ -132,8 +126,6 @@ public final class OlmUtils {
                                       OpenRoadmInterfaces openRoadmInterfaces) {
         LOG.info("Setting spanloss for node: {} - {}", realNodeId, interfaceName);
         switch (nodeVersion) {
-            case OpenroadmNodeVersion._121:
-                return OlmUtils121.setSpanLoss(realNodeId, interfaceName, spanLoss, direction,openRoadmInterfaces);
             case OpenroadmNodeVersion._221:
                 return OlmUtils221.setSpanLoss(realNodeId, interfaceName, spanLoss, direction, openRoadmInterfaces);
             case OpenroadmNodeVersion._71:

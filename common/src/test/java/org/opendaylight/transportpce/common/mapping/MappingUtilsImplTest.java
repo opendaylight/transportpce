@@ -66,10 +66,10 @@ public class MappingUtilsImplTest extends AbstractTest {
 
     @Test
     void getOpenRoadmVersionTest() {
-        assertEquals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1, mappingUtils.getOpenRoadmVersion("ROADM-C1"),
-            "NodeInfo with ROADM-C1 as id should be 1.2.1 version");
         assertEquals(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, mappingUtils.getOpenRoadmVersion("ROADM-A1"),
             "NodeInfo with ROADM-A1 as id should be 2.2.1 version");
+        assertEquals(StringConstants.OPENROADM_DEVICE_VERSION_7_1, mappingUtils.getOpenRoadmVersion("ROADM-C1"),
+                "NodeInfo with ROADM-C1 as id should be 7.1 version");
         assertNull(mappingUtils.getOpenRoadmVersion("nodes3"), "NodeInfo with nodes3 as id should not exist");
     }
 

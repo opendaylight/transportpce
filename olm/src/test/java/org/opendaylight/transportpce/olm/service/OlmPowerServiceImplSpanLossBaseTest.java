@@ -32,7 +32,6 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
@@ -72,8 +71,6 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     @Mock
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     @Mock
-    private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
-    @Mock
     private OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
 
     private OpenRoadmInterfaces openRoadmInterfaces;
@@ -83,7 +80,7 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     @BeforeEach
     void setUp() throws OpenRoadmInterfaceException {
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
-                this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
+                this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
         this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.dataBroker = getDataBroker();

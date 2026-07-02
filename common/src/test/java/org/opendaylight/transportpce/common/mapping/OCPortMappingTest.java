@@ -138,7 +138,6 @@ public class OCPortMappingTest {
     private OCPortMappingVersion200 ocPortMappingVersion200Test;
     private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion22;
-    private PortMappingVersion121 portMappingVersion121;
 
     @BeforeEach
     void setUp() {
@@ -148,7 +147,7 @@ public class OCPortMappingTest {
         ocMetaDataTransaction = mock(OCMetaDataTransaction.class);
         deviceTransactionManager = mock(DeviceTransactionManager.class);
         portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion22,
-                portMappingVersion121, ocPortMappingVersion200);
+                ocPortMappingVersion200);
         ocPortMappingVersion200Test = new OCPortMappingVersion200(dataBroker, deviceTransactionManager,
                 ocMetaDataTransaction, networkTransactionService);
     }

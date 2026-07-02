@@ -266,8 +266,6 @@ public final class MappingUtilsImpl implements MappingUtils {
                         return StringConstants.OPENROADM_DEVICE_VERSION_7_1;
                     case _221:
                         return StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
-                    case _121:
-                        return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
                     default:
                         LOG.warn("unknown openROADM device version");
                 }

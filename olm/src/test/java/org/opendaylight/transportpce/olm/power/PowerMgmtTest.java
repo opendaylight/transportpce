@@ -51,13 +51,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.mapping.OpenconfigInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.och.container.OchBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.Interface1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.och.container.OchBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.OtsBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
 class PowerMgmtTest {
@@ -91,10 +91,10 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForTransponderAEnd() throws OpenRoadmInterfaceException {
         when(this.portMapping.getNode("xpdr-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._221,
                     List.of("network-A")));
         when(this.portMapping.getNode("roadm-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._221,
                     List.of("srg1-A", "deg2-A")));
         Interface interfOch = new InterfaceBuilder()
                 .setName("interface name")
@@ -106,7 +106,7 @@ class PowerMgmtTest {
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
                                         .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
@@ -114,13 +114,13 @@ class PowerMgmtTest {
                                 .build())
                 .build();
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
-        MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class);
-        pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
+        MockedStatic<PowerMgmtVersion221> pmv221 = mockStatic(PowerMgmtVersion221.class);
+        pmv221.when(() -> PowerMgmtVersion221.setTransponderPower(anyString(), anyString(), any(), any(), any()))
                 .thenReturn(true);
         Map<String, Double> powerRangeMap = new HashMap<>();
         powerRangeMap.put("MaxTx", 0.1);
         powerRangeMap.put("MinTx", -5.1);
-        pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
+        pmv221.when(() -> PowerMgmtVersion221.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
                 .thenReturn(powerRangeMap);
         when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
@@ -133,7 +133,7 @@ class PowerMgmtTest {
     void testSetPowerForTransponderZEnd() {
         when(this.portMapping.getNode("xpdr-C"))
             .thenReturn(OlmPowerServiceRpcImplUtil
-                .getMappingNodeTpdr("xpdr-C", OpenroadmNodeVersion._121, List.of("client-C")));
+                .getMappingNodeTpdr("xpdr-C", OpenroadmNodeVersion._221, List.of("client-C")));
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("xpdr-C", "network-C", "client-C");
@@ -144,14 +144,14 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForRoadmAEnd() throws OpenRoadmInterfaceException {
         when(this.portMapping.getNode("roadm-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._221,
                         List.of("srg1-A", "deg2-A")));
         when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
                             .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
@@ -176,7 +176,7 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForRoadmZEnd() {
         when(this.portMapping.getNode("roadm-C"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-C", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-C", OpenroadmNodeVersion._221,
                     List.of("deg1-C", "srg1-C")));
         when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
@@ -194,10 +194,10 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForTransponderWhenNoTransponderPort() throws OpenRoadmInterfaceException {
         when(this.portMapping.getNode("xpdr-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._221,
                     List.of("network-A")));
         when(this.portMapping.getNode("roadm-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._221,
                     List.of("srg1-A", "deg2-A")));
         Interface interfOch = new InterfaceBuilder()
                 .setName("interface name")
@@ -209,7 +209,7 @@ class PowerMgmtTest {
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
                                         .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
@@ -217,11 +217,11 @@ class PowerMgmtTest {
                                 .build())
                 .build();
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
-        try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
-            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(),
+        try (MockedStatic<PowerMgmtVersion221> pmv221 = mockStatic(PowerMgmtVersion221.class)) {
+            pmv221.when(() -> PowerMgmtVersion221.setTransponderPower(anyString(), anyString(),
                             any(), any(), any()))
                     .thenReturn(true);
-            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(),
+            pmv221.when(() -> PowerMgmtVersion221.getXponderPowerRange(anyString(), anyString(),
                             anyString(), any()))
                     .thenReturn(new HashMap<>());
 
@@ -233,7 +233,7 @@ class PowerMgmtTest {
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
             assertTrue(result);
-            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
+            pmv221.verify(() -> PowerMgmtVersion221.setTransponderPower(matches("xpdr-A"),
                     anyString(), eq(new BigDecimal("-5")), any(), any()));
             verify(this.crossConnect, times(1))
                 .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
@@ -244,10 +244,10 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForTransponderAEndWithRoadmPort() throws OpenRoadmInterfaceException {
         when(this.portMapping.getNode("xpdr-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdr("xpdr-A", OpenroadmNodeVersion._221,
                     List.of("network-A")));
         when(this.portMapping.getNode("roadm-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._221,
                     List.of("srg1-A", "deg2-A")));
         Interface interfOch = new InterfaceBuilder()
                 .setName("interface name")
@@ -259,7 +259,7 @@ class PowerMgmtTest {
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                                 .Interface1Builder()
                                 .setOts(new OtsBuilder()
                                         .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
@@ -267,19 +267,19 @@ class PowerMgmtTest {
                                 .build())
                 .build();
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
-        try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
+        try (MockedStatic<PowerMgmtVersion221> pmv221 = mockStatic(PowerMgmtVersion221.class)) {
 
-            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
+            pmv221.when(() -> PowerMgmtVersion221.setTransponderPower(anyString(), anyString(), any(), any(), any()))
                     .thenReturn(true);
             Map<String, Double> powerRangeMapTpdrTx = new HashMap<>();
             powerRangeMapTpdrTx.put("MaxTx", 0.1);
             powerRangeMapTpdrTx.put("MinTx", -5.1);
-            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
+            pmv221.when(() -> PowerMgmtVersion221.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
                     .thenReturn(powerRangeMapTpdrTx);
             Map<String, Double> powerRangeMapSrgRx = new HashMap<>();
             powerRangeMapSrgRx.put("MaxRx", -4.2);
             powerRangeMapSrgRx.put("MinRx", -22.2);
-            pmv121.when(() -> PowerMgmtVersion121.getSRGRxPowerRange(anyString(), anyString(), any(), anyString(),
+            pmv221.when(() -> PowerMgmtVersion221.getSRGRxPowerRange(anyString(), anyString(), any(), anyString(),
                         anyString()))
                     .thenReturn(powerRangeMapSrgRx);
             when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
@@ -287,7 +287,7 @@ class PowerMgmtTest {
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
             assertTrue(result);
-            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
+            pmv221.verify(() -> PowerMgmtVersion221.setTransponderPower(matches("xpdr-A"),
                     anyString(), eq(new BigDecimal("-4.20000000000000017763568394002504646778106689453125")),
                     any(), any()));
         }
@@ -344,14 +344,14 @@ class PowerMgmtTest {
     @Test
     void testSetPowerForRoadmAEndGainLossFailure() throws OpenRoadmInterfaceException {
         when(this.portMapping.getNode("roadm-A"))
-            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._221,
                         List.of("srg1-A", "deg2-A")));
         when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                             .Interface1Builder()
                     .setOts(new OtsBuilder()
                             .setSpanLossTransmit(new RatioDB(Decimal64.valueOf(3, 6)))
@@ -390,7 +390,7 @@ class PowerMgmtTest {
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
-                    OpenroadmNodeVersion._121, List.of("srg1")));
+                    OpenroadmNodeVersion._221, List.of("srg1")));
 
         Mapping portMap = new MappingBuilder()
                 .setLogicalConnectionPoint("network-OC")
@@ -436,7 +436,7 @@ class PowerMgmtTest {
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
-                    OpenroadmNodeVersion._121, List.of("srg1")));
+                    OpenroadmNodeVersion._221, List.of("srg1")));
 
         try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
                 mockStatic(PowerMgmtVersionOC200.class)) {
@@ -469,7 +469,7 @@ class PowerMgmtTest {
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
-                    OpenroadmNodeVersion._121, List.of("srg1")));
+                    OpenroadmNodeVersion._221, List.of("srg1")));
 
         Mapping portMap = new MappingBuilder()
                 .setLogicalConnectionPoint("network-OC")

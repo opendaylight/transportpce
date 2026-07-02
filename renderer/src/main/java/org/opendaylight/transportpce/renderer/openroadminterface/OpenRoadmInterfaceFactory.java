@@ -26,13 +26,10 @@ import org.slf4j.LoggerFactory;
 
 public class OpenRoadmInterfaceFactory {
 
-    private static final String OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG =
-            "OTN functions are not supported by Openroadm models 1.2.1";
     private static  final String OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_2_2_1_MSG =
             "OTN functions are not supported by Openroadm models 2.2.1";
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaceFactory.class);
     private final MappingUtils mappingUtils;
-    private final OpenRoadmInterface121 openRoadmInterface121;
     private final OpenRoadmInterface221 openRoadmInterface221;
     private final OpenRoadmInterface710 openRoadmInterface710;
     private final OpenRoadmOtnInterface221 openRoadmOtnInterface221;
@@ -41,7 +38,6 @@ public class OpenRoadmInterfaceFactory {
     public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, PortMapping portMapping,
             OpenRoadmInterfaces openRoadmInterfaces) {
         this.mappingUtils = mappingUtils;
-        this.openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
         this.openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
         this.openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
         this.openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
@@ -52,8 +48,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
@@ -68,9 +62,6 @@ public class OpenRoadmInterfaceFactory {
             SpectrumInformation spectrumInformation)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterfaces(nodeId, logicalConnPoint,
-                        spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
@@ -94,9 +85,6 @@ public class OpenRoadmInterfaceFactory {
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
             SpectrumInformation spectrumInformation, String operationalMode) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
-                        spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
                         spectrumInformation);
@@ -126,8 +114,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4HOInterface(nodeId, logicalConnPoint, isCTP,
                     apiInfoA, apiInfoZ, payloadType);
@@ -167,9 +153,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121
-                        .createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface,
                     apiInfoA, apiInfoZ);
@@ -188,8 +171,6 @@ public class OpenRoadmInterfaceFactory {
 
     public String createOpenRoadmOmsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOmsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOmsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
@@ -201,8 +182,6 @@ public class OpenRoadmInterfaceFactory {
 
     public String createOpenRoadmOtsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOtsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOtsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
@@ -215,8 +194,6 @@ public class OpenRoadmInterfaceFactory {
     public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
             DeviceTransactionManager deviceTransactionManager) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
@@ -229,9 +206,6 @@ public class OpenRoadmInterfaceFactory {
     public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
             DeviceTransactionManager deviceTransactionManager) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return false;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.isUsedByOtnXc(nodeId, interfaceName, xc, deviceTransactionManager);
             default:
@@ -243,9 +217,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface221.createOpenRoadmEth1GInterface(nodeId, logicalConnPoint);
             default:
@@ -257,9 +228,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface221.createOpenRoadmEth10GInterface(nodeId, logicalConnPoint);
             default:
@@ -271,9 +239,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 LOG.warn("Use Ethernet interface creation for 2.2.1, instead this method of Ether 100G");
                 return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
@@ -290,9 +255,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface221.createOpenRoadmOdu0Interface(nodeId, logicalConnPoint, servicename,
                     isCTP, tribPortNumber, tribSlotIndex, apiInfoA, apiInfoZ, payLoadType);
@@ -306,9 +268,6 @@ public class OpenRoadmInterfaceFactory {
             String payLoadType)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface221.createOpenRoadmOdu2Interface(nodeId, logicalConnPoint,  servicename,
                     isCTP, tribPortNumber, tribSlotIndex, apiInfoA, apiInfoZ, payLoadType);
@@ -323,9 +282,6 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface221.createOpenRoadmOdu2eInterface(nodeId, logicalConnPoint, servicename,
                     isCTP, tribPortNumber, tribSlotIndex, apiInfoA, apiInfoZ, payLoadType);
@@ -340,9 +296,6 @@ public class OpenRoadmInterfaceFactory {
         throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_2_2_1_MSG);
                 return null;

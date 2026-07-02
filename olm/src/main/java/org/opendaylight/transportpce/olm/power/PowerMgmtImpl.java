@@ -44,9 +44,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.Interface1;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -310,9 +310,6 @@ public class PowerMgmtImpl implements PowerMgmt {
         String circuitPackName = mappingObject.orElseThrow().getSupportingCircuitPackName();
         String portName = mappingObject.orElseThrow().getSupportingPort();
         switch (openroadmVersion.getIntValue()) {
-            case 1:
-                return PowerMgmtVersion121.getXponderPowerRange(circuitPackName, portName,
-                    nodeId, deviceTransactionManager);
             case 2:
                 return PowerMgmtVersion221.getXponderPowerRange(circuitPackName, portName,
                     nodeId, deviceTransactionManager);
@@ -377,9 +374,6 @@ public class PowerMgmtImpl implements PowerMgmt {
         String circuitPackName = mappingObject.orElseThrow().getSupportingCircuitPackName();
         String portName = mappingObject.orElseThrow().getSupportingPort();
         switch (rdmOpenroadmVersion) {
-            case 1:
-                return PowerMgmtVersion121.getSRGRxPowerRange(nodeId, srgId,
-                        deviceTransactionManager, circuitPackName, portName);
             case 2:
                 return PowerMgmtVersion221.getSRGRxPowerRange(nodeId, srgId,
                         deviceTransactionManager, circuitPackName, portName);
@@ -684,16 +678,6 @@ public class PowerMgmtImpl implements PowerMgmt {
         boolean powerSetupResult = false;
         try {
             switch (openroadmVersion.getIntValue()) {
-                case 1:
-                    Optional<Interface> interfaceOptional121 =
-                        openRoadmInterfaces.getInterface(nodeId, interfaceName);
-                    if (interfaceOptional121.isEmpty()) {
-                        LOG.error(INTERFACE_NOT_PRESENT, interfaceName, nodeId);
-                        return false;
-                    }
-                    powerSetupResult = PowerMgmtVersion121.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional121.orElseThrow());
-                    break;
                 case 2:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp
                             .Interface> interfaceOptional221 =

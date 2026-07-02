@@ -10,14 +10,14 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.TcaNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev181019.TcaNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.TcaNotification
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev181019.TcaNotification
  * notification.
- * This implementation is dedicated to yang model 1.2.1 revision.
+ * This implementation is dedicated to yang model 2.2.1 revision.
  */
 public final class TcaListener {
 

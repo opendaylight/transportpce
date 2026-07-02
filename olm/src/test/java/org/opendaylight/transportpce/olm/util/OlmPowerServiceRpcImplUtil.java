@@ -32,25 +32,34 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.mapping.OpenconfigInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlistBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.MeasurementsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.measurements.MeasurementBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPm;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.pm.measurement.PmParameterNameBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Location;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPmBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPmKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntry;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.Measurement;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.MeasurementBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.MeasurementKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmDataType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.Validity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -60,44 +69,56 @@ public final class OlmPowerServiceRpcImplUtil {
     }
 
     public static GetPmInput  getGetPmInput() {
-        GetPmInput input = new GetPmInputBuilder()
+        return new GetPmInputBuilder()
+                .setDirection(org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.Direction.Tx)
+                .setPmExtension("extension")
+                .setPmNameType(org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.PmNamesEnum
+                        .OpticalPowerInput)
+                .setLocation(org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.Location.NearEnd)
+                .setDirection(org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.Direction.Rx)
                 .setNodeId("node1")
                 .setGranularity(PmGranularity._15min)
                 .setResourceIdentifier(new ResourceIdentifierBuilder()
                         .setResourceName("ots-deg1").build())
                 .setResourceType(ResourceTypeEnum.Interface).build();
-        return input;
     }
 
-    public static CurrentPmlist getCurrentPmList121() {
-        CurrentPm currentPm = new CurrentPmBuilder()
-                .setId("id")
-                .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity._15min)
-                .setResource(new ResourceBuilder()
-                        .setResourceType(new ResourceTypeBuilder()
-                                .setType(ResourceTypeEnum.Interface)
-                                .build())
-                        .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource
-                                .ResourceBuilder()
-                                .setResource(new InterfaceBuilder()
-                                        .setInterfaceName("ots-deg1")
-                                        .build())
-                                .build())
-                        .build())
-                .setMeasurements(List.of(
-                        new MeasurementsBuilder()
-                                .setMeasurement(new MeasurementBuilder()
-                                        .setPmParameterName(new PmParameterNameBuilder()
-                                                .setType(PmNamesEnum.OpticalPowerInput)
-                                                .build())
-                                        .setPmParameterValue(new PmDataType(Decimal64.valueOf(2, 3)))
-                                        .build())
-                                .build()))
+    public static CurrentPmList getCurrentPmList221() {
+        Map<MeasurementKey, Measurement> measureList = new HashMap<>();
+        Measurement measure = new MeasurementBuilder()
+                .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmGranularity._15min)
+                .setValidity(Validity.Complete)
+                .setPmParameterValue(new PmDataType(Decimal64.valueOf(2, 3)))
+                .setPmParameterUnit("pm_unit")
                 .build();
-        Map<CurrentPmKey, CurrentPm> currentPmMap = new HashMap<>();
-        currentPmMap.put(currentPm.key(), currentPm);
-        return new CurrentPmlistBuilder()
-                .setCurrentPm(currentPmMap)
+        measureList.put(measure.key(), measure);
+        Map<CurrentPmKey, CurrentPm> currentPmList = new HashMap<>();
+        CurrentPm currentPm = new CurrentPmBuilder()
+                .setMeasurement(measureList)
+                .setType(PmNamesEnum.OpticalPowerInput)
+                .setDirection(Direction.Rx)
+                .setExtension("extension")
+                .setLocation(Location.NearEnd)
+                .build();
+        currentPmList.put(currentPm.key(), currentPm);
+
+        DataObjectIdentifier device = DataObjectIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                    .child(Interface.class, new InterfaceKey("ots-deg1"))
+                .build();
+
+        CurrentPmEntry currentPmEntry =
+            new CurrentPmEntryBuilder()
+                .setCurrentPm(currentPmList)
+                .setPmResourceType(ResourceTypeEnum.Interface)
+                .setPmResourceInstance(device)
+                .setPmResourceTypeExtension("pm_resource_type_extension")
+                .setRetrievalTime(new DateAndTime("2023-01-01T00:00:00Z"))
+                .build();
+        Map<CurrentPmEntryKey, CurrentPmEntry> currentPmMap = new HashMap<>();
+        currentPmMap.put(currentPmEntry.key(), currentPmEntry);
+        return new CurrentPmListBuilder()
+                .setCurrentPmEntry(currentPmMap)
                 .build();
     }
 

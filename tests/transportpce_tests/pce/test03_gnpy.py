@@ -73,7 +73,7 @@ class TestTransportGnpy(unittest.TestCase):
             with open(TOPO_ORDTOPO_FILE, 'r', encoding='utf-8') as topo_ordtopo:
                 cls.topo_ordtopo_data = topo_ordtopo.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                             "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_121.json")
+                                             "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_221.json")
             with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
