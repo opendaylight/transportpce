@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb0ad5bf_254b3223",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T12:30:44Z",
+      "side": 1,
+      "message": "This change appears to combine several independent pieces of work that I think would benefit from being split into separate commits. Keeping commits focused on a single logical change makes them easier to review, bisect, and revert when needed.\n\nThe PCE transversal path routing fix, the inter-domain link TP name\nhandling changes, and the OR node UUID derivation / CEP handling fixes\nare grouped together, even though they can be reviewed independently.\n\nAs a proposed way forward, I’ve split this into focused commits without\nchanging the implementation. The original authorship has been preserved;\nI only reorganized the changes into separate commits:\n\n- Fix inter-domain link TP name handling https://git.opendaylight.org/gerrit/c/transportpce/+/123803 \n- Fix OR node UUID derivation and interdomain CEPs https://git.opendaylight.org/gerrit/c/transportpce/+/123804\n- Fix TAPI transversal path routing https://git.opendaylight.org/gerrit/c/transportpce/+/123805",
+      "revId": "6861fee21e2921243073ca92f78fb8d882c43111",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7941a848_52e1c840",
