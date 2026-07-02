@@ -16,6 +16,91 @@
       "message": "recheck",
       "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e508c9_3e954e0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T10:56:40Z",
+      "side": 1,
+      "message": "This change appears to combine several independent pieces of work that I think would benefit from being split into separate commits. Keeping commits focused on a single logical change makes them easier to review, bisect, and revert when needed.\n\nThe reference topology regeneration (refTopoTapiFullUnidirLink.xml) is grouped together with several unrelated fixes, including the virtual-link mesh loop termination fix in TapiOpticalNode, the ConnectivityUtils map reset, the OpenRoadmServiceCopier active-mode setting, and log cleanup in TapiRendererNotificationHandler, even though those can be reviewed independently.\n\nAs a proposed way forward, I’ve split this into focused commits without\nchanging the implementation. The original authorship has been preserved;\nI only reorganized the changes into separate commits:\n\n- Switch to UNIDIR links in TAPI topology (includes reference topology regeneration)(https://git.opendaylight.org/gerrit/c/transportpce/+/123806)\n- tapi: fix virtual link mesh loop termination https://git.opendaylight.org/gerrit/c/transportpce/+/123807\n- tapi: clear connectionFullMap per service creation https://git.opendaylight.org/gerrit/c/transportpce/+/123808\n- tapi: set active mode in OpenRoadmServiceCopier https://git.opendaylight.org/gerrit/c/transportpce/+/123809\n- tapi: fix logs and remove stale TODOs https://git.opendaylight.org/gerrit/c/transportpce/+/123810",
+      "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0029989_ba8cd67d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2463,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T10:56:40Z",
+      "side": 1,
+      "message": "This appears to be an unrelated bug fix or, at the very least, introduces a meaningful change in behavior. The same applies to line 2485. Since the issue should be independently reproducible and testable, I’d recommend moving these changes into their own commit with a corresponding JIRA ticket.\n\nThat will keep this change focused while ensuring the bug fix or functional change is documented and traceable on its own.\n\ni have extracted this into its own change: https://git.opendaylight.org/gerrit/c/transportpce/+/123807",
+      "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba520997_bf4029ca",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T10:56:40Z",
+      "side": 1,
+      "message": "This looks like a separate bug fix unrelated to the primary purpose of this change. Since it should be reproducible independently, I’d recommend moving it into its own commit with a corresponding JIRA ticket, even if it’s only a one-line change.\n\nThat will make the history clearer and ensure the bug fix is documented and traceable on its own. As it stands, this change has become a footnote in an unrelated commit rather than the main focus of its own bug fix.\n\nI have extracted this into its own change: https://git.opendaylight.org/gerrit/c/transportpce/+/123808",
+      "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b5ea0d_32f45753",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T10:56:40Z",
+      "side": 1,
+      "message": "While this log update seems like a worthwhile improvement, it’s unrelated to “Regenerate Ref test Topo with Unidir links.” I’d recommend submitting it in a separate commit to keep this change focused.\n\nI have extracted this into its own change: https://git.opendaylight.org/gerrit/c/transportpce/+/123810",
+      "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a38d1ab_9e8930e2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmServiceCopier.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T10:56:40Z",
+      "side": 1,
+      "message": "This change appears to affect how OpenROADM services are copied to TAPI. While it may be an important improvement and “only one line,” it still seems unrelated to the issue being addressed in the commit.\nI’d recommend moving it into its own commit with a corresponding JIRA ticket so it can be documented and tracked independently.\n\nI have extracted this into its own change: https://git.opendaylight.org/gerrit/c/transportpce/+/123809",
+      "revId": "11227deb7488c7ced6da2651757de3b2c59c5d66",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
