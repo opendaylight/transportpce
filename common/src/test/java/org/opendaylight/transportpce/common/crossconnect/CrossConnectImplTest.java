@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.List;
@@ -33,7 +33,6 @@ public class CrossConnectImplTest {
 
     private CrossConnectImpl crossConnectImpl = null;
     private static DeviceTransactionManager deviceTransactionManager = mock(DeviceTransactionManager.class);
-    private CrossConnectImpl121 crossConnectImpl121 = mock(CrossConnectImpl121.class);
     private CrossConnectImpl221 crossConnectImpl221 = mock(CrossConnectImpl221.class);
     private CrossConnectImpl710 crossConnectImpl710 = mock(CrossConnectImpl710.class);
     private MappingUtils mappingUtils = mock(MappingUtils.class);
@@ -41,8 +40,8 @@ public class CrossConnectImplTest {
 
     @BeforeEach
     void setUp() {
-        crossConnectImpl = new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl121,
-            crossConnectImpl221, crossConnectImpl710);
+        crossConnectImpl = new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl221,
+                crossConnectImpl710);
     }
 
 
@@ -78,22 +77,22 @@ public class CrossConnectImplTest {
         List<String> res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
         assertNull(res);
 
-        when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_1_2_1);
-        when(crossConnectImpl121.deleteCrossConnect(any(), any()))
+        when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_2_2_1);
+        when(crossConnectImpl221.deleteCrossConnect(any(), any(), anyBoolean()))
                 .thenReturn(List.of("interface1", "interface2"));
         res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
-        assertEquals(res.size(), 2);
+        assertEquals(2, res.size());
     }
 
     @Test
     void setPowerLevel() {
-        when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn(OPENROADM_DEVICE_VERSION_1_2_1);
+        when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn(OPENROADM_DEVICE_VERSION_2_2_1);
         boolean res = crossConnectImpl.setPowerLevel("nodeId", "bad mode", Decimal64.valueOf(2, 1),
                 "connection number");
         assertFalse(res, "Power Level sgould be false");
 
-        when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_1_2_1);
-        when(crossConnectImpl121.setPowerLevel(any(), any(), any(), any()))
+        when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_2_2_1);
+        when(crossConnectImpl221.setPowerLevel(any(), any(), any(), any()))
                 .thenReturn(true);
         crossConnectImpl.setPowerLevel("nodeId", "power", Decimal64.valueOf(2, 1), "connection number");
         assertTrue(true);

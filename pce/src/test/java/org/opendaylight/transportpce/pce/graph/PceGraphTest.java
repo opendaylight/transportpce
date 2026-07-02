@@ -40,7 +40,6 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion200;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
-import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
@@ -132,7 +131,6 @@ public class PceGraphTest extends AbstractTest {
     private DeviceTransactionManager deviceTransactionManager;
     private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion22;
-    private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
     private NetworkTransactionService netTransServ;
     private ClientInput clientInput;
@@ -150,12 +148,11 @@ public class PceGraphTest extends AbstractTest {
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         this.portMappingVersion22 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
-        this.portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
         this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         this.ocPortMappingVersion200 = new OCPortMappingVersion200(dataBroker, deviceTransactionManager,
                 ocMetaDataTransaction, networkTransactionService);
         this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,  this.portMappingVersion22,
-                this.portMappingVersion121, this.ocPortMappingVersion200);
+                this.ocPortMappingVersion200);
         this.clientInput = mock(ClientInput.class);
         when(this.clientInput.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
         when(this.clientInput.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));

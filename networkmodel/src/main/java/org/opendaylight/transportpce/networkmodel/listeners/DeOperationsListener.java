@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.RestartNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev181019.RestartNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
