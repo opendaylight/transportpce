@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcdd861c_45cd203e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-02T12:35:17Z",
+      "side": 1,
+      "message": "This change seems to be missing some related changes that logically belong here but have instead been split across other changes in the relation chain.\n\nSpecifically, this change alone doesn\u0027t include the reference topology fixture and test coverage needed to validate the BIDIR→UNIDIR switch (refTopoTapiFullUnidirLink.xml, PceTapiLinkUnidirTest.java), which were introduced in a separate change.\n\nAs a proposed way forward, I\u0027ve created a new commit, with the other related changes, without changing the implementation. The original authorship has been preserved; I only reorganized the changes into separate commits:\n\n- Switch to UNIDIR links in TAPI topology\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/123806\n\n123806 also contains select changes from this commit:\n- Regenerate Ref test Topo with Unidir links\nChanges from files refTopoTapiFullUnidirLink.xml and PceTapiLinkUnidirTest.java\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/123447",
+      "revId": "ac7347228d2056d4f50f918294bf24ecc70032f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
