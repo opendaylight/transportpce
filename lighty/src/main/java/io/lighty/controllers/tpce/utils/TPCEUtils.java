@@ -20,35 +20,22 @@ public final class TPCEUtils {
 
     private static final Set<YangModuleInfo> TPCE_MODELS = ImmutableSet.of(
 
-            // common models 1.2.1 and 2.2.1
-            org.opendaylight.yang.svc.v1.http.org.openroadm.alarm.rev161014.YangModuleInfoImpl.INSTANCE,
+            // common models 2.2.1
             org.opendaylight.yang.svc.v1.http.org.openroadm.alarm.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.common.types.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.common.types.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.equipment.states.types.rev161014.YangModuleInfoImpl
-                    .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.equipment.states.types.rev171215.YangModuleInfoImpl
                     .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.layerrate.rev161014.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.rev181019.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.otn.common.types.rev171215.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.pm.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.pm.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.pm.types.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.pm.types.rev171215.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.port.types.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.probablecause.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.probablecause.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.resource.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.resource.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.resource.types.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.resource.types.rev181019.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.switching.pool.types.rev171215.YangModuleInfoImpl
                     .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.tca.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.tca.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.user.mgmt.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.user.mgmt.rev171215.YangModuleInfoImpl.INSTANCE,
 
             // common models 7.1
@@ -94,63 +81,37 @@ public final class TPCEUtils {
             org.opendaylight.yang.svc.v1.http.org.openroadm.resource.types.rev250530.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.resource.rev250530.YangModuleInfoImpl.INSTANCE,
 
-            // device models 1.2.1 and 2.2.1
-            org.opendaylight.yang.svc.v1.http.org.openroadm.database.rev161014.YangModuleInfoImpl.INSTANCE,
+            // device models 2.2.1
             org.opendaylight.yang.svc.v1.http.org.openroadm.database.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.de.device.resource.types.rev161014.YangModuleInfoImpl
-                    .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.de.operations.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.de.operations.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.de.swdl.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.de.swdl.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.device.rev170206.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.device.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.ethernet.interfaces.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.ethernet.interfaces.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.file.transfer.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.file.transfer.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.fwdl.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.fwdl.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.interfaces.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.interfaces.rev170626.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.lldp.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.lldp.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.loopback.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.loopback.rev171215.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.testsignal.rev161014.YangModuleInfoImpl
-                    .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.maintenance.testsignal.rev171215.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.media.channel.interfaces.rev181019.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.network.media.channel.interfaces.rev181019
                     .YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.optical.channel.interfaces.rev161014.YangModuleInfoImpl
-                    .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.optical.channel.interfaces.rev181019.YangModuleInfoImpl
-                    .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.optical.multiplex.interfaces.rev161014.YangModuleInfoImpl
-                    .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.optical.transport.interfaces.rev161014.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.optical.transport.interfaces.rev181019.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.otn.common.rev170626.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.otn.odu.interfaces.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.otn.odu.interfaces.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.otn.otu.interfaces.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.otn.otu.interfaces.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.physical.types.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.physical.types.rev181019.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.pluggable.optics.holder.capability.rev181019
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.port.capability.rev181019.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.prot.otn.linear.aps.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.rstp.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.rstp.rev181019.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.syslog.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.syslog.rev171215.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.openroadm.wavelength.map.rev161014.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.openroadm.wavelength.map.rev171215.YangModuleInfoImpl.INSTANCE,
 
             // device models 7.1
@@ -273,7 +234,7 @@ public final class TPCEUtils {
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.YangModuleInfoImpl
                     .INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.transportpce.common.types.rev251022.YangModuleInfoImpl.INSTANCE,
+            org.opendaylight.yang.svc.v1.http.org.transportpce.common.types.rev260707.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.gnpy.api.rev220221.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.gnpy.eqpt.config.rev220221.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.gnpy.network.topology.rev220615.YangModuleInfoImpl.INSTANCE,

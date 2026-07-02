@@ -20,20 +20,20 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsupp
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.Nodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.AlarmNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.alarm.ProbableCause;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.Resource;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.CircuitPack;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Connection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Degree;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.InternalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.PhysicalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Port;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Service;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Shelf;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Srg;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.AlarmNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.alarm.ProbableCause;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.ResourceType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.Resource;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.CircuitPack;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Connection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Degree;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.InternalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.PhysicalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Port;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Service;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Shelf;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.  resource.resource.resource.Srg;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,13 +87,14 @@ public class AlarmNotificationListener {
         } catch (InterruptedException | ExecutionException ex) {
             LOG.warn("Exception thrown while reading Logical Connection Point value: ", ex);
         }
-        String message = String.join(PIPE,notification.getResource().getDevice().getNodeId(),
+        String message = String.join(PIPE,notification.getResource().getDevice().getNodeId().toString(),
                 buildCause(notification.getProbableCause()),notification.getId() != null ? notification.getId() : "",
                 notification.getRaiseTime() != null ? notification.getRaiseTime().toString() : "",
                 notification.getSeverity() != null ? notification.getSeverity().getName() : "",
                 notification.getCircuitId() != null ? notification.getCircuitId() : "", buildType(notification));
 
-        Nodes build = new NodesBuilder().setNodeId(notification.getResource().getDevice().getNodeId()).build();
+        Nodes build = new NodesBuilder().setNodeId(notification.getResource().getDevice().getNodeId().toString())
+                .build();
         if (allNodeList.contains(build)) {
             LOG.info("onAlarmNotification: {}", message);
         } else {
@@ -154,7 +155,7 @@ public class AlarmNotificationListener {
             case Connection:
                 Optional<Connection> connectionOptional = tryCastToParticularResource(Connection.class, resource);
                 if (connectionOptional.isPresent()) {
-                    connection = connectionOptional.orElseThrow().getConnectionNumber();
+                    connection = connectionOptional.orElseThrow().getConnectionName();
                 }
                 break;
 

@@ -13,16 +13,12 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener221;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener710;
-import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener221;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener710;
-import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener121;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener221;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener710;
-import org.opendaylight.transportpce.networkmodel.listeners.TcaListener;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener221;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener710;
 import org.opendaylight.yangtools.concepts.Registration;
@@ -66,9 +62,6 @@ public class NodeRegistration {
      */
     public void registerListeners() {
         switch (this.nodeVersion) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                registerListeners121();
-                break;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 registerListeners221();
                 break;
@@ -89,24 +82,6 @@ public class NodeRegistration {
         for (Registration listenerRegistration : listeners) {
             listenerRegistration.close();
         }
-    }
-
-    private void registerListeners121() {
-        AlarmNotificationListener alarmListener = new AlarmNotificationListener(this.dataBroker);
-        LOG.info("Registering notification listener on OrgOpenroadmAlarmListener for node: {}", nodeId);
-        listeners.add(notificationService.registerCompositeListener(alarmListener.getCompositeListener()));
-
-        DeOperationsListener deOperationsListener = new DeOperationsListener();
-        LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
-        listeners.add(notificationService.registerCompositeListener(deOperationsListener.getCompositeListener()));
-
-        DeviceListener121 deviceListener = new DeviceListener121(nodeId, this.portMapping);
-        LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
-        listeners.add(notificationService.registerCompositeListener(deviceListener.getCompositeListener()));
-
-        TcaListener tcaListener = new TcaListener();
-        LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
-        listeners.add(notificationService.registerCompositeListener(tcaListener.getCompositeListener()));
     }
 
     private void registerListeners221() {

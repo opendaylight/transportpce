@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.util.Comparator;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.Port;
 
 
 /**

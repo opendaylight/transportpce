@@ -69,7 +69,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
@@ -78,10 +78,10 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
