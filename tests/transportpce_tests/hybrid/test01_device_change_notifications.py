@@ -36,7 +36,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         "connection-type": "service",
         "service-a-end": {
             "service-rate": "100",
-            "node-id": "XPDRA01",
+            "node-id": "XPDR-A1",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJP8",
             "tx-direction": [{"index": 0}],
@@ -68,14 +68,13 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     }
 
     WAITING = 25  # nominal value is 300
-    NODE_VERSION_121 = '1.2.1'
     NODE_VERSION_221 = '2.2.1'
     NODE_VERSION_71 = '7.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION_121),
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION_221),
                                                ('roadma', cls.NODE_VERSION_221),
                                                ('roadmc', cls.NODE_VERSION_221),
                                                ('xpdrc', cls.NODE_VERSION_71)])
@@ -94,7 +93,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_connect_xpdrA(self):
-        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION_121))
+        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION_221))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
@@ -116,7 +115,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     def test_05_connect_xpdrA_N1_to_roadmA_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
-            {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+            {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
@@ -124,7 +123,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
     def test_06_connect_roadmA_PP1_to_xpdrA_N1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
-            {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+            {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
@@ -198,7 +197,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(1)
 
     def test_13_change_status_line_port_xpdra(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1/0/1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "logical-connection-point": "XPDR1-NETWORK1",
@@ -210,7 +209,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(2)
 
     def test_14_check_update_portmapping(self):
-        response = test_utils.get_portmapping_node_attr("XPDRA01", None, None)
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         mapping_list = response['nodes'][0]['mapping']
         for mapping in mapping_list:
@@ -236,7 +235,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'XPDRA01-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
+                if node['node-id'] == 'XPDR-A1-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -246,8 +245,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         self.assertEqual(nb_updated_tp, 1, "Only one termination-point should have been modified")
 
         link_list = response['network'][0]['ietf-network-topology:link']
-        updated_links = ['XPDRA01-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX',
-                         'ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1']
+        updated_links = ['XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX',
+                         'ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1']
         nb_updated_link = 0
         for link in link_list:
             if link['link-id'] in updated_links:
@@ -268,7 +267,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(1)
 
     def test_17_restore_status_line_port_xpdra(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1/0/1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "logical-connection-point": "XPDR1-NETWORK1",
@@ -280,7 +279,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(2)
 
     def test_18_check_update_portmapping_ok(self):
-        response = test_utils.get_portmapping_node_attr("XPDRA01", None, None)
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         mapping_list = response['nodes'][0]['mapping']
         for mapping in mapping_list:
@@ -360,8 +359,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         self.assertEqual(nb_updated_tp, 1, "Only one termination-point should have been modified")
 
         link_list = response['network'][0]['ietf-network-topology:link']
-        updated_links = ['XPDRA01-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX',
-                         'ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1']
+        updated_links = ['XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX',
+                         'ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1']
         nb_updated_link = 0
         for link in link_list:
             if link['link-id'] in updated_links:
@@ -639,7 +638,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_48_disconnect_XPDRA(self):
-        response = test_utils.unmount_device("XPDRA01")
+        response = test_utils.unmount_device("XPDR-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_49_disconnect_XPDRC(self):

@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
@@ -56,7 +55,6 @@ public class PortMappingImpl implements PortMapping {
     private final DataBroker dataBroker;
     private final PortMappingVersion710 portMappingVersion710;
     private final PortMappingVersion221 portMappingVersion22;
-    private final PortMappingVersion121 portMappingVersion121;
     private final OCPortMappingVersion200 ocPortMappingVersion200;
 
     @Activate
@@ -67,19 +65,15 @@ public class PortMappingImpl implements PortMapping {
         this(dataBroker,
             new PortMappingVersion710(dataBroker, deviceTransactionManager),
             new PortMappingVersion221(dataBroker, deviceTransactionManager),
-            new PortMappingVersion121(dataBroker, deviceTransactionManager),
             new OCPortMappingVersion200(dataBroker,deviceTransactionManager,ocMetaDataTransaction,
                         networkTransactionService));
     }
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
-        PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121,
-                           OCPortMappingVersion200 ocPortMappingVersion200) {
-
+        PortMappingVersion221 portMappingVersion22, OCPortMappingVersion200 ocPortMappingVersion200) {
         this.dataBroker = dataBroker;
         this.portMappingVersion710 = portMappingVersion710;
         this.portMappingVersion22 = portMappingVersion22;
-        this.portMappingVersion121 = portMappingVersion121;
         this.ocPortMappingVersion200 = ocPortMappingVersion200;
     }
 
@@ -96,7 +90,6 @@ public class PortMappingImpl implements PortMapping {
     @Override
     public boolean createMappingData(String nodeId, String nodeVersion, IpAddress ipAddress) {
         return switch (nodeVersion) {
-            case OPENROADM_DEVICE_VERSION_1_2_1 -> portMappingVersion121.createMappingData(nodeId);
             case OPENROADM_DEVICE_VERSION_2_2_1 -> portMappingVersion22.createMappingData(nodeId);
             case OPENROADM_DEVICE_VERSION_7_1 -> portMappingVersion710.createMappingData(nodeId);
             case OPENCONFIG_DEVICE_VERSION_2_0_0 -> ocPortMappingVersion200.createMappingData(nodeId, ipAddress);
@@ -232,7 +225,6 @@ public class PortMappingImpl implements PortMapping {
             return ocPortMappingVersion200.updateMapping(nodeId, oldMapping);
         } else {
             return switch (openROADMversion) {
-                case _121 -> portMappingVersion121.updateMapping(nodeId, oldMapping);
                 case _221 -> portMappingVersion22.updateMapping(nodeId, oldMapping);
                 case _71 -> portMappingVersion710.updateMapping(nodeId, oldMapping);
                 default -> false;

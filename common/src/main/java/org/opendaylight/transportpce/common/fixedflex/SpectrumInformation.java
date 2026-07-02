@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.fixedflex;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**

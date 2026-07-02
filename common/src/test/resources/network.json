@@ -53,7 +53,7 @@
                 "node-id": "ROADM-C1",
                 "node-info": {
                     "node-type": "rdm",
-                    "openroadm-version": "1.2.1",
+                    "openroadm-version": "7.1",
                     "node-clli": "nodeC",
                     "node-vendor": "vendorC",
                     "node-model": "modelC",
