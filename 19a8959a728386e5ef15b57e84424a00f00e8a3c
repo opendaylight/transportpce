@@ -56,6 +56,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db6ba579_e76420d2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-07-03T05:50:13Z",
+      "side": 1,
+      "message": "On second thought, probably best to be a bit more defensive here. `.getCenterFreqGranularity()` and `.getSlotWidthGranularity()` can both return `null`. Something like this should work:\n\n```\nvar centerFreqGranularity \u003d mcCapabilityProfile.getCenterFreqGranularity();           \nFrequencyGHz cfg \u003d null;                                                              \nif (centerFreqGranularity !\u003d null) {                                                  \n    cfg \u003d FrequencyGHz.getDefaultInstance(centerFreqGranularity.getValue().toString())\n}                                                                                     \n                                                                                      \nvar slotWidthGranularity \u003d mcCapabilityProfile.getSlotWidthGranularity();             \nFrequencyGHz swg \u003d null;                                                              \nif (slotWidthGranularity !\u003d null) {                                                   \n    swg \u003d FrequencyGHz.getDefaultInstance(slotWidthGranularity.getValue().toString());\n}\n                                                                                                                                                                            \nmcCapabilitiesBuilder              \n    .setCenterFreqGranularity(cfg) \n    .setSlotWidthGranularity(swg)\n    \n```\n\nNote: the same applies to row 1364 and 1366.",
+      "range": {
+        "startLine": 945,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 78
+      },
+      "revId": "19a8959a728386e5ef15b57e84424a00f00e8a3c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05e34e76_36893b67",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710Test.java",
         "patchSetId": 6
