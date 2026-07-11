@@ -11,14 +11,26 @@ package org.opendaylight.transportpce.common.device.observer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import org.slf4j.event.Level;
 
+/**
+ * Thread-safe implementation of {@link Subscriber}.
+ *
+ * <p>Messages are stored per {@link Level} in a {@link LinkedHashSet}, preserving insertion order.
+ * Messages are only ever appended, never removed.
+ *
+ * <p>Each {@link Level} has its own {@link SequencedSet} instance, and every read or write of that
+ * set must hold its monitor ({@code synchronized (strings)}) for the duration of the access,
+ * including check-then-act sequences such as {@code isEmpty()} followed by {@code getFirst()}.
+ * Any new accessor must follow the same pattern or it will reintroduce the races this class was
+ * fixed to avoid.
+ */
 public class EventSubscriber implements Subscriber {
 
-    private final Map<Level, Set<String>> messages = new ConcurrentHashMap<>();
+    private final Map<Level, SequencedSet<String>> messages = new ConcurrentHashMap<>();
 
     @Override
     public void event(Level level, String message) {
@@ -26,11 +38,11 @@ public class EventSubscriber implements Subscriber {
             return;
         }
 
-        if (!messages.containsKey(level)) {
-            messages.put(level, new LinkedHashSet<>());
-        }
+        SequencedSet<String> strings = messages.computeIfAbsent(level, l -> new LinkedHashSet<>());
 
-        messages.get(level).add(message);
+        synchronized (strings) {
+            strings.add(message);
+        }
     }
 
     @Override
@@ -50,22 +62,38 @@ public class EventSubscriber implements Subscriber {
 
     @Override
     public String first(Level level, String defaultMessage) {
-        if (!messages.containsKey(level)) {
+        SequencedSet<String> strings = messages.get(level);
+
+        if (strings == null) {
             return defaultMessage;
         }
 
-        return messages.get(level).iterator().next();
+        synchronized (strings) {
+            if (strings.isEmpty()) {
+                return defaultMessage;
+            }
+
+            return strings.getFirst();
+        }
     }
 
     @Override
     public String first(Level level, String defaultMessage, int count) {
-        if (!messages.containsKey(level)) {
+        SequencedSet<String> strings = messages.get(level);
+
+        if (strings == null) {
             return defaultMessage;
         }
 
-        return messages.get(level)
-            .stream().limit(Math.max(count, 1))
-            .collect(Collectors.joining(", "));
+        synchronized (strings) {
+            if (strings.isEmpty()) {
+                return defaultMessage;
+            }
+
+            String[] arr = strings.toArray(String[]::new);
+
+            return String.join(", ", Arrays.copyOf(arr, Math.clamp(count, 1, arr.length)));
+        }
     }
 
     @Override
@@ -75,26 +103,30 @@ public class EventSubscriber implements Subscriber {
 
     @Override
     public String last(Level level, String defaultMessage) {
-        if (!messages.containsKey(level)) {
+        SequencedSet<String> strings = messages.get(level);
+
+        if (strings == null) {
             return defaultMessage;
         }
 
-        Set<String> strings = messages.get(level);
+        synchronized (strings) {
+            if (strings.isEmpty()) {
+                return defaultMessage;
+            }
 
-        return strings.stream().skip(strings.size() - 1).findFirst().orElse(defaultMessage);
-
+            return strings.getLast();
+        }
     }
 
     @Override
     public String[] messages(Level level) {
-
-        if (!messages.containsKey(level)) {
+        Set<String> strings = messages.get(level);
+        if (strings == null) {
             return new String[0];
         }
 
-        Object[] arr = messages.get(level).toArray();
-
-        return Arrays.copyOf(arr, arr.length, String[].class);
-
+        synchronized (strings) {
+            return strings.toArray(String[]::new);
+        }
     }
 }
