@@ -832,6 +832,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
             services = future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             throw e;
         }
         if (services.isPresent()) {
