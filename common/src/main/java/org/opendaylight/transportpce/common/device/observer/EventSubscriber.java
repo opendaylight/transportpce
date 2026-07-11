@@ -9,13 +9,22 @@
 package org.opendaylight.transportpce.common.device.observer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import org.slf4j.event.Level;
 
+/**
+ * Thread-safe implementation of {@link Subscriber}.
+ *
+ * <p>Messages are stored per {@link Level} in a {@link Collections#synchronizedSet(Set)}
+ * wrapping a {@link LinkedHashSet}, preserving insertion order. Reads take a single
+ * {@code toArray()} snapshot rather than iterating the set directly, since iteration is not
+ * covered by the wrapper's per-call synchronization. Messages are only ever appended, never
+ * removed.
+ */
 public class EventSubscriber implements Subscriber {
 
     private final Map<Level, Set<String>> messages = new ConcurrentHashMap<>();
@@ -26,11 +35,7 @@ public class EventSubscriber implements Subscriber {
             return;
         }
 
-        if (!messages.containsKey(level)) {
-            messages.put(level, new LinkedHashSet<>());
-        }
-
-        messages.get(level).add(message);
+        messages.computeIfAbsent(level, l -> Collections.synchronizedSet(new LinkedHashSet<>())).add(message);
     }
 
     @Override
@@ -50,22 +55,34 @@ public class EventSubscriber implements Subscriber {
 
     @Override
     public String first(Level level, String defaultMessage) {
-        if (!messages.containsKey(level)) {
+        Set<String> strings = messages.get(level);
+
+        if (strings == null || strings.isEmpty()) {
             return defaultMessage;
         }
 
-        return messages.get(level).iterator().next();
+        Object[] arr = strings.toArray();
+
+        //Since objects are only added in the current contract, it's safe to assume there never will be a
+        //concurrent modification by another thread removing an object from the set between the null/empty check and
+        //the cast to array. Should that contract ever change, then this needs to be updated.
+        return (String) arr[0];
     }
 
     @Override
     public String first(Level level, String defaultMessage, int count) {
-        if (!messages.containsKey(level)) {
+        Set<String> strings = messages.get(level);
+
+        if (strings == null || strings.isEmpty()) {
             return defaultMessage;
         }
 
-        return messages.get(level)
-            .stream().limit(Math.max(count, 1))
-            .collect(Collectors.joining(", "));
+        String[] arr = strings.toArray(String[]::new);
+
+        //Since objects are only added in the current contract, it's safe to assume there never will be a
+        //concurrent modification by another thread removing an object from the set between the null/empty check and
+        //the cast to array. Should that contract ever change, then this needs to be updated.
+        return String.join(", ", Arrays.copyOf(arr, Math.clamp(count, 1, arr.length)));
     }
 
     @Override
@@ -75,26 +92,27 @@ public class EventSubscriber implements Subscriber {
 
     @Override
     public String last(Level level, String defaultMessage) {
-        if (!messages.containsKey(level)) {
+        Set<String> strings = messages.get(level);
+
+        if (strings == null || strings.isEmpty()) {
             return defaultMessage;
         }
 
-        Set<String> strings = messages.get(level);
+        Object[] arr = strings.toArray();
 
-        return strings.stream().skip(strings.size() - 1).findFirst().orElse(defaultMessage);
-
+        //Since objects are only added in the current contract, it's safe to assume there never will be a
+        //concurrent modification by another thread removing an object from the set between the null/empty check and
+        //the cast to array. Should that contract ever change, then this needs to be updated.
+        return (String) arr[arr.length - 1];
     }
 
     @Override
     public String[] messages(Level level) {
-
-        if (!messages.containsKey(level)) {
+        Set<String> strings = messages.get(level);
+        if (strings == null) {
             return new String[0];
         }
 
-        Object[] arr = messages.get(level).toArray();
-
-        return Arrays.copyOf(arr, arr.length, String[].class);
-
+        return strings.toArray(String[]::new);
     }
 }
