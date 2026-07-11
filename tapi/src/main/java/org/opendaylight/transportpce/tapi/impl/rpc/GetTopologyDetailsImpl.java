@@ -17,15 +17,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbi;
@@ -366,24 +370,26 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1.class)
                     .getAssociatedConnectionMapTp().iterator().next().getValue()
                 : tp.getTpId().getValue();
-        ListenableFuture<Optional<Mapping>> mappingOpt =
-            networkTransactionService.read(
-                LogicalDatastoreType.CONFIGURATION,
-                DataObjectIdentifier.builder(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.Network.class)
-                        .child(Nodes.class, new NodesKey(nodeIdPortMap))
-                        .child(Mapping.class, new MappingKey(networkLcp))
-                        .build());
-        if (!mappingOpt.isDone()) {
-            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
-                    networkLcp, tp.getTpId().getValue());
-            return false;
-        }
         Mapping mapping;
         try {
-            mapping = mappingOpt.get().orElseThrow();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error getting mapping for {}", networkLcp, e);
+            mapping = networkTransactionService.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    DataObjectIdentifier.builder(
+                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+                                    .Network.class)
+                            .child(Nodes.class, new NodesKey(nodeIdPortMap))
+                            .child(Mapping.class, new MappingKey(networkLcp))
+                            .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS)
+                    .orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
+                    networkLcp, tp.getTpId().getValue(), e);
+            return false;
+        } catch (ExecutionException | TimeoutException | NoSuchElementException e) {
+            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
+                    networkLcp, tp.getTpId().getValue(), e);
             return false;
         }
         long count = 0;
