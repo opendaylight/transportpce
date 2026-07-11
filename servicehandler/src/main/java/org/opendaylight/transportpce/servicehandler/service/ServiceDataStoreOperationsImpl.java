@@ -101,7 +101,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.error("init failed: ", e);
+            LOG.error("Failed to initialize service registry", e);
         }
     }
 
@@ -117,9 +117,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.error("init failed: ", e);
+            LOG.error("Failed to initialize temp service registry", e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.error("init failed: ", e);
+            LOG.error("Failed to initialize temp service registry", e);
         }
     }
 
@@ -135,9 +135,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.warn("Reading service {} failed:", serviceName, e);
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Reading service {} failed:", serviceName, e);
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
@@ -151,9 +151,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.warn("Reading services failed:", e);
+            LOG.error("Failed to read services from operational datastore", e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Reading services failed:", e);
+            LOG.error("Failed to read services from operational datastore", e);
 
         }
         return Optional.empty();
@@ -175,9 +175,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.warn("Reading service {} failed:", serviceName, e);
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Reading service {} failed:", serviceName, e);
+            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
@@ -198,7 +198,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("deleteService : {}", LogMessages.failedTo("delete", serviceName), e);
+            LOG.error("deleteService : {}", LogMessages.failedTo("delete", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("delete", serviceName));
         }
     }
@@ -223,7 +223,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("deleteTempService : {}", LogMessages.failedTo("delete Temp", commonId), e);
+            LOG.error("deleteTempService : {}", LogMessages.failedTo("delete Temp", commonId), e);
             return OperationResult.failed(LogMessages.failedTo("delete Temp", commonId));
         }
     }
@@ -253,7 +253,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("modifyService : {}", LogMessages.failedTo("modify", serviceName), e);
+            LOG.error("modifyService : {}", LogMessages.failedTo("modify", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify", serviceName));
         }
     }
@@ -290,7 +290,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("modifyTempService : {}", LogMessages.failedTo("modify Temp", serviceName), e);
+            LOG.error("modifyTempService : {}", LogMessages.failedTo("modify Temp", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify Temp", serviceName));
         }
     }
@@ -312,7 +312,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("createService : {}", LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()), e);
+            LOG.error("createService : {}", LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()), e);
             return OperationResult.failed(LogMessages.failedTo(CREATE_MSG, serviceCreateInput.getServiceName()));
         }
     }
@@ -340,7 +340,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("createTempService : {}",
+            LOG.error("createTempService : {}",
                     LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()), e);
             return OperationResult.failed(LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()));
         }
@@ -358,7 +358,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.error("Reading service path list failed. Error={}", e.getMessage());
+            LOG.error("Failed to read service path list from operational datastore", e);
         }
         return Optional.empty();
     }
@@ -377,7 +377,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.error("Reading service path failed. Error={}", e.getMessage());
+            LOG.error("Failed to read service path {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
@@ -399,7 +399,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("createServicePath : {}",
+            LOG.error("createServicePath : {}",
                     LogMessages.failedTo("create servicePath", serviceInput.getCommonId()), e);
             return OperationResult.failed(LogMessages.failedTo("create servicePath", serviceInput.getCommonId()));
         }
@@ -440,7 +440,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.warn("modifyServicePath : {}", LogMessages.failedTo("modify service path", serviceName), e);
+            LOG.error("modifyServicePath : {}", LogMessages.failedTo("modify service path", serviceName), e);
             return OperationResult.failed(LogMessages.failedTo("modify service path", serviceName));
         }
     }
