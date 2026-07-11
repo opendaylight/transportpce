@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
 public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
+    private static final long DATASTORE_READ_TIMEOUT = 1000L;
 
     @SuppressWarnings("rawtypes")
     // FIXME check if the InstanceIdentifier raw type can be avoided
@@ -143,20 +146,20 @@ public final class TopologyDataUtils {
     // FIXME check if the InstanceIdentifier raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
-    private static <T extends DataObject> T readTransaction(DataBroker dataBroker,
-            DataObjectIdentifier instanceIdentifier) {
-        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
-        FluentFuture<Optional<T>> read = readTransaction.read(LogicalDatastoreType.OPERATIONAL, instanceIdentifier);
-        if (read.isDone()) {
-            try {
-                Optional<T> tpOpt;
-                tpOpt = read.get();
-                if (tpOpt.isPresent()) {
-                    return tpOpt.orElseThrow();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Impossible read operational datastore", e);
-            }
+    private static <T extends DataObject> T readTransaction(
+            DataBroker dataBroker, DataObjectIdentifier<T> instanceIdentifier) {
+        try (ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction()) {
+            Optional<T> read = Optional.ofNullable(readTransaction
+                            .read(LogicalDatastoreType.OPERATIONAL, instanceIdentifier)
+                            .get(DATASTORE_READ_TIMEOUT, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+
+            return read.orElse(null);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Impossible read operational datastore", e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Impossible read operational datastore", e);
         }
         return null;
     }
