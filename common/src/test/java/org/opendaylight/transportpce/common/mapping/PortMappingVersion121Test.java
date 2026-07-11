@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -452,16 +454,22 @@ public class PortMappingVersion121Test {
             "creating mappingdata for existed node returns true");
 
         // assert all portmappings have been created for the roadm node
-        ReadTransaction rr = dataBroker.newReadOnlyTransaction();
         DataObjectIdentifier<Network> mappingIID = DataObjectIdentifier.builder(Network.class).build();
         Network network = new NetworkBuilder().build();
-        try {
-            Optional<Network> optionalNetwork = rr.read(LogicalDatastoreType.CONFIGURATION, mappingIID).get();
+        try (ReadTransaction tx = dataBroker.newReadOnlyTransaction()) {
+            Optional<Network> optionalNetwork = Optional.ofNullable(tx
+                    .read(LogicalDatastoreType.CONFIGURATION, mappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
             if (optionalNetwork.isPresent()) {
                 network = optionalNetwork.orElseThrow();
             }
 
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to read mapping.", e);
+            fail();
+        } catch (ExecutionException | TimeoutException e) {
             LOG.error("Failed to read mapping.", e);
             fail();
         }
@@ -620,16 +628,22 @@ public class PortMappingVersion121Test {
         assertTrue(portMappingVersion121.createMappingData("node"), "returns true when create mapping");
 
         // assert all portmappings have been created for the xpdr node
-        ReadTransaction rr = dataBroker.newReadOnlyTransaction();
         DataObjectIdentifier<Network> mappingIID = DataObjectIdentifier.builder(Network.class).build();
         Network network = new NetworkBuilder().build();
-        try {
-            Optional<Network> optionalNetwork = rr.read(LogicalDatastoreType.CONFIGURATION, mappingIID).get();
+        try (ReadTransaction tx = dataBroker.newReadOnlyTransaction()) {
+            Optional<Network> optionalNetwork = Optional.ofNullable(tx
+                    .read(LogicalDatastoreType.CONFIGURATION, mappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
             if (optionalNetwork.isPresent()) {
                 network = optionalNetwork.orElseThrow();
             }
 
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Failed to read mapping.", e);
+            fail();
+        } catch (ExecutionException | TimeoutException e) {
             LOG.error("Failed to read mapping.", e);
             fail();
         }

@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -375,16 +376,21 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                     .service.path.PathDescription.class)
                 .build();
-        try {
+        try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
             LOG.debug("Getting path description for service {}", serviceName);
-            return this.dataBroker.newReadOnlyTransaction()
-                    .read(LogicalDatastoreType.OPERATIONAL, pathDescriptionIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return Optional.ofNullable(tx
+                            .read(LogicalDatastoreType.OPERATIONAL, pathDescriptionIID)
+                            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.warn("Exception while getting path description from datastore {} for service {}!",
                     pathDescriptionIID, serviceName, e);
-            return Optional.empty();
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting path description from datastore {} for service {}!",
+                    pathDescriptionIID, serviceName, e);
         }
+        return Optional.empty();
     }
 
     @SuppressFBWarnings(

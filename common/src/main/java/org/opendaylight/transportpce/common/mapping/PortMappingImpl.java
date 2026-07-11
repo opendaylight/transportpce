@@ -118,14 +118,20 @@ public class PortMappingImpl implements PortMapping {
                 .child(Mapping.class, new MappingKey(logicalConnPoint))
                 .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
+            Optional<Mapping> mapObject = Optional.ofNullable(readTx
+                            .read(LogicalDatastoreType.CONFIGURATION, portMappingIID)
+                            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (mapObject.isPresent()) {
                 Mapping mapping = mapObject.orElseThrow();
                 LOG.info("Found mapping for {} - {}. Mapping: {}", nodeId, logicalConnPoint, mapping.toString());
                 return mapping;
             }
             LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint, nodeId);
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", logicalConnPoint,
                 nodeId, ex);
         }
@@ -138,7 +144,10 @@ public class PortMappingImpl implements PortMapping {
             .child(Nodes.class, new NodesKey(nodeId))
             .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> portMapppingOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
+            Optional<Nodes> portMapppingOpt = Optional.ofNullable(readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, portMappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (portMapppingOpt.isEmpty()) {
                 LOG.warn("Could not get portMapping for node {}", nodeId);
                 return null;
@@ -150,7 +159,10 @@ public class PortMappingImpl implements PortMapping {
                     return mapping;
                 }
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
         }
         return null;
@@ -170,6 +182,9 @@ public class PortMappingImpl implements PortMapping {
             rw.commit().get(1, TimeUnit.SECONDS);
             LOG.info("Mapping {} removed for node '{}'", logicalConnectionPoint, nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error for removing mapping {} for node '{}'", logicalConnectionPoint, nodeId, e);
         }
     }
@@ -184,15 +199,20 @@ public class PortMappingImpl implements PortMapping {
             .child(McCapabilities.class, new McCapabilitiesKey(mcLcp))
             .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<McCapabilities> mcCapObject = readTx.read(LogicalDatastoreType.CONFIGURATION,
-                mcCapabilitiesIID).get();
+            Optional<McCapabilities> mcCapObject = Optional.ofNullable(readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, mcCapabilitiesIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (mcCapObject.isPresent()) {
                 McCapabilities mcCap = mcCapObject.orElseThrow();
                 LOG.info("Found MC-cap for {} - {}. Mapping: {}", nodeId, mcLcp, mcCap.toString());
                 return mcCap;
             }
             LOG.warn("Could not find mc-capabilities for logical connection point {} for nodeId {}", mcLcp, nodeId);
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", mcLcp,
                 nodeId, ex);
         }
@@ -246,15 +266,20 @@ public class PortMappingImpl implements PortMapping {
                 .child(Nodes.class, new NodesKey(nodeId))
                 .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodePortMapObject =
-                readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
+            Optional<Nodes> nodePortMapObject = Optional.ofNullable(readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
             if (nodePortMapObject.isPresent()) {
                 Nodes node = nodePortMapObject.orElseThrow();
                 LOG.info("Found node {} in portmapping.", nodeId);
                 return node;
             }
             LOG.warn("Could not find node {} in portmapping.", nodeId);
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get node {} in portmapping", nodeId, e);
         }
         return null;
@@ -285,8 +310,10 @@ public class PortMappingImpl implements PortMapping {
             .child(Nodes.class, new NodesKey(nodeId))
             .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodePortmapppingOpt
-                = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortmappingIID).get();
+            Optional<Nodes> nodePortmapppingOpt = Optional.ofNullable(readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, nodePortmappingIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
             if (nodePortmapppingOpt.isEmpty()) {
                 LOG.warn("Could not get portMapping for node {}", nodeId);
                 return null;
@@ -297,7 +324,10 @@ public class PortMappingImpl implements PortMapping {
                     return mapping;
                 }
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
         }
         return null;

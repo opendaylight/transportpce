@@ -14,6 +14,8 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -280,7 +282,9 @@ public class R2RLinkDiscovery {
             .child(Nodes.class, new NodesKey(nodeId.getValue()))
             .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
+            Optional<Nodes> nodesObject = Optional.ofNullable(readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (nodesObject.isPresent() && (nodesObject.orElseThrow().getMapping() != null)) {
                 Collection<Mapping> mappingList = nodesObject.orElseThrow().nonnullMapping().values();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
@@ -293,7 +297,10 @@ public class R2RLinkDiscovery {
                     return Direction.NotApplicable;
                 }
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Mapping data from portMapping",e);
         }
         return Direction.NotApplicable;
@@ -454,7 +461,9 @@ public class R2RLinkDiscovery {
             .child(Nodes.class, new NodesKey(nodeId.getValue()))
             .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
+            Optional<Nodes> nodesObject = Optional.ofNullable(readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (nodesObject.isPresent() && (nodesObject.orElseThrow().getCpToDegree() != null)) {
                 Collection<CpToDegree> cpToDeg = nodesObject.orElseThrow().nonnullCpToDegree().values();
                 Stream<CpToDegree> cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
@@ -476,7 +485,10 @@ public class R2RLinkDiscovery {
                 LOG.warn("Could not find mapping for Interface {} for nodeId {}", interfaceName,
                     nodeId.getValue());
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for Interface : {} for nodeId {}", interfaceName, nodeId, ex);
         }
         return null;
