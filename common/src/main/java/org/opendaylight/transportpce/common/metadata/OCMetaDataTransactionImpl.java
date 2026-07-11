@@ -10,9 +10,12 @@ package org.opendaylight.transportpce.common.metadata;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
@@ -49,12 +52,18 @@ public class OCMetaDataTransactionImpl implements OCMetaDataTransaction {
                 .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<OpenTerminalMetaData> openTerminalMetaData =
-                    readTx.read(LogicalDatastoreType.CONFIGURATION, iidOTMD).get();
+                    Optional.ofNullable(readTx
+                                    .read(LogicalDatastoreType.CONFIGURATION, iidOTMD)
+                                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                            .orElse(Optional.empty());
             if (openTerminalMetaData.isPresent()) {
                 terminalMetaData = openTerminalMetaData.orElseThrow();
                 LOG.debug("Found OpenTerminalMetaData {} in Md-Sal.", terminalMetaData);
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get open-terminal-meta-data from Md-Sal", e);
         }
         return  terminalMetaData;

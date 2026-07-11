@@ -19,15 +19,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
@@ -122,61 +127,71 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         TopologyDataUtils.writePortmappingFromFileToDatastore(
             getDataStoreContextUtil(),
             TapiTopologyDataUtils.PORTMAPPING_FILE);
-        otnMuxA = dataBroker.newReadOnlyTransaction()
-            .read(
-                LogicalDatastoreType.CONFIGURATION,
-                //muxAIID
-                DataObjectIdentifier.builder(Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1")))
-                    .build())
-            .get().orElseThrow();
-        otnMuxC = dataBroker.newReadOnlyTransaction()
-            .read(
-                LogicalDatastoreType.CONFIGURATION,
-                //muxCIID
-                DataObjectIdentifier.builder(Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")))
-                    .build())
-            .get().orElseThrow();
-        otnSwitch = dataBroker.newReadOnlyTransaction()
-            .read(
-                LogicalDatastoreType.CONFIGURATION,
-                //switchIID
-                DataObjectIdentifier.builder(Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")))
-                    .build())
-            .get().orElseThrow();
-        tpdr100G = dataBroker.newReadOnlyTransaction()
-            .read(
-                LogicalDatastoreType.CONFIGURATION,
-                //tpdrIID
-                DataObjectIdentifier.builder(Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")))
-                    .build())
-            .get().orElseThrow();
-        otnLinks = dataBroker.newReadOnlyTransaction()
-            .read(
-                LogicalDatastoreType.CONFIGURATION,
-                //linksIID
-                DataObjectIdentifier.builder(Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId("otn-topology")))
-                    .augmentation(Network1.class)
-                    .build())
-            .get().orElseThrow().getLink();
+        try (ReadTransaction tx = dataBroker.newReadOnlyTransaction()) {
+            otnMuxA = Optional.ofNullable(tx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    //muxAIID
+                    DataObjectIdentifier.builder(Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                .networks.Network.class,
+                            new NetworkKey(new NetworkId("otn-topology")))
+                        .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1")))
+                        .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty())
+                .orElseThrow();
+            otnMuxC = Optional.ofNullable(tx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    //muxCIID
+                    DataObjectIdentifier.builder(Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                .networks.Network.class,
+                            new NetworkKey(new NetworkId("otn-topology")))
+                        .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")))
+                        .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty())
+                .orElseThrow();
+            otnSwitch = Optional.ofNullable(tx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    //switchIID
+                    DataObjectIdentifier.builder(Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                .networks.Network.class,
+                            new NetworkKey(new NetworkId("otn-topology")))
+                        .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")))
+                        .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty())
+                .orElseThrow();
+            tpdr100G = Optional.ofNullable(tx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    //tpdrIID
+                    DataObjectIdentifier.builder(Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                .networks.Network.class,
+                            new NetworkKey(new NetworkId("otn-topology")))
+                        .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")))
+                        .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty())
+                .orElseThrow();
+            otnLinks = Optional.ofNullable(tx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    //linksIID
+                    DataObjectIdentifier.builder(Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                .networks.Network.class,
+                            new NetworkKey(new NetworkId("otn-topology")))
+                        .augmentation(Network1.class)
+                        .build())
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty())
+                .orElseThrow()
+                .getLink();
+        } catch (TimeoutException e) {
+            throw new RuntimeException("Timed out reading topology test data", e);
+        }
         topologyUuid = new Uuid(
             UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
