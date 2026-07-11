@@ -69,6 +69,24 @@ class EventSubscriberTest {
     }
 
     @Test
+    void firstNumberZero() {
+        Subscriber subscriber = new EventSubscriber();
+        subscriber.event(Level.ERROR, "First error");
+        subscriber.event(Level.ERROR, "Second error");
+
+        assertEquals("First error", subscriber.first(Level.ERROR, "", 0));
+    }
+
+    @Test
+    void firstNumberNegative() {
+        Subscriber subscriber = new EventSubscriber();
+        subscriber.event(Level.ERROR, "First error");
+        subscriber.event(Level.ERROR, "Second error");
+
+        assertEquals("First error", subscriber.first(Level.ERROR, "", -1));
+    }
+
+    @Test
     void repetitiveMessages() {
         Subscriber subscriber = new EventSubscriber();
         subscriber.event(Level.ERROR, "First error");
