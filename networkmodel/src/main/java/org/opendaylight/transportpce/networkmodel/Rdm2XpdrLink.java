@@ -12,6 +12,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
@@ -19,6 +21,7 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.links.input.grouping.LinksInput;
@@ -262,21 +265,22 @@ final class Rdm2XpdrLink {
                 .Node1.class)
             .child(TerminationPoint.class, new TerminationPointKey(new TpId(srcTp)))
             .build();
-        @NonNull
-        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
-        @NonNull
-        FluentFuture<Optional<TerminationPoint>> tpFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, iiTp);
-        if (tpFf.isDone()) {
-            try {
-                Optional<TerminationPoint> tpOpt;
-                tpOpt = tpFf.get();
-                if (tpOpt.isPresent()) {
-                    return tpOpt.orElseThrow();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                    StringConstants.OPENROADM_TOPOLOGY, e);
+
+        try (ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction()) {
+            Optional<TerminationPoint> tpOpt = Optional.ofNullable(readTransaction.read(
+                    LogicalDatastoreType.CONFIGURATION, iiTp)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+            if (tpOpt.isPresent()) {
+                return tpOpt.orElseThrow();
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
+                StringConstants.OPENROADM_TOPOLOGY, e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
+                StringConstants.OPENROADM_TOPOLOGY, e);
         }
         return null;
     }
@@ -290,22 +294,21 @@ final class Rdm2XpdrLink {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
                     .transportpce.or.network.augmentation.rev250902.Node1.class)
                 .build();
-        @NonNull
-        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
-        @NonNull
-        FluentFuture<Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
-                .rev250902.Node1>> nodeFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodeIID);
-        if (nodeFf.isDone()) {
-            try {
-                Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
-                    .rev250902.Node1> node;
-                node = nodeFf.get();
-                if (node.isPresent()) {
-                    return node.orElseThrow().getYangDataModel();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Impossible to get the Node YangDataModel of node {} ", srcNode, e);
+
+        try (ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction()) {
+            Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
+                    .rev250902.Node1> node = Optional.ofNullable(readTransaction.read(
+                    LogicalDatastoreType.CONFIGURATION, nodeIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+            if (node.isPresent()) {
+                return node.orElseThrow().getYangDataModel();
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Impossible to get the Node YangDataModel of node {}", srcNode, e);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Impossible to get the Node YangDataModel of node {}", srcNode, e);
         }
         return null;
     }
