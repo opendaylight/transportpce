@@ -87,6 +87,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd6091f7_b89da291",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d64d7fe1_4aca6042",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5da62eb_53f2e6d1",
