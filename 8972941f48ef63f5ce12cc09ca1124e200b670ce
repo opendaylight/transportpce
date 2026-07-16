@@ -224,6 +224,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cb19b994_b4217563",
+        "filename": "features/odl-transportpce-tapisbi/.externalToolBuilders/org.eclipse.wst.common.project.facet.core.builder.launch",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-07-16T13:33:11Z",
+      "side": 1,
+      "message": "This file is not currently serving any purpose.\nThis is an Eclipse IDE configuration file for the Facet Builder, and it\u0027s explicitly disabled (ATTR_BUILDER_ENABLED \u003d false). \nThe file essentially states that the Eclipse WST (Web Standard Tools) Facet Builder is turned off for this project. Since it\u0027s disabled, it has no functional impact on the build or the codebase.",
+      "parentUuid": "297905bb_5c728bed",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a138ada2_b47443be",
         "filename": "features/odl-transportpce-tapisbi/.gitignore",
         "patchSetId": 13
