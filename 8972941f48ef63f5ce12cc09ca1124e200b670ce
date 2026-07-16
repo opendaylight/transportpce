@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d64d7fe1_4aca6042",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "This was added in the service path to follow the same approach that we applied until now. This file include the definition of several new rpcs/notifications specific to tapi. Their equivalent were already defined in yang files of service-path. Taking the example of service-implementation-request, all is defined in service-path. Thus, it makes sense to define tapi-service-implementation-request in the same place. Does it make sense to you?",
+      "parentUuid": "539eddf7_3d6fa6a7",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5da62eb_53f2e6d1",
         "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
         "patchSetId": 13
@@ -82,6 +100,24 @@
       "writtenOn": "2026-07-01T08:10:31Z",
       "side": 1,
       "message": "Wouldn\u0027t it be better to add a list of sbi controller details here?\nFor now, we can define it as a list with max elements as 1.\nAnd define url, userid, password, tapi-version, controller-type etc.\n\nOr, do you prefer keeping it outside of this?",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d384c9e2_bfd606f5",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "The introduction of a list of SBI controller is planned, and I fully agree with you on the fact that this will be needed at a time. However, this has strong impact on the code, as we will need to revise a lot of things : number of Tapi-SBI-topologies, the way we process their names, how we handle path-computation considering that we may have as many sbi-topologies (and their corresponding TAPI-SBI-ABS-NODE in OpenROADM topology) as we have southbound controllers.\n\nSo, in a first step, I think we should keep it as simple as possible, focusing on addressing next IOWN demos.\n\nAt the time we will consider the extension of the number of connected SBI controllers, we may need to refine controller customization module (Directly pushing yang models in OR, or using augmentations in the meanwhile). We will need also to add other elements in yang models. this might be here, or in another dedicated module.\n\nIn any case, IMHO, this should be in separate future change as the impact is huge.",
+      "parentUuid": "e5da62eb_53f2e6d1",
       "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -99,6 +135,24 @@
       "writtenOn": "2026-07-15T09:51:28Z",
       "side": 1,
       "message": "Are you assuming that SIPs are bi-directional and NEPs could be uni-directional?\nWhy not allow separate SIPs for each direction?",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e83cfcc_892c1d1e",
+        "filename": "api/src/main/yang/service_path/transportpce-tapi-sbi@2026-04-10.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "I used the assumption that we define only bidirectional services, and that there is no interest in having unidirectional SIP. However, you are right, we should be as generic as possible, and T-API allows to do so. As we also depends on some parameters that may be defined by the SBI controller, we need to consider this case. Corrected it to put it at rx/tx level according to your suggestion.",
+      "parentUuid": "1f6be39e_353b91ec",
       "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -128,6 +182,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "297905bb_5c728bed",
+        "filename": "features/odl-transportpce-tapisbi/.externalToolBuilders/org.eclipse.wst.common.project.facet.core.builder.launch",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "I think this file was added after solving a compilation issue, following a suggestion on a correction (probably in a POM file) that implied using this feature. So would say yes, except if another simpler workaround can be applied. As other corrections were applied by Gilles in the meanwhile, it may happen that this is no longer needed...",
+      "parentUuid": "8142dd47_674a3020",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a138ada2_b47443be",
         "filename": "features/odl-transportpce-tapisbi/.gitignore",
         "patchSetId": 13
@@ -139,6 +217,24 @@
       "writtenOn": "2026-06-25T13:36:45Z",
       "side": 1,
       "message": "Is this file really necessay ?",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc17a3e3_7dd3f5cc",
+        "filename": "features/odl-transportpce-tapisbi/.gitignore",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "I guess this is a mistake. removed it",
+      "parentUuid": "a138ada2_b47443be",
       "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -160,6 +256,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b86743a_60ee181f",
+        "filename": "features/odl-transportpce-tapisbi/pom.xml",
+        "patchSetId": 13
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77fd07cf_7110f361",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d50d0337_7917eeb5",
@@ -173,6 +287,30 @@
       "writtenOn": "2026-06-25T13:36:45Z",
       "side": 1,
       "message": "Aas you declared a property for mdsal.version, you can use it here.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 33
+      },
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "082d1eea_29864a50",
+        "filename": "features/odl-transportpce-tapisbi/pom.xml",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d50d0337_7917eeb5",
       "range": {
         "startLine": 42,
         "startChar": 8,
@@ -206,6 +344,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83908d79_78b55678",
+        "filename": "tapisbi/pom.xml",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae590b44_d81c1e0c",
+      "range": {
+        "startLine": 72,
+        "startChar": 3,
+        "endLine": 86,
+        "endChar": 19
+      },
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b5bc115_d99eb85c",
@@ -229,6 +391,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a5a9a4f_1d7daa18",
+        "filename": "tapisbi/pom.xml",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b5bc115_d99eb85c",
+      "range": {
+        "startLine": 155,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 19
+      },
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe23d149_161ddaea",
@@ -242,6 +428,24 @@
       "writtenOn": "2026-06-25T13:36:45Z",
       "side": 1,
       "message": "update author",
+      "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67395193_eee9fde9",
+        "filename": "tapisbi/src/main/java/org/opendaylight/transportpce/tapisbi/impl/TapiSbiProvider.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-07-16T09:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe23d149_161ddaea",
       "revId": "8972941f48ef63f5ce12cc09ca1124e200b670ce",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
