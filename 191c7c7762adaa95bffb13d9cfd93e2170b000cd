@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68041827_8896be7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2026-07-22T15:38:44Z",
+      "side": 1,
+      "message": "Should we also indicate that 1.2.1 is deprecated in transportpce-portmapping YANG file?\nenum 1.2.1 {      value 1;      status deprecated;      description\n        \"Deprecated: kept for backward compatibility only.\";    }\n        \nIf add it here, then can we use the same version of portmapping yang date that I have for including 13.1.1 and 17.1.0? I can rebase my change on top of this change.\n\nOtherwise I will have to deal with lot of merge conflicts. \n\nIn general, I\u0027m okay with this change and no additional review comments from my side.",
+      "revId": "191c7c7762adaa95bffb13d9cfd93e2170b000cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
