@@ -16,6 +16,24 @@
       "message": "Should we also indicate that 1.2.1 is deprecated in transportpce-portmapping YANG file?\nenum 1.2.1 {      value 1;      status deprecated;      description\n        \"Deprecated: kept for backward compatibility only.\";    }\n        \nIf add it here, then can we use the same version of portmapping yang date that I have for including 13.1.1 and 17.1.0? I can rebase my change on top of this change.\n\nOtherwise I will have to deal with lot of merge conflicts. \n\nIn general, I\u0027m okay with this change and no additional review comments from my side.",
       "revId": "191c7c7762adaa95bffb13d9cfd93e2170b000cd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8036f7d_72d04865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-07-23T07:18:23Z",
+      "side": 1,
+      "message": "I agree with your proposal to add \"deprecated\" to the YANG model.\nI understand the issue and suggest not modifying the YANG model revision yet to avoid conflicts during your rebases. We will update the revision when we remove the enmu in the model or if there is any other evolution in the model.",
+      "parentUuid": "68041827_8896be7f",
+      "revId": "191c7c7762adaa95bffb13d9cfd93e2170b000cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
