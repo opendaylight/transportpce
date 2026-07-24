@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eb8d3b2_59243694",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-07-24T08:56:28Z",
+      "side": 1,
+      "message": "Thanks Bala for this contribution. Just a comment to address to add in the commit message some changes adressed for portmapping 710.",
+      "revId": "fc8e4e7b6b16be43a8195b593d8e780ecbf141dc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a86fd828_c4f35474",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-07-24T08:56:28Z",
+      "side": 1,
+      "message": "Could you please add a comment in the commit message to explain it, as it seems more or less related to change 122175 which has been abandonned.",
+      "range": {
+        "startLine": 900,
+        "startChar": 3,
+        "endLine": 925,
+        "endChar": 17
+      },
+      "revId": "fc8e4e7b6b16be43a8195b593d8e780ecbf141dc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
