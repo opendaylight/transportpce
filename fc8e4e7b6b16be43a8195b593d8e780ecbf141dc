@@ -39,6 +39,30 @@
       },
       "revId": "fc8e4e7b6b16be43a8195b593d8e780ecbf141dc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d5379a3_f29139b9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-07-27T14:31:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a86fd828_c4f35474",
+      "range": {
+        "startLine": 900,
+        "startChar": 3,
+        "endLine": 925,
+        "endChar": 17
+      },
+      "revId": "fc8e4e7b6b16be43a8195b593d8e780ecbf141dc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
