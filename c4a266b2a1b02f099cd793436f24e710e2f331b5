@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "c4a266b2a1b02f099cd793436f24e710e2f331b5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce42d967_2008da3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-08-05T07:23:05Z",
+      "side": 1,
+      "message": "There are tests that are not updated correctly on this commit. I will fix them after Jocke gets back from the vacation ha does the rebase of his changes.",
+      "revId": "c4a266b2a1b02f099cd793436f24e710e2f331b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
