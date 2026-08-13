@@ -41,10 +41,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
@@ -57,26 +54,14 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +81,7 @@ public class ConvertTopoORtoTapiAtInit {
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
     private final LinkTerminationPointsFactory linkTerminationPointsFactory;
     private final RoadmNepFactory roadmNepFactory;
+    private final ORtoTapiTopoConversionTools tapiFactory;
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
@@ -109,6 +95,7 @@ public class ConvertTopoORtoTapiAtInit {
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
         this.roadmNepFactory = roadmNepFactory;
+        this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         linkTerminationPointsFactory = new OpenRoadmLinkTerminationPointsFactory(
                 new TopologyTerminationPointTypeResolver());
     }
@@ -433,14 +420,16 @@ public class ConvertTopoORtoTapiAtInit {
         }
 
         //org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
-        var roadmNode = createRoadmTapiNode(
+        Map<NameKey, Name> nodeNamesMap = Map.of(
+                nodeNames.key(), nodeNames,
+                nameNodeType.key(), nameNodeType);
+        var roadmNode = tapiFactory.createRoadmTapiNode(
                 nodeUuid,
-                Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType),
+                nodeNamesMap,
                 layerProtocols,
                 oneplist,
-                "Full",
-                ietfNodeId);
-
+                ietfNodeId,
+                "Full");
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNF)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNF)",
@@ -592,9 +581,17 @@ public class ConvertTopoORtoTapiAtInit {
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
+        Map<NameKey, Name> nodeNames = Map.of(
+                nodeName.key(), nodeName,
+                nameNodeType.key(), nameNodeType);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node roadmNode =
-            createRoadmTapiNode(nodeUuid, Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType),
-            layerProtocols, oneMap, "Abstracted", ietfNodeId);
+                tapiFactory.createRoadmTapiNode(
+                        nodeUuid,
+                        nodeNames,
+                        layerProtocols,
+                        oneMap,
+                        TapiConstants.RDM_INFRA,
+                        "Abstracted");
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA,
@@ -603,90 +600,6 @@ public class ConvertTopoORtoTapiAtInit {
                 .filter(nep -> nep.getMappedServiceInterfacePoint() != null).count());
 
         return Optional.of(roadmNode);
-    }
-
-    /**
-     * Converts OpenROADM infrastructure of the OpenROADM topology to its equivalent Tapi Topology stored in Data Store.
-     * Associated topology name T0_FULL_MULTILAYER.
-     * @param nodeUuid Uuid of the node to be created,
-     * @param nameMap Name Map of the node to be created,
-     * @param layerProtocols Set of layer protocols supported by the node,
-     * @param onepMap Map of Owned-Node-Edge-Point of the node,
-     * @param topoMode Mode of creation for the topo,
-     */
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
-             createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
-             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode, String ietfNodeId) {
-        // Empty random creation of mandatory fields for avoiding errors....
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
-
-        var tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode(
-                topoMode.equals("Full")
-                    ? "Full"
-                    : "Abstracted",
-                nodeUuid, ietfNodeId, onepMap.values());
-        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
-        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
-            NodeRuleGroup nrg = nrgMapEntry.getValue();
-            if (nrg == null || nrg.getName() == null) {
-                throw new IllegalStateException(
-                        "NodeRuleGroup " + nrgMapEntry.getKey() + " has no name map");
-            }
-
-            Name nrgName = nrg.getName().get(new NameKey("nrg name"));
-            if (nrgName == null || nrgName.getValue() == null) {
-                throw new IllegalStateException(
-                        "NodeRuleGroup " + nrgMapEntry.getKey() + " is missing name 'nrg name'");
-            }
-
-            nrgMap.put(nrgMapEntry.getKey(), nrgName.getValue());
-        }
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode(
-                topoMode.equals("Full")
-                    ? "Full"
-                    : "Abstracted",
-                nodeUuid, ietfNodeId, nrgMap);
-        return new NodeBuilder()
-            .setUuid(nodeUuid)
-            .setName(nameMap)
-            .setLayerProtocolName(layerProtocols)
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
-            .setLifecycleState(LifecycleState.INSTALLED)
-            .setOwnedNodeEdgePoint(onepMap)
-            .setNodeRuleGroup(nodeRuleGroupMap)
-            .setInterRuleGroup(interRuleGroupMap)
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setRiskParameterPac(
-                new RiskParameterPacBuilder()
-                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                    .build())
-            .setErrorCharacteristic("error")
-            .setLossCharacteristic("loss")
-            .setRepeatDeliveryCharacteristic("repeat delivery")
-            .setDeliveryOrderCharacteristic("delivery order")
-            .setUnavailableTimeCharacteristic("unavailable time")
-            .setServerIntegrityProcessCharacteristic("server integrity process")
-            .build();
     }
 
     /**
