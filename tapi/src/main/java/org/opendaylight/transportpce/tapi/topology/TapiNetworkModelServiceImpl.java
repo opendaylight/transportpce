@@ -1518,54 +1518,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         Name nameNodeType =
             new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
-        // Protocol Layer
-        // Empty random creation of mandatory fields for avoiding errors....
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.COST_HOP_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, onepMap.values());
-        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
-        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
-            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
-        }
-        return new NodeBuilder()
-            .setUuid(nodeUuid)
-            .setName(Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType))
-            .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
-            .setLifecycleState(LifecycleState.INSTALLED)
-            .setOwnedNodeEdgePoint(onepMap)
-            .setNodeRuleGroup(nodeRuleGroupMap)
-            .setInterRuleGroup(
-                tapiFactory.createInterRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, nrgMap))
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setErrorCharacteristic("error")
-            .setLossCharacteristic("loss")
-            .setRepeatDeliveryCharacteristic("repeat delivery")
-            .setDeliveryOrderCharacteristic("delivery order")
-            .setUnavailableTimeCharacteristic("unavailable time")
-            .setServerIntegrityProcessCharacteristic("server integrity process")
-            .setRiskParameterPac(
-                new RiskParameterPacBuilder()
-                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                    .build())
-            .build();
+        return tapiFactory.createRoadmTapiNode(
+            nodeUuid,
+            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType),
+            Set.of(LayerProtocolName.PHOTONICMEDIA),
+            onepMap,
+            orNodeId,
+            TOPOLOGICAL_MODE);
     }
 
     private OduSwitchingPools createTpdrSwitchPool(List<Mapping> xpdrNetMaps) {
