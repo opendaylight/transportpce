@@ -648,6 +648,82 @@ public class ORtoTapiTopoConversionTools {
     }
 
     /**
+     * Recovers the degree/SRG name a node rule group was built for, by stripping the suffix appended by
+     * {@link #createNodeRuleGroupForRdmNode}.
+     *
+     * @param nrgName name of the node rule group, e.g. {@code ROADM-Antwerp-SRG2-node-rule-group}
+     * @return the degree/SRG name, e.g. {@code ROADM-Antwerp-SRG2}
+     */
+    private static String subNodeNameOf(String nrgName) {
+        return nrgName.endsWith(NRG_NAME_SUFFIX)
+            ? nrgName.substring(0, nrgName.length() - NRG_NAME_SUFFIX.length())
+            : nrgName;
+    }
+
+    /**
+     * Creates the ROADM (Photonic Media) Tapi Node, either representing a single physical OpenROADM node
+     * ("Full" topology mode) or the abstracted "ROADM_INFRA" node ("Abstracted" topology mode).
+     * @param nodeUuid Uuid of the node to be created,
+     * @param nameMap Name Map of the node to be created,
+     * @param layerProtocols Set of layer protocols supported by the node,
+     * @param onepMap Map of Owned-Node-Edge-Point of the node,
+     * @param orNodeId Id of the OpenROADM node the NRG/IRG names are derived from,
+     * @param topoMode Mode of creation for the topo ("Full" or "Abstracted").
+     */
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createRoadmTapiNode(
+            Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
+            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String orNodeId, String topoMode) {
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+            .setCostAlgorithm("Restricted Shortest Path - RSP")
+            .setCostName("HOP_COUNT")
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
+            .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
+            createAllNodeRuleGroupForRdmNode(topoMode, nodeUuid, orNodeId, onepMap.values());
+        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
+        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
+            Map<NameKey, Name> name = nrgMapEntry.getValue().getName();
+            if (name != null) {
+                nrgMap.put(nrgMapEntry.getKey(), name.get(new NameKey("nrg name")).getValue());
+            }
+        }
+        return new NodeBuilder()
+            .setUuid(nodeUuid)
+            .setName(nameMap)
+            .setLayerProtocolName(layerProtocols)
+            .setAdministrativeState(AdministrativeState.UNLOCKED)
+            .setOperationalState(OperationalState.ENABLED)
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setOwnedNodeEdgePoint(onepMap)
+            .setNodeRuleGroup(nodeRuleGroupMap)
+            .setInterRuleGroup(createInterRuleGroupForRdmNode(topoMode, nodeUuid, orNodeId, nrgMap))
+            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setErrorCharacteristic("error")
+            .setLossCharacteristic("loss")
+            .setRepeatDeliveryCharacteristic("repeat delivery")
+            .setDeliveryOrderCharacteristic("delivery order")
+            .setUnavailableTimeCharacteristic("unavailable time")
+            .setServerIntegrityProcessCharacteristic("server integrity process")
+            .setRiskParameterPac(
+                new RiskParameterPacBuilder()
+                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                    .build())
+            .build();
+    }
+
+    /**
      * Provides a list of Mapped Service Interface Points associated with a tp/NEP and add SIPs to tapiSip List.
      * so that they can be added later on to the SIP context.
      * Returns a List of Mapped Service Interface Points.
