@@ -1829,13 +1829,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.debug("Attempting to save: {}", nodeMap);
         }
         // merge in datastore
-        this.networkTransactionService.merge(
-            LogicalDatastoreType.OPERATIONAL,
-            DataObjectIdentifier.builder(Context.class)
-                .augmentation(Context1.class)
-                .child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-                .build(),
+        TapiLinkTopologyWriter.mergeInTopology(this.networkTransactionService, this.tapiTopoUuid,
             new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build());
         try {
             this.networkTransactionService.commit().get();

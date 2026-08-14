@@ -44,14 +44,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -271,43 +265,17 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     private void putTapiLinkInTopology(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
         LOG.info("Creating tapi link in TAPI topology context");
-        // merge in datastore
-        this.networkTransactionService.merge(
-            LogicalDatastoreType.OPERATIONAL,
-            DataObjectIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-                .build(),
-            new TopologyBuilder()
-                .setUuid(this.tapiTopoUuid)
-                .setLink(Map.of(tapiXpdrLink.key(), tapiXpdrLink))
-                .build());
-        try {
-            this.networkTransactionService.commit().get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error populating TAPI topology: ", e);
+        if (TapiLinkTopologyWriter.mergeLinksInTopology(
+                this.networkTransactionService, this.tapiTopoUuid, Map.of(tapiXpdrLink.key(), tapiXpdrLink))) {
+            LOG.info("TAPI Link added succesfully.");
         }
-        LOG.info("TAPI Link added succesfully.");
     }
 
     private boolean putTapiInterDomainLinkInTopology(Uuid topoUuid,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link) {
         LOG.info("Creating tapi link {} in TAPI topology context", link.getName());
-        // merge in datastore
-        this.networkTransactionService.merge(
-            LogicalDatastoreType.OPERATIONAL,
-            DataObjectIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(topoUuid))
-                .build(),
-            new TopologyBuilder()
-                .setUuid(topoUuid)
-                .setLink(Map.of(link.key(), link))
-                .build());
-        try {
-            this.networkTransactionService.commit().get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error populating TAPI topology with InterdomainLink {}: ", link.getName(), e);
+        if (!TapiLinkTopologyWriter.mergeLinksInTopology(
+                this.networkTransactionService, topoUuid, Map.of(link.key(), link))) {
             return false;
         }
         LOG.info("TAPI InterdomainLink {} added succesfully in Topology {}.", link.getName(), topoUuid);
