@@ -230,6 +230,15 @@ Current implementation detects device configuration changes and updates the topo
 Then, it sends a TopologyUpdateNotification to the *Service Handler* to indicate that a change has been
 detected in the network that may affect some of the already existing services.
 
+When a node is mounted, the device's internal connection map (the set of circuit-pack-to-circuit-pack
+connections reported by the device, e.g. between a WSS and its associated SRG ports) is now read and
+saved to the datastore alongside the port mapping. The Topology Management module uses this stored
+connection map when creating ROADM-to-ROADM links: a link between two termination points is only
+created if the connection map confirms that the corresponding circuit packs are actually connected on
+the device. This avoids creating links that do not correspond to any real internal connection. For
+devices or datastore entries where no connection map has been saved, the module falls back to the
+previous behaviour of assuming all internal connections exist, preserving backwards compatibility.
+
 Renderer
 ^^^^^^^^
 
