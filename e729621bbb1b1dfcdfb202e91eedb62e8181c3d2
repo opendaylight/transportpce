@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1787217435 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1787217435-BD1002EA5E80B63DAD86061869C77F708E7BFB92\n\n0000000000000000000000000000000000000000 c9e052b3ba28f8592a169a941b602f38839c3cbf refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQJPBAABCAA5FiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmqGxhsbFIAAAAAABAAO\nbWFudTIsMi41KzEuMTIsMCwzAAoJEF+9+bkxT61xGVcQAK7eregDbrxwj8U/YNm+\nerouzlQlW1aMWL1+rJ/wTKrJ/GHysb+YqDlWUTOhJeUek/rMh3n71iF6h59adBVj\noBp9icV39h+XD0Y51nR02efGn8RnYU2HXWaaxbS1aaS8vBEhqnrwq3E0+X1vZbpy\nsqvqHao5Crr4mjsbzGlRxIBBBjwwKGDkRQNICte/akFetuk+3eKLpPxfJoN8C38J\nOVSBQjTURW/nOsud5MVu1VOFkStJ1plZYT8O0RO3Y5hULvjHgwfSt/ygMB9G59vq\n7kBMNwQKr/ocOYLR2fp6HitgUKLEj5+LHmxSp6vXRttoArgQpr4A7CulHGpKSc4E\nbf/lBns1isDQXpvNXC1Hi1Y3GHgbZjee+Uky0MvVx8D46FPCWAxMEUBqZ6rcqnJe\n/Ye6gHgw6GV6V6BJq8jMdQUCs/6RMQNWDlpIoqRpGDEdMaK/l9Q691QN551FbhfK\nWoCzO+FV/q9OoOp7Xze81gbxRo20InKlVu3xYwRr4eEjq8iNR5W5l9U47W/Zgcnj\nzita4rbuBF5Ia6Fu9Vs6wHRGakPTLfVlDVf/Pw+N4nswkI4zHKktAsjSXsy8V3w4\n1DQEr7Y8H5che76ZLZgkcej7GEpwL7+tCD6URNoDf9XhvXa6usiAlaojuBrXZNn9\nRxtrzMENId1lnW9ThZqnKamV\n\u003dCJEc\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49538f02_207ed900",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-08-20T12:35:21Z",
+      "side": 1,
+      "message": "Thanks, will fix.",
+      "revId": "e729621bbb1b1dfcdfb202e91eedb62e8181c3d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }

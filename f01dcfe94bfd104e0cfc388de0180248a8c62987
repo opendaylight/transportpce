@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09ec9f95_d6e0aba2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-08-20T12:35:21Z",
+      "side": 1,
+      "message": "ok!",
+      "parentUuid": "2743047f_e66b29c4",
+      "range": {
+        "startLine": 881,
+        "startChar": 0,
+        "endLine": 886,
+        "endChar": 0
+      },
+      "revId": "f01dcfe94bfd104e0cfc388de0180248a8c62987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fcc3e7d_40360702",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
         "patchSetId": 11
@@ -71,6 +95,24 @@
       "writtenOn": "2026-08-12T11:57:18Z",
       "side": 1,
       "message": "Add a warning message instead of silently ignoring the issue.",
+      "revId": "f01dcfe94bfd104e0cfc388de0180248a8c62987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b721d5f_88534e02",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-08-20T12:35:21Z",
+      "side": 1,
+      "message": "ok!",
+      "parentUuid": "6fcc3e7d_40360702",
       "revId": "f01dcfe94bfd104e0cfc388de0180248a8c62987",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
