@@ -23,6 +23,30 @@
       },
       "revId": "2ddb6e2cf5f5f2cbfe2a67c229c9ee0047a9b4b6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d9e5bd_a5b098b6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/link/TapiLinkAttributes.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-08-20T09:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd66c88f_d875b53e",
+      "range": {
+        "startLine": 76,
+        "startChar": 20,
+        "endLine": 76,
+        "endChar": 30
+      },
+      "revId": "2ddb6e2cf5f5f2cbfe2a67c229c9ee0047a9b4b6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
