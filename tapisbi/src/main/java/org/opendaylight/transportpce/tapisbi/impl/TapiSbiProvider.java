@@ -22,11 +22,6 @@ import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapisbi.listener.TapiSbiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapisbi.listener.TapiSbiServiceNotificationHandler;
 import org.opendaylight.transportpce.tapisbi.listener.TapiSbiTopologyNotificationHandler;
-import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererService;
-import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererServiceImpl;
-import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServiceDeleteImpl;
-import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServiceImplementationRequestImpl;
-import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServicePathImpl;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -48,7 +43,6 @@ public class TapiSbiProvider {
 
     private final NetworkModelService netModServ;
     private List<Registration> listeners;
-    private Registration rpcRegistration;
     private Registration rendererlistenerRegistration;
     private Registration sbiTopologylistenerRegistration;
     private Registration sbiServicelistenerRegistration;
@@ -62,8 +56,8 @@ public class TapiSbiProvider {
             @Reference NetworkTransactionService networkTransactionService,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
             @Reference NetworkModelService networkModelService,
-            @Reference TapiSbiServiceNotificationHandler tapiSbiServiceNotificationHandler,
-            @Reference TapiSbiTopologyNotificationHandler tapiSbiTopologyNotificationHandler,
+            @Reference TapiSbiServiceNotificationHandler sbiServiceListener,
+            @Reference TapiSbiTopologyNotificationHandler sbiTopologyListener,
             @Reference TapiLink tapiLink,
             @Reference TapiContext tapiContext) {
 
@@ -71,37 +65,23 @@ public class TapiSbiProvider {
         LOG.info("TapiSbiProvider Session Initiated");
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
         // TapiPceNotificationHandler instantiated from TAPI feature -> not to be needed in TAPI SBI
-        TapiSbiRendererNotificationHandler rendererListener = new TapiSbiRendererNotificationHandler();
-        TapiSbiRendererService sbiRenderer = new TapiSbiRendererServiceImpl();
-
-        rpcRegistration = rpcProviderService.registerRpcImplementations(
-            new TapiSbiServiceImplementationRequestImpl(rendererListener),
-            new TapiSbiServiceDeleteImpl(rendererListener),
-            new TapiSbiServicePathImpl(sbiRenderer));
+        TapiSbiRendererNotificationHandler sbiRendererListener = new TapiSbiRendererNotificationHandler();
 
         this.listeners = new ArrayList<>();
 
         // Notification Listener
         rendererlistenerRegistration = notificationService
-            .registerCompositeListener(rendererListener.getCompositeListener());
+            .registerCompositeListener(sbiRendererListener.getCompositeListener());
         LOG.debug("Renderer Listener Registration in TapiSbiProvider : {}", rendererlistenerRegistration);
         listeners.add(rendererlistenerRegistration);
-        TapiSbiTopologyNotificationHandler sbiTopologyListener = new TapiSbiTopologyNotificationHandler(
-                notificationPublishService);
         sbiTopologylistenerRegistration = notificationService
             .registerCompositeListener(sbiTopologyListener.getCompositeListener());
         LOG.debug("Sbi Topology Listener Registration in TapiSbiProvider : {}", rendererlistenerRegistration);
         listeners.add(sbiTopologylistenerRegistration);
-        TapiSbiServiceNotificationHandler sbiServiceListener = new TapiSbiServiceNotificationHandler(
-                notificationPublishService);
         sbiServicelistenerRegistration = notificationService
             .registerCompositeListener(sbiServiceListener.getCompositeListener());
         LOG.debug("Sbi Topology Listener Registration in TapiSbiProvider : {}", rendererlistenerRegistration);
         listeners.add(sbiServicelistenerRegistration);
-        sbiServicelistenerRegistration = notificationService
-            .registerCompositeListener(sbiServiceListener.getCompositeListener());
-        LOG.debug("Sbi Topology Listener Registration in TapiSbiProvider : {}", rendererlistenerRegistration);
-        listeners.add(rendererlistenerRegistration);
     }
 
     /**
@@ -112,11 +92,7 @@ public class TapiSbiProvider {
         listeners.forEach(lis -> lis.close());
         listeners.clear();
         rendererlistenerRegistration.close();
-        rpcRegistration.close();
         LOG.info("TapiProvider Session Closed");
     }
 
-    public Registration getRegisteredRpcs() {
-        return rpcRegistration;
-    }
 }

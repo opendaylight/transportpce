@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapisbi.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.opendaylight.transportpce.tapisbi.listener.TapiSbiRendererNotificationHandler;
+import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperation;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceDelete;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceDeleteOutput;
@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 
 public class TapiSbiServiceDeleteImpl implements TapiSbiServiceDelete {
     private static final Logger LOG = LoggerFactory.getLogger(TapiSbiServiceDeleteImpl.class);
-    private final TapiSbiRendererNotificationHandler sbiRendererListener;
+    private final TapiSbiRendererOperation tapiSbiRendererOperation;
 
-    public TapiSbiServiceDeleteImpl(TapiSbiRendererNotificationHandler rendererListener) {
-        this.sbiRendererListener = rendererListener;
+    public TapiSbiServiceDeleteImpl(TapiSbiRendererOperation sbiRendererOperation) {
+        this.tapiSbiRendererOperation = sbiRendererOperation;
 
     }
 
@@ -33,9 +33,8 @@ public class TapiSbiServiceDeleteImpl implements TapiSbiServiceDelete {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service delete request {}", serviceName);
 
-        // TODO: Implement this RPC directly removing service form Sout Bound NMS DataStore (No RPCs for easy
-        // update to version of TAPI higher than 2.4
-        LOG.debug("TapiSbiServiceDelete invoked leveraging {}", sbiRendererListener.getClass());
+        // TODO: Implement this RPC
+        LOG.debug("TapiSbiServiceDelete invoked leveraging {}", tapiSbiRendererOperation.getClass());
 
         return RpcResultBuilder.success(new TapiSbiServiceDeleteOutputBuilder().build()).buildFuture();
     }

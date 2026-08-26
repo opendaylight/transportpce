@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapisbi.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.opendaylight.transportpce.tapisbi.listener.TapiSbiRendererNotificationHandler;
+import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperation;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestOutput;
@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 
 public class TapiSbiServiceImplementationRequestImpl implements TapiSbiServiceImplementationRequest {
     private static final Logger LOG = LoggerFactory.getLogger(TapiSbiServiceImplementationRequestImpl.class);
-    private final TapiSbiRendererNotificationHandler sbiRendererListener;
+    private final TapiSbiRendererOperation tapiSbiRendererOperation;
 
-    public TapiSbiServiceImplementationRequestImpl(TapiSbiRendererNotificationHandler rendererListener) {
-        this.sbiRendererListener = rendererListener;
+    public TapiSbiServiceImplementationRequestImpl(TapiSbiRendererOperation sbiRendererOperation) {
+        this.tapiSbiRendererOperation = sbiRendererOperation;
 
     }
 
@@ -33,7 +33,8 @@ public class TapiSbiServiceImplementationRequestImpl implements TapiSbiServiceIm
             TapiSbiServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {}", serviceName);
-     // TODO: provide implementation of this RPC
+        // TODO: provide implementation of this RPC
+        LOG.debug("TapiSbiServiceImplementationRequest invoked leveraging {}", tapiSbiRendererOperation.getClass());
 
         return RpcResultBuilder.success(new TapiSbiServiceImplementationRequestOutputBuilder().build()).buildFuture();
     }
