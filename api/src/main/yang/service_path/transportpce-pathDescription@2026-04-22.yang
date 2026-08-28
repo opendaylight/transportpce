@@ -53,7 +53,7 @@ module transportpce-pathDescription {
 
   revision 2026-04-22 {
       description
-        "Version 1.8. Add service breakdown attributes to handle services spanning across TAPI domain
+        "Version 1.8. Add cross-domain service attributes to handle services spanning across TAPI domain
          handled through TAPI-SBI.";
   }
   revision 2023-05-01 {
@@ -132,18 +132,18 @@ module transportpce-pathDescription {
        Physical ports are ordered with the logical ports that run over them as follows:
        a.\tOn ingress to a node/card, physical then logical
        b.\tOn egress to a node/card, logical then physical";
-    leaf service-breakdown {
+    leaf cross-domain {
         type boolean;
         description
           "Optional attribute set to true if the service spans across TAPI-ABS-NODE abstracting an OLS domain handled
            through a NMS connected to TransportPCE via the TAPI-SBI";
     }
-    container broken-down-service {
-      when "../service-breakdown = 'true'";
+    container cross-domain-service {
+      when "../cross-domain = 'true'";
           description
-            "If the service of service-creation request spans across several domains, it needs to be broken down.
-             This container contains information on sub-services/broken-down-services associated with the service.";
-          uses broken-down-service-attributes;
+            "If the service of service-creation request spans across several domains, it needs to be decomposed.
+             This container contains information on sub-services/cross-domain-services associated with the service.";
+          uses cross-domain-service-attributes;
     }
     container aToZ-direction {
       leaf aToZ-wavelength-number {
@@ -221,7 +221,16 @@ module transportpce-pathDescription {
   grouping impairment-params {
     description
       "Grouping defining the parameters to be stored when impairments can be evaluated on section of the path
-       corresponding to a broken-down service";
+       corresponding to a cross-domain service";
+    leaf margin {
+      type decimal64 {
+        fraction-digits 3;
+      }
+      description
+        "Use to store margin. Not supposed to be used for cross-domain services. Added so that ImpairmentParams object
+         can be used as the output of methods calculating impairments on partial-path, but also as the output of the
+         same methods when used for regular complete path-computation (only margin attributes will then be used)";
+    }
     leaf accumulated-cd {
       type uint32;
       description
@@ -253,11 +262,11 @@ module transportpce-pathDescription {
     leaf section-available-freq-map {
       type binary;
       description
-        "bitmap providing spectrum availability on the section of the broken-down service";
+        "bitmap providing spectrum availability on the section of the cross-domain service";
     }
   }
 
-  grouping broken-down-service-attributes {
+  grouping cross-domain-service-attributes {
     description
       "When a service spans across a TAPI domain handled through a TAPI SBI, the service creation request needs to
        be handled through several steps, separating the part of the service that is routed over OpenRoadm domains
@@ -270,19 +279,19 @@ module transportpce-pathDescription {
        type string;
        description
          "The service name as provided in the service-create RPCs, or the common-id as provided in the
-          temp-service-create RPCs, that will be used in either the broken-down-service container of the
-          path-description or in the broken-down-service-list as an identifier of the service";
+          temp-service-create RPCs, that will be used in either the cross-domain-service container of the
+          path-description or in the cross-domain-service-list as an identifier of the service";
      }
-     list bd-services {
-       key "bd-service-id";
+     list cd-services {
+       key "cd-service-id";
        description
          "A list of sub-services that compose the service, all being at the same layer, corresponding to the different
           sections/domains the service is routed over.";
-       leaf bd-service-id {
+       leaf cd-service-id {
          type uint8;
          description
-           "unique identifier of the broken-down-service/sub-service corresponding to one domain. A [service-name] is
-           composed of several (N) [service-name]-[bd-service-id]. The value of bd-service-id corresponds to the order
+           "unique identifier of the cross-domain-service/sub-service corresponding to one domain. A [service-name] is
+           composed of several (N) [service-name]-[cd-service-id]. The value of cd-service-id corresponds to the order
            of the sub-service across the path in A to Z direction: service-name-0 precedes service-name-1 ...
            which precedes service-name-N routed over domain-O then domain-1, ...and ultimately domain-N.";
         }
@@ -300,8 +309,15 @@ module transportpce-pathDescription {
           when "../calculated-impairments = 'true'";
           description
             "If impairments can be evaluated, the attributes of this container allow storing parameters qualifying the
-             accumulated degradations on the path of the broken down service";
-          uses impairment-params;
+             accumulated degradations on the path of the cross-domain service";
+          container aToZ-impairments {
+            description "Impairment calculated in A to Z direction : from source to destination";
+            uses impairment-params;
+          }
+          container zToA-impairments {
+            description "Impairment calculated in Z to A direction : from destination to source";
+            uses impairment-params;
+          }
         }
         container source {
           description
@@ -380,13 +396,13 @@ module transportpce-pathDescription {
      }
   }
 
-  list broken-down-services {
+  list cross-domain-services {
     key "initial-service-name-or-common-id";
       description
-        "A list of services that have been broken down because they span across several topological domains.
+        "A list of services that have been split because they span across several topological domains.
          In addition to storing the parameters of subservices in the path of the service, we keep here information
          about the way the service has been split into several sub-services so that necessary information is available
          to all modules implicated in the orchestration of the service creation (PCE/Renderer).";
-      uses broken-down-service-attributes;
+      uses cross-domain-service-attributes;
   }
 }
