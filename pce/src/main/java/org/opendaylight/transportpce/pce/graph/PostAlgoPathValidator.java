@@ -1073,24 +1073,22 @@ public class PostAlgoPathValidator {
     }
 
     /**
-     * Get spectrum assignment for path.
-     *
+     * Compute spectrum occupation for path.
+     * Sets Bits of the returned Bitset to either AVAILABLE_SLOT_VALUE or USED_SLOT_VALUE in order to reflect
+     * spectrum occupation.
      * @param path                    the path for which we get spectrum assignment.
      * @param allPceNodes             all optical nodes.
      * @param spectralWidthSlotNumber number of slot for spectral width. Depends on
      *                                service type.
      * @param subscriber              will be notified about errors.
-     * @return a spectrum assignment object which contains begin and end index. If
-     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     * @param centerFreqGranularityCollection  collection of authorized central-frequency granularity.
+     * @return a SpectrumUsage record, which is an association of a BitSet object which represents the spectrum
+     *         occupation and a Collection of supported Center Frequency Granularities.
      */
-    public SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
-            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber) {
-        byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
-        Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
-        BitSet result = BitSet.valueOf(freqMap);
-        boolean isFlexGrid = true;
+    public SpectrumUsage computeSpectrumOccupation(GraphPath<String, PceGraphEdge> path,
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber,
+            Collection centerFreqGranularityCollection) {
         LOG.debug("Processing path {} with length {}", path, path.getLength());
-        BitSet pceNodeFreqMap;
         Set<PceNode> pceNodes = new LinkedHashSet<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -1105,10 +1103,14 @@ public class PostAlgoPathValidator {
             }
         }
 
-        Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
         CapabilityCollection mcCapabilityCollection = new McCapabilityCollection(
                 message -> subscriber.event(Level.ERROR, message));
-
+        byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
+        Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        BitSet result = BitSet.valueOf(freqMap);
+        Arrays.fill(freqMap, (byte) GridConstant.USED_SLOT_VALUE);
+        BitSet occupied = BitSet.valueOf(freqMap);
+        BitSet pceNodeFreqMap;
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
 
@@ -1124,20 +1126,19 @@ public class PostAlgoPathValidator {
                 LOG.debug("PCE node {} is a contentionless srg, skipping available frequency map.", pceNode);
             }
             McCapability mcCapability = pceNode.mcCapabilities();
-            centerFrequencyGranularityCollection.add(mcCapability.centerFrequencyGranularity());
+            centerFreqGranularityCollection.add(mcCapability.centerFrequencyGranularity());
             mcCapabilityCollection.add(mcCapability);
 
             String pceNodeVersion = pceNode.getVersion();
 
-            LOG.debug("Node {}: version is {}, mc-capabilities: {}, flex grid = {}",
-                pceNode.getNodeId(), pceNodeVersion, mcCapability, isFlexGrid);
+            LOG.debug("Node {}: version is {}, mc-capabilities: {}",pceNode.getNodeId(), pceNodeVersion, mcCapability);
         }
 
         LOG.info("Available bitset on nodes: {}", result);
 
         if (result.isEmpty()) {
             subscriber.error("No frequencies available");
-            return createEmptySpectrumAssignment();
+            return new SpectrumUsage(occupied, centerFreqGranularityCollection, subscriber);
         }
 
         result = mcCapabilityCollection.usableFrequencyRange(
@@ -1150,13 +1151,13 @@ public class PostAlgoPathValidator {
 
         if (result.isEmpty()) {
             subscriber.error("No frequencies available (restricted by McCapabilities)");
-            return createEmptySpectrumAssignment();
+            return new SpectrumUsage(occupied, centerFreqGranularityCollection, subscriber);
         }
 
         int slotCount = clientInput.slotWidth(spectralWidthSlotNumber);
 
         if (!mcCapabilityCollection.isCompatibleService(GridConstant.GRANULARITY, slotCount)) {
-            return createEmptySpectrumAssignment();
+            return new SpectrumUsage(occupied, centerFreqGranularityCollection, subscriber);
         }
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
@@ -1167,18 +1168,37 @@ public class PostAlgoPathValidator {
                 result);
 
         LOG.info("Assignable bitset: {}", assignableBitset);
+        return new SpectrumUsage(assignableBitset, centerFreqGranularityCollection, subscriber);
+    }
 
-        if (assignableBitset.isEmpty()) {
-            subscriber.error("No frequencies are assignable to the service.");
+    /**
+     * Get spectrum assignment for path.
+     *
+     * @param path                    the path for which we get spectrum assignment.
+     * @param allPceNodes             all optical nodes.
+     * @param spectralWidthSlotNumber number of slot for spectral width. Depends on
+     *                                service type.
+     * @param subscriber              will be notified about errors.
+     * @return a spectrum assignment object which contains begin and end index. If
+     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     */
+    public SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber) {
+        boolean isFlexGrid = true;
+        Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
+        SpectrumUsage spectrumUsage = computeSpectrumOccupation(path, allPceNodes, spectralWidthSlotNumber, subscriber,
+            centerFrequencyGranularityCollection);
+
+        if (spectrumUsage.spectrumOccupation.isEmpty()) {
             return createEmptySpectrumAssignment();
         }
 
         return computeBestSpectrumAssignment(
-                assignableBitset,
+                spectrumUsage.spectrumOccupation,
                 clientInput.slotWidth(spectralWidthSlotNumber),
-                centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
+                spectrumUsage.centerFrequencyGranularityCollection().slots(GridConstant.GRANULARITY),
                 isFlexGrid,
-                subscriber);
+                spectrumUsage.subscriber);
     }
 
     private SpectrumAssignment createEmptySpectrumAssignment() {
@@ -1257,4 +1277,8 @@ public class PostAlgoPathValidator {
         }
         return outUuid;
     }
+
+    public record SpectrumUsage(BitSet spectrumOccupation, Collection centerFrequencyGranularityCollection,
+            Subscriber subscriber) {}
+
 }
