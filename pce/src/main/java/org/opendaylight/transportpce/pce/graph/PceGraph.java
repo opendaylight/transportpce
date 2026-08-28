@@ -44,10 +44,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev241213.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.broken.down.service.attributes.BdServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.broken.down.service.attributes.bd.services.DestinationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.broken.down.service.attributes.bd.services.ImpairmentParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.broken.down.service.attributes.bd.services.SourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.DestinationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.ImpairmentParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -93,7 +93,7 @@ public class PceGraph {
     private String zendOperationalMode;
     private int tapiSbiAbsNodeOrderInPath = -1;
     private Map<Integer, PathElement> pathElementMap = new HashMap<>();
-    private Map<Integer, BdServicesBuilder> brokenDownServiceBldr = new HashMap<>();
+    private Map<Integer, CdServicesBuilder> crossDomainServiceBldr = new HashMap<>();
 
     // results
     private PceResult pceResult = null;
@@ -205,7 +205,7 @@ public class PceGraph {
                         // Compute extract of Path from lower to higher Boundary
                         // Call modified PAPV :  not proving margins but Absolute value
                         // Fill this.brokenDownServiceBldr form output parameters of PapV
-                        populateBDServBlderWithOpticalParams(0, null, null, Uint32.valueOf(0), Uint32.valueOf(0),
+                        populateCDServBlderWithOpticalParams(0, null, null, Uint32.valueOf(0), Uint32.valueOf(0),
                             Decimal64.valueOf(0.0, RoundingMode.UP), null);
                     } else {
                         LOG.debug("ScanPath elt number {} of non OR type", loopIter);
@@ -398,12 +398,12 @@ public class PceGraph {
         // LOOP that scans the different Nodes/Links of the path, checks whether the path includes TAPI-SBI-ABS-NODE
         // or not. If this the case,...
 
-        int bdServiceOrder = 0;
+        int cdServiceOrder = 0;
         int lowIndex = 0;
 
         PceNode firstNode = allPceNodesList.get(new NodeId(vertices.get(0)));
         String firstTpId = edges.get(0).link().getClientA();
-        BdServicesBuilder bdServiceBldr = new BdServicesBuilder();
+        CdServicesBuilder cdServiceBldr = new CdServicesBuilder();
         for (int pathElement = 0; pathElement < vertices.size(); pathElement++) {
             PceNode currentNode = allPceNodesList.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = null;
@@ -419,14 +419,14 @@ public class PceGraph {
                 DestinationBuilder destBldr = new DestinationBuilder()
                     .setDestNodeId(currentNode.getNodeId().getValue())
                     .setDestTpId(edges.get(pathElement).link().getSourceTP());
-                bdServiceBldr.setBdServiceId(Uint8.valueOf(bdServiceOrder))
+                cdServiceBldr.setCdServiceId(Uint8.valueOf(cdServiceOrder))
                     .setSource(sourceBldr.build())
                     .setDestination(destBldr.build());
-                this.brokenDownServiceBldr.put(bdServiceOrder, bdServiceBldr);
+                this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
                 this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.Openroadm,
-                    bdServiceOrder));
-                bdServiceBldr = new BdServicesBuilder();
-                bdServiceOrder++;
+                    cdServiceOrder));
+                cdServiceBldr = new CdServicesBuilder();
+                cdServiceOrder++;
                 lowIndex = pathElement + 1;
             } else if (currentNode.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE")) {
                 if (pathElement == 0) {
@@ -441,15 +441,15 @@ public class PceGraph {
                     destTpId = edges.get(pathElement).link().getSourceTP();
                     srcTpId = edges.get(pathElement - 1).link().getDestTP();
                 }
-                bdServiceBldr = retrieveSBINodeParams(srcTpId, destTpId, bdServiceOrder, serviceLayer);
-                this.brokenDownServiceBldr.put(bdServiceOrder, bdServiceBldr);
-                this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.TapiSbi, bdServiceOrder));
-                bdServiceOrder++;
+                cdServiceBldr = retrieveSBINodeParams(srcTpId, destTpId, cdServiceOrder, serviceLayer);
+                this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
+                this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.TapiSbi, cdServiceOrder));
+                cdServiceOrder++;
                 lowIndex = pathElement + 1;
                 this.tapiSbiAbsNodeOrderInPath = pathElement;
                 firstNode = nextNode;
                 firstTpId = edges.get(pathElement).link().getDestTP();
-            } else if (bdServiceOrder > 0 && pathElement == vertices.size() - 1) {
+            } else if (cdServiceOrder > 0 && pathElement == vertices.size() - 1) {
                 // This is the case of last node on the path, when TAPI-SBI-ABS-NODE is present on the path
                 SourceBuilder sourceBldr = new SourceBuilder()
                     .setSrcNodeId(firstNode.getNodeId().getValue())
@@ -457,21 +457,21 @@ public class PceGraph {
                 DestinationBuilder destBldr = new DestinationBuilder()
                     .setDestNodeId(currentNode.getNodeId().getValue())
                     .setDestTpId(edges.get(pathElement - 1).link().getClientZ());
-                bdServiceBldr.setBdServiceId(Uint8.valueOf(bdServiceOrder))
+                cdServiceBldr.setCdServiceId(Uint8.valueOf(cdServiceOrder))
                     .setSource(sourceBldr.build())
                     .setDestination(destBldr.build());
-                this.brokenDownServiceBldr.put(bdServiceOrder, bdServiceBldr);
+                this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
                 this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.Openroadm,
-                    bdServiceOrder));
+                    cdServiceOrder));
             }
         }
-        if (bdServiceOrder > 0) {
+        if (cdServiceOrder > 0) {
             return true;
         }
         return false;
     }
 
-    private void populateBDServBlderWithOpticalParams(int bdServiceOrder, RatioDB osnrContrib, RatioDB targetRxOSNR,
+    private void populateCDServBlderWithOpticalParams(int bdServiceOrder, RatioDB osnrContrib, RatioDB targetRxOSNR,
             Uint32 cdContrib, Uint32 pmd2Contrib, Decimal64 latency, byte[] freqOccupation) {
         ImpairmentParametersBuilder impairments = new ImpairmentParametersBuilder()
             .setAccumulatedCd(cdContrib)
@@ -480,12 +480,12 @@ public class PceGraph {
             .setOsnrContribution(osnrContrib)
             .setSectionAvailableFreqMap(freqOccupation)
             .setTargetRxOsnr(targetRxOSNR);
-        this.brokenDownServiceBldr.get(bdServiceOrder)
+        this.crossDomainServiceBldr.get(bdServiceOrder)
             .setCalculatedImpairments(true)
             .setImpairmentParameters(impairments.build());
     }
 
-    private BdServicesBuilder retrieveSBINodeParams(String srcTpId, String dstTpId,
+    private CdServicesBuilder retrieveSBINodeParams(String srcTpId, String dstTpId,
             int bdServiceOrder, String servLayer) {
 
         TerminationPoint srcTp = getTpFromId(servLayer, srcTpId);
@@ -513,8 +513,8 @@ public class PceGraph {
         }
 
         return
-            new BdServicesBuilder()
-                .setBdServiceId(Uint8.valueOf(bdServiceOrder))
+            new CdServicesBuilder()
+                .setCdServiceId(Uint8.valueOf(bdServiceOrder))
                 .setDestination(destBldr.build())
                 .setSource(sourceBldr.build());
     }
