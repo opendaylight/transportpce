@@ -24,6 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
@@ -97,6 +99,7 @@ public class TapiInitialORMapping {
 
         LOG.info("orderedServices = {}", orderedServices);
         Map<ConnectivityServiceKey, ConnectivityService> connServMap = new HashMap<>();
+        Map<ConnectionKey, Connection> connectionMap = new HashMap<>();
         for (Service service:orderedServices) {
             // map services
             // connections needed to be created --> looking at path description
@@ -108,9 +111,11 @@ public class TapiInitialORMapping {
             }
 
             connServMap.put(connServ.key(), connServ);
+            // ConnectivityUtils clears its connection map on every service, so collect it before the next one
+            connectionMap.putAll(this.connectivityUtils.getConnectionFullMap());
         }
         // Put in datastore connectivity services and connections
-        this.tapiContext.updateConnectivityContext(connServMap, this.connectivityUtils.getConnectionFullMap());
+        this.tapiContext.updateConnectivityContext(connServMap, connectionMap);
 
         return true;
     }
