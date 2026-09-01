@@ -141,6 +141,26 @@ class TapiInitialORMappingTest {
     }
 
     @Test
+    void performServInitialMappingWritesNothingWhenNoServiceCouldBeMapped() {
+        Services one = createService("service 1", ServiceFormat.ODU);
+        Services two = createService("service 2", ServiceFormat.OTU);
+
+        // No service path in the datastore for either service.
+        ConnectivityUtils connectivityUtils = mock(ConnectivityUtils.class);
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(Mockito.any()))
+                .thenReturn(null);
+
+        TapiContext tapi = mock(TapiContext.class);
+
+        assertFalse(
+                new TapiInitialORMapping(null, connectivityUtils, tapi, null)
+                        .performServInitialMapping(serviceList(one, two)));
+
+        // An empty connectivity context is nothing to write, and writing it throws.
+        Mockito.verify(tapi, Mockito.never()).updateConnectivityContext(Mockito.any(), Mockito.any());
+    }
+
+    @Test
     void sortByServiceFormat() {
         Services one = createService("service 1", ServiceFormat.ODU);
         Services two = createService("service 2", ServiceFormat.OTU);

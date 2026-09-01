@@ -220,7 +220,7 @@ public class TapiContext {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI connectivity merged successfully.");
             LOG.debug("TAPI connectivity merged successfully for services {}",
-                connServMap.entrySet().iterator().next().getKey());
+                    connServMap.keySet());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI connectivity", e);
         }
