@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 public class TapiInitialORMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiInitialORMapping.class);
+    private static final int LOGGED_SERVICE_NAMES = 10;
     private final TapiContext tapiContext;
     private final TopologyUtils topologyUtils;
     private final ConnectivityUtils connectivityUtils;
@@ -90,6 +91,8 @@ public class TapiInitialORMapping {
     }
 
     public boolean performServInitialMapping(ServiceList orServices) {
+        LOG.info("Performing initial service mapping between OR and TAPI models.");
+
         if (orServices.getServices() == null) {
             LOG.info("No services in datastore. No mapping needed");
             return false;
@@ -97,7 +100,10 @@ public class TapiInitialORMapping {
 
         List<Services> orderedServices = sortByServiceFormat(orServices);
 
-        LOG.info("orderedServices = {}", orderedServices);
+        List<String> firstServiceNames =
+            orderedServices.stream().map(Services::getServiceName).limit(LOGGED_SERVICE_NAMES).toList();
+        LOG.info("Mapping {} services, first {} in mapping order = {}",
+            orderedServices.size(), firstServiceNames.size(), firstServiceNames);
         Map<ConnectivityServiceKey, ConnectivityService> connServMap = new HashMap<>();
         Map<ConnectionKey, Connection> connectionMap = new HashMap<>();
         int unmapped = 0;
