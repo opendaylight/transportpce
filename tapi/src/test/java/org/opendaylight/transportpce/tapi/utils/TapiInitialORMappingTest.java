@@ -16,8 +16,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.ServiceAEndBuilder;
@@ -30,6 +32,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceBuilder;
 
@@ -65,6 +70,44 @@ class TapiInitialORMappingTest {
 
         Mockito.verify(connectivityUtils, Mockito.times(4)).mapORServiceToTapiConnectivity(Mockito.any());
         Mockito.verify(tapi, Mockito.times(1)).updateConnectivityContext(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void performServInitialMappingKeepsTheConnectionsOfEveryService() {
+        Services one = createService("service 1", ServiceFormat.ODU);
+        Services two = createService("service 2", ServiceFormat.OTU);
+        Services three = createService("service 3", ServiceFormat.Ethernet);
+        Services four = createService("service 4", ServiceFormat.ODU);
+
+        ConnectivityUtils connectivityUtils = mock(ConnectivityUtils.class);
+
+        for (Services service : List.of(one, two, three, four)) {
+            Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(service))
+                    .thenReturn(connectivityService(service.getServiceName()));
+        }
+
+        // ConnectivityUtils clears its connection map on every service it maps.
+        Mockito.when(connectivityUtils.getConnectionFullMap())
+                .thenReturn(connections("connection 2"))
+                .thenReturn(connections("connection 1"))
+                .thenReturn(connections("connection 4"))
+                .thenReturn(connections("connection 3"));
+
+        TapiContext tapi = mock(TapiContext.class);
+
+        new TapiInitialORMapping(null, connectivityUtils, tapi, null)
+                .performServInitialMapping(serviceList(one, two, three, four));
+
+        ArgumentCaptor<Map<ConnectionKey, Connection>> connectionMap = ArgumentCaptor.captor();
+        Mockito.verify(tapi).updateConnectivityContext(Mockito.any(), connectionMap.capture());
+
+        assertEquals(
+                Set.of(
+                        connectionOf("connection 1").key(),
+                        connectionOf("connection 2").key(),
+                        connectionOf("connection 3").key(),
+                        connectionOf("connection 4").key()),
+                connectionMap.getValue().keySet());
     }
 
     @Test
@@ -110,6 +153,23 @@ class TapiInitialORMappingTest {
         return new ConnectivityServiceBuilder()
                 .setUuid(uuidOf(serviceName))
                 .setName(Map.of(name.key(), name))
+                .build();
+    }
+
+    private Map<ConnectionKey, Connection> connections(String... connectionNames) {
+        Map<ConnectionKey, Connection> connectionMap = new HashMap<>(connectionNames.length);
+
+        for (String connectionName : connectionNames) {
+            Connection connection = connectionOf(connectionName);
+            connectionMap.put(connection.key(), connection);
+        }
+
+        return connectionMap;
+    }
+
+    private Connection connectionOf(String connectionName) {
+        return new ConnectionBuilder()
+                .setUuid(uuidOf(connectionName))
                 .build();
     }
 
