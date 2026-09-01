@@ -122,8 +122,10 @@ public class TapiInitialORMapping {
             // ConnectivityUtils clears its connection map on every service, so collect it before the next one
             connectionMap.putAll(this.connectivityUtils.getConnectionFullMap());
         }
-        // Put in datastore connectivity services and connections
-        this.tapiContext.updateConnectivityContext(connServMap, connectionMap);
+        if (!connServMap.isEmpty()) {
+            // Put in datastore connectivity services and connections
+            this.tapiContext.updateConnectivityContext(connServMap, connectionMap);
+        }
 
         if (unmapped > 0) {
             LOG.error("{} of the {} OpenROADM services could not be mapped to TAPI",
