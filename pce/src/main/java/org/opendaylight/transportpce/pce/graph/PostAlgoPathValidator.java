@@ -9,6 +9,8 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -58,15 +60,22 @@ import org.opendaylight.transportpce.pce.spectrum.slot.McCapabilityCollection;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev241213.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.Penalties;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250530.operational.mode.transponder.parameters.PenaltiesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250530.OpucnTribSlotDef;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.AToZImpairmentsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.ZToAImpairmentsBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -452,9 +461,9 @@ public class PostAlgoPathValidator {
             Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
         switch (direction) {
             case StringConstants.SERVICE_DIRECTION_AZ:
-                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu);
+                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu).getMargin().doubleValue();
             case StringConstants.SERVICE_DIRECTION_ZA:
-                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu);
+                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu).getMargin().doubleValue();
             default:
                 LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported direction {}", direction);
                 return 0.0;
@@ -469,9 +478,11 @@ public class PostAlgoPathValidator {
      * @param allPceLinks               The map of PceLinks build corresponding to the whole topology.
      * @param serviceType               The service Type used to extrapolate Operational mode when it is not provided.
      * @param cu                        CatalogUtils instance.
-     * @return the calculated margin according to the Transponder performances and path impairments.
+     * @return an AToZImpairmentBuilder which includes intermediate results such as cumulated PMD/CD/PDL and OSNR to be
+     *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
+     *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private double checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
+    private AToZImpairmentsBuilder checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
@@ -491,6 +502,7 @@ public class PostAlgoPathValidator {
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
         int bypassDegree = 0;
+        AToZImpairmentsBuilder atozImpBldr = new AToZImpairmentsBuilder();
         for (int pathElement = 0; pathElement < 2; pathElement++) {
             bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
@@ -522,7 +534,8 @@ public class PostAlgoPathValidator {
                         pathElement, pathElement + 1, signal.get("pwrOut"));
                     double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                     if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
@@ -553,7 +566,8 @@ public class PostAlgoPathValidator {
                     calcDropContrib(cu, signal, currentNode, pceLink);
                     double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                     if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // If SRG is not the first or the second element of the Path, it is the DROP
                     // side.
@@ -567,7 +581,8 @@ public class PostAlgoPathValidator {
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                             path.getEdgeList().size(), e);
-                        return -1.0;
+                        return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     break;
                 case DEGREE:
@@ -582,7 +597,8 @@ public class PostAlgoPathValidator {
                     LOG.debug(
                         "Loop pathElement= {}, DEGREE, calcOnsrdB= {}", pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
@@ -595,12 +611,15 @@ public class PostAlgoPathValidator {
                 case XPONDER:
                     LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", pathElement);
                     LOG.error("unsupported back to back transponder configuration");
-                    return -1.0;
+                    return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 default:
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
         double margin = 0;
+        double rxosnr = 0.0;
+        String xpdrOperationalMode = "";
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(vertices.size() - 1)));
         LOG.debug("loop of check OSNR, Path Element = {}", vertices.size() - 1);
         switch (currentNode.getORNodeType()) {
@@ -610,6 +629,10 @@ public class PostAlgoPathValidator {
                 // TSP is the last of the path
                 margin = getLastXpdrMargin(cu, signal, edges.get(vertices.size() - 2).link().getDestTP(),
                     serviceType, currentNode, vertices.get(vertices.size() - 1), vertices.size() - 1);
+                rxosnr = getXpdrRxOsnr(cu, edges.get(vertices.size() - 2).link().getDestTP(),
+                    serviceType, currentNode, vertices.get(vertices.size() - 1), vertices.size() - 1);
+                xpdrOperationalMode = getXpdrOpMode(edges.get(vertices.size() - 2).link().getDestTP(),
+                    vertices.get(vertices.size() - 1), vertices.size() - 1, currentNode, serviceType, cu);
                 break;
             case SRG:
                 LOG.debug("loop of check OSNR direction AZ: SRG, Path Element = {}", vertices.size() - 1);
@@ -625,7 +648,8 @@ public class PostAlgoPathValidator {
                 double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                 //commented out to avoid spotbug DLS_DEAD_LOCAL_STORE pwrIn = impairments.get("pwrIn");
                 if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                    return -1.0;
+                    return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 }
                 // If SRG is not the first or the second element of the Path, it is the DROP
                 // side.
@@ -639,7 +663,8 @@ public class PostAlgoPathValidator {
                 } catch (ArithmeticException e) {
                     LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                         path.getEdgeList().size(), e);
-                    return -1.0;
+                    return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 }
                 break;
             case DEGREE:
@@ -651,10 +676,21 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
+
+        atozImpBldr
+            .setAccumulatedCd(Uint32.valueOf(Math.round(signal.get("calcCd"))))
+            .setAccumulatedPmd2(Uint32.valueOf(Math.round(signal.get("calcPmd2"))))
+            .setAccumulatedPdl2(Uint32.valueOf(Math.round(signal.get("calcPdl2"))))
+            .setTargetRxOsnr(new RatioDB(Decimal64.valueOf(new BigDecimal(rxosnr).setScale(3, RoundingMode.HALF_EVEN))
+                .scaleTo(3)))
+            .setMargin(Decimal64.valueOf(new BigDecimal(margin).setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+        LOG.info("Building AtoZImpairmentBuilder {}", atozImpBldr);
+
         if (!transponderPresent) {
             LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
                 + "that optical tunnel degradations are compatible with external transponder performances");
-            return 0.0;
+            return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(0.0)
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
         }
         double delta = margin - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode results in a residual margin of {} dB, according "
@@ -663,7 +699,11 @@ public class PostAlgoPathValidator {
         String validationMessage = delta >= 0 ? "VALIDATED" : "INVALIDATED";
         LOG.info("- In checkOSNR: A to Z Path from {} to {} {}",
                 vertices.get(0), vertices.get(vertices.size() - 1), validationMessage);
-        return delta;
+
+        atozImpBldr.setMargin(Decimal64.valueOf(delta, RoundingMode.DOWN));
+        atozImpBldr.setXponderOperationalMode(xpdrOperationalMode);
+
+        return atozImpBldr;
     }
 
     /**
@@ -674,9 +714,11 @@ public class PostAlgoPathValidator {
      * @param allPceLinks               The map of PceLinks build corresponding to the whole topology.
      * @param serviceType               The service Type used to extrapolate Operational mode when it is not provided.
      * @param cu                        CatalogUtils instance.
-     * @return the calculated margin according to the Transponder performances and path impairments.
+     * @return an ZToAImpairmentBuilder which includes intermediate results such as cumulated PMD/CD/PDL and OSNR to be
+     *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
+     *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private double checkOSNRza(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
+    private ZToAImpairmentsBuilder checkOSNRza(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
@@ -696,6 +738,7 @@ public class PostAlgoPathValidator {
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
         int bypassDegree = 0;
+        ZToAImpairmentsBuilder ztoaImpBldr = new ZToAImpairmentsBuilder();
         for (int pathElement = vertices.size() - 1; pathElement > vertices.size() - 3; pathElement--) {
             bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
@@ -725,7 +768,8 @@ public class PostAlgoPathValidator {
                     calcAddContrib(cu, signal, currentNode, getOppPceLink(pathElement - 2, edges, allPceLinks));
                     double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                     if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
@@ -755,7 +799,8 @@ public class PostAlgoPathValidator {
                     calcDropContrib(cu, signal, currentNode, pceLink);
                     double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                     if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // If SRG is not the first or the second element of the Path, it is the DROP
                     // side.
@@ -769,7 +814,8 @@ public class PostAlgoPathValidator {
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                             path.getEdgeList().size(), e);
-                        return -1.0;
+                        return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     break;
                 case DEGREE:
@@ -785,7 +831,8 @@ public class PostAlgoPathValidator {
                     LOG.debug("Loop Path Element = {}, DEGREE, calcOnsrdB= {}",
                             pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                        return -1.0;
+                        return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
@@ -798,12 +845,15 @@ public class PostAlgoPathValidator {
                 case XPONDER:
                     LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", pathElement);
                     LOG.error("unsupported back to back transponder configuration");
-                    return -1.0;
+                    return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 default:
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
         double margin = 0;
+        double rxosnr = 0.0;
+        String xpdrOperationalMode = "";
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(0)));
         LOG.debug("loop of check OSNR direction ZA: Path Element = 0");
         switch (currentNode.getORNodeType()) {
@@ -813,6 +863,10 @@ public class PostAlgoPathValidator {
                 // TSP is the last of the path
                 margin = getLastXpdrMargin(cu, signal, getOppPceLink(0, edges, allPceLinks).getDestTP(),
                     serviceType, currentNode, vertices.get(0), 0);
+                rxosnr = getXpdrRxOsnr(cu, getOppPceLink(0, edges, allPceLinks).getDestTP(),
+                    serviceType, currentNode, vertices.get(0), 0);
+                xpdrOperationalMode = getXpdrOpMode(getOppPceLink(0, edges, allPceLinks).getDestTP(),
+                    vertices.get(0), 0, currentNode, serviceType, cu);
                 break;
             case SRG:
                 LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = 0");
@@ -827,7 +881,8 @@ public class PostAlgoPathValidator {
                 double calcOnsr = signal.get("calcOnsrLin").doubleValue();
                 //commented out to avoid spotbug DLS_DEAD_LOCAL_STORE pwrIn = impairments.get("pwrIn");
                 if (calcOnsr == Double.NEGATIVE_INFINITY || calcOnsr == Double.POSITIVE_INFINITY) {
-                    return -1.0;
+                    return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 }
                 // If SRG is not the first or the second element of the Path, it is the DROP
                 // side.
@@ -841,7 +896,8 @@ public class PostAlgoPathValidator {
                 } catch (ArithmeticException e) {
                     LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                         path.getEdgeList().size(), e);
-                    return -1.0;
+                    return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
                 }
                 break;
             case DEGREE:
@@ -853,10 +909,20 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
+
+        ztoaImpBldr
+            .setAccumulatedCd(Uint32.valueOf(Math.round(signal.get("calcCd"))))
+            .setAccumulatedPmd2(Uint32.valueOf(Math.round(signal.get("calcPmd2"))))
+            .setTargetRxOsnr(new RatioDB(Decimal64.valueOf(new BigDecimal(rxosnr).setScale(3, RoundingMode.HALF_EVEN))
+                .scaleTo(3)))
+            .setMargin(Decimal64.valueOf(new BigDecimal(margin).setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+        LOG.info("Building ZtoAImpairmentBuilder {}", ztoaImpBldr);
+
         if (!transponderPresent) {
             LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
                 + "that optical tunnel degradations are compatible with external transponder performances");
-            return 0.0;
+            return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(0.0)
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
         }
         double delta = margin - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode results in a residual margin of {} dB, according "
@@ -865,7 +931,11 @@ public class PostAlgoPathValidator {
         String validationMessage = delta >= 0 ? "VALIDATED" : "INVALIDATED";
         LOG.info("- In checkOSNR: Z to A Path from {} to {} {}",
                 vertices.get(vertices.size() - 1), vertices.get(0), validationMessage);
-        return delta;
+
+        ztoaImpBldr.setMargin(Decimal64.valueOf(delta, RoundingMode.DOWN));
+        ztoaImpBldr.setXponderOperationalMode(xpdrOperationalMode);
+
+        return ztoaImpBldr;
     }
 
     private String setOpMode(String opMode, String defaultMode) {
@@ -943,6 +1013,12 @@ public class PostAlgoPathValidator {
             Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()),
             calcOnsrdB);
+    }
+
+    private double getXpdrRxOsnr(CatalogUtils cu, String nwTpId, String serviceType, PceNode currentNode,
+            String vertice, int pathElement) {
+        Map<PenaltiesKey, Penalties> penaltiesMap = new HashMap<>();
+        return cu.getTspRxOsnr(getXpdrOpMode(nwTpId, vertice, pathElement, currentNode, serviceType, cu), penaltiesMap);
     }
 
     private void calcXpdrOSNR(
