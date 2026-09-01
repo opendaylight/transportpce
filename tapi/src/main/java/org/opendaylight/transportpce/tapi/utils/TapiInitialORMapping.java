@@ -100,6 +100,7 @@ public class TapiInitialORMapping {
         LOG.info("orderedServices = {}", orderedServices);
         Map<ConnectivityServiceKey, ConnectivityService> connServMap = new HashMap<>();
         Map<ConnectionKey, Connection> connectionMap = new HashMap<>();
+        int unmapped = 0;
         for (Service service:orderedServices) {
             // map services
             // connections needed to be created --> looking at path description
@@ -107,6 +108,7 @@ public class TapiInitialORMapping {
 
             if (connServ == null) {
                 LOG.warn("Couldn't map service {} to TAPI", service.getServiceName());
+                unmapped++;
                 continue;
             }
 
@@ -116,6 +118,12 @@ public class TapiInitialORMapping {
         }
         // Put in datastore connectivity services and connections
         this.tapiContext.updateConnectivityContext(connServMap, connectionMap);
+
+        if (unmapped > 0) {
+            LOG.error("{} of the {} OpenROADM services could not be mapped to TAPI",
+                unmapped, orderedServices.size());
+            return false;
+        }
 
         return true;
     }
