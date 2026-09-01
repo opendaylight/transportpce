@@ -303,64 +303,14 @@ public class CatalogUtils {
     public double getPceRxTspParameters(String operationalModeId, double calcCd, double calcPmd,
             double calcPdl, double calcOsnrdB) {
         double rxOsnrdB = 0.0;
-        XponderPluggableOpenroadmOperationalMode orTspOM = null;
-        SpecificOperationalMode speTspOM = null;
-        Map<PenaltiesKey, Penalties> penaltiesMap = null;
-        if (operationalModeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
-            var omCatalogIid = DataObjectIdentifier
-                .builder(OperationalModeCatalog.class)
-                .child(OpenroadmOperationalModes.class)
-                .child(XpondersPluggables.class)
-                .child(XponderPluggableOpenroadmOperationalMode.class,
-                    new XponderPluggableOpenroadmOperationalModeKey(operationalModeId))
-                .build();
-            try {
-                Optional<XponderPluggableOpenroadmOperationalMode> omOptional = networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
-                if (omOptional.isPresent()) {
-                    orTspOM = omOptional.orElseThrow();
-                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orTspOM);
-                    if (orTspOM.getMinRXOsnrTolerance() != null) {
-                        rxOsnrdB = orTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
-                    }
-                    penaltiesMap = orTspOM.getPenalties();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
-                throw new RuntimeException(
-                    "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
-                        + e);
-            }
-        } else {
-            // In other cases, means the mode is a non OpenROADM specific Operational Mode
-            // InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
-            var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
-                .child(SpecificOperationalModes.class)
-                .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
-                .build();
-            try {
-                Optional<SpecificOperationalMode> somOptional = networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
-                if (somOptional.isPresent()) {
-                    speTspOM = somOptional.orElseThrow();
-                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", speTspOM);
-                    if (speTspOM.getMinRXOsnrTolerance() != null) {
-                        rxOsnrdB = speTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
-                    }
-                    penaltiesMap = speTspOM.getPenalties();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
-                throw new RuntimeException(
-                    "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
-                        + e);
-            }
-        }
-        if (penaltiesMap == null) {
+        Map<PenaltiesKey, Penalties> penaltiesMap = new HashMap<>();
+        rxOsnrdB = getTspRxOsnr(operationalModeId, penaltiesMap);
+        if (penaltiesMap == null || penaltiesMap.isEmpty()) {
             LOG.error("Unable to calculate margin as penaltyMap can not be retrieved : Operational mode not populated");
             return -9999.9;
         }
         HashMap<String, Double> impairments = new HashMap<>();
+
         double penalty = getRxTspPenalty(calcCd, ImpairmentType.CDPsNm, penaltiesMap);
         impairments.put("CDpenalty", penalty);
         double totalPenalty = penalty;
@@ -390,6 +340,77 @@ public class CatalogUtils {
             LOG.warn("Negative margin shall result in PCE rejecting the analyzed path");
         }
         return margin;
+    }
+
+    /**
+     * This method retrieves Xponder RX OSNR.
+     *
+     * @param operationalModeId
+     *            operational-mode-Id of the Xponder (OR or Specific)
+     *
+     * @param penaltiesMap updated by the method from the catalog
+     * @return the rxOsnr of the Xponder
+     * @throws RuntimeException
+     *             if operationalModeId is not described in the catalog
+     */
+    public double getTspRxOsnr(String operationalModeId, Map<PenaltiesKey, Penalties> penaltiesMap) {
+        double rxOsnrdB = 0.0;
+        XponderPluggableOpenroadmOperationalMode orTspOM = null;
+        SpecificOperationalMode speTspOM = null;
+        if (operationalModeId.split("-")[0].equals(StringConstants.OPENROADM_MODE_PREFIX)) {
+            var omCatalogIid = DataObjectIdentifier
+                .builder(OperationalModeCatalog.class)
+                .child(OpenroadmOperationalModes.class)
+                .child(XpondersPluggables.class)
+                .child(XponderPluggableOpenroadmOperationalMode.class,
+                    new XponderPluggableOpenroadmOperationalModeKey(operationalModeId))
+                .build();
+            try {
+                Optional<XponderPluggableOpenroadmOperationalMode> omOptional = networkTransactionService
+                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (omOptional.isPresent()) {
+                    orTspOM = omOptional.orElseThrow();
+                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orTspOM);
+                    if (orTspOM.getMinRXOsnrTolerance() != null) {
+                        rxOsnrdB = orTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
+                    }
+                    penaltiesMap.putAll(orTspOM.getPenalties());
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
+                throw new RuntimeException(
+                    "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
+                        + e);
+            }
+        } else {
+            // In other cases, means the mode is a non OpenROADM specific Operational Mode
+            var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
+                .child(SpecificOperationalModes.class)
+                .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
+                .build();
+            try {
+                Optional<SpecificOperationalMode> somOptional = networkTransactionService
+                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (somOptional.isPresent()) {
+                    speTspOM = somOptional.orElseThrow();
+                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", speTspOM);
+                    if (speTspOM.getMinRXOsnrTolerance() != null) {
+                        rxOsnrdB = speTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
+                    }
+                    penaltiesMap.putAll(speTspOM.getPenalties());
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
+                throw new RuntimeException(
+                    "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
+                        + e);
+            }
+        }
+        if (penaltiesMap == null || penaltiesMap.isEmpty()) {
+            LOG.error("Operational mode {} not correctly populated in catalog", operationalModeId);
+            return -9999.9;
+        }
+        return rxOsnrdB;
     }
 
     /**
