@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -37,6 +38,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
 
 class TapiInitialORMappingTest {
 
@@ -108,6 +110,34 @@ class TapiInitialORMappingTest {
                         connectionOf("connection 3").key(),
                         connectionOf("connection 4").key()),
                 connectionMap.getValue().keySet());
+    }
+
+    @Test
+    void performServInitialMappingReportsAnUnmappedService() {
+        Services one = createService("service 1", ServiceFormat.ODU);
+        Services two = createService("service 2", ServiceFormat.OTU);
+
+        ConnectivityUtils connectivityUtils = mock(ConnectivityUtils.class);
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(one))
+                .thenReturn(connectivityService(one.getServiceName()));
+
+        // No service path in the datastore for this service.
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(two))
+                .thenReturn(null);
+
+        TapiContext tapi = mock(TapiContext.class);
+
+        assertFalse(
+                new TapiInitialORMapping(null, connectivityUtils, tapi, null)
+                        .performServInitialMapping(serviceList(one, two)));
+
+        // The service that could be mapped is still written.
+        ArgumentCaptor<Map<ConnectivityServiceKey, ConnectivityService>> connServMap = ArgumentCaptor.captor();
+        Mockito.verify(tapi).updateConnectivityContext(connServMap.capture(), Mockito.any());
+
+        assertEquals(
+                Set.of(connectivityService(one.getServiceName()).key()),
+                connServMap.getValue().keySet());
     }
 
     @Test
