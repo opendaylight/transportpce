@@ -254,7 +254,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.0919881995992924));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.092));
     }
 
     @Test
@@ -268,7 +268,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.1559963686478447));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.156));
     }
 
     @Test
@@ -282,7 +282,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(0.3351048800367167));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(0.335));
     }
 
     @Test
@@ -310,7 +310,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.4432381874659086));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.443));
     }
 
     @Test
@@ -324,7 +324,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.4432381874659086));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.443));
     }
 
     @Test
@@ -352,7 +352,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
             clientInput, pceCalc.getServiceLayer());
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.0919881995992924));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.092));
     }
 
     @Test
