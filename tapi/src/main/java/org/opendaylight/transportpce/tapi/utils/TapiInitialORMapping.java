@@ -7,11 +7,13 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import com.google.common.annotations.VisibleForTesting;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
@@ -20,7 +22,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
@@ -92,21 +93,47 @@ public class TapiInitialORMapping {
             return false;
         }
 
-        Map<ServicesKey, Services> orderedServices = new TreeMap<>(Comparator.comparing(s ->
-            orServices.getServices().get(s).getServiceAEnd().getServiceFormat().getName()).reversed());
-        orderedServices.putAll(orServices.getServices());
+        List<Services> orderedServices = sortByServiceFormat(orServices);
+
         LOG.info("orderedServices = {}", orderedServices);
-        // TODO order services correctly. First OTU, then ODU and then DSR
         Map<ConnectivityServiceKey, ConnectivityService> connServMap = new HashMap<>();
-        for (Service service:orderedServices.values()) {
+        for (Service service:orderedServices) {
             // map services
             // connections needed to be created --> looking at path description
             ConnectivityService connServ = this.connectivityUtils.mapORServiceToTapiConnectivity(service);
+
+            if (connServ == null) {
+                LOG.warn("Couldn't map service {} to TAPI", service.getServiceName());
+                continue;
+            }
+
             connServMap.put(connServ.key(), connServ);
         }
         // Put in datastore connectivity services and connections
         this.tapiContext.updateConnectivityContext(connServMap, this.connectivityUtils.getConnectionFullMap());
 
         return true;
+    }
+
+    /**
+     * Orders services for TAPI mapping: OTU first, then ODU, then DSR.
+     *
+     * <p>Each service depends on mapping state created by the layer below it, so mapping
+     * them out of order may produce incomplete connections. Descending service-format
+     * names happen to provide the required order. Service names provide deterministic
+     * ordering when formats are equal.
+     *
+     * @param services the services to order
+     * @return services ordered by descending format name, then ascending service name
+     */
+    @VisibleForTesting
+    static List<Services> sortByServiceFormat(ServiceList services) {
+        List<Services> orderedServices = new ArrayList<>(services.nonnullServices().values());
+        orderedServices.sort(Comparator.comparing(
+                        (Services serv) -> serv.getServiceAEnd().getServiceFormat().getName())
+                .reversed()
+                .thenComparing(Services::getServiceName));
+
+        return orderedServices;
     }
 }
