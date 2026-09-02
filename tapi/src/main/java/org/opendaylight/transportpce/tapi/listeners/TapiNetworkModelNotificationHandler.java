@@ -240,6 +240,9 @@ public class TapiNetworkModelNotificationHandler {
                     LayerProtocolName.ODU));
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Could not update TAPI connectivity services", e);
         }
     }
@@ -354,6 +357,9 @@ public class TapiNetworkModelNotificationHandler {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
         }
     }
@@ -422,6 +428,9 @@ public class TapiNetworkModelNotificationHandler {
             }
             return OperationalState.DISABLED;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
             return topConnectionState;
         }
@@ -511,6 +520,9 @@ public class TapiNetworkModelNotificationHandler {
             }
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
             return false;
         }
@@ -571,6 +583,9 @@ public class TapiNetworkModelNotificationHandler {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Could not update TAPI connectivity service", e);
         }
         return changedServices;

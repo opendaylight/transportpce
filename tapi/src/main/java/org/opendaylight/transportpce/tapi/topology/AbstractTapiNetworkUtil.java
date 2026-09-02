@@ -60,6 +60,9 @@ public abstract class AbstractTapiNetworkUtil {
             this.networkTransactionService.commit().get();
 
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error populating TAPI topology: ", e);
             return false;
         }

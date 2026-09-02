@@ -220,6 +220,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 return false;
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("TapiORLinListener: Error retrieving Tp {} from InterdomainLink {}", tpIID, link.getLinkId(), e);
             return false;
         }
@@ -283,6 +286,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error populating TAPI topology: ", e);
         }
         LOG.info("TAPI Link added succesfully.");
@@ -305,6 +311,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error populating TAPI topology with InterdomainLink {}: ", link.getName(), e);
             return false;
         }

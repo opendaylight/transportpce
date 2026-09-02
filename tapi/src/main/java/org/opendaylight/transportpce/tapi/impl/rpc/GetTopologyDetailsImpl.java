@@ -383,6 +383,9 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         try {
             mapping = mappingOpt.get().orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error getting mapping for {}", networkLcp, e);
             return false;
         }

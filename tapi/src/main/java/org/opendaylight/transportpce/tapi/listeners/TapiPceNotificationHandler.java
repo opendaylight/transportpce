@@ -247,6 +247,9 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.commit().get();
             logCreatedCepInOnepInTopology(cep, newOnep);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt update cep in topology", e);
         }
     }
@@ -331,6 +334,9 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.commit().get();
             LOG.info("NEP {} added successfully.", onep.getName().toString());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName().toString(), e);
         }
     }
@@ -369,6 +375,9 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI connectivity Line 305 for Service {} merged successfully.", suuid);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI connectivity", e);
         }
     }
@@ -391,6 +400,9 @@ public class TapiPceNotificationHandler {
             }
             return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("TapiPceNotificationHandler Line328 Connectivity service not found in tapi context. Error:", e);
             return null;
         }
@@ -408,6 +420,9 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectivityServIID);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI connectivity service", e);
         }
     }
@@ -430,6 +445,9 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectionIID);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI connection", e);
         }
     }

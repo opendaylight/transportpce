@@ -142,6 +142,9 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
             }
             LOG.info("Output of service request = {}", output.get().getResult());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error checking response code of service create", e);
         }
         // Connections and states should be created/updated when the pce and renderer are done :)
