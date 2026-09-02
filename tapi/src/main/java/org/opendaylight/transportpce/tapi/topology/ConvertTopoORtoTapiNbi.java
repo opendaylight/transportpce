@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -107,7 +106,7 @@ public class ConvertTopoORtoTapiNbi {
                 .networks.network.Link> otnLinkMap) {
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> otnLinkList = new ArrayList<>(otnLinkMap.values());
-        Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
+        otnLinkList.sort((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} otn links", otnLinkMap.size() / 2);
         for (var otnlink : otnLinkList) {
