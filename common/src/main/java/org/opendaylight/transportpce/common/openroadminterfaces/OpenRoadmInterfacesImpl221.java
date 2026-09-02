@@ -65,6 +65,9 @@ public class OpenRoadmInterfacesImpl221 {
                     nodeId));
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
                 nodeId), e);
         }
@@ -88,6 +91,7 @@ public class OpenRoadmInterfacesImpl221 {
                     Thread.sleep(3000);
                     current.interrupt();
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     LOG.error("Timeout before the new created interface appears on the deivce circuit-pack port", e);
                 }
             }
@@ -107,6 +111,9 @@ public class OpenRoadmInterfacesImpl221 {
             }
             timer.interrupt();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
                 .getName(), nodeId), e);
         }
@@ -158,6 +165,9 @@ public class OpenRoadmInterfacesImpl221 {
                         nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
                     nodeId), e);
             }
@@ -170,6 +180,9 @@ public class OpenRoadmInterfacesImpl221 {
                 commit.get();
                 LOG.info("Successfully deleted {} on node {}", interfaceName, nodeId);
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenRoadmInterfaceException(String.format("Failed to delete interface %s on " + "node %s",
                     interfaceName, nodeId), e);
             }
@@ -230,6 +243,9 @@ public class OpenRoadmInterfacesImpl221 {
                         nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
                     nodeId), e);
             }
@@ -240,6 +256,9 @@ public class OpenRoadmInterfacesImpl221 {
                 txSubmitFuture.get();
                 LOG.info("Successfully posted equipment state change on node {}", nodeId);
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenRoadmInterfaceException(String.format("Failed to post equipment state on node %s!",
                     nodeId), e);
             }

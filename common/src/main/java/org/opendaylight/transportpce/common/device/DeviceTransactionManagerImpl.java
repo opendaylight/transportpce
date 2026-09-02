@@ -187,6 +187,9 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
         try {
             deviceTxOpt = getDeviceTransaction(deviceId, timeout, timeUnit).get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Exception thrown while getting transaction for device {}!", deviceId, e);
             return Optional.empty();
         }
@@ -195,6 +198,9 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             try {
                 return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
             } finally {
                 deviceTx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);

@@ -146,6 +146,9 @@ public class CatalogUtils {
                 maxRollOff = orTspOM.getMaxRollOff() == null ? 0 : orTspOM.getMaxRollOff().doubleValue();
                 baudRate = orTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
             }
@@ -167,6 +170,9 @@ public class CatalogUtils {
                 maxRollOff = speTspOM.getMaxRollOff() == null ? 0 : speTspOM.getMaxRollOff().doubleValue();
                 baudRate = speTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
             }
@@ -232,6 +238,9 @@ public class CatalogUtils {
                 minOOBOsnrSingleChannelValue = orTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrSingleChannelValue();
                 minOOBOsnrMultiChannelValue =  orTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrMultiChannelValue();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : "
@@ -263,6 +272,9 @@ public class CatalogUtils {
                 minOOBOsnrSingleChannelValue = speTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrSingleChannelValue();
                 minOOBOsnrMultiChannelValue = speTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrMultiChannelValue();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
@@ -326,6 +338,9 @@ public class CatalogUtils {
                     penaltiesMap = orTspOM.getPenalties();
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
@@ -350,6 +365,9 @@ public class CatalogUtils {
                     penaltiesMap = speTspOM.getPenalties();
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
@@ -504,6 +522,9 @@ public class CatalogUtils {
                     maxIntroducedDgd = orAddOM.getMaxIntroducedDgd().doubleValue();
                     osnrPolynomialFits = List.of(orAddOM.getIncrementalOsnr().getValue().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     onsrLin = 1;
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid);
@@ -541,6 +562,9 @@ public class CatalogUtils {
                         orDropOM.getOsnrPolynomialFit().getB().doubleValue(),
                         orDropOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid1);
                     throw new RuntimeException(
@@ -584,6 +608,9 @@ public class CatalogUtils {
                         orExpressOM.getOsnrPolynomialFit().getB().doubleValue(),
                         orExpressOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid2);
                     throw new RuntimeException(
@@ -626,6 +653,9 @@ public class CatalogUtils {
                         orAmpOM.getOsnrPolynomialFit().getB().doubleValue(),
                         orAmpOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid3);
                     throw new RuntimeException(
@@ -738,6 +768,9 @@ public class CatalogUtils {
                     LOG.info("Did not succeed in calculating target Output power, SpanLoss {} dB is out of range",
                         spanLoss);
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid);
                     throw new RuntimeException(
@@ -782,6 +815,9 @@ public class CatalogUtils {
                     LOG.info("Did not succeed in calculating target Output power, SpanLoss {} dB is out of range",
                         spanLoss);
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid2);
                     throw new RuntimeException(
@@ -850,6 +886,9 @@ public class CatalogUtils {
             }
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("readMdSal: Error reading Operational Mode Catalog, catalog not filled");
             throw new RuntimeException(
                 "readMdSal: Error reading from operational store, Operational Mode Catalog not filled" + e);
@@ -881,6 +920,9 @@ public class CatalogUtils {
             return somOptional;
 
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("readMdSal: Error reading Specific Operational Mode Catalog {} , Mode does not exist",
                     omCatalogIid);
             throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
