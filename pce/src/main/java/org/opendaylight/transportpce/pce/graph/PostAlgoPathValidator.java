@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -372,14 +372,14 @@ public class PostAlgoPathValidator {
                     commonEdgeTsPoolList.add(integer);
                 }
             }
-            Collections.sort(commonEdgeTsPoolList);
+            commonEdgeTsPoolList.sort(Comparator.naturalOrder());
             List<Uint16> commonGoodStartEdgeTsPoolList = new ArrayList<>();
             for (Uint16 startEdgeTsPool : commonEdgeTsPoolList) {
                 if (Integer.valueOf(1).equals(startEdgeTsPool.toJava() % nbSlot) || nbSlot == 1) {
                     commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
                 }
             }
-            Collections.sort(commonGoodStartEdgeTsPoolList);
+            commonGoodStartEdgeTsPoolList.sort(Comparator.naturalOrder());
             boolean goodTsList = false;
             List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 goodStartTsPool : commonGoodStartEdgeTsPoolList) {
