@@ -436,6 +436,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("Waiting for A-Z and Z-A device renderers ...");
             renderingResults = renderingCombinedFuture.get(Timeouts.RENDERING_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(DEVICE_RENDERING_ROLL_BACK_MSG, e);
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -497,6 +500,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("Waiting for A-Z and Z-A device renderers ...");
             otnRenderingResults = renderingCombinedFuture.get(Timeouts.RENDERING_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(DEVICE_RENDERING_ROLL_BACK_MSG, e);
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -560,6 +566,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("Waiting for A-Z and Z-A OLM power setup ...");
             olmResults = olmFutures.get(Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(OLM_ROLL_BACK_MSG, e);
             sendNotifications(
                     ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -632,6 +641,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             }
 
         } catch (ExecutionException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Error occurred while getting PM for node {} and tp {}", nodeId, tp, e);
         }
         return null;
@@ -792,6 +804,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS
                 );
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Error while turning down power!", e);
                 return false;
             }
