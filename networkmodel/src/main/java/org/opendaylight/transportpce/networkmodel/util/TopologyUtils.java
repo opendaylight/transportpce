@@ -159,6 +159,9 @@ public final class TopologyUtils {
             }
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error deleting link {}", linkId.getValue(), e);
             return false;
         }

@@ -287,6 +287,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             subscriptionSuccessful = subscription.get().isSuccessful();
             LOG.info("{} subscription is {}", streamName, subscriptionSuccessful);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error during subscription to stream {}", streamName, e);
         }
         return subscriptionSuccessful;

@@ -107,6 +107,9 @@ final class OrdLink {
                 linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer", e);
             return false;
         }
@@ -216,6 +219,9 @@ final class OrdLink {
             LOG.info("InterdomainLink creation : A new link with linkId: {} added into {} layer. Link = {}",
                 linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderFW.build());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
                 srcNode, srcTp, destNode, destTp, e);
             return false;
@@ -233,6 +239,9 @@ final class OrdLink {
                 oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY, linkBuilderBW.build());
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
                 destNode, destTp, srcNode, srcTp, e);
             return false;
@@ -290,6 +299,9 @@ final class OrdLink {
             LOG.info("A new tp {} terminating Link {} has been added  to TAPI-SBI-ABS-NODE into {} layer.",
                 tpName, linkId, StringConstants.OPENROADM_TOPOLOGY);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to create new tp {} terminating link {} on TAPI-SBI-ABS-NODE ", tpName, linkId, e);
             return null;
         }
@@ -316,6 +328,9 @@ final class OrdLink {
                     return tpOpt.orElseThrow();
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
                         StringConstants.OPENROADM_TOPOLOGY, e);
             }

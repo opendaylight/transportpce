@@ -85,6 +85,9 @@ public class AlarmNotificationListener {
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Exception thrown while reading Logical Connection Point value: ", ex);
         }
         String message = String.join(PIPE,notification.getResource().getDevice().getNodeId().toString(),
