@@ -388,6 +388,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         try {
             forkJoinTask.get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error while deleting service paths!", e);
             return new OtnServicePathOutputBuilder()
                     .setResult("Error while deleting service paths!")
