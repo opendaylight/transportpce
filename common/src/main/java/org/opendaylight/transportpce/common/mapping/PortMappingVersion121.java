@@ -314,7 +314,7 @@ public class PortMappingVersion121 {
                     cp : srgCpEntry.getValue()) {
                 String circuitPackName = cp.getCircuitPackName();
                 List<Ports> portList = getPortList(circuitPackName, nodeId);
-                Collections.sort(portList, new SortPort121ByName());
+                portList.sort(new SortPort121ByName());
                 for (Ports port : portList) {
                     if (!checkPortQual(port, circuitPackName, nodeId)) {
                         continue;

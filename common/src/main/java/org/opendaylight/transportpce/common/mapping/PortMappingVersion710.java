@@ -13,7 +13,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -528,7 +527,7 @@ public class PortMappingVersion710 {
                     cp : srgCpEntry.getValue()) {
                 String circuitPackName = cp.getCircuitPackName();
                 List<Ports> portList = getPortList(circuitPackName, nodeId);
-                Collections.sort(portList, new SortPort710ByName());
+                portList.sort(new SortPort710ByName());
                 for (Ports port : portList) {
                     if (!checkPortQual(port, circuitPackName, nodeId)) {
                         continue;
