@@ -139,6 +139,9 @@ public class NetworkUtilsImpl {
                 .success(new DeleteLinkOutputBuilder().setResult("Link {} deleted successfully").build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("readMdSal: Error writing link {}", input.getLinkId(), e);
             return RpcResultBuilder.<DeleteLinkOutput>failed().buildFuture();
         }
