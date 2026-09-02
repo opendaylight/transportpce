@@ -61,6 +61,7 @@ public class RendererServiceWrapper {
         try {
             notificationPublishService.putNotification(notif);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.info("notification offer rejected : ", e);
         }
     }

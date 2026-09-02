@@ -60,6 +60,9 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Warning addOpenroadmOperationalModesToCatalog CatalogDataStoreOperationsImpl", e);
         }
     }
@@ -77,6 +80,9 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Warning addSpecificOperationalModesToCatalog CatalogDataStoreOperationsImpl", e);
         }
     }
@@ -105,6 +111,9 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
         } catch (IOException e) {
             LOG.error("Error reading openroadm operational mode catalog {}", CATALOG_FILE, e);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error stroging openroadm operational mode catalog {} in the datastore", CATALOG_FILE, e);
         }
     }
