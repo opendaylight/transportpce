@@ -273,6 +273,9 @@ public final class MappingUtilsImpl implements MappingUtils {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);
         }
         return null;
@@ -317,6 +320,9 @@ public final class MappingUtilsImpl implements MappingUtils {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for nodeId {}", nodeId, ex);
         }
         return null;

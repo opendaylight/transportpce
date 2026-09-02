@@ -119,6 +119,9 @@ public class PortMappingImpl implements PortMapping {
             }
             LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint, nodeId);
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", logicalConnPoint,
                 nodeId, ex);
         }
@@ -144,6 +147,9 @@ public class PortMappingImpl implements PortMapping {
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
         }
         return null;
@@ -163,6 +169,9 @@ public class PortMappingImpl implements PortMapping {
             rw.commit().get(1, TimeUnit.SECONDS);
             LOG.info("Mapping {} removed for node '{}'", logicalConnectionPoint, nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error for removing mapping {} for node '{}'", logicalConnectionPoint, nodeId, e);
         }
     }
@@ -186,6 +195,9 @@ public class PortMappingImpl implements PortMapping {
             }
             LOG.warn("Could not find mc-capabilities for logical connection point {} for nodeId {}", mcLcp, nodeId);
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", mcLcp,
                 nodeId, ex);
         }
@@ -247,6 +259,9 @@ public class PortMappingImpl implements PortMapping {
             }
             LOG.warn("Could not find node {} in portmapping.", nodeId);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get node {} in portmapping", nodeId, e);
         }
         return null;
@@ -290,6 +305,9 @@ public class PortMappingImpl implements PortMapping {
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
         }
         return null;

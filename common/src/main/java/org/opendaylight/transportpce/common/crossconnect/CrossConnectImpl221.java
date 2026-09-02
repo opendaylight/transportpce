@@ -88,6 +88,9 @@ public class CrossConnectImpl221 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return Optional.empty();
         }
@@ -118,6 +121,9 @@ public class CrossConnectImpl221 {
                     spectrumInformation.getHigherSpectralSlotNumber());
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to post {}. Exception: ", rdmConn, e);
         }
         return Optional.empty();
@@ -153,6 +159,9 @@ public class CrossConnectImpl221 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return null;
         }
@@ -168,6 +177,9 @@ public class CrossConnectImpl221 {
             LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);
             return interfList;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to delete {}", connectionName, e);
         }
         return null;
@@ -213,6 +225,9 @@ public class CrossConnectImpl221 {
                 LOG.info("{} - Circuit pack {} - Port {}", nodeId, port.getCircuitPackName(), port.getPortName());
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Exception caught", e);
         }
         return ports == null ? Collections.emptyList() : ports;
@@ -244,6 +259,9 @@ public class CrossConnectImpl221 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get transaction for device {}!", deviceId, e);
             return false;
         }
@@ -261,6 +279,9 @@ public class CrossConnectImpl221 {
             LOG.info("Roadm connection power level successfully set ");
             return true;
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to post {}", newRdmConn, ex);
         }
         return false;
@@ -294,6 +315,9 @@ public class CrossConnectImpl221 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return Optional.empty();
         }
@@ -327,6 +351,9 @@ public class CrossConnectImpl221 {
             LOG.info("Otn-connection successfully created: {}", oduXConnectionName);
             return Optional.of(oduXConnectionName);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to post {}.", oduConnection, e);
         }
         return Optional.empty();

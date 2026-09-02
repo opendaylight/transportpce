@@ -245,6 +245,9 @@ public class PortMappingVersion221 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG,
                 nodeId, PortMappingUtils.UPDATE, oldMapping.getLogicalConnectionPoint(), e);
             return false;
@@ -766,6 +769,9 @@ public class PortMappingVersion221 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
