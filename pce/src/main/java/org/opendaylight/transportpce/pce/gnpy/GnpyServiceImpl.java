@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -147,7 +146,7 @@ public class GnpyServiceImpl {
         if (listAtoZ.isEmpty()) {
             extractHardConstraints(pceHardConstraints);
         } else {
-            Collections.sort(listAtoZ, atoZComparator);
+            listAtoZ.sort(atoZComparator);
             extractRouteObjectIcludeAtoZ(listAtoZ);
         }
 
@@ -187,7 +186,7 @@ public class GnpyServiceImpl {
         if (listZtoA.isEmpty()) {
             extractHardConstraints(pceHardConstraints);
         } else {
-            Collections.sort(listZtoA, ztoAComparator);
+            listZtoA.sort(ztoAComparator);
             extractRouteObjectIcludeZtoA(listZtoA);
         }
 
