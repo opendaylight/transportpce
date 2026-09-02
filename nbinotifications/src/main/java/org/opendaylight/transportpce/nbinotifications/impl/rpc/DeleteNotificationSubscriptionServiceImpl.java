@@ -84,6 +84,9 @@ public class DeleteNotificationSubscriptionServiceImpl implements DeleteNotifica
                 .success(new DeleteNotificationSubscriptionServiceOutputBuilder().build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete Notification subscription service", e);
         }
         return RpcResultBuilder.<DeleteNotificationSubscriptionServiceOutput>failed()

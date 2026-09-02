@@ -110,6 +110,9 @@ public class GetNotificationListImpl implements GetNotificationList {
                 .success(new GetNotificationListOutputBuilder().setNotification(notificationMap).build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to get Notifications from Kafka", e);
         }
         return RpcResultBuilder.<GetNotificationListOutput>failed()
