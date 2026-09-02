@@ -70,6 +70,9 @@ public class RollbackProcessor {
                 task.call();
             //this method prototype only uses the generic Exception but no specific and useable subclass
             } catch (Exception e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("ERROR: Rollback task {} has failed", task.getId(), e);
             }
         }

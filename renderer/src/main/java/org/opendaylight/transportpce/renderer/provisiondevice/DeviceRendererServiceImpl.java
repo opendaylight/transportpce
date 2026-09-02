@@ -394,6 +394,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         try {
             forkJoinTask.get();
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("Error while setting up service paths! Process was interrupted.", e);
             if (results.isEmpty()) {
                 results.add("Setup service path failed! Process was unexpectedly interrupted.");
@@ -416,6 +417,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             ServiceListTopology topology = new ServiceListTopology();
             setTopologyForService(input.getServiceName(), topology.getTopology());
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
         }
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
@@ -535,6 +539,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         try {
             forkJoinTask.get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error while deleting service paths!", e);
         }
         forkJoinPool.shutdown();
@@ -794,6 +801,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.info("Nodes are register for alarm suppression for service: {}", input.getServiceName());
             return true;
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to alarm suppresslist for service: {}", input.getServiceName(), e);
             return false;
         }
@@ -813,6 +823,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.info("Nodes are unregister for alarm suppression for service: {}", serviceName);
             return true;
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to alarm suppresslist for service: {}", serviceName, e);
             return false;
         }
@@ -879,6 +892,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 Thread.sleep(10000);
                 this.portMapping.updateMapping(input.getNodeId(), oldMapping);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 LOG.error("Failed to wait for post interface operation");
             }
             count++;
