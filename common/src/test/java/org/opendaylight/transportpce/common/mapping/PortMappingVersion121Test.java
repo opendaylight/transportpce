@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -473,8 +473,8 @@ public class PortMappingVersion121Test {
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(mappingValues.get(i).getLogicalConnectionPoint());
         }
-        Collections.sort(testMappings);
-        Collections.sort(mappings);
+        testMappings.sort(Comparator.naturalOrder());
+        mappings.sort(Comparator.naturalOrder());
         assertEquals(testMappings, mappings, "test mapping are equals to mapping");
 
         // test updateMapping
@@ -641,8 +641,8 @@ public class PortMappingVersion121Test {
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(mappingValues.get(i).getLogicalConnectionPoint());
         }
-        Collections.sort(testMappings);
-        Collections.sort(mappings);
+        testMappings.sort(Comparator.naturalOrder());
+        mappings.sort(Comparator.naturalOrder());
         assertEquals(testMappings, mappings, "test mapping are equals to mapping");
     }
 
