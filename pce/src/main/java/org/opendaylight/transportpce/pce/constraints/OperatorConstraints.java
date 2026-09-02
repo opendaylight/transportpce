@@ -121,6 +121,9 @@ public class OperatorConstraints {
                 return referenceBitSet;
             }
         } catch (InterruptedException | ExecutionException e1) {
+            if (e1 instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Exception caught handling Spectrum filling Rules ", e1.getCause());
         }
         LOG.info("Did not succeed finding any Specific Spectrum filling Rules defined in Configuration Datastore");

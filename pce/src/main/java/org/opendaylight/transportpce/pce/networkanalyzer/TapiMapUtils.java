@@ -171,6 +171,9 @@ public final class TapiMapUtils {
                             .build())
                     .get();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("TapiMapUtils:extractOppositeLink : Failed to find in Tapi Context/connectivity-context"
                     + " opposite connection {}", oppLinkName, e);
                 return null;
@@ -199,6 +202,9 @@ public final class TapiMapUtils {
                             .build())
                     .get();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("TapiMapUtils:extractOppositeLink :Failed to find in Topology {} opposite link {}",
                     tapiTopoUuid, oppLinkName, e);
                 return null;

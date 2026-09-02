@@ -400,6 +400,9 @@ public class PceCalculation {
                         conContIID);
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("PceCalculation:readMdSalTapi : Error reading ConnectivityContext {}", conContIID, e);
                 returnStructure.error("Unexpected error occurred while reading ConnectivityContext"
                     + "from internal data store.");
@@ -451,6 +454,9 @@ public class PceCalculation {
                 LOG.debug("PceCalculation:readTopology : network nodes: nwOptional.isPresent = true {}", nw);
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("PceCalculation:readTopology : Error reading topology {}", nwInstanceIdentifier, e);
             returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }
@@ -469,6 +475,9 @@ public class PceCalculation {
                 LOG.debug("readMdSalTapi: T-API Topology: topoOptional.isPresent = true {}", topoIID);
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("PceCalculation:readTapiTopology : Error reading topology {}", topoIID, e);
             returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }

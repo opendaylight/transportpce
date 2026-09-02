@@ -904,6 +904,9 @@ public class PostAlgoPathValidator {
                 return opMode;
             }
         } catch (InterruptedException | ExecutionException e1) {
+            if (e1 instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.debug("Issue accessing the XponderNetworkAttributes of {} for Transponder {}"
                 + " corresponding to path Element {} in the path ",
                 nwTpId, currentNode.getNodeId().getValue(), pathElement, e1);
