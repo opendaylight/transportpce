@@ -152,6 +152,9 @@ public class NbiNotificationsProvider {
             }
             LOG.debug("notification context is empty");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Caught exception getting Notification Context", e);
         }
         LOG.error("Could not get TAPI notification context");
@@ -169,6 +172,9 @@ public class NbiNotificationsProvider {
             this.networkTransactionService.commit().get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Could not update TAPI notification context", e);
         }
         return false;
