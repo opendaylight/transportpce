@@ -137,6 +137,9 @@ public class TapiContext {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI context created successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to create TAPI context", e);
         }
     }
@@ -155,6 +158,9 @@ public class TapiContext {
             }
             return optionalContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read tapi context from datastore", e);
             return null;
         }
@@ -182,6 +188,9 @@ public class TapiContext {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI topology merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI topology", e);
         }
     }
@@ -197,6 +206,9 @@ public class TapiContext {
             this.networkTransactionService.commit().get();
             LOG.info("{} TAPI SIPs merged successfully.", sipMap.size());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI SIPs", e);
         }
     }
@@ -222,6 +234,9 @@ public class TapiContext {
             LOG.debug("TAPI connectivity merged successfully for services {}",
                 connServMap.entrySet().iterator().next().getKey());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI connectivity", e);
         }
     }
@@ -276,6 +291,9 @@ public class TapiContext {
                     cepName(cep),
                     Optional.ofNullable(cepList.getConnectionEndPoint()).orElse(Collections.emptyMap()).size());
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldn't update cep in topology", e);
         }
     }
@@ -456,6 +474,9 @@ public class TapiContext {
                     return topoUuid;
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.info("GetTopoUuidFromNode in tapiContext: unable to retrieve topoUuid from Node {} raise exception",
                     nodeUuid, e);
             }
@@ -516,6 +537,9 @@ public class TapiContext {
                 onepMap.size());
             return new NodeBuilder(node).setOwnedNodeEdgePoint(onepMap).build();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read node in topology", e);
             return null;
         }
@@ -544,6 +568,9 @@ public class TapiContext {
             }
             return optNode.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read NEP in topology", e);
             return null;
         }
@@ -568,6 +595,9 @@ public class TapiContext {
             }
             return optLink.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read link in topology", e);
             return null;
         }
@@ -589,6 +619,9 @@ public class TapiContext {
             }
             return optTopoContext.orElseThrow().getTopology();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read topology context", e);
             return null;
         }
@@ -613,6 +646,9 @@ public class TapiContext {
             }
             return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Connectivity service not found in tapi context. Error:", e);
             return null;
         }
@@ -650,6 +686,9 @@ public class TapiContext {
             this.networkTransactionService.commit().get();
             LOG.info("Connectivity service deleted");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete Connectivity service", e);
         }
     }
@@ -717,6 +756,9 @@ public class TapiContext {
                     .build());
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI Connection", e);
         }
     }
@@ -785,6 +827,9 @@ public class TapiContext {
             }
             return optConn.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Connection not found in tapi context. Error:", e);
             return null;
         }
@@ -809,6 +854,9 @@ public class TapiContext {
             }
             return optConnContext.orElseThrow().getConnectivityService();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Connectivity context not found in tapi context. Error:", e);
             return null;
         }
@@ -844,6 +892,9 @@ public class TapiContext {
                 .getConnectionEndPoint()
                 .get(new ConnectionEndPointKey(cepUuid));
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read node in topology", e);
             return null;
         }

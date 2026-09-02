@@ -593,6 +593,9 @@ public class TapiLinkImpl implements TapiLink {
             //return link
             return link.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Link data from Datastore",e);
         }
         return null;
@@ -779,6 +782,9 @@ public class TapiLinkImpl implements TapiLink {
                 .filter(supn -> supn.getKey().getNetworkRef().getValue().equals(StringConstants.OPENROADM_NETWORK))
                 .findFirst().orElseThrow().getKey().getNodeRef().getValue();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("TAPILINKIMPL Failed getting Mapping data from portMapping",e);
         }
         return null;
@@ -880,6 +886,9 @@ public class TapiLinkImpl implements TapiLink {
             return onepOperState.equals(optionalOnep1.orElseThrow().getOperationalState())
                 ? onepOperState.getName() : OperationalState.DISABLED.getName();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
         }
@@ -939,6 +948,9 @@ public class TapiLinkImpl implements TapiLink {
             return onepAdminState.equals(optionalOnep1.orElseThrow().getAdministrativeState())
                 ? onepAdminState.getName() : AdministrativeState.UNLOCKED.getName();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
         }

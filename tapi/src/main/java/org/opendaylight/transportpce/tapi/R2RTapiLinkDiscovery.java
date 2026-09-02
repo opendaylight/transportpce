@@ -286,6 +286,9 @@ public class R2RTapiLinkDiscovery {
                     nodeId.getValue(),interfaceName);
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for Interface : {} for nodeId {}", interfaceName, nodeId, ex);
         }
         return null;
@@ -309,6 +312,9 @@ public class R2RTapiLinkDiscovery {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Mapping data from portMapping",e);
         }
         return Direction.NotApplicable;
