@@ -235,6 +235,9 @@ public class R2RLinkDiscovery {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed getting Mapping data from portMapping",e);
         }
         return Direction.NotApplicable;
@@ -418,6 +421,9 @@ public class R2RLinkDiscovery {
                     nodeId.getValue());
             }
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read mapping for Interface : {} for nodeId {}", interfaceName, nodeId, ex);
         }
         return null;

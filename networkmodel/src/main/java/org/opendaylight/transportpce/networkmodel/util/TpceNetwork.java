@@ -62,6 +62,9 @@ public class TpceNetwork {
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("{} network layer created successfully.", networkId);
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to create {} network layer", networkId, e);
         }
     }
