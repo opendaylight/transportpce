@@ -371,6 +371,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY, e);
             return Collections.emptyList();
         }
@@ -619,6 +622,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         } catch (ExecutionException e) {
             LOG.error("ExecutionException while getting future map", e);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("InterruptedException while getting future map", e);
         }
         return Map.of();
@@ -765,6 +769,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error on getRealNodeId {} :", mappedNodeId, e);
             throw new IllegalStateException(e);
         }
@@ -800,6 +807,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
             return linkOptional.orElseThrow();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         }
