@@ -201,6 +201,9 @@ public final class PowerMgmtVersion710 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get transaction for device {} during transponder power setup!", nodeId, e);
             return false;
         }
@@ -216,6 +219,9 @@ public final class PowerMgmtVersion710 {
             LOG.info("Transponder Power update is committed");
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Setting transponder power failed: ", e);
         }
         return false;
@@ -266,6 +272,9 @@ public final class PowerMgmtVersion710 {
             }
             deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get transaction for device {}!", deviceId, e);
             return false;
         }
@@ -282,6 +291,9 @@ public final class PowerMgmtVersion710 {
             LOG.info("Roadm connection power level successfully set ");
             return true;
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Failed to post {}", newRdmConn, ex);
         }
         return false;

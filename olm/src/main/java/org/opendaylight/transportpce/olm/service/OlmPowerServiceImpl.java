@@ -622,6 +622,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         } catch (ExecutionException e) {
             LOG.error("ExecutionException while getting future map", e);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("InterruptedException while getting future map", e);
         }
         return Map.of();
