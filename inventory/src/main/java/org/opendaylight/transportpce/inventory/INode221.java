@@ -176,6 +176,9 @@ public class INode221 {
             LOG.debug("iNode persist Connection Map call complete");
 
         } catch (SQLException | InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Something wrong when storing node into DB", e);
         }
         return sqlResult;
