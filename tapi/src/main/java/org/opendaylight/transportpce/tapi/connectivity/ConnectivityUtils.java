@@ -938,15 +938,15 @@ public final class ConnectivityUtils {
                 .orElseThrow().getSupportingServiceName())
                 .map(set -> set.stream().sorted().collect(Collectors.toList()))
                 .orElseGet(Collections::emptyList);
-        if (supServiceList == null) {
+        if (supServiceList.isEmpty()) {
             LOG.debug("CU:populateServiceInConnectionVsServiceAtInit : Population of ConnectionVsServices for service "
                 + "{}, Initial list of Services = {}", serviceName, this.servicesMap);
             return;
         }
         Map<String, Integer> supServiceMap = new HashMap<>();
         for (String supServiceName : supServiceList) {
-            Set<String> sup2ServList = getServiceFromServiceName(supServiceName).orElseThrow()
-                .getSupportingServiceName();
+            Set<String> sup2ServList = Optional.ofNullable(getServiceFromServiceName(supServiceName).orElseThrow()
+                .getSupportingServiceName()).orElseGet(Collections::emptySet);
             // We fill supServiceMap with the supporting service name, and a number which is inversely proportional to
             // the number of supporting services (to sort the list at a later step form highest to lowest number of
             // supported services.
