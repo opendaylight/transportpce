@@ -202,6 +202,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             LOG.info("Now going in sleep mode");
                             Thread.sleep(timer1);
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                             LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                             // FIXME shouldn't it be LOG.warn  or LOG.error?
                             // or maybe this try/catch block can simply be removed
@@ -282,6 +283,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             return false;
                         }
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         LOG.error("Olm-setPower wait failed :", e);
                         errorSubscriber.error("Olm-setPower wait failed: " + e.getMessage());
                         return false;
@@ -597,6 +599,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         // FIXME a return false would allow sync with DEG case but makes current Unit tests fail
                 }
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 // TODO Auto-generated catch block
                 LOG.error("Olm-powerTurnDown wait failed: ",e);
                 return false;
