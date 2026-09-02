@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f247a866_d65bec9b",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-02T17:25:22Z",
+      "side": 1,
+      "message": "List.of() or Collections.singletonList() would work better here",
+      "range": {
+        "startLine": 98,
+        "startChar": 40,
+        "endLine": 98,
+        "endChar": 53
+      },
+      "revId": "97b0eec94c6d60110d2e54fb844e8c9533e69622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdcf8dc7_5de8e3bb",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-02T17:25:22Z",
+      "side": 1,
+      "message": "non-null items: Map.entry() is the best way to construct this",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 63
+      },
+      "revId": "97b0eec94c6d60110d2e54fb844e8c9533e69622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
