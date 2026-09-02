@@ -244,6 +244,9 @@ public class PceConstraintsCalc {
                 }
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(
                 "PCE diversity constraints: Exception while getting path description from datastore {} for service {}!",
                 pathDescriptionIID,serviceName, e);

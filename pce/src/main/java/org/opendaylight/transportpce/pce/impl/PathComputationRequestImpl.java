@@ -35,6 +35,9 @@ public class PathComputationRequestImpl implements PathComputationRequest {
         try {
             return RpcResultBuilder.success(pathComputationService.pathComputationRequest(input).get()).buildFuture();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("RPC path computation request failed !", e);
         }
         return RpcResultBuilder.<PathComputationRequestOutput>failed()

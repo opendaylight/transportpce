@@ -534,6 +534,9 @@ public class PceGraph {
             tp = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get().orElseThrow();
 
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error when trying to read TP : {} of TAPI-SBI-ABS-NODE", tpId, e);
         }
         return tp;
