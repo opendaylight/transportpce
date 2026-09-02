@@ -55,6 +55,9 @@ public class OCMetaDataTransactionImpl implements OCMetaDataTransaction {
                 LOG.debug("Found OpenTerminalMetaData {} in Md-Sal.", terminalMetaData);
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to get open-terminal-meta-data from Md-Sal", e);
         }
         return  terminalMetaData;

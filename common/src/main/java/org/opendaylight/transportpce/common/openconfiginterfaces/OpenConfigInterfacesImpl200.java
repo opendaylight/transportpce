@@ -56,6 +56,9 @@ public class OpenConfigInterfacesImpl200 {
                             + " not found for node %s!", nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenConfigInterfacesException(String.format("Failed to obtain device transaction for "
                         + "node %s!", nodeId), e);
             }
@@ -72,6 +75,7 @@ public class OpenConfigInterfacesImpl200 {
                         Thread.sleep(3000);
                         current.interrupt();
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         LOG.error("Timeout while configuring the component", e);
                     }
                 }
@@ -81,6 +85,9 @@ public class OpenConfigInterfacesImpl200 {
                 LOG.debug("Successfully updated the component {} on node {}", componentBuilder.getName(), nodeId);
                 timer.interrupt();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenConfigInterfacesException(String.format("Failed to configure component %s on node %s!",
                         componentBuilder.getName(), nodeId), e);
             }
@@ -101,6 +108,9 @@ public class OpenConfigInterfacesImpl200 {
                             + " not found for node %s!", nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenConfigInterfacesException(String.format("Failed to obtain device transaction for "
                         + "node %s!", nodeId), e);
             }
@@ -117,6 +127,7 @@ public class OpenConfigInterfacesImpl200 {
                         Thread.sleep(3000);
                         current.interrupt();
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         LOG.error("Timeout while configuring the interface",e);
                     }
                 }
@@ -126,6 +137,9 @@ public class OpenConfigInterfacesImpl200 {
                 LOG.info("Successfully updated the interface {} on node {}", interfaceBuilder.getName(), nodeId);
                 timer.interrupt();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 throw new OpenConfigInterfacesException(String.format("Failed to configure interface %s on node %s",
                         interfaceBuilder.getName(), nodeId), e);
             }

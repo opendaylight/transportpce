@@ -238,6 +238,9 @@ public class PortMappingVersion710 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG,
                 nodeId, PortMappingUtils.UPDATE, oldMapping.getLogicalConnectionPoint(), e);
             return false;
@@ -254,6 +257,9 @@ public class PortMappingVersion710 {
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             portmappingNode = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingNodeIID).get().orElseThrow();
         } catch (InterruptedException | ExecutionException ex) {
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Unable to read the port-mapping for nodeId {}", nodeId, ex);
         }
         if (portmappingNode == null) {
@@ -849,6 +855,9 @@ public class PortMappingVersion710 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
