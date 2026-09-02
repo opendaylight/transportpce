@@ -161,7 +161,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
-            boolean isOpenConfig = false;
             String nodeId = node.getNodeId();
             LOG.info("Starting provisioning for node : {}", nodeId);
             AEndApiInfo apiInfoA = null;
@@ -180,7 +179,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             int crossConnectFlag = 0;
 
             Set<String> portIds = new HashSet<>();
-
+            boolean isOpenConfig = false;
             try {
                 // if the node is currently mounted then proceed
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {

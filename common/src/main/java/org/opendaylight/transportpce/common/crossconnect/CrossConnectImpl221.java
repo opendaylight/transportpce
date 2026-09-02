@@ -178,7 +178,6 @@ public class CrossConnectImpl221 {
             String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
         Optional<MountPoint> mountPointOpt = deviceTransactionManager.getDeviceMountPoint(nodeId);
-        List<Ports> ports = null;
         if (mountPointOpt.isEmpty()) {
             LOG.error("Failed to obtain mount point for device {}!", nodeId);
             return Collections.emptyList();
@@ -200,6 +199,7 @@ public class CrossConnectImpl221 {
             LOG.warn("Port trail is null in getConnectionPortTrail for nodeId {}", nodeId);
             return Collections.emptyList();
         }
+        List<Ports> ports = null;
         try {
             RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();
             GetConnectionPortTrailOutput connectionPortTrailOutput = connectionPortTrailOutputRpcResult.getResult();
