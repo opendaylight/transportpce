@@ -155,6 +155,9 @@ public final class TopologyDataUtils {
                     return tpOpt.orElseThrow();
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Impossible read operational datastore", e);
             }
         }

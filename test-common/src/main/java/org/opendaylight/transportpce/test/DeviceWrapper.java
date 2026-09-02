@@ -141,6 +141,9 @@ public final class DeviceWrapper {
         try {
             writeOnlyTransaction.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("This should be not reached ", e);
             throw new IllegalStateException(e);
         }
