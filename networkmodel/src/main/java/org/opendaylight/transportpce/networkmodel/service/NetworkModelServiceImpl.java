@@ -169,6 +169,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
             LOG.info("all nodes and links created");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("ERROR: ", e);
         }
     }
@@ -196,6 +199,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error adding openconfig node in openroadm network layers", e);
         }
     }
@@ -311,6 +317,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 otnTopologyLinks = otnTopology.augmentation(Network1.class).getLink();
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error when trying to update node : {}", nodeId, e);
         }
         if (openroadmTopology == null || otnTopology == null) {
@@ -404,6 +413,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             networkTransactionService.commit().get();
             sendNotification();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error updating openroadm-topology", e);
         }
     }
@@ -471,6 +483,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error adding OTN links in otn-topology", e);
         }
         LOG.info("OTN links created");
@@ -561,6 +576,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error deleting OTN links in otn-topology", e);
         }
         LOG.info("OTN links deletion terminated");
@@ -643,6 +661,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error updating OTN links in otn-topology", e);
         }
     }
@@ -671,6 +692,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error adding OTN links in otn-topology", e);
         }
         LOG.info("OTN links updated");
@@ -746,6 +770,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error adding TAPI-SBI-ABS-NODE in OpenROADM topology", e);
         }
         LOG.info("TAPI-SBI-ABS-NODE added to OpenROADM topology");
@@ -834,6 +861,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error trying to delete TAPI-SBI-ABS-NODE and associated Links at {} Level in Datastore",
                 networkLayer,e);
         }
@@ -998,6 +1028,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         links.add(linkOptLf.get().orElseThrow());
                     }
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                        LOG.error("Interrupted while retrieving OTN links from OTN-topology", e);
+                        return links;
+                    }
                     LOG.error("Error retreiving OTN links from otn-topology", e);
                 }
             } else {
@@ -1057,6 +1092,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 tpAOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpA).get();
                 tpZOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpZ).get();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Error retreiving tp {} of node {} or tp {} from node {} from otn-topology", tpA, nodeTopoA,
                     tpZ, nodeTopoZ, e);
             }
@@ -1090,6 +1128,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         tps.add(tpOpt.orElseThrow());
                     }
                 } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                        LOG.error("Interrupted while retrieving OTN termination points from OTN-topology", e);
+                        return tps;
+                    }
                     LOG.error("Error retreiving tp {} of node {} from otn-topology", tp, nodeId, e);
                 }
             } else {
@@ -1113,6 +1156,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error deleting OTN links from otn-topology", e);
         }
     }
@@ -1129,6 +1175,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             try {
                 netw1Opt = netw1Fl.get();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Error retreiving list of links from otn-topology", e);
             }
         }
@@ -1207,6 +1256,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             notificationPublishService.putNotification(this.notification);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("Notification offer rejected. Error={}", e.getMessage());
         }
     }
