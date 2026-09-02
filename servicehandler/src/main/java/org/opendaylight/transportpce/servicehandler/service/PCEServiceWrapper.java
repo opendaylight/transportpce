@@ -170,6 +170,7 @@ public class PCEServiceWrapper {
         try {
             notificationPublishService.putNotification(notification);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
         }
         FutureCallback<PathComputationRequestOutput> pceCallback =
@@ -216,6 +217,9 @@ public class PCEServiceWrapper {
         try {
             return res.get();
         } catch (ExecutionException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("PerformPCEReroute FAILED ! ", e);
             return new PathComputationRerouteRequestOutputBuilder()
                     .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
@@ -305,6 +309,7 @@ public class PCEServiceWrapper {
         try {
             notificationPublishService.putNotification(notification);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
         }
         FutureCallback<CancelResourceReserveOutput> pceCallback =
@@ -383,6 +388,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
                 }
             } else {
@@ -392,6 +398,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
                 }
             }
@@ -406,6 +413,7 @@ public class PCEServiceWrapper {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
             }
         }
@@ -437,6 +445,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
                 }
             } else {
@@ -446,6 +455,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
                 }
             }
@@ -461,6 +471,7 @@ public class PCEServiceWrapper {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
             }
         }
