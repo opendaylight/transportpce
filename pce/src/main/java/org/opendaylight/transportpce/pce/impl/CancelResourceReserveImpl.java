@@ -36,6 +36,9 @@ public class CancelResourceReserveImpl implements CancelResourceReserve {
                     .success(this.pathComputationService.cancelResourceReserve(input).get())
                     .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("RPC cancelResourceReserve failed !", e);
         }
         return RpcResultBuilder.<CancelResourceReserveOutput>failed()

@@ -126,6 +126,7 @@ public class PceSendingPceRPCs {
             // sleep for 10s
             Thread.sleep(10000);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("in PCESendingPceRPC: ",e);
         }
         success = true;
