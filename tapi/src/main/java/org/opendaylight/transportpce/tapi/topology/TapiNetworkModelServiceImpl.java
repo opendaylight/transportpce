@@ -456,6 +456,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .setUuid(tapiTopoUuid)
                     .build());
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.error("Could not send notification");
         }
     }
@@ -548,6 +549,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.info("AffectedLinksNb = {} ", nbAffectedLinks);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Could not update TAPI links", e);
         }
     }
@@ -598,6 +602,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 this.networkTransactionService.commit().get();
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Could not update TAPI NEP", e);
             }
         }
@@ -765,6 +772,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         // TODO Auto-generated catch block
                         LOG.debug("TNMSI:transformSrgToOnep :Waiting until PP is backported in Topology,"
                             + " Exception raised", e);
@@ -856,6 +864,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
             topology = optTopology.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read tapi topology from datastore", e);
         }
         if (topology == null) {
@@ -910,6 +921,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
             context = optContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read tapi context from datastore", e);
         }
         if (context == null) {
@@ -1882,6 +1896,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error populating TAPI topology: ", e);
         }
         LOG.info("Saved {} tapi node(s) in TAPI topology context in the datastore: {}",
@@ -1914,6 +1931,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.commit().get();
 
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error populating TAPI topology: ", e);
         }
         LOG.info("Node added succesfully.");
@@ -1939,6 +1959,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     this.tapiTopoUuid.getValue(),
                     linkNames(linkMap));
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error while merging links into TAPI topology, failed saving {}: ", linkNames(linkMap), e);
         }
     }
@@ -1964,6 +1987,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIPs merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI Sips", e);
         }
     }
@@ -1981,6 +2007,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI link deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI link", e);
         }
     }
@@ -1998,6 +2027,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI Node deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI Node", e);
         }
     }
@@ -2013,6 +2045,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIP deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI SIP", e);
         }
     }
@@ -2036,6 +2071,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
             connContext = optConnContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read connectivity context from datastore", e);
         }
         if (connContext == null) {
@@ -2090,6 +2128,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error committing into datastore", e);
         }
     }
@@ -2108,6 +2149,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Error committing into datastore", e);
         }
     }

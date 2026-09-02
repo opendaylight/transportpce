@@ -292,6 +292,9 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
                 networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, orTopologyTpIID);
                 networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Error trying to delete tp  {} from TAPI-SBI-ABS-NODE in Datastore Topology {}",
                     onepTpId, netLayer,e);
                 uncounteredIssue = true;
@@ -347,6 +350,9 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
                 this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
                 LOG.info("update tp {} in TAPI-SBI-ABS-NODE at {} layer! ", onepTpId, netLayer);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Error trying to update tp {} in TAPI-SBI-ABS-NODE at {} layer!", onepTpId, netLayer,e);
                 uncounteredIssue = true;
             }

@@ -198,6 +198,9 @@ public class TapiRendererNotificationHandler {
             }
             return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI connectivity", e);
             return null;
         }
@@ -236,6 +239,9 @@ public class TapiRendererNotificationHandler {
             LOG.info("TAPI connection merged successfully.");
 
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI connection", e);
         }
     }
@@ -263,6 +269,9 @@ public class TapiRendererNotificationHandler {
             this.networkTransactionService.commit().get();
             LOG.info("TAPI connectivity service merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to merge TAPI connectivity service", e);
         }
     }
@@ -279,6 +288,9 @@ public class TapiRendererNotificationHandler {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectivityServIID);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI connectivity service", e);
         }
     }
@@ -301,6 +313,9 @@ public class TapiRendererNotificationHandler {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectionIID);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI connection", e);
         }
     }

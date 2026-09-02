@@ -104,6 +104,9 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
                     .buildFuture();
             }
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete service.", e);
             return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
                     .withError(ErrorType.RPC, "Failed to delete Service")
