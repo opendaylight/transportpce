@@ -8,12 +8,16 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import com.google.common.annotations.VisibleForTesting;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
@@ -37,6 +41,10 @@ public class TapiInitialORMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiInitialORMapping.class);
     private static final int LOGGED_SERVICE_NAMES = 10;
+    private static final Comparator<Services> BY_SERVICE_FORMAT =
+        Comparator.comparing((Services serv) -> serv.getServiceAEnd().getServiceFormat().getName())
+            .reversed()
+            .thenComparing(Services::getServiceName);
     private final TapiContext tapiContext;
     private final TopologyUtils topologyUtils;
     private final ConnectivityUtils connectivityUtils;
@@ -98,7 +106,7 @@ public class TapiInitialORMapping {
             return false;
         }
 
-        List<Services> orderedServices = sortByServiceFormat(orServices);
+        List<Services> orderedServices = sortBySupportingServices(orServices);
 
         List<String> firstServiceNames =
             orderedServices.stream().map(Services::getServiceName).limit(LOGGED_SERVICE_NAMES).toList();
@@ -137,24 +145,85 @@ public class TapiInitialORMapping {
     }
 
     /**
-     * Orders services for TAPI mapping: OTU first, then ODU, then DSR.
+     * Orders services so that supporting services in the batch are mapped before the services
+     * that depend on them, while keeping each service stack together.
      *
-     * <p>Each service depends on mapping state created by the layer below it, so mapping
-     * them out of order may produce incomplete connections. Descending service-format
-     * names happen to provide the required order. Service names provide deterministic
-     * ordering when formats are equal.
+     * <p>Services involved in or dependent on a cycle are appended in service-format order.
      *
      * @param services the services to order
-     * @return services ordered by descending format name, then ascending service name
+     * @return the services in mapping order
      */
     @VisibleForTesting
-    static List<Services> sortByServiceFormat(ServiceList services) {
-        List<Services> orderedServices = new ArrayList<>(services.nonnullServices().values());
-        orderedServices.sort(Comparator.comparing(
-                        (Services serv) -> serv.getServiceAEnd().getServiceFormat().getName())
-                .reversed()
-                .thenComparing(Services::getServiceName));
+    static List<Services> sortBySupportingServices(ServiceList services) {
+        List<Services> unordered = new ArrayList<>(services.nonnullServices().values());
+        unordered.sort(BY_SERVICE_FORMAT);
+        Set<String> batch = unordered.stream().map(Services::getServiceName).collect(Collectors.toSet());
 
-        return orderedServices;
+        // The services riding on each service, in format order because that is the order they are
+        // collected in, and how many of the services each one rides on are still to be mapped.
+        Map<String, List<Services>> supportedServices = new HashMap<>();
+        Map<String, Integer> pendingSupport = new HashMap<>();
+        for (Services service : unordered) {
+            List<String> supportingServices = supportingServicesIn(batch, service);
+            for (String supportingService : supportingServices) {
+                supportedServices.computeIfAbsent(supportingService, name -> new ArrayList<>()).add(service);
+            }
+            pendingSupport.put(service.getServiceName(), supportingServices.size());
+        }
+
+        // One service stack at a time means depth first: take the services a service unblocks
+        // before the ones that were already waiting, so LIFO rather than FIFO.
+        Deque<Services> ready = new ArrayDeque<>();
+        push(ready, unordered.stream().filter(service -> pendingSupport.get(service.getServiceName()) == 0).toList());
+        List<Services> ordered = new ArrayList<>(unordered.size());
+        while (!ready.isEmpty()) {
+            Services service = ready.pop();
+            ordered.add(service);
+            push(ready, supportedServices.getOrDefault(service.getServiceName(), List.of()).stream()
+                    .filter(supported -> pendingSupport.merge(supported.getServiceName(), -1, Integer::sum) == 0)
+                    .toList());
+        }
+
+        if (ordered.size() < unordered.size()) {
+            // Every service still waiting for a supporting service is in a cycle, or rides on one.
+            List<Services> cyclic = unordered.stream()
+                    .filter(service -> pendingSupport.get(service.getServiceName()) > 0)
+                    .toList();
+            LOG.warn("The supporting services of {} form a cycle, so the order they ride on each other in is not "
+                    + "known. Mapping them by service format instead: {}",
+                cyclic.size(), cyclic.stream().map(Services::getServiceName).toList());
+            ordered.addAll(cyclic);
+        }
+
+        return ordered;
+    }
+
+    /**
+     * Returns the names of the services the given service rides on that are being mapped alongside
+     * it. A supporting service outside the batch orders nothing, so it is left out.
+     *
+     * @param batch the names of the services being mapped
+     * @param service the service whose supporting services to look up
+     * @return the names of the supporting services of the service that are in the batch
+     */
+    private static List<String> supportingServicesIn(Set<String> batch, Services service) {
+        Set<String> supportingServices = service.getSupportingServiceName();
+
+        return supportingServices == null
+            ? List.of()
+            : supportingServices.stream().filter(batch::contains).toList();
+    }
+
+    /**
+     * Pushes services onto the stack in reverse, so that the first of them ends up on top of it and
+     * the stack hands them back in the order they were given in.
+     *
+     * @param stack the stack to push onto
+     * @param services the services to push
+     */
+    private static void push(Deque<Services> stack, List<Services> services) {
+        for (int i = services.size() - 1; i >= 0; i--) {
+            stack.push(services.get(i));
+        }
     }
 }

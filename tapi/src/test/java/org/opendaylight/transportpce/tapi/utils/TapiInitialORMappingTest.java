@@ -161,15 +161,49 @@ class TapiInitialORMappingTest {
     }
 
     @Test
-    void sortByServiceFormat() {
+    void sortBySupportingServicesFallsBackToTheServiceFormat() {
         Services one = createService("service 1", ServiceFormat.ODU);
         Services two = createService("service 2", ServiceFormat.OTU);
         Services three = createService("service 3", ServiceFormat.Ethernet);
         Services four = createService("service 4", ServiceFormat.ODU);
 
-        List<Services> services = TapiInitialORMapping.sortByServiceFormat(serviceList(one, two, three, four));
+        List<Services> services = TapiInitialORMapping.sortBySupportingServices(serviceList(one, two, three, four));
 
         assertEquals(List.of(two, one, four, three), services);
+    }
+
+    @Test
+    void sortBySupportingServicesKeepsEachStackTogether() {
+        Services otuA = createService("otu a", ServiceFormat.OTU);
+        Services oduA = createService("odu a", ServiceFormat.ODU, "otu a");
+        Services dsrA = createService("dsr a", ServiceFormat.Ethernet, "odu a");
+        Services otuB = createService("otu b", ServiceFormat.OTU);
+        Services oduB = createService("odu b", ServiceFormat.ODU, "otu b");
+        Services dsrB = createService("dsr b", ServiceFormat.Ethernet, "odu b");
+
+        List<Services> services = TapiInitialORMapping.sortBySupportingServices(
+                serviceList(dsrB, oduB, otuB, dsrA, oduA, otuA));
+
+        assertEquals(List.of(otuA, oduA, dsrA, otuB, oduB, dsrB), services);
+    }
+
+    @Test
+    void sortBySupportingServicesIgnoresASupportingServiceOutsideTheBatch() {
+        // The single service mapping maps one service without the services it rides on.
+        Services dsr = createService("dsr a", ServiceFormat.Ethernet, "odu a");
+
+        assertEquals(List.of(dsr), TapiInitialORMapping.sortBySupportingServices(serviceList(dsr)));
+    }
+
+    @Test
+    void sortBySupportingServicesMapsTheServicesOfACycleAnyway() {
+        Services one = createService("service 1", ServiceFormat.OTU, "service 2");
+        Services two = createService("service 2", ServiceFormat.ODU, "service 1");
+        Services three = createService("service 3", ServiceFormat.OTU);
+
+        List<Services> services = TapiInitialORMapping.sortBySupportingServices(serviceList(one, two, three));
+
+        assertEquals(List.of(three, one, two), services);
     }
 
     private ServiceList serviceList(Services... services) {
@@ -184,13 +218,15 @@ class TapiInitialORMappingTest {
                 .build();
     }
 
-    private Services createService(String serviceName, ServiceFormat serviceFormat) {
+    private Services createService(String serviceName, ServiceFormat serviceFormat, String... supportingServices) {
         return new ServicesBuilder()
                 .setServiceAEnd(
                         new ServiceAEndBuilder()
                                 .setServiceFormat(serviceFormat)
                                 .build())
                 .setServiceName(serviceName)
+                // A service that rides on nothing leaves supporting-service-name unset, as OpenROADM does.
+                .setSupportingServiceName(supportingServices.length == 0 ? null : Set.of(supportingServices))
                 .build();
     }
 
