@@ -913,6 +913,9 @@ public final class ConnectivityUtils {
             this.networkTransactionService.commit().get();
             LOG.info("NEP {} successfully added to node {} topology {} datastore.", nepName(onep), nodeUuid, topoUuid);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldn't save (i.e. PUT) NEP {} in topology {}, error = ", nepName(onep), topoUuid, e);
         }
     }
@@ -1056,6 +1059,9 @@ public final class ConnectivityUtils {
                   .build())
                 .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("Reading service {} failed:", servName, e);
         }
         return Optional.empty();
@@ -1077,6 +1083,9 @@ public final class ConnectivityUtils {
             LOG.info("Did succeed retrieving NEP {} for node {}", nepUuid, nodeUuid);
             return onep;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt find NEP {} for node {}", nepUuid, nodeUuid, e);
             return null;
         }
@@ -3004,6 +3013,9 @@ public final class ConnectivityUtils {
                     clientPortList.add(key);
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Couldnt read mapping from datastore", e);
                 return null;
             }
@@ -3058,6 +3070,9 @@ public final class ConnectivityUtils {
             LOG.info("ConnectivityUtils 1991 : Connected client ports found for node+port {}+{} = {}",
                 nodeId, tpId, connectedPorts);
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Couldnt read mapping from datastore", e);
             return null;
         }
@@ -3092,6 +3107,9 @@ public final class ConnectivityUtils {
                     openroadmNodeTypeList.add(openroadmNodeType);
                 }
             } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
                 LOG.error("Couldnt read node in topology", e);
                 return null;
             }

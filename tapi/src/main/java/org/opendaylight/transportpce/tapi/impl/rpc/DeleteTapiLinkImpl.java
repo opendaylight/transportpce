@@ -58,6 +58,9 @@ public class DeleteTapiLinkImpl extends AbstractTapiNetworkUtil implements Delet
             return RpcResultBuilder.success(new DeleteTapiLinkOutputBuilder()
                 .setResult("Link successfully deleted from tapi topology").build()).buildFuture();
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.error("Failed to delete TAPI link", e);
             return RpcResultBuilder.<DeleteTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to delete link from topology")
