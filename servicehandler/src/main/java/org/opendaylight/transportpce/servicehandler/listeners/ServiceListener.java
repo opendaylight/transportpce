@@ -214,6 +214,9 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                 LOG.warn("ServiceRerouteStep1 (deletion of the service) failed '{}' http code ", httpResponseCode);
             }
         } catch (ExecutionException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("ServiceRerouteStep1 FAILED ! ", e);
         }
     }
@@ -235,6 +238,9 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                 LOG.warn("ServiceRerouteStep2 (creation of the new service) failed '{}' http code ", httpResponseCode);
             }
         } catch (ExecutionException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("ServiceRerouteStep2 FAILED ! ", e);
         }
         mapServiceInputReroute.remove(serviceNameToReroute);
@@ -263,6 +269,9 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
             return res.get().getResult().getConfigurationResponseCommon().getResponseCode()
                     .equals(ResponseCodes.RESPONSE_OK);
         } catch (ExecutionException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn("ServiceRerouteCheck FAILED ! ", e);
             return false;
         }

@@ -154,7 +154,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             LOG.error("Failed to read services from operational datastore", e);
         } catch (ExecutionException | TimeoutException e) {
             LOG.error("Failed to read services from operational datastore", e);
-
         }
         return Optional.empty();
     }
