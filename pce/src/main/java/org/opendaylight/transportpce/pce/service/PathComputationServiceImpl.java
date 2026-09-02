@@ -111,6 +111,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         try {
             notificationPublishService.putNotification(this.notification);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.info("notification offer rejected: ", e);
         }
     }
