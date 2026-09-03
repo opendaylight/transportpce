@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "554e93e6_644fbf31",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-09-03T06:43:37Z",
+      "side": 1,
+      "message": "Thank you very much for your suggestions",
+      "parentUuid": "f247a866_d65bec9b",
+      "range": {
+        "startLine": 98,
+        "startChar": 40,
+        "endLine": 98,
+        "endChar": 53
+      },
+      "revId": "97b0eec94c6d60110d2e54fb844e8c9533e69622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdcf8dc7_5de8e3bb",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-09-02T17:25:22Z",
       "side": 1,
       "message": "non-null items: Map.entry() is the best way to construct this",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 63
+      },
+      "revId": "97b0eec94c6d60110d2e54fb844e8c9533e69622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67db214b_91414a7b",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-09-03T06:43:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdcf8dc7_5de8e3bb",
       "range": {
         "startLine": 99,
         "startChar": 16,
