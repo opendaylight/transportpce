@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -50,6 +51,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.a
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.networks.network.node.termination.point.TpSupportedInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250530.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -1712,13 +1714,19 @@ public class ORtoTapiTopoConversionTools {
             org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250530.TerminationPoint1.class);
         var oorTpId = oorTp.getTpId();
         var oorTpIdValue = oorTpId.getValue();
-        if (tp1.getTpSupportedInterfaces() == null) {
+        if (tp1 == null || tp1.getTpSupportedInterfaces() == null) {
             LOG.warn("Tp supported interface doesnt exist on TP {}", oorTpIdValue);
-            return null;
+            return new ArrayList<>();
         }
+        TpSupportedInterfaces tpSupportedInterfaces = tp1.getTpSupportedInterfaces();
         Collection<SupportedInterfaceCapability> sicColl =
-            tp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values();
+                Optional.ofNullable(tpSupportedInterfaces.getSupportedInterfaceCapability())
+                        .orElse(new HashMap<>()).values();
         TerminationPoint1 oorTpAug = oorTp.augmentation(TerminationPoint1.class);
+        if (oorTpAug == null) {
+            LOG.warn("Common network TP augmentation doesnt exist on TP {}", oorTpIdValue);
+            return new ArrayList<>();
+        }
         String rate = "100";
         List<OperationalModeKey> opModeList = new ArrayList<>();
         if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -1743,8 +1751,14 @@ public class ORtoTapiTopoConversionTools {
                 opModeList.add(new OperationalModeKey("100G"));
                 LOG.warn(TopologyUtils.NOOPMODEDECLARED + "Assumes that by default, 100G rate available", oorTpId);
             } else {
-                opModeList = tp11.getXpdrNetworkAttributes().getSupportedOperationalModes().getOperationalMode()
-                    .keySet().stream().toList();
+                opModeList = Optional.ofNullable(tp11
+                                .getXpdrNetworkAttributes()
+                                .getSupportedOperationalModes()
+                                .getOperationalMode())
+                        .orElse(new HashMap<>())
+                        .keySet()
+                        .stream()
+                        .toList();
                 if (tp11.getXpdrNetworkAttributes().getRate() != null) {
                     String rateIdentity = tp11.getXpdrNetworkAttributes().getRate().toString();
                     if (rateIdentity.contains("200")) {
@@ -1810,7 +1824,7 @@ public class ORtoTapiTopoConversionTools {
         }
         List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
         if (!keyword.contains(TapiConstants.OTSI_MC) && !keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
-            if (sicColl == null || sicColl.isEmpty()) {
+            if (sicColl.isEmpty()) {
                 onepList.add(onepBldr.build());
                 return onepList;
             }
