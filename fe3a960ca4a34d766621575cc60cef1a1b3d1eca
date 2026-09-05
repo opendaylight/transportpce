@@ -1,4 +1,97 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1788529217 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1788529217-051152E20055FC2008E99011187042374DADC1C4\n\n0000000000000000000000000000000000000000 fe3a960ca4a34d766621575cc60cef1a1b3d1eca refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQJPBAABCAA5FiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmqaykIbFIAAAAAABAAO\nbWFudTIsMi41KzEuMTIsMCwzAAoJEF+9+bkxT61xFYYP/ju71rESBd+GAZOrxuCa\n+eMn8mMCxpzuanV7OwIh71ZoSz2FXzm6C/Mh0lPuzos9TrFCiO6sl54mlQFJqF0D\nE/brMnU4ChK4E6jSRkZuq6UjlDHNxvauqUdt47b+7KqPWStCapUUGE4BnNKQk1G1\n7LXW8exGUuvmZElSlFBLtKcAogv6A+JhUekfNg+MNDCRv8VCAEcWenv9hszD2hgY\nm3+SonASDok+0SpldajYKW3o3xdB7n3m3Ggpq1P3Sv0+R820zStr5MXRdq1fFE+E\nMi7SEy1DAVjhpZjnZh7zqfpxq+0Lx77n8jrS7xXlWxmWFjk8g+LBr1iM6jlZeNkb\n3jR4b6xwQKbd4XYiDIf5UizkCAEBBQQ7PdoY1usvCyQPeWlrqk1jzbl8rqI7I8+4\nA92Z1bgsH+VamiPtHl0oadC2IEPM38y6JAEtoHSfSHBXj5NCrYeiuHSMSQW9mpwZ\nMPd3DAg8LxNXUDmdP3qenN5TxeTeFWNfZ5AUKGpwiNoRJijYJiuhATjNiWMzilFs\nMOFNfHy3TGkkXuMNKsczNrOzHHty4aB/aWeKczAe+JknwQB4Q1G+QKcLOmOjviK0\nkXBLUMWNKynIDG+ofp3VcFHo9GY40vLoVshFp0KTUR6lvxyoY98jJs2R27PV5eo2\no8R5tVvCVHpgORS4YteQIBHI\n\u003dBuiz\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14d5b6e4_5a12892a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-05T18:00:33Z",
+      "side": 1,
+      "message": "LinkedHashSet is a SequencedSet -- and having getFirst() would be useful below",
+      "range": {
+        "startLine": 38,
+        "startChar": 77,
+        "endLine": 38,
+        "endChar": 90
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58bf79f9_c92a3713",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-05T18:00:33Z",
+      "side": 1,
+      "message": "since the Set is internal, I would suggest going the route of explicit synchronization on the set itself rather than wrapping it.",
+      "range": {
+        "startLine": 38,
+        "startChar": 45,
+        "endLine": 38,
+        "endChar": 72
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d752e41c_bd4a9e49",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-05T18:00:33Z",
+      "side": 1,
+      "message": "so here we can just do synchronized (strings) { return strings.getFirst(); }",
+      "range": {
+        "startLine": 64,
+        "startChar": 23,
+        "endLine": 64,
+        "endChar": 30
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd865ac_5ec2fbd4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-09-05T18:00:33Z",
+      "side": 1,
+      "message": "this would be SequencedSet.getLast()",
+      "range": {
+        "startLine": 106,
+        "startChar": 23,
+        "endLine": 106,
+        "endChar": 44
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
