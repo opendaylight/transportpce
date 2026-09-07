@@ -48,6 +48,54 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34fcacff_e6d44a6f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14d5b6e4_5a12892a",
+      "range": {
+        "startLine": 38,
+        "startChar": 77,
+        "endLine": 38,
+        "endChar": 90
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea12190_da100a1f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58bf79f9_c92a3713",
+      "range": {
+        "startLine": 38,
+        "startChar": 45,
+        "endLine": 38,
+        "endChar": 72
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d752e41c_bd4a9e49",
@@ -71,6 +119,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e64e9bf5_93c5ec4f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d752e41c_bd4a9e49",
+      "range": {
+        "startLine": 64,
+        "startChar": 23,
+        "endLine": 64,
+        "endChar": 30
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcd865ac_5ec2fbd4",
@@ -84,6 +156,30 @@
       "writtenOn": "2026-09-05T18:00:33Z",
       "side": 1,
       "message": "this would be SequencedSet.getLast()",
+      "range": {
+        "startLine": 106,
+        "startChar": 23,
+        "endLine": 106,
+        "endChar": 44
+      },
+      "revId": "fe3a960ca4a34d766621575cc60cef1a1b3d1eca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bf88b9c_035cc218",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/observer/EventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd865ac_5ec2fbd4",
       "range": {
         "startLine": 106,
         "startChar": 23,
