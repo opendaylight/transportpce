@@ -49,6 +49,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace43491_c6ebc21d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "396a3dc9_00facd21",
+      "range": {
+        "startLine": 970,
+        "startChar": 0,
+        "endLine": 975,
+        "endChar": 33
+      },
+      "revId": "62cb4ec5609b0aab85b17103cf9971a4653fb05e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fb93872_b0022cbe",
@@ -84,6 +108,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28dd83c4_83d5dc7c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebaf478f_71200e34",
+      "revId": "62cb4ec5609b0aab85b17103cf9971a4653fb05e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cc65eab_a6f51a4b",
@@ -115,6 +157,24 @@
       "side": 1,
       "message": "Will do!",
       "parentUuid": "6cc65eab_a6f51a4b",
+      "revId": "62cb4ec5609b0aab85b17103cf9971a4653fb05e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c47cb31_25db1ac6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-07T05:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e12c9549_0c04bdbf",
       "revId": "62cb4ec5609b0aab85b17103cf9971a4653fb05e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
