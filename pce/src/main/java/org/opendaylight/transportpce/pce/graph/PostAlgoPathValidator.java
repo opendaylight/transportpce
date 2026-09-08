@@ -94,6 +94,10 @@ public class PostAlgoPathValidator {
     private String aendOperationalMode ;
     private String zendOperationalMode;
     private String pceOperMode;
+    // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
+    // and each domains (2NdKey is domain order).
+    private List<Map<Integer, AToZImpairmentsBuilder>> atoZSubPathImpairments = new ArrayList<>();
+    private List<Map<Integer, ZToAImpairmentsBuilder>> ztoASubPathImpairments = new ArrayList<>();
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint,
             ClientInput clientInput) {
@@ -106,9 +110,10 @@ public class PostAlgoPathValidator {
     @SuppressFBWarnings(
         value = "SF_SWITCH_FALLTHROUGH",
         justification = "intentional fallthrough")
-    public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
+    public PceResult checkPath(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
-            String serviceType, PceConstraintMode mode) {
+            String serviceType, PceConstraintMode mode, boolean isPartialPath,
+            PceGraphEdge preceedingEdge, PceGraphEdge followingEdge, Integer npathorder) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -117,6 +122,7 @@ public class PostAlgoPathValidator {
         int spectralWidthSlotNumber =
             GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP.getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
         SpectrumAssignment spectrumAssignment = null;
+        BitSet spectrumOccupation;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_OTUC2:
@@ -133,6 +139,8 @@ public class PostAlgoPathValidator {
                 LOG.info("PostAlgoValidator, checkPath, calling getSpectrumAssignment with spectralWidthSlotNber = {}",
                     spectralWidthSlotNumber);
                 spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber, subscriber);
+                spectrumOccupation = computeSpectrumOccupation(path, allPceNodes, spectralWidthSlotNumber, subscriber,
+                    new CenterFrequencyGranularityCollection(50));
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.ZERO)
                         && spectrumAssignment.getStopIndex().equals(Uint16.ZERO)) {
@@ -150,25 +158,35 @@ public class PostAlgoPathValidator {
                 }
                 pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex().toJava()));
                 pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex().toJava()));
-                LOG.debug("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
+                LOG.debug("In PostAlgoPathValidator: spectrum assignment found {} for path {} from BitSet {}",
+                    spectrumAssignment, path, spectrumOccupation);
 
                 // Check the OSNR
                 CatalogUtils cu = new CatalogUtils(networkTransactionService);
                 if (cu.isCatalogFilled()) {
-                    double margin1 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                            StringConstants.SERVICE_DIRECTION_AZ, cu);
-                    double margin2 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                            StringConstants.SERVICE_DIRECTION_ZA, cu);
-                    if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
-                            || margin2 == Double.NEGATIVE_INFINITY) {
-                        pceResult.error(String.format("OSNR out of range (%s - %s)", margin1, margin2));
-                        pceResult.setLocalCause(PceResult.LocalCause.OUT_OF_SPEC_OSNR);
-                        return pceResult;
+                    if (!isPartialPath) {
+                        double margin1 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
+                                StringConstants.SERVICE_DIRECTION_AZ, cu);
+                        double margin2 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
+                                StringConstants.SERVICE_DIRECTION_ZA, cu);
+                        if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
+                                || margin2 == Double.NEGATIVE_INFINITY) {
+                            pceResult.error(String.format("OSNR out of range (%s - %s)", margin1, margin2));
+                            pceResult.setLocalCause(PceResult.LocalCause.OUT_OF_SPEC_OSNR);
+                            return pceResult;
+                        }
+                        this.tpceCalculatedMargin = Math.min(margin1, margin2);
+                        LOG.info(
+                            "In PostAlgoPathValidator: Min margin estimated by tpce on AtoZ and ZtoA path is of  {} dB",
+                            this.tpceCalculatedMargin);
+                    } else {
+                        Map<Integer, AToZImpairmentsBuilder> impairmentMapAZ = new HashMap<>();
+                        impairmentMapAZ.put(npathorder, checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu));
+                        this.atoZSubPathImpairments.add(impairmentMapAZ);
+                        Map<Integer, ZToAImpairmentsBuilder> impairmentMapZA = new HashMap<>();
+                        impairmentMapZA.put(npathorder, checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu));
+                        this.ztoASubPathImpairments.add(impairmentMapZA);
                     }
-                    this.tpceCalculatedMargin = Math.min(margin1, margin2);
-                    LOG.info(
-                        "In PostAlgoPathValidator: Minimum margin estimated by tpce on AtoZ and ZtoA path is of  {} dB",
-                        this.tpceCalculatedMargin);
                 } else {
                     this.tpceCalculatedMargin = 0.0;
                     LOG.info("In PostAlgoPathValidator: Operational mode Catalog not filled, delegate OSNR calculation"
@@ -202,8 +220,9 @@ public class PostAlgoPathValidator {
                     .get(serviceType);
                 pceResult.error("An unknown error occurred while trying to find the spectrum assignment.");
                 pceResult.setServiceType(serviceType);
-                Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
-                Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot, tribSlotNb);
+                Map<String, List<Uint16>> tribSlot = chooseTribSlot((ModifiedGraphPath) path, allPceNodes, tribSlotNb);
+                Map<String, Uint16> tribPort = chooseTribPort((ModifiedGraphPath) path, allPceNodes, tribSlot,
+                        tribSlotNb);
                 if (tribSlot == null || tribPort == null) {
                     if (this.pceOperMode.equals(PceSendingPceRPCs.TAPI_PCE_OPER_MODE)) {
                         pceResult.success();
@@ -248,7 +267,7 @@ public class PostAlgoPathValidator {
     }
 
     // Check the latency
-    private boolean checkLatency(Long maxLatency, GraphPath<String, PceGraphEdge> path) {
+    private boolean checkLatency(Long maxLatency, ModifiedGraphPath path) {
         double latency = 0;
         for (PceGraphEdge edge : path.getEdgeList()) {
             if (edge.link() == null || edge.link().getLatency() == null) {
@@ -263,7 +282,7 @@ public class PostAlgoPathValidator {
 
     // Check the inclusion if it is defined in the hard constraints
     //TODO: remove this checkstyle false positive warning when the checkstyle bug will be fixed
-    private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput,
+    private boolean checkInclude(ModifiedGraphPath path, PceConstraints pceHardConstraintsInput,
             PceConstraintMode mode) {
         List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
         if (listToInclude.isEmpty()) {
@@ -348,8 +367,8 @@ public class PostAlgoPathValidator {
         return new ArrayList<>(listOfElements);
     }
 
-    private Map<String, Uint16> chooseTribPort(GraphPath<String,
-            PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
+    private Map<String, Uint16> chooseTribPort(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
+                Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
         LOG.debug("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -389,8 +408,8 @@ public class PostAlgoPathValidator {
         return tribPortMap;
     }
 
-    private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
-            PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
+    private Map<String, List<Uint16>> chooseTribSlot(ModifiedGraphPath
+            path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
         LOG.debug("In choosetribSlot: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -457,7 +476,7 @@ public class PostAlgoPathValidator {
             OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()))));
     }
 
-    private double checkOSNR(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
+    private double checkOSNR(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
         switch (direction) {
             case StringConstants.SERVICE_DIRECTION_AZ:
@@ -482,8 +501,8 @@ public class PostAlgoPathValidator {
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private AToZImpairmentsBuilder checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+    private AToZImpairmentsBuilder checkOSNRaz(ModifiedGraphPath path,
+            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -718,8 +737,8 @@ public class PostAlgoPathValidator {
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private ZToAImpairmentsBuilder checkOSNRza(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+    private ZToAImpairmentsBuilder checkOSNRza(ModifiedGraphPath path,
+            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -1155,8 +1174,9 @@ public class PostAlgoPathValidator {
      * @param centerFreqGranularityCollection  collection of authorized central-frequency granularity.
      * @return BitSet object which represents the spectrum occupation
      */
-    public BitSet computeSpectrumOccupation(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            int spectralWidthSlotNumber, Subscriber subscriber, Collection centerFreqGranularityCollection) {
+    public BitSet computeSpectrumOccupation(ModifiedGraphPath path,
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber,
+            Collection centerFreqGranularityCollection) {
         LOG.debug("Processing path {} with length {}", path, path.getLength());
         Set<PceNode> pceNodes = new LinkedHashSet<>();
 
@@ -1257,7 +1277,9 @@ public class PostAlgoPathValidator {
             Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber) {
         boolean isFlexGrid = true;
         Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
-        BitSet assignableBitset = computeSpectrumOccupation(path, allPceNodes, spectralWidthSlotNumber, subscriber,
+        BitSet assignableBitset = computeSpectrumOccupation(
+            (ModifiedGraphPath) path,
+            allPceNodes, spectralWidthSlotNumber, subscriber,
             centerFrequencyGranularityCollection);
 
         if (assignableBitset.isEmpty()) {
@@ -1335,6 +1357,22 @@ public class PostAlgoPathValidator {
 
     public void setPceOperMode(String pceOperationalMode) {
         this.pceOperMode = pceOperationalMode;
+    }
+
+    public List<Map<Integer, AToZImpairmentsBuilder>> getAtoZSubPathImpairments() {
+        return this.atoZSubPathImpairments;
+    }
+
+    public List<Map<Integer, ZToAImpairmentsBuilder>> getZtoASubPathImpairments() {
+        return this.ztoASubPathImpairments;
+    }
+
+    public void clearOpenRoadmAtoZSubPathImpairments() {
+        this.atoZSubPathImpairments.clear();
+    }
+
+    public void clearOpenRoadmZtoASubPathImpairments() {
+        this.ztoASubPathImpairments.clear();
     }
 
     private Uuid getUuidFromInput(String inString) {

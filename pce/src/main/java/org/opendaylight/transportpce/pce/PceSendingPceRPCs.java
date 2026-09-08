@@ -79,6 +79,8 @@ public class PceSendingPceRPCs {
     private Endpoints endpoints;
     // Define PCE mode of operation (OpenROADM/TAPI)
     private String pceOperMode;
+    private boolean isSecondStepHybridPC;
+    private int npathorder;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
     public static final String SERVICE_LAYER_OTN = "OTN";
@@ -94,7 +96,8 @@ public class PceSendingPceRPCs {
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
-                             GnpyConsumer gnpyConsumer, PortMapping portMapping, String pceOperationalMode) {
+                             GnpyConsumer gnpyConsumer, PortMapping portMapping, String pceOperationalMode,
+                             boolean isSecondStepHybridPC, int npathorder) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         // TODO compliance check to check that input is not empty
@@ -103,13 +106,17 @@ public class PceSendingPceRPCs {
         this.portMapping = portMapping;
         this.endpoints = null;
         this.pceOperMode = pceOperationalMode;
+        this.isSecondStepHybridPC = isSecondStepHybridPC;
+        this.npathorder = npathorder;
 
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
                              GnpyConsumer gnpyConsumer, PortMapping portMapping,
                              Endpoints endpoints,
-                             String pceOperationalMode) {
+                             String pceOperationalMode,
+                             boolean isSecondStepHybridPC,
+                             int npathorder) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         this.input = input;
@@ -117,6 +124,8 @@ public class PceSendingPceRPCs {
         this.portMapping = portMapping;
         this.endpoints = endpoints;
         this.pceOperMode = pceOperationalMode;
+        this.isSecondStepHybridPC = isSecondStepHybridPC;
+        this.npathorder = npathorder;
     }
 
     public void cancelResourceReserve() {
@@ -171,7 +180,7 @@ public class PceSendingPceRPCs {
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
             nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
             rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-            clientInput, nwAnalizer.getServiceLayer());
+            clientInput, nwAnalizer.getServiceLayer(), isSecondStepHybridPC, npathorder);
 
         Subscriber errorSubscriber = new EventSubscriber();
         graph.setPceOperMode(this.pceOperMode);

@@ -44,7 +44,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.DestinationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.ImpairmentParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.SourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.AToZImpairmentsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.ZToAImpairmentsBuilder;
@@ -90,8 +89,17 @@ public class PceGraph {
     private String aendOperationalMode ;
     private String zendOperationalMode;
     private int tapiSbiAbsNodeOrderInPath = -1;
-    private Map<Integer, PathElement> pathElementMap = new HashMap<>();
+    private int pathOrderInHybidPathComputation = 0;
+    private List<PathElement> pathElementList = new ArrayList<>();
     private Map<Integer, CdServicesBuilder> crossDomainServiceBldr = new HashMap<>();
+    private boolean isSecondStepHybridPC;
+    private int npathorder;
+    // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
+    // and each domains (2NdKey is domain order).
+    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> openRoadmAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> openRoadmZtoASubPathImpairments = new HashMap<>();
+    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> tapiAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> tapiZtoASubPathImpairments = new HashMap<>();
 
     // results
     private PceResult pceResult = null;
@@ -107,7 +115,8 @@ public class PceGraph {
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult,
             String serviceType, NetworkTransactionService networkTransactionService, PceConstraintMode mode,
-            BitSet spectrumConstraint, ClientInput clientInput, String serviceLayer) {
+            BitSet spectrumConstraint, ClientInput clientInput, String serviceLayer,
+            boolean isSecondStepHybridPC, int npathorder) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -121,6 +130,9 @@ public class PceGraph {
         this.pceConstraintMode = mode;
         this.spectrumConstraint = spectrumConstraint;
         this.clientInput = clientInput;
+        this.isSecondStepHybridPC = isSecondStepHybridPC;
+        this.npathorder = npathorder;
+        this.pceOperMode = PceSendingPceRPCs.OR_PCE_OPER_MODE;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
         LOG.info("In PceGraph, serviceType is {} ", serviceType);
@@ -147,17 +159,22 @@ public class PceGraph {
         }
         // validate found paths
         pceResult.error();
+        Integer kpathorder = 0;
+        Map<Integer, List<SubGraphPath>> subGraphPathMap = new HashMap<>();
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
             if (!isPathHybrid(path, allPceNodes)) {
+                // This is the regular path computation process going through either the OR PCE
+                // or TAPI PCE when Service creation is triggered through TAPI API.
                 PostAlgoPathValidator papv = new PostAlgoPathValidator(
                         networkTransactionService,
                         spectrumConstraint,
                         clientInput);
                 papv.setPceOperMode(pceOperMode);
-                pceResult = papv.checkPath(
-                        path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
+                pceResult = papv.checkPath(ModifiedGraphPath.fromGraphPath(path),
+                        allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
+                        false, null, null, 0);
                 this.margin = papv.getTpceCalculatedMargin();
                 this.aendOperationalMode = papv.getAendOperationalMode();
                 this.zendOperationalMode = papv.getZendOperationalMode();
@@ -169,13 +186,11 @@ public class PceGraph {
                         path, pceResult.getLocalCause());
                     continue;
                 }
-
                 // build pathAtoZ
                 pathAtoZ.clear();
                 for (PceGraphEdge edge : path.getEdgeList()) {
                     pathAtoZ.add(edge.link());
                 }
-
                 shortestPathAtoZ = new ArrayList<>(pathAtoZ);
                 switch (serviceLayer) {
 
@@ -194,36 +209,110 @@ public class PceGraph {
                         break;
                 }
                 break;
+            } else if (!isPathHybrid(path, allPceNodes) && isSecondStepHybridPC) {
+                // This is the path computation process going through the TAPI PCE in the second step of cross-domain
+                // service creation where TAPI PCE is used to compute impairments of the path between 2 end-points of
+                // the TAPI-SBI-ABS-NODE relying on detailed TAPI topology.
+                // In this case, as one or the 2 transponders maybe outside the TAPI-Domain, it might not be possible to
+                // compute margin (only accumulated impairments).
+                PostAlgoPathValidator papv = new PostAlgoPathValidator(
+                        networkTransactionService,
+                        spectrumConstraint,
+                        clientInput);
+                papv.setPceOperMode(pceOperMode);
+                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
+                pceResult = papv.checkPath(ModifiedGraphPath.fromGraphPath(path),
+                    allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
+                    true, pcdpa.getPrecedingEdge(pathOrderInHybidPathComputation, npathorder),
+                    pcdpa.getSucceedingEdge(pathOrderInHybidPathComputation, npathorder), 0);
+                this.tapiAtoZSubPathImpairments.put(pathOrderInHybidPathComputation, papv.getAtoZSubPathImpairments());
+                this.tapiZtoASubPathImpairments.put(pathOrderInHybidPathComputation, papv.getZtoASubPathImpairments());
+                pcdpa.setTapiAtoZSubPathImpairments(tapiAtoZSubPathImpairments);
+                pcdpa.setTapiZtoASubPathImpairments(tapiZtoASubPathImpairments);
+                boolean successfulE2EPathComputation = pcdpa.checkE2EpathImpairments(pathOrderInHybidPathComputation);
+                if (successfulE2EPathComputation) {
+                    pcdpa.buildE2Epath(pathOrderInHybidPathComputation);
+                } else {
+                    // Tapi portion of the path not validated, goes to next iteration of the Graph
+                    continue;
+                }
+                // Path has been validated build pathAtoZ
+                pathAtoZ.clear();
+                for (PceGraphEdge edge : path.getEdgeList()) {
+                    pathAtoZ.add(edge.link());
+                // TODO: complete implementation of this use case
+                }
+                shortestPathAtoZ = new ArrayList<>(pathAtoZ);
+                break;
             } else {
+                 // This is the path computation process for cross-domain-service creation
                 // TODO: Provide implementation when a TAPI-SBI-ABS-NODE was detected on the path
-                for (Entry<Integer, PathElement> pathelement : pathElementMap.entrySet()) {
-                    int loopIter = 0;
-                    if (pathelement.getValue().domainType.equals(DomainTypeEnum.Openroadm)) {
-                        LOG.debug("ScanPath elt number {} of OR type", loopIter);
-                        // Compute extract of Path from lower to higher Boundary
-                        // Call modified PAPV :  not proving margins but Absolute value
-                        // Fill this.CrossDomainServiceBldr from output parameters of PapV that will return both
-                        // AtoZImpairmentsBuilder ZtoAImpairmentsBuilder
-                        AToZImpairmentsBuilder atozBldr = new AToZImpairmentsBuilder();
-                        ZToAImpairmentsBuilder ztoaBldr = new ZToAImpairmentsBuilder();
-                        populateCDServBlderWithOpticalParams(0, atozBldr, ztoaBldr);
+                // Calls splitPath that for the kpathorder path is going to split the path into several sub-path,
+                // each of them corresponding to a specific domain.
+                // PathElementList is built if the path is hybrid (isPathHybrid), meaning TAPI-SBI-ABS-NODE is part
+                // of the path; and includes information (high/low Index) on the boundaries of the sub-paths as well
+                // as its corresponding domain. SubGraphPathMap Map<kpathorder, List<SubGraphPath>> is updated through
+                // this call to contain through its list of SubGraphPath, notably, a Map<VerticeNames, PceGraphEdge>
+                // for each of the domains.
+                LOG.info("Detected TAPI-SBI-ABS-NODE in the path, entering splitting process of PathK {} ",
+                    entry.getKey());
+                PostAlgoPathValidator papv = new PostAlgoPathValidator(
+                        networkTransactionService,
+                        spectrumConstraint,
+                        clientInput);
+                papv.setPceOperMode(pceOperMode);
+                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
+                pcdpa.resetInstance();
+                //pathElementList has been filled calling isPathHybrid
+                pcdpa.setPathElementList(pathElementList);
+                // splitPath populates SubGraphPathMap
+                splitPath(kpathorder, pathElementList, path, subGraphPathMap);
+
+                int subPathPointer = 0;
+                for (PathElement pathelement : pathElementList) {
+                    pcdpa.addSubGraphPathToMap(
+                        kpathorder, subPathPointer, subGraphPathMap.get(kpathorder).get(subPathPointer));
+                    if (pathelement.domainType.equals(DomainTypeEnum.Openroadm)) {
+                        LOG.debug("ScanPath elt number {} of OR type", subPathPointer);
+
+                        ModifiedGraphPath subpath = (ModifiedGraphPath) subGraphPathMap
+                            .get(kpathorder).get(subPathPointer).intermediateGraphPath();
+
+                        papv.checkPath(
+                                subpath,
+                                allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType,
+                                pceConstraintMode, true,
+                                pcdpa.getPrecedingEdge(kpathorder, subPathPointer),
+                                pcdpa.getSucceedingEdge(kpathorder, subPathPointer),
+                                subPathPointer);
+                        this.openRoadmAtoZSubPathImpairments.put(kpathorder, papv.getAtoZSubPathImpairments());
+                        this.openRoadmZtoASubPathImpairments.put(kpathorder, papv.getZtoASubPathImpairments());
+                        pcdpa.setOpenRoadmAtoZSubPathImpairments(openRoadmAtoZSubPathImpairments);
+                        pcdpa.setOpenRoadmZtoASubPathImpairments(openRoadmZtoASubPathImpairments);
+
+
                     } else {
-                        LOG.debug("ScanPath elt number {} of non OR type", loopIter);
-                        // do nothing (need to fill the cross-domain service completely before we call the TAPI PCE
+                        LOG.debug("ScanPath elt number {} of non OR type", subPathPointer);
+                        // do nothing (need to fill the cross-domain service completely before we call the TAPI PCE)
                         //except increasing NumberOfOccurence of TAPI-SBI-ABS-NODE
                     }
-                    loopIter ++;
+                    subPathPointer ++;
                 }
-                // do a fist check to see if degradations on dif domains do not exceed RX OSNR (MARGIN calculation)
-                // If it is the case -> continue (next Graph)
+                // do a fist check to see if degradations on dif domains do not exceed RX OSNR(MARGIN calculation)
+                pcdpa.pruneOpenROADMimpairments();
+                // Try to aggregate calculation
+                // Envisage a rationalization looking an start and end tp on TAPI-SBI ABS node to minimize the number
+                // of call of TAPI PCE
+                pcdpa.pruneTapiSbiABSpath();
                 // If NumberOfOccurence > 1 -> continue (next Graph)
                 // else -> what follows
                 LOG.debug("TAPI-SBI-ABS-NODE identified as node at position {} in the calculated path",
                     this.tapiSbiAbsNodeOrderInPath);
-                for (Entry<Integer, PathElement> pathelement : pathElementMap.entrySet()) {
+                for (PathElement pathelement : pathElementList) {
 
-                    if (pathelement.getValue().domainType.equals(DomainTypeEnum.TapiSbi)) {
+                    if (pathelement.domainType.equals(DomainTypeEnum.TapiSbi)) {
                         LOG.info("Calculated path includes TAPI-Domain");
+                     // TODO: provide implementation of this use case
                         // Build tapi-sbi PCRI
                         // new PceSendingRPC (PceOperationalMode = TAPI)
                         // Trigger Path computation through TAPI-PCE
@@ -231,10 +320,14 @@ public class PceGraph {
                         // If negative result : continue (next Graph)
                         // if positive result, call new function that creates LOG
                         // Launch rendering of optical tunnel
-                        // on positive results Service-implementation request
+                        // on positive results compute PCeREsult
                     }
                 }
+             // Fill this.CrossDomainServiceBldr from output parameters of PapV
+
+                // Compute PceResult
             }
+            kpathorder++;
         }
 
         if (shortestPathAtoZ != null) {
@@ -423,7 +516,7 @@ public class PceGraph {
                     .setSource(sourceBldr.build())
                     .setDestination(destBldr.build());
                 this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
-                this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.Openroadm,
+                this.pathElementList.add(new PathElement(lowIndex, pathElement, DomainTypeEnum.Openroadm,
                     cdServiceOrder));
                 cdServiceBldr = new CdServicesBuilder();
                 cdServiceOrder++;
@@ -443,7 +536,8 @@ public class PceGraph {
                 }
                 cdServiceBldr = retrieveSBINodeParams(srcTpId, destTpId, cdServiceOrder, serviceLayer);
                 this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
-                this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.TapiSbi, cdServiceOrder));
+                this.pathElementList.add(
+                    new PathElement(lowIndex, pathElement, DomainTypeEnum.TapiSbi, cdServiceOrder));
                 cdServiceOrder++;
                 lowIndex = pathElement + 1;
                 this.tapiSbiAbsNodeOrderInPath = pathElement;
@@ -461,7 +555,7 @@ public class PceGraph {
                     .setSource(sourceBldr.build())
                     .setDestination(destBldr.build());
                 this.crossDomainServiceBldr.put(cdServiceOrder, cdServiceBldr);
-                this.pathElementMap.put(lowIndex, new PathElement(pathElement, DomainTypeEnum.Openroadm,
+                this.pathElementList.add(new PathElement(lowIndex, pathElement, DomainTypeEnum.Openroadm,
                     cdServiceOrder));
             }
         }
@@ -471,14 +565,41 @@ public class PceGraph {
         return false;
     }
 
-    private void populateCDServBlderWithOpticalParams(int cdServiceOrder,
-            AToZImpairmentsBuilder atozBldr, ZToAImpairmentsBuilder ztoaBldr) {
-        ImpairmentParametersBuilder impairments = new ImpairmentParametersBuilder()
-            .setAToZImpairments(atozBldr.build())
-            .setZToAImpairments(ztoaBldr.build());
-        this.crossDomainServiceBldr.get(cdServiceOrder)
-            .setCalculatedImpairments(true)
-            .setImpairmentParameters(impairments.build());
+    private void splitPath(Integer korder, List<PathElement> pathEltList,
+        GraphPath<String, PceGraphEdge> path, Map<Integer, List<SubGraphPath>> subGraphPathMap) {
+        // Add to the subGraphMap, for the Korder PATH a new list of SubGraphPath that results from the decomposition of
+        // the End to End graphPath from A to Z.
+        // The record SubGraphPath include preceding and following node (if relevant), so that we can get information
+        // on the edges that are required to compute impairment parameters.
+        Map<String, PceGraphEdge> splitPathMap = new HashMap<>();
+        List<String> vertices = path.getVertexList();
+        List<PceGraphEdge> edges = path.getEdgeList();
+        Integer edgeListSize = path.getEdgeList().size();
+        Integer verticeListSize = path.getVertexList().size();
+        Integer norder = 0;
+        List<SubGraphPath> subGraphPathList = new ArrayList<>();
+        // LOOP that scans the different elements of the path and stores in SplitPathMap the partial paths.
+        for (PathElement pathElt : pathEltList) {
+            int lowIndex = pathElt.lowIndex;
+            int highIndex = pathElt.highIndex;
+            //SubGraphPath subGraphPath = new SubGraphPath();
+            for (int pathIndex = lowIndex; pathIndex < highIndex + 1; pathIndex++) {
+                splitPathMap.put(vertices.get(pathIndex),
+                    pathIndex < edgeListSize ? edges.get(pathIndex) : null);
+            }
+            ModifiedGraphPath splitMdgp =  new ModifiedGraphPath(splitPathMap);
+            String precedingNodeId = lowIndex == 0 ? null : vertices.get(lowIndex - 1);
+            String followingNodeId = highIndex < (verticeListSize - 1) ? null : vertices.get(highIndex + 1);
+            PceGraphEdge precedingEdge = lowIndex == 0 ? null : edges.get(lowIndex - 1);
+            PceGraphEdge followingEdge = highIndex < (edgeListSize - 1) ? null : edges.get(highIndex + 1);
+            SubGraphPath subGraphPath = new SubGraphPath(norder,pathElt.domainType,
+                pathElt.cdServiceOrder, splitMdgp, precedingNodeId, followingNodeId,
+                precedingEdge, followingEdge);
+            subGraphPathList.add(subGraphPath);
+            norder++;
+        }
+        subGraphPathMap.put(korder, subGraphPathList);
+
     }
 
     private CdServicesBuilder retrieveSBINodeParams(String srcTpId, String dstTpId,
@@ -535,7 +656,18 @@ public class PceGraph {
         return tp;
     }
 
-    private record PathElement(int highIndex, DomainTypeEnum domainType, int bdServiceOrder) {}
+    public record PathElement(int lowIndex, int highIndex, DomainTypeEnum domainType, int cdServiceOrder) {}
+
+    public record SubGraphPath(
+        int norder,
+        DomainTypeEnum domainType,
+        int cdServiceOrder,
+        ModifiedGraphPath intermediateGraphPath,
+        String precedingNode,
+        String succeedingNode,
+        PceGraphEdge precedingEdge,
+        PceGraphEdge succeedingEdge) {
+    }
 
     public int getKpathsToBring() {
         return kpathsToBring;
@@ -565,6 +697,10 @@ public class PceGraph {
         return zendOperationalMode;
     }
 
+    public boolean get2ndStepHybrid() {
+        return isSecondStepHybridPC;
+    }
+
     public void setConstrains(PceConstraints pceHardConstraintsInput) {
         this.pceHardConstraints = pceHardConstraintsInput;
     }
@@ -572,4 +708,9 @@ public class PceGraph {
     public void setPceOperMode(String pceOperationalMode) {
         this.pceOperMode = pceOperationalMode;
     }
+
+    public void setPathOrderInHybridPath(int kpathorder) {
+        this.pathOrderInHybidPathComputation = kpathorder;
+    }
+
 }
