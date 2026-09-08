@@ -14,7 +14,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.r
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 
-public interface TapiSbiRendererOperation {
+public interface TapiSbiRendererOperations {
 
     ListenableFuture<TapiSbiServiceImplementationRequestOutput> serviceImplementation(
             TapiSbiServiceImplementationRequestInput input, boolean isTempService);

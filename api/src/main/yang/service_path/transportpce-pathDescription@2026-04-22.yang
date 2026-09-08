@@ -138,6 +138,11 @@ module transportpce-pathDescription {
           "Optional attribute set to true if the service spans across TAPI-ABS-NODE abstracting an OLS domain handled
            through a NMS connected to TransportPCE via the TAPI-SBI";
     }
+    leaf cd-service-id {
+      type uint8;
+      description
+        "identifier of the cross-domain service for which the path is provided";
+    }
     container cross-domain-service {
       when "../cross-domain = 'true'";
           description
@@ -232,26 +237,34 @@ module transportpce-pathDescription {
          same methods when used for regular complete path-computation (only margin attributes will then be used)";
     }
     leaf accumulated-cd {
-      type uint32;
+      type decimal64 {
+        fraction-digits 3;
+      }
+      units "ps";
       description
-        "Chromatic dispersion accumulated on the section of the path in ps/nm";
+        "Chromatic dispersion accumulated on the section of the path in ps";
     }
     leaf accumulated-pmd2 {
-      type uint32;
+      type decimal64 {
+        fraction-digits 3;
+      }
+      units "ps2perkm";
       description
         "Polarization Mode Dispersion accumulated on the section of the path";
     }
     leaf accumulated-pdl2 {
-      type uint32;
+      type decimal64 {
+        fraction-digits 3;
+      }
       description
         "Polarization dependent loss accumulated on the section of the path";
     }
     leaf latency {
       type decimal64 {
         fraction-digits 3;
-        }
-        units "milliseconds";
-        description
+      }
+      units "milliseconds";
+      description
         "latency accumulated on the section of the path in milliseconds";
     }
     leaf osnr-contribution {

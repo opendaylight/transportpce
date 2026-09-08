@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapisbi.rpcs;
 
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperation;
+import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperations;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -24,7 +24,7 @@ public class SbiRendererRPCImpl {
     private Registration reg;
 
     @Activate
-    public SbiRendererRPCImpl(@Reference TapiSbiRendererOperation tapiSbirendererOperation,
+    public SbiRendererRPCImpl(@Reference TapiSbiRendererOperations tapiSbirendererOperation,
             @Reference RpcProviderService rpcProviderService) {
         this.reg = rpcProviderService.registerRpcImplementations(
                 new TapiSbiServiceImplementationRequestImpl(tapiSbirendererOperation),
