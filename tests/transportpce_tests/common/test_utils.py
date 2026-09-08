@@ -173,21 +173,16 @@ def start_honeynode(log_file: str, sim):
 
 def start_lightynode(log_file: str, sim):
     executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                              '..', '..', 'lightynode', 'lightynode-openroadm-device', 'start-device.sh')
+                              '..', '..', 'lightynode', sim[1], 'start-device.sh')
     sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     '..', '..', 'sample_configs', 'openroadm', sim[1])
     if os.path.isfile(executable):
         with open(log_file, 'w', encoding='utf-8') as outfile:
             if sim[1] == 'oc200':
-                version = 'OC'
                 sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                 '..', '..', 'sample_configs', 'openconfig', '251203')
-
-            else:
-                version = sim[1]
             return subprocess.Popen(
-                [executable, "-v" + version, "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory,
-                                                                                           SIMS[sim]['configfile'])],
+                [executable, "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory, SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
     return None
 
