@@ -73,6 +73,8 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
     private static String pceOperationalMode;
+    private static boolean isSecondStepHybrid;
+    private static int npathorder;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
 
@@ -86,6 +88,8 @@ public class PathComputationServiceImpl implements PathComputationService {
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
         this.portMapping = portMapping;
+        PathComputationServiceImpl.setIs2ndStepHybrid(false);
+        PathComputationServiceImpl.setNpathOrder(0);
         LOG.info("PathComputationServiceImpl instantiated");
     }
 
@@ -211,7 +215,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     null);
                 PceSendingPceRPCs sendingPCE =
                     new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping,
-                        getPceOperationalMode());
+                        getPceOperationalMode(), isSecondStepHybrid, npathorder);
                 sendingPCE.pathComputation();
                 String message = sendingPCE.getMessage();
                 String responseCode = sendingPCE.getResponseCode();
@@ -335,7 +339,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setRoutingMetric(input.getRoutingMetric())
                     .build();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
-                    gnpyConsumer, portMapping, input.getEndpoints(), getPceOperationalMode());
+                    gnpyConsumer, portMapping, input.getEndpoints(), getPceOperationalMode(),
+                    isSecondStepHybrid, npathorder);
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
@@ -419,5 +424,15 @@ public class PathComputationServiceImpl implements PathComputationService {
     public static void setPceOperationalMode(String pceOperMode) {
         PathComputationServiceImpl.pceOperationalMode = pceOperMode;
     }
+
+    public static void setIs2ndStepHybrid(boolean is2ndStepHybrid) {
+        PathComputationServiceImpl.isSecondStepHybrid = is2ndStepHybrid;
+    }
+
+
+    public static void setNpathOrder(Integer npathOrder) {
+        PathComputationServiceImpl.npathorder = npathOrder;
+    }
+
 
 }
