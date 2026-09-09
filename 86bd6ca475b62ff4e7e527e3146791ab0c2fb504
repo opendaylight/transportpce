@@ -17,6 +17,46 @@
       "message": "recheck",
       "revId": "86bd6ca475b62ff4e7e527e3146791ab0c2fb504",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08b63a3d_8d4d11e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-09-09T13:48:12Z",
+      "side": 1,
+      "message": "Thanks for your contribution! LGTM, except one parameter missing from a java doc (see comment).",
+      "revId": "86bd6ca475b62ff4e7e527e3146791ab0c2fb504",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc35b09b_dcd35236",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-09-09T13:48:12Z",
+      "side": 1,
+      "message": "introduced ietfNodeId is missing from the doc params",
+      "range": {
+        "startLine": 1707,
+        "startChar": 5,
+        "endLine": 1707,
+        "endChar": 7
+      },
+      "revId": "86bd6ca475b62ff4e7e527e3146791ab0c2fb504",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
