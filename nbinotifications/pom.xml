@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>16.0.3</version>
+    <version>16.0.6</version>
     <relativePath/>
   </parent>
 
@@ -22,7 +22,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <transportpce.models.version>24.0.1</transportpce.models.version>
+    <transportpce.models.version>24.1.0-SNAPSHOT</transportpce.models.version>
     <kafka.version>3.7.0</kafka.version>
   </properties>
 
@@ -41,7 +41,11 @@
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-7.1.0</artifactId>
+      <artifactId>openroadm-common-6.1.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-9.1.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
@@ -116,6 +120,11 @@
     </dependency>
 
     <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-9.1.0</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-17.1.0</artifactId>
