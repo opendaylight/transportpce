@@ -77,18 +77,12 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.li
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.ResilienceTypeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanism;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanismBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
@@ -249,22 +243,7 @@ public class TapiLinkImpl implements TapiLink {
                 return null;
         }
         // Todo: common aspects of links and set all attributes
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                .setCostAlgorithm("Restricted Shortest Path - RSP")
-                .setCostName("HOP_COUNT")
-                .setCostValue(TapiConstants.COST_HOP_VALUE)
-                .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-                .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-                .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-                .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-                .setTrafficPropertyName("FIXED_LATENCY")
-                .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-                .setRiskCharacteristicName("risk characteristic")
-                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-                .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
                 .setValidationMechanism("validation mechanism")
                 .setValidationRobustness("validation robustness")
@@ -306,9 +285,9 @@ public class TapiLinkImpl implements TapiLink {
                                 .setValue(Decimal64.valueOf("100"))
                                 .build())
                         .build())
-                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+                .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
+                .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
                 .setErrorCharacteristic("error")
                 .setLossCharacteristic("loss")
                 .setRepeatDeliveryCharacteristic("repeat delivery")
@@ -407,22 +386,7 @@ public class TapiLinkImpl implements TapiLink {
                 return null;
         }
         // Todo: common aspects of links and set all attributes
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
             .setValidationMechanism("validation mechanism")
             .setValidationRobustness("validation robustness")
@@ -456,9 +420,9 @@ public class TapiLinkImpl implements TapiLink {
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf(7, 100)).build())
                 .build())
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
             .setErrorCharacteristic("error")
             .setLossCharacteristic("loss")
             .setRepeatDeliveryCharacteristic("repeat delivery")
@@ -488,22 +452,7 @@ public class TapiLinkImpl implements TapiLink {
 
         createCepForLink(getORLinkFromLinkId(orlinkId), srcTapiTopoUuid, dstTapiTopoUuid);
 
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
             .setValidationMechanism("validation mechanism")
             .setValidationRobustness("validation robustness")
@@ -548,9 +497,9 @@ public class TapiLinkImpl implements TapiLink {
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
                 .build())
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
             .setErrorCharacteristic("error")
             .setLossCharacteristic("loss")
             .setRepeatDeliveryCharacteristic("repeat delivery")
