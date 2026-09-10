@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.openroadm.topology.link.OpenRoadmLinkResolver;
+import org.opendaylight.transportpce.tapi.topology.TapiLinkTopologyWriter;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * while the node writer interleaves a rule-group write between the merge and the commit and raises
  * failure as an {@link IllegalStateException}.
  */
-final class TapiLinkTopologyWriter {
+public final class TapiLinkTopologyWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiLinkTopologyWriter.class);
 
@@ -71,7 +71,7 @@ final class TapiLinkTopologyWriter {
      * @return {@code true} if the commit succeeded, {@code false} if it failed. On failure this
      *     already logs the error with its stack trace; the caller does not need to log it again.
      */
-    static boolean mergeLinksInTopology(
+    public static boolean mergeLinksInTopology(
             NetworkTransactionService networkTransactionService,
             Uuid topoUuid,
             Map<LinkKey, Link> linkMap) {

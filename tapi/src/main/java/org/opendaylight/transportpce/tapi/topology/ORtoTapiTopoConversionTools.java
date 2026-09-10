@@ -36,6 +36,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.TapiSpectrumCapabilityPacFactory;
+import org.opendaylight.transportpce.tapi.utils.TapiDefaultTransferCharacteristics;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -149,14 +150,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -428,30 +423,15 @@ public class ORtoTapiTopoConversionTools {
             .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
             .build();
         Name nrgName = new NameBuilder().setValueName("nrg name").setValue(nrgNameValue).build();
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                .setCostAlgorithm("Restricted Shortest Path - RSP")
-                .setCostName("HOP_COUNT")
-                .setCostValue(TapiConstants.COST_HOP_VALUE)
-                .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
             .setName(Map.of(nrgName.key(), nrgName))
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
             .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
             .setNodeEdgePoint(nepMap)
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
@@ -537,22 +517,7 @@ public class ORtoTapiTopoConversionTools {
 
         Map<InterRuleGroupKey, InterRuleGroup> irgMapp = new HashMap<>();
         String irgNameValue = " irg-" + index;
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                .setCostAlgorithm("Restricted Shortest Path - RSP")
-                .setCostName("HOP_COUNT")
-                .setCostValue(TapiConstants.COST_HOP_VALUE)
-                .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
 
         Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
         InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
@@ -560,9 +525,9 @@ public class ORtoTapiTopoConversionTools {
             .setName(Map.of(irgName.key(), irgName))
             .setRule(new HashMap<>(Map.of(rule.key(), rule)))
             .setAssociatedNodeRuleGroup(associatedNrgMap)
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .build();
         irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
 
@@ -614,22 +579,7 @@ public class ORtoTapiTopoConversionTools {
                 anrg.getKey(), anrg.getValue(),
                 associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getKey(),
                 associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getValue()));
-            CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                    .setCostAlgorithm("Restricted Shortest Path - RSP")
-                    .setCostName("HOP_COUNT")
-                    .setCostValue(TapiConstants.COST_HOP_VALUE)
-                    .build();
-            LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-                .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-                .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-                .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-                .setTrafficPropertyName("FIXED_LATENCY")
-                .build();
-            RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-                .setRiskCharacteristicName("risk characteristic")
-                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-                .build();
+            TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
 
             Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
             InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
@@ -637,27 +587,14 @@ public class ORtoTapiTopoConversionTools {
                 .setName(Map.of(irgName.key(), irgName))
                 .setRule(new HashMap<>(Map.of(rule.key(), rule)))
                 .setAssociatedNodeRuleGroup(associatedNrgMap)
-                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+                .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+                .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
                 .build();
             irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
             srgCounter++;
         }
         return irgMapp;
-    }
-
-    /**
-     * Recovers the degree/SRG name a node rule group was built for, by stripping the suffix appended by
-     * {@link #createNodeRuleGroupForRdmNode}.
-     *
-     * @param nrgName name of the node rule group, e.g. {@code ROADM-Antwerp-SRG2-node-rule-group}
-     * @return the degree/SRG name, e.g. {@code ROADM-Antwerp-SRG2}
-     */
-    private static String subNodeNameOf(String nrgName) {
-        return nrgName.endsWith(NRG_NAME_SUFFIX)
-            ? nrgName.substring(0, nrgName.length() - NRG_NAME_SUFFIX.length())
-            : nrgName;
     }
 
     /**
@@ -673,22 +610,7 @@ public class ORtoTapiTopoConversionTools {
     public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createRoadmTapiNode(
             Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String orNodeId, String topoMode) {
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
             createAllNodeRuleGroupForRdmNode(topoMode, nodeUuid, orNodeId, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
@@ -708,8 +630,8 @@ public class ORtoTapiTopoConversionTools {
             .setOwnedNodeEdgePoint(onepMap)
             .setNodeRuleGroup(nodeRuleGroupMap)
             .setInterRuleGroup(createInterRuleGroupForRdmNode(topoMode, nodeUuid, orNodeId, nrgMap))
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .setErrorCharacteristic("error")
             .setLossCharacteristic("loss")
             .setRepeatDeliveryCharacteristic("repeat delivery")
@@ -718,7 +640,7 @@ public class ORtoTapiTopoConversionTools {
             .setServerIntegrityProcessCharacteristic("server integrity process")
             .setRiskParameterPac(
                 new RiskParameterPacBuilder()
-                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                    .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
                     .build())
             .build();
     }
@@ -1394,22 +1316,7 @@ public class ORtoTapiTopoConversionTools {
             LOG.error("Undefined LayerProtocolName for {} node {}", nodeName.getValueName(), nodeName.getValue());
         }
      // Empty random creation of mandatory fields for avoiding errors....
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         return new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(nodeNames)
@@ -1420,11 +1327,11 @@ public class ORtoTapiTopoConversionTools {
             .setOwnedNodeEdgePoint(onepl)
             .setInterRuleGroup(irgMap)
             .setNodeRuleGroup(nodeRuleGroupMap)
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .setRiskParameterPac(
                 new RiskParameterPacBuilder()
-                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                    .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
                     .build())
             .setErrorCharacteristic("error")
             .setLossCharacteristic("loss")
@@ -1703,22 +1610,7 @@ public class ORtoTapiTopoConversionTools {
                     tpc = new TotalPotentialCapacityBuilder().build();
                 }
 
-                CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                    .setCostAlgorithm("Restricted Shortest Path - RSP")
-                    .setCostName("HOP_COUNT")
-                    .setCostValue(TapiConstants.COST_HOP_VALUE)
-                    .build();
-                LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                    .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-                    .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-                    .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-                    .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-                    .setTrafficPropertyName("FIXED_LATENCY")
-                    .build();
-                RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-                    .setRiskCharacteristicName("risk characteristic")
-                    .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-                    .build();
+                TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
 
                 if (nepList != null && !nepList.isEmpty()) {
                     Name nrgName1 = new NameBuilder().setValueName("nrg name")
@@ -1731,9 +1623,9 @@ public class ORtoTapiTopoConversionTools {
                         .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
                             nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
                         .setNodeEdgePoint(nepList)
-                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                        .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+                        .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+                        .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
                         .setAvailableCapacity(avc)
                         .setTotalPotentialCapacity(tpc)
                         .build();
@@ -1752,9 +1644,9 @@ public class ORtoTapiTopoConversionTools {
                         .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
                             nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
                         .setNodeEdgePoint(oduNepList)
-                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                        .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+                        .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+                        .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
                         .setAvailableCapacity(avc)
                         .setTotalPotentialCapacity(tpc)
                         .build();
