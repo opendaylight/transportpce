@@ -57,6 +57,30 @@
       },
       "revId": "85433ab689888c98370408c121dc8bca9336bd93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20028b4a_f15f4d65",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-10T05:50:32Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ve adjusted the datatype in the @param annotation.",
+      "parentUuid": "be6fcbc6_ec544c6b",
+      "range": {
+        "startLine": 2144,
+        "startChar": 1,
+        "endLine": 2144,
+        "endChar": 25
+      },
+      "revId": "85433ab689888c98370408c121dc8bca9336bd93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
