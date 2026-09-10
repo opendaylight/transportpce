@@ -48,6 +48,7 @@ import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.sp
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.topology.nep.DefaultRoadmNepFactory;
 import org.opendaylight.transportpce.tapi.topology.nep.RoadmNepFactory;
+import org.opendaylight.transportpce.tapi.utils.TapiDefaultTransferCharacteristics;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
@@ -161,8 +162,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
@@ -172,10 +171,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -947,24 +942,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.debug("TNMSI:createTapiXpdrNode : total NEP map = {}", onepl);
 
         // Empty random creation of mandatory fields for avoiding errors....
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
         RiskParameterPac riskParamPac = new RiskParameterPacBuilder()
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
             .build();
         Node builtNode = new NodeBuilder()
             .setUuid(nodeUuid)
@@ -976,8 +956,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setOwnedNodeEdgePoint(onepl)
             .setNodeRuleGroup(nodeRuleGroupList)
             .setInterRuleGroup(irgMap)
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .setErrorCharacteristic("error")
             .setLossCharacteristic("loss")
             .setRepeatDeliveryCharacteristic("repeat delivery")
@@ -1516,15 +1496,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .toString());
             nodeNames = new NameBuilder().setValueName("roadm node name").setValue(nodeNamesVal).build();
         }
-        Name nameNodeType =
-            new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
+        Name nameNodeType = new NameBuilder()
+                .setValueName("Node Type")
+                .setValue(OpenroadmNodeType.ROADM.getName())
+                .build();
+        Map<NameKey, Name> nodeNameMap = Map.of(
+                nodeNames.key(), nodeNames,
+                nameNodeType.key(), nameNodeType);
+
         return tapiFactory.createRoadmTapiNode(
-            nodeUuid,
-            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType),
-            Set.of(LayerProtocolName.PHOTONICMEDIA),
-            onepMap,
-            orNodeId,
-            TOPOLOGICAL_MODE);
+                nodeUuid,
+                nodeNameMap,
+                Set.of(LayerProtocolName.PHOTONICMEDIA),
+                onepMap,
+                orNodeId,
+                TOPOLOGICAL_MODE);
     }
 
     private OduSwitchingPools createTpdrSwitchPool(List<Mapping> xpdrNetMaps) {
@@ -1768,22 +1754,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         RuleBuilder nblRuleBd = new RuleBuilder()
             .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
             .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)));
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
+        TapiDefaultTransferCharacteristics defaultChars = TapiDefaultTransferCharacteristics.create();
 
         Name nrgName = new NameBuilder().setValueName("nrg name")
             .setValue(qualifier + " node rule group-" + count + "." + nblCount).build();
@@ -1796,9 +1767,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
                 nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
             .setNodeEdgePoint(nepMap)
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
+            .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
+            .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .setAvailableCapacity(avc)
             .setTotalPotentialCapacity(tpc)
             .build();
