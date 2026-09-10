@@ -41,26 +41,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,51 +167,19 @@ public class ConvertTopoORtoTapiNbi {
             convertListNodeWithListNepToMapForUuidAndName(pruneTapiPhotonicNodes());
         // nep creation for rdm infra abstraction node
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = createNepForRdmNode(photonicNepUuisMap.size());
-        // node rule group creation
+        // build RDM infra node abstraction, including node/inter rule groups, via the shared builder
         var tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode("T0ML", nodeUuid, null, onepMap.values());
-        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
-        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
-            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
-        }
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode("T0ML", nodeUuid, null, nrgMap);
-        // Empty random creation of mandatory fields for avoiding errors....
-        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-            .setCostAlgorithm("Restricted Shortest Path - RSP")
-            .setCostName("HOP_COUNT")
-            .setCostValue(TapiConstants.COST_HOP_VALUE)
-            .build();
-        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-            .setTrafficPropertyName("FIXED_LATENCY")
-            .build();
-        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-            .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-            .build();
-        // build RDM infra node abstraction
-        var rdmNode = new NodeBuilder()
-            .setUuid(nodeUuid)
-            .setName(Map.of(nodeName.key(), nodeName, nodeName2.key(), nodeName2, nameNodeType.key(), nameNodeType))
-            .setLayerProtocolName(nodeLayerProtocols)
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
-            .setLifecycleState(LifecycleState.INSTALLED)
-            .setOwnedNodeEdgePoint(onepMap)
-            .setNodeRuleGroup(nodeRuleGroupMap)
-            .setInterRuleGroup(interRuleGroupMap)
-            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setRiskParameterPac(
-                new RiskParameterPacBuilder()
-                    .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                    .build())
-            .build();
+        Map<NameKey, Name> nodeNames = Map.of(
+                nodeName.key(), nodeName,
+                nodeName2.key(), nodeName2,
+                nameNodeType.key(), nameNodeType);
+        var rdmNode = tapiFactory.createRoadmTapiNode(
+                nodeUuid,
+                nodeNames,
+                nodeLayerProtocols,
+                onepMap,
+                null,
+                "T0ML");
         tapiNodes.put(rdmNode.key(), rdmNode);
     // OTS link creation between photonic nodes and RDM infra abstraction node :
       //onepMap is a list of nep which Uuid is formed from THE ROADM node name, "nep" and an integer (order of the nep)
