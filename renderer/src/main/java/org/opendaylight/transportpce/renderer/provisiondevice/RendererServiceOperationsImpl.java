@@ -73,8 +73,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
@@ -237,7 +237,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         "Service compliant, submitting service delete Request ...");
                 // Obtain path description
                 Optional<
-                        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                                 .service.path.PathDescription> pathDescriptionOpt =
                         getPathDescriptionFromDatastore(serviceName);
                 if (pathDescriptionOpt.isEmpty()) {
@@ -367,13 +367,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @SuppressFBWarnings(
             value = "UPM_UNCALLED_PRIVATE_METHOD",
             justification = "call in call() method")
-    private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+    private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
             .service.path.PathDescription> getPathDescriptionFromDatastore(String serviceName) {
-        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                     .service.path.PathDescription> pathDescriptionIID = DataObjectIdentifier
                 .builder(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName))
-                .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                     .service.path.PathDescription.class)
                 .build();
         try {

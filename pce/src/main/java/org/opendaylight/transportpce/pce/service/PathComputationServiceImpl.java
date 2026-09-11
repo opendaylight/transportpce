@@ -25,36 +25,36 @@ import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.Response;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserveOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserveOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.ServicePathRpcResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.gnpy.GnpyResponse;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.gnpy.GnpyResponseBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.gnpy.gnpy.response.response.type.NoPathCaseBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.gnpy.gnpy.response.response.type.PathCaseBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.performance.PathPropertiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.performance.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.performance.path.properties.PathMetricBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.CancelResourceReserveInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.CancelResourceReserveOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.CancelResourceReserveOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRerouteRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRerouteRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.ServicePathRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.ServicePathRpcResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.gnpy.GnpyResponse;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.gnpy.GnpyResponseBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.gnpy.gnpy.response.response.type.NoPathCaseBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.gnpy.gnpy.response.response.type.PathCaseBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.performance.PathPropertiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.performance.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.performance.path.properties.PathMetricBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -268,9 +268,9 @@ public class PathComputationServiceImpl implements PathComputationService {
                     RpcStatusEx.Successful,
                     message,
                     pathDescription);
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                         .response.parameters.sp.response.parameters.PathDescription pathDescription1 =
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .response.parameters.sp.response.parameters.PathDescriptionBuilder()
                         .setAToZDirection(path.getAToZDirection())
                         .setZToADirection(path.getZToADirection())

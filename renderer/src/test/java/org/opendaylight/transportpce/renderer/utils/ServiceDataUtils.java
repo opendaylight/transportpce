@@ -40,9 +40,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.pce.resource.resource.resource.TerminationPointBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.NodesKey;

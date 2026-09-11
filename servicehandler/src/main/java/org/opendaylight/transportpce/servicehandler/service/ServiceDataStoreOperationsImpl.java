@@ -21,7 +21,7 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
@@ -33,7 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.path.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
@@ -291,7 +291,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public OperationResult createTempService(
             TempServiceCreateInput tempServiceCreateInput,
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910
                     .service.path.rpc.result.PathDescription pathDescription) {
         LOG.debug("Writing '{}' Temp Service", tempServiceCreateInput.getCommonId());
         try {

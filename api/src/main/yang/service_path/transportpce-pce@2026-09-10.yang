@@ -53,7 +53,10 @@ module transportpce-pce {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-
+  revision 2026-09-10 {
+    description
+      "Add second-step-hybrid-pc-result notification";
+  }
   revision 2024-02-05 {
       description
         "Add customer-name to path-computation-request input to check in controller-customization if the customer's
@@ -269,12 +272,50 @@ module transportpce-pce {
 
   notification service-path-rpc-result {
     description
-      "This Notification indicates result of  service RPC";
+      "This Notification indicates result of service RPC";
     leaf notification-type {
       type transportpce-common-service-path-types:service-path-notification-types;
     }
     container path-description {
       uses transportpce-pathDescription:path-description;
+    }
+    uses transportpce-common-service-path-types:rpc-response-status-ex;
+    uses org-openroadm-common-service-types:service-notification-result;
+    uses org-openroadm-common-service-types:routing-metric;
+  }
+
+  notification second-step-hybrid-pc-result {
+    description
+      "This Notification indicates result of second-step-hybrid-pc-request RPC";
+    leaf notification-type {
+      type transportpce-common-service-path-types:service-path-notification-types;
+    }
+    leaf selected-kpath-order {
+      type uint8;
+      description
+        "K order of the path provided through first step of path computation, for which a sub-path was successfully
+         computed in second step of the path computation";
+    }
+    container aggregated-path-description {
+      description
+        "Host a list of all paths corresponding to the different cd-services that builds the E2E service.
+         In the list of pathDescription of this container, cross-domain service container of the path-descriptions
+         themselves are not supposed to be filled. It is filled one time in the separate following container
+         cross-domain-services to avoid redundant information";
+      list cd-service-path-description {
+        key "cd-service-id";
+        leaf cd-service-id {
+          type string;
+          description
+            "the cd-service for which service-path is provided";
+        }
+        uses transportpce-pathDescription:path-description;
+      }
+    }
+    container cross-domain-service {
+      description
+        "Host a list of all cd-services corresponding to the E2E path computation";
+      uses transportpce-pathDescription:cross-domain-service-attributes;
     }
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
