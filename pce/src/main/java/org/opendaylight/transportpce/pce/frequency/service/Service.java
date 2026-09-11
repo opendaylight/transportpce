@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.pce.frequency.service;
 
 import org.opendaylight.transportpce.pce.input.InvalidClientInputException;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.spectrum.allocation.FrequencySlot;
 
 public interface Service {

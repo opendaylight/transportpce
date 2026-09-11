@@ -11,8 +11,8 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.input.valid.Factory;
 import org.opendaylight.transportpce.pce.input.valid.Valid;
 import org.opendaylight.transportpce.pce.input.valid.ValidInputFactory;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRerouteRequestInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
