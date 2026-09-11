@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.frequency.interval;
 
 import java.math.BigDecimal;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 
 public interface IntervalFactory {
 

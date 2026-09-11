@@ -56,12 +56,17 @@ module transportpce-common-service-path-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2026-09-10 {
+    description
+      "Add to service-path-notification-types:
+       - second-step-hybrid-pc-request
+       - tapi-service-implementation-request";
+  }
   revision 2022-01-18 {
     description
       "Add typedef pce-metric.
        Replace transportpce-routing-constraints by org-openroadm-routing-constraints.";
   }
-
   revision 2020-01-28 {
     description
       "Version 1.7";
@@ -110,6 +115,12 @@ module transportpce-common-service-path-types {
       }
       enum service-delete {
         value 4;
+      }
+      enum second-step-hybrid-pc-request {
+        value 5;
+      }
+      enum tapi-service-implementation-request {
+        value 6;
       }
     }
   }

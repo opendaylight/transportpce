@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.pce.input.valid;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 
 public interface Valid extends Observer {
 

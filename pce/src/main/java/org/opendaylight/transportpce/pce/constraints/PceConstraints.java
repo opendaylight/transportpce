@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.PceMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
