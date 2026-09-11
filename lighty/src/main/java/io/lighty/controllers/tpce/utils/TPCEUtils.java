@@ -221,7 +221,7 @@ public final class TPCEUtils {
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.networkutils.rev250902.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.olm.rev210618.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.pce.rev240205.YangModuleInfoImpl.INSTANCE,
+            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.pce.rev260910.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev260612.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728
@@ -243,7 +243,7 @@ public final class TPCEUtils {
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422
                     .YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+            org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.YangModuleInfoImpl
                     .INSTANCE,

@@ -9,12 +9,12 @@ package org.opendaylight.transportpce.servicehandler.utils;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInputBuilder;
@@ -43,12 +43,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.TempServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.path.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.path.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -72,13 +72,13 @@ public final class ModelMappingUtils {
                 .setServiceRate(input.getServiceAEnd().getServiceRate()).setClli(input.getServiceAEnd().getClli())
                 .setNodeId(input.getServiceAEnd().getNodeId().getValue())
                 .setTxDirection(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.endpoint.sp.TxDirectionBuilder()
                         .setPort(input.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
                             .getPort())
                         .build())
                 .setRxDirection(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.endpoint.sp.RxDirectionBuilder()
                         .setPort(input.getServiceAEnd().getRxDirection().values().stream().findFirst().orElseThrow()
                             .getPort())
@@ -91,13 +91,13 @@ public final class ModelMappingUtils {
                 .setServiceRate(input.getServiceZEnd().getServiceRate()).setClli(input.getServiceZEnd().getClli())
                 .setNodeId(input.getServiceZEnd().getNodeId().getValue())
                 .setTxDirection(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.endpoint.sp.TxDirectionBuilder()
                         .setPort(input.getServiceZEnd().getTxDirection().values().stream().findFirst().orElseThrow()
                             .getPort())
                         .build())
                 .setRxDirection(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.endpoint.sp.RxDirectionBuilder()
                         .setPort(input.getServiceZEnd().getRxDirection().values().stream().findFirst().orElseThrow()
                             .getPort())
@@ -349,7 +349,7 @@ public final class ModelMappingUtils {
         ServicePathsBuilder servicePathBuilder =
             new ServicePathsBuilder()
                 .setServiceAEnd(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.path.ServiceAEndBuilder()
                         .setServiceFormat(serviceInput.getServiceAEnd().getServiceFormat())
                         .setServiceRate(serviceInput.getServiceAEnd().getServiceRate())
@@ -357,7 +357,7 @@ public final class ModelMappingUtils {
                         .setNodeId(new NodeIdType(serviceInput.getServiceAEnd().getNodeId().getValue()).getValue())
                         .setTxDirection(
                             new org.opendaylight.yang.gen.v1
-                                    .http.org.transportpce.b.c._interface.service.types.rev220118
+                                    .http.org.transportpce.b.c._interface.service.types.rev260910
                                         .service.endpoint.sp.TxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceAEnd().getTxDirection()
@@ -365,7 +365,7 @@ public final class ModelMappingUtils {
                                 .build())
                         .setRxDirection(
                             new org.opendaylight.yang.gen.v1
-                                    .http.org.transportpce.b.c._interface.service.types.rev220118
+                                    .http.org.transportpce.b.c._interface.service.types.rev260910
                                         .service.endpoint.sp.RxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceAEnd().getRxDirection()
@@ -373,7 +373,7 @@ public final class ModelMappingUtils {
                                 .build())
                         .build())
                 .setServiceZEnd(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
                             .service.path.ServiceZEndBuilder()
                         .setServiceFormat(serviceInput.getServiceZEnd().getServiceFormat())
                         .setServiceRate(serviceInput.getServiceZEnd().getServiceRate())
@@ -381,7 +381,7 @@ public final class ModelMappingUtils {
                         .setNodeId(new NodeIdType(serviceInput.getServiceZEnd().getNodeId().getValue()).getValue())
                         .setTxDirection(
                             new org.opendaylight.yang.gen.v1
-                                    .http.org.transportpce.b.c._interface.service.types.rev220118
+                                    .http.org.transportpce.b.c._interface.service.types.rev260910
                                         .service.endpoint.sp.TxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceZEnd().getTxDirection()
@@ -389,7 +389,7 @@ public final class ModelMappingUtils {
                                 .build())
                         .setRxDirection(
                             new org.opendaylight.yang.gen.v1
-                                    .http.org.transportpce.b.c._interface.service.types.rev220118
+                                    .http.org.transportpce.b.c._interface.service.types.rev260910
                                         .service.endpoint.sp.RxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceZEnd().getRxDirection()
