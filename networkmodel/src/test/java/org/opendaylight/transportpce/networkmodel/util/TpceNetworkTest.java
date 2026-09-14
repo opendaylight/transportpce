@@ -45,7 +45,7 @@ public class TpceNetworkTest extends AbstractTest {
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdClli, "Clli layer should be created and not null");
 
-        Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
+        Augmentation<NetworkTypes, NetworkTypes1> ordClli = new NetworkTypes1Builder()
             .setClliNetwork(new ClliNetworkBuilder().build())
             .build();
         assertNotNull(createdClli.getNetworkTypes().augmentation(NetworkTypes1.class),
@@ -108,7 +108,8 @@ public class TpceNetworkTest extends AbstractTest {
     }
 
     private void commonNetworkAugmentationTest(Network createdOrdNetwork) {
-        Augmentation<NetworkTypes> ordComNet
+        Augmentation<NetworkTypes, org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530
+                .NetworkTypes1> ordComNet
             = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.NetworkTypes1Builder()
                 .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                 .build();
