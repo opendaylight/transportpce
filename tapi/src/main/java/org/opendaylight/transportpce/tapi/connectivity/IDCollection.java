@@ -15,6 +15,7 @@ public interface IDCollection {
 
     /**
      * Add xponder client termination point.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.
@@ -28,6 +29,7 @@ public interface IDCollection {
 
     /**
      * Add xponder network termination point.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.
@@ -41,6 +43,7 @@ public interface IDCollection {
 
     /**
      * Add ROADM PP termination point.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.
@@ -54,6 +57,7 @@ public interface IDCollection {
 
     /**
      * Add ROADM TTP termination point.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.
@@ -67,6 +71,7 @@ public interface IDCollection {
 
     /**
      * Add ROADM node.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.
@@ -80,6 +85,7 @@ public interface IDCollection {
 
     /**
      * Add xponder node.
+     *
      * @return true if and only if the TP was added.
      * @throws UnsupportedOperationException if object is immutable. The implementing class may choose to
      *                                       return false instead of throwing this exception.

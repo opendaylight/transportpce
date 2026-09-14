@@ -154,6 +154,7 @@ public class TapiOpticalNode {
     /**
      * Intermediate class used to process T-API NEP, before instantiating one or several (for ROADMs)
      * PceTapiOpticalNode(s).
+     *
      * @param serviceType Type of service is used to determine which type (Optical/Otn) of PceNode is created and which
      *                    BasePceNep NEPs shall be created and validated
      *                    See StringConstants SERVICE_TYPE_XXXX.
@@ -805,6 +806,7 @@ public class TapiOpticalNode {
 
     /**
      * Create a Dictionary (couple) made from a name and a Uuid as the key for both nodes and NodeEdgePoints.
+     *
      * @param identifier    The name of the Termination Point (NodeEdgePoint),
      * @param extension     The extension is either SRG or DEG for Add/drop and Degrees,
      * @param isNode        Defines whether the Id is built for a NEP or a Node (different value name).
@@ -971,6 +973,7 @@ public class TapiOpticalNode {
      * Create a Full Mesh of links between VirtualNEPs associated to all pairs of NEP of NepMap, without duplicate.
      *  Consider that this is a partial mesh, as we create less links than if we were creating all the links
      *  between any combination of NEPs of the NepMap.
+     *
      * @param nepMap    A dictionary of virtual NEPs using their Uuid as the key.
      * @return          A dictionary of IntLinkObj, defining internal Link Objects, build from an Id (Uuid, Name),
      *                  and the Uuid of the origin and destination of the internal link.
@@ -1078,6 +1081,7 @@ public class TapiOpticalNode {
 
     /**
      * Create Ids for internal links between virtual NEPs.
+     *
      * @param orgName   Origin Termination point name,
      * @param destName  Destnation Termination point name,
      * @return          Internal Link Id as Map of Name using the link Uuid as a key.
@@ -1097,6 +1101,7 @@ public class TapiOpticalNode {
      *   If CEP Uuid or SIP Uuid is used, Bpn that has CEP/SIP corresponding to the PortId provided in the request will
      *   be validated and PCE can later rely on NEP rather than CEP/SIP (Easier to handle notably since SIP model in
      *   the context does not include any reference to the NEP it is attached to!
+     *
      * @param bpn The BasePceNep to be tested,
      * @return True/False depending on whether the NEP/CEP/SIP is valid according to end points defined in the request.
      */
@@ -1123,6 +1128,7 @@ public class TapiOpticalNode {
 
     /**
      * Returns the child ConnectionEndPoint's Uuid of The Node Edge Point provided as an input.
+     *
      * @param nepUuid   Uuid of the Parent NodeEdgePoint
      * @return  The child CEP's Uuid
      */
@@ -1152,6 +1158,7 @@ public class TapiOpticalNode {
      * Allows to qualify the validity of a NEP whatever is the portId used in the request: NEP/SIP Uuid.
      *   Returns True if either provided Nep Uuid, or its associated SIP Uuid corresponds to one of the end points (A/Z)
      *   provided in the service request.
+     *
      * @param onep The NEP to be tested,
      * @return   True/False depending on whether the NEP or its SIP is valid according to End Points defined in the
      *           request.
@@ -1174,6 +1181,7 @@ public class TapiOpticalNode {
 
     /**
      * Returns the Uuid of the MappedServiceInterfacePoint associated with the OwnedNodeEdgePoint provided as an input.
+     *
      * @param onep OwnedNodeEdgePoint hosting the SIP
      * @return     Its hosted SIP Uuid.
      */
@@ -1187,7 +1195,8 @@ public class TapiOpticalNode {
 
     /**
      * Sets ConnectedInternalLinks attributes in BasePceNep that constitute ROADM internal Link extremities.
-     *  The BasePceNep concerned are Ots Virtual NEP of Degrees' and SRGs of the ROADM
+     *  The BasePceNep concerned are Ots Virtual NEP of Degrees' and SRGs of the ROADM.
+     *
      * @param orgVnepId     Uuid of the origin Virtual NEP
      * @param destVnepId    Uuid of the destination Virtual NEP
      * @param orgNodeType   Uuid of the origin Node
@@ -1220,6 +1229,7 @@ public class TapiOpticalNode {
 
     /**
      * Generates all Degree disaggregated nodes associated with one ROADM.
+     *
      * @return  A map of PceTapiOpticalNode resulting from the disaggregation of the T-API ROADM node.
      */
     private Map<Uuid, PceTapiOpticalNode> splitDegNodes() {
@@ -1294,6 +1304,7 @@ public class TapiOpticalNode {
 
     /**
      * Generates all SRG disaggregated nodes associated with one ROADM.
+     *
      * @return  A map of PceTapiOpticalNode resulting from the disaggregation of the T-API ROADM node.
      */
     private Map<Uuid, PceTapiOpticalNode> splitSrgNodes() {
@@ -1823,6 +1834,7 @@ public class TapiOpticalNode {
      *              NRGk (NW,...,NW) Forwarding (Regen function creating loop between NW ports)or not
      *              IRG (NRGi,....NRGk) forwarding
      *     Typical configuration for Mux and Switch-Ponders
+     *
      * @param clientPortId  The clientPortId which corresponds to A or Z end port specified in the service request.
      * @param netOtsNep     A list of BasePceNep that corresponds to Network ports.
      * @return              Returns pruned netOtsNep NW port list where all port that are not in direct (NRG) or
@@ -2011,6 +2023,7 @@ public class TapiOpticalNode {
 
     /**
      * Convert Frequency to slot number according to IETF FlexGrid representation (RFC 7698).
+     *
      * @param frequency     Frequency associated to an optical channel expressed in Hz (T-API)
      * @return      the adjacent upper Slot Number in a FlexGrid Slot Number = N + 285,
      *              N being an integer varying from -284 to 484 for C band as defined by IETF.
@@ -2022,6 +2035,7 @@ public class TapiOpticalNode {
 
     /**
      * Sets a Binary corresponding to the spectrum occupancy, from NEP available spectrum attribute.
+     *
      * @param onepUuid  Uuid of the Node Edge Point supporting WDM channel
      * @return          A Binary corresponding to the spectrum occupancy according to IETF RFC 7698
      */
@@ -2055,6 +2069,7 @@ public class TapiOpticalNode {
 
     /**
      * Check that used spectrum is empty or null which is the condition of availability for a PP.
+     *
      * @param otsNepUuid    Uuid of the NodeEdgePoint to be checked (a ROADM SRG PP).
      * @return  Returns true if no wavelength has been provisioned on the PP, false if the PP already support a channel.
      */
@@ -2066,6 +2081,7 @@ public class TapiOpticalNode {
 
     /**
      * Check that the NEP characteristics allow its validation.
+     *
      * @param   nepUuid Uuid of the NEP to check.
      * @return  true when NEP is relevant in the context.
      */
@@ -2078,6 +2094,7 @@ public class TapiOpticalNode {
 
     /**
      * Retrieves port Operational mode from the standard/souce/sink-Profiles.
+     *
      * @param nepUuid   Uuid of the NEP associated to the network port.
      * @return First    Operational Mode that includes the rate of the service in its name, "UNKNOWN_MODE" if no
      *                  operational mode is populated in any of the NEPs' profiles.
@@ -2125,6 +2142,7 @@ public class TapiOpticalNode {
      * Checks that there are some availabilities in the spectrum of a NEP.
      *   Scans spectrum portions defined in the available spectrum and return true if a spectrum portion is found
      *   with a width that is greater than 50GHz.
+     *
      * @param lcpUuid   Uuid of the NEP
      * @return          True if a spectrum portion wider or equal to 50 GHz was found, false if this is not the case.
      */
@@ -2161,6 +2179,7 @@ public class TapiOpticalNode {
      * Checks that a port is not already used looking at NEP used spectrum.
      *   Checks whether a port is used or not checking for the presence of a PhotonicMediaNodeEdgePointSpec and an
      *   occupied spectrum.
+     *
      * @param lcpUuid   Uuid of the NEP
      * @return          True if the port has a occupied spectrum, false if this is not the case.
      */
@@ -2374,6 +2393,7 @@ public class TapiOpticalNode {
 
     /**
      * For a specified NEP, completes a list of NEPs that share the same port, using CEP kindred information.
+     *
      * @param nepUuid   Uuid of the specified NEP.
      * @param connectedNepUuidList  List of NEP that are direct/indirect parent/child of the specified NEP.
      * @return  completed connectedNepUuidList.
@@ -2422,6 +2442,7 @@ public class TapiOpticalNode {
 
     /**
      * Creates a Full Mesh between VirtualNEPs considering all combination of 2 NEPs from input Map.
+     *
      * @param intercoNepMap     Map of NodeEdgePoint that correspond to virtual NEPs (either CPs, CTPs or TTPs).
      * @return               A dictionary of IntLinkObj, defining internal Link Objects, build from an Id (Uuid, Name),
      *                       and the Uuid of the origin and destination of the internal link.
@@ -2506,6 +2527,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a Map of PceTapiOticalNode instantiated when the service is of photonic type.
+     *
      * @return   A map of PceTapiOticalNode (Abstracted Node corresponding to a Graph Vertex for path computation in
      *           photonic layer). This Map contains only one Node in the case of Xponders and several Nodes
      *           (Degrees and SRGs) resulting from the disaggregation in the case of a ROADM Node.
@@ -2517,6 +2539,7 @@ public class TapiOpticalNode {
     /**
      * Provides information on whether the node must be considered or not according to the service request.
      *  Validity depends on service type, and whether the node is identified as a service end of the exercised request.
+     *
      * @return true/false depending on whether the node is valid or not.
      */
     public Boolean isValid() {
@@ -2525,6 +2548,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides node Common Node Type as defined in OpenROADM : RDM, XPDR, ILA, EXTPLUG.
+     *
      * @return NodeType as defined in OpenROADM.
      */
     public NodeTypes getCommonNodeType() {
@@ -2533,6 +2557,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a unique PceTapiOpticalNode instantiated if the TapiOpticalNode is identified as valid Xponder.
+     *
      * @return  A PceTapiOpticalNode (Abstracted Node corresponding to a Graph Vertex for path computation in the
      *          photonic layer).
      */
@@ -2542,6 +2567,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a unique PceTapiOtnNode instantiated if the TapiOpticalNode is identified as valid, for OTN services.
+     *
      * @return  A PceTapiOtnNode: Abstracted XPONDER Node corresponding to a Graph Vertex for path computation in the
      *          OTN layer.
      */
@@ -2551,6 +2577,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of OTS BasePceNep (NEPs + CEPs) associated with a Degree (OTS TTPs and CTP).
+     *
      * @return  A list of OTS BasePceNep associated with a Degree
      */
     public List<BasePceNep> getDegOtsNep() {
@@ -2559,6 +2586,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of OMS BasePceNep (NEPs + CEPs) associated with a Degree (OMS TTPs).
+     *
      * @return  A list of OMS BasePceNep associated with a Degree
      */
     public List<BasePceNep> getDegOmsNep() {
@@ -2567,6 +2595,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of OTS BasePceNep (NEPs + CEPs) associated with a SRG (OTS PPs and CP).
+     *
      * @return  A list of OTS BasePceNep associated with a SRG
      */
     public List<BasePceNep> getSrgOtsNep() {
@@ -2575,6 +2604,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of OTS BasePceNep (NEPs + CEPs) associated with a XPONDER network port.
+     *
      * @return  A list of OTS BasePceNep associated with a XPONDER (OTS NEPs)
      */
     public List<BasePceNep> getnetOtsNep() {
@@ -2583,6 +2613,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of BasePceNep (NEPs) associated with a XPONDER.
+     *
      * @return  A list of BasePceNep associated with a XPONDER including DSR NEPs, eODU and iODU NEPs and potentially
      *          CEPs (if ODU service already provisioned).
      */
@@ -2592,6 +2623,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of ODU BasePceNep (NEPs + CEPs) associated with a XPONDER.
+     *
      * @return  A list of ODU BasePceNep associated with a XPONDER, including eODU and iODU NEPs and potentially CEPs
      *          (if ODU service already provisioned).
      */
@@ -2601,6 +2633,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a List of OTU BasePceNep (CEPs) associated with a XPONDER Network port.
+     *
      * @return  A list of iOTU BasePceNep associated with a XPONDER.
      */
     public List<BasePceNep> getOtuCepAndNep() {
@@ -2609,6 +2642,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a Map internal links (IntLinkObj) joining virtual NEPs of disaggregated ROADM nodes.
+     *
      * @return  A dictionary of IntLinkObj, defining internal Link Objects, build from an Id (Uuid, Name),
      *          and the Uuid of the origin and destination of the internal link.
      */
@@ -2618,6 +2652,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides a Map internal links (PceTapiLink) joining virtual NEPs of disaggregated ROADM nodes.
+     *
      * @return  A dictionary of PceTapiLink.
      */
     public Map<Uuid, PceTapiLink> getPceInternalLinkMap() {
@@ -2627,6 +2662,7 @@ public class TapiOpticalNode {
 
     /**
      * Provides the Uuid of the topology the Tapi Optical Node belongs to.
+     *
      * @return  Uuid of the topology.
      */
     public Uuid getTopoUuid() {
@@ -2635,6 +2671,7 @@ public class TapiOpticalNode {
 
     /**
      * Retrieves and provides the direction of a CEP/NEP, as well as the corresponding OpenROADM tp type.
+     *
      * @param ep        Either an OwnedNodeEdgePoint or a ConnectionEndPoint to retrieve its direction.
      * @param tpType    Termination Point type (PP, CP, CTP, TTP, NW, CLIENT)
      * @return          A TpQualifier record with the direction and qualifier values.
@@ -2731,6 +2768,7 @@ public class TapiOpticalNode {
 
         /**
          * Provides a Uuid corresponding to origin NEP of the Link (Photonic Layer).
+         *
          * @return  Origin NEP Uuid.
          */
         private void setOppositeLinkId(Map<Uuid, Name> oppositeLinkId) {

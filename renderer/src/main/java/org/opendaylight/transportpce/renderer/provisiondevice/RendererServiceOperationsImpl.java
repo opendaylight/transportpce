@@ -954,6 +954,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     /**
      * Send renderer notification.
+     *
      * @param servicePathNotificationTypes ServicePathNotificationTypes
      * @param serviceName String
      * @param rpcStatusEx RpcStatusEx
@@ -975,6 +976,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     /**
      * Send renderer notification with path description information.
+     *
      * @param servicePathNotificationTypes ServicePathNotificationTypes
      * @param serviceName String
      * @param rpcStatusEx RpcStatusEx

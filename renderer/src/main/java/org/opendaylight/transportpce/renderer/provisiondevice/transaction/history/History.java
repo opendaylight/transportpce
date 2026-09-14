@@ -28,6 +28,7 @@ public interface History {
      * A list of transactions.
      *
      * <p>Will only accept unique transactions.
+     *
      * @return true if all transactions was added. false if one or more transactions was rejected.
      */
     boolean add(List<Transaction> transactions);
@@ -37,6 +38,7 @@ public interface History {
      *
      * <p>Duplicate interface ids, null or empty strings
      * are silently ignored.
+     *
      * @return may return false
      */
     boolean addInterfaces(String nodeId, String interfaceId);
@@ -46,6 +48,7 @@ public interface History {
      *
      * <p>Duplicate interface ids, null or empty strings
      * are silently ignored.
+     *
      * @return may return false
      */
     boolean addInterfaces(String nodeId, String[] interfaceIds);

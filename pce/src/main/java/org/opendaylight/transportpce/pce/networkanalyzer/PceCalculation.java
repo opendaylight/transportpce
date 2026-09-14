@@ -1954,6 +1954,7 @@ public class PceCalculation {
 
     /**
      * Get mc capability for device.
+     *
      * @param deviceNodeId String
      * @param nodeId NodeId
      * @return mc capability

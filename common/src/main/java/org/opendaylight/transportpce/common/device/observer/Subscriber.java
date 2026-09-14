@@ -29,6 +29,7 @@ public interface Subscriber {
      * Send an error message to this subscriber.
      *
      * <p>The same as calling {@link #event(Level, String)} Level.ERROR.
+     *
      * @param message error message
      */
     void error(String message);
@@ -37,6 +38,7 @@ public interface Subscriber {
      * Send a warning message to this subscriber.
      *
      * <p>The same as calling {@link #event(Level, String)} Level.WARN.
+     *
      * @param message warning message
      */
     void warn(String message);

@@ -378,6 +378,7 @@ public final class MappingUtilsImpl implements MappingUtils {
 
     /**
      * This Method is used to get SupportedIfCapability for openconfig port.
+     *
      * @param ifCapType interface name
      * @return supportedIf-capability
      */
@@ -391,6 +392,7 @@ public final class MappingUtilsImpl implements MappingUtils {
 
     /**
      * This Method is used to get interface type from metadata.
+     *
      * @param interfaceType interface type
      * @return interface name
      */

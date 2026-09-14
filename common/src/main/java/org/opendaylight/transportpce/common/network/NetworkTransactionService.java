@@ -34,6 +34,7 @@ public interface NetworkTransactionService {
 
     /**
      * the Databroker related to NetworkTransactionService.
+     *
      * @return the Databroker related to NetworkTransactionService.
      */
     DataBroker getDataBroker();

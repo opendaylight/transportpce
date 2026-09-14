@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
  * However, one may create an immutable copy of this object by passing an instance
  * of IDCollection into one of the constructors.
  * Also, this class will not except any values being null or empty string.
+ *
  * @see TPAndNodeCollection#TPAndNodeCollection(IDCollection)
  */
 public class TPAndNodeCollection implements IDCollection {

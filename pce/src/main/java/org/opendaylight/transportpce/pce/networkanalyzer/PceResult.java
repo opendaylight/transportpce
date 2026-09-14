@@ -175,6 +175,7 @@ public class PceResult {
 
     /**
      * Get the minimal frequency.
+     *
      * @return the minFreq.
      */
     public BigDecimal getMinFreq() {
@@ -183,6 +184,7 @@ public class PceResult {
 
     /**
      * Set the minimal frequency.
+     *
      * @param minFreq the minFreq to set.
      */
     public void setMinFreq(BigDecimal minFreq) {
@@ -191,6 +193,7 @@ public class PceResult {
 
     /**
      * Get the maximal frequency.
+     *
      * @return the maxFreq.
      */
     public BigDecimal getMaxFreq() {
@@ -199,6 +202,7 @@ public class PceResult {
 
     /**
      * Set the maximal frequency.
+     *
      * @param maxFreq the maxFreq to set.
      */
     public void setMaxFreq(BigDecimal maxFreq) {

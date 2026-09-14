@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to register
  * Servicehandler Service and Notification.
+ *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */

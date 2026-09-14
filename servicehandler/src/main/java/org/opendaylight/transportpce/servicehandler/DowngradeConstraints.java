@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class to Map Hard Constraints to Soft Constraints.
+ *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  * @author gilles Thouenon (gilles.thouenon@orange.com)
  */
@@ -55,6 +56,7 @@ public final class DowngradeConstraints {
 
     /**
      * Add Hard Constraints to Soft Constraints.
+     *
      * @param  hardConstraints to be added
      * @param  softConstraints to be modified
      * @return                 SoftConstraints modified
@@ -348,6 +350,7 @@ public final class DowngradeConstraints {
 
     /**
      * Remove all hard constraints except latency.
+     *
      * @param  hardConstraints HardConstarints to be downgraded
      * @return                 HardConstraints downgraded
      */
@@ -363,6 +366,7 @@ public final class DowngradeConstraints {
 
     /**
      * Convert HardConstraints to SoftConstraints.
+     *
      * @param  hardConstraints to be converted.
      * @return                 SoftConstraints converted.
      */

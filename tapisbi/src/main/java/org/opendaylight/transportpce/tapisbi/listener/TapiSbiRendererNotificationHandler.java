@@ -46,6 +46,7 @@ public class TapiSbiRendererNotificationHandler {
 
     /**
      * Process service implementation result for serviceName.
+     *
      * @param notification RendererRpcResultSp
      */
     private void onServiceImplementationResult(TapiSbiRendererRpcResultSp notification) {
@@ -77,6 +78,7 @@ public class TapiSbiRendererNotificationHandler {
 
     /**
      * Process failed service implementation for serviceName.
+     *
      * @param serviceName String
      */
     private void onFailedServiceImplementation(String serviceName) {

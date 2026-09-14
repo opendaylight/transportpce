@@ -18,6 +18,7 @@ public interface Base {
      * referenceFrequencyTHz.</p>
      *
      * <p>Note: (referenceFrequencyTHz - referenceFrequencyTHz) mod frequencyGranularityGHz = 0</p>
+     *
      * @throws NoIndexFoundException if the reference index cannot be found on the spectrum grid.
      */
     int referenceFrequencySpectrumIndex(double referenceFrequencyTHz, double edgeFrequencyTHz,

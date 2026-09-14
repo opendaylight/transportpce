@@ -15,18 +15,21 @@ public interface Collection {
 
     /**
      * Add a center frequency to this collection.
+     *
      * @param centerFrequencyGranularityGHz A center frequency, e.g. for a node.
      */
     boolean add(BigDecimal centerFrequencyGranularityGHz);
 
     /**
      * Add a center frequency to this collection.
+     *
      * @param centerFrequencyGranularityGHz A center frequency, e.g. for a node.
      */
     boolean add(float centerFrequencyGranularityGHz);
 
     /**
      * Add a center frequency to this collection.
+     *
      * @param centerFrequencyGranularityGHz A center frequency, e.g. for a node.
      */
     boolean add(double centerFrequencyGranularityGHz);
@@ -38,6 +41,7 @@ public interface Collection {
 
     /**
      * Finds the least common multiple of all center frequency granularities in this collection.
+     *
      * @throws LeastCommonMultipleException if no least common multiple is possible.
      */
     BigDecimal leastCommonMultipleInGHz();
@@ -47,6 +51,7 @@ public interface Collection {
      *
      * <p>Calculates the least common multiplier for this collection of frequency granularities
      * and then calculates how many slots it will occupy.</p>
+     *
      * @throws LeastCommonMultipleException if no least common multiple is possible.
      */
     int slots(BigDecimal frequencyGranularityGHz);

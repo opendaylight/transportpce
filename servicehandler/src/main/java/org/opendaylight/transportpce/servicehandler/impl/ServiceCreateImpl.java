@@ -118,6 +118,7 @@ public class ServiceCreateImpl implements ServiceCreate {
 
     /**
      * Send notification to NBI notification in order to publish message.
+     *
      * @param service PublishNotificationService
      */
     private void sendNbiNotification(PublishNotificationProcessService service) {

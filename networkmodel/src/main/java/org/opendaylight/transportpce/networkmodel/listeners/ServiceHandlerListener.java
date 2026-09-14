@@ -83,6 +83,7 @@ public class ServiceHandlerListener {
 
     /**
      * Allocate frequencies in topology.
+     *
      * @param notification ServiceRpcResultSh
      */
     private void onServiceCreation(ServiceRpcResultSh notification) {
@@ -94,6 +95,7 @@ public class ServiceHandlerListener {
 
     /**
      * Release frequencies in topology.
+     *
      * @param notification ServiceRpcResultSh
      */
     private void onServiceDeletion(ServiceRpcResultSh notification) {

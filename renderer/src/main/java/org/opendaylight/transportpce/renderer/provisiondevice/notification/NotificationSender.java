@@ -58,6 +58,7 @@ public class NotificationSender implements Notification {
 
     /**
      * Send renderer notification.
+     *
      * @param notification Notification
      */
     public void send(org.opendaylight.yangtools.binding.Notification<?> notification) {
@@ -72,6 +73,7 @@ public class NotificationSender implements Notification {
 
     /**
      * Build notification containing path description information.
+     *
      * @param servicePathNotificationTypes ServicePathNotificationTypes
      * @param serviceName String
      * @param rpcStatusEx RpcStatusEx

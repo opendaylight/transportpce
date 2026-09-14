@@ -16,12 +16,14 @@ public interface GnpyConsumer {
 
     /**
      * Check if api is available or not.
+     *
      * @return true os available, false otherwise.
      */
     boolean isAvailable();
 
     /**
      * Path computation request.
+     *
      * @param request GnpyApi.
      * @return Result the result of pat computation.
      */

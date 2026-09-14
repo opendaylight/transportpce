@@ -85,6 +85,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
+     *
      * @param tapiTopoUuid Uuid of the generated topology which corresponds to either an Abstracted or a Full view
      *                     of the OpenROAM converted topology.
      * @param tapiLink Instance of TapiLink leveraging its methods.
@@ -209,6 +210,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Enriches Nep description of tapiNodes populating their associated cep-list with Cep.
+     *
      * @param cepMap Map of Connection-End-Points with their Keys.
      */
     private void addCepToOnepAndNode(

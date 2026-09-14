@@ -2096,6 +2096,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     /**
      * Get a network termination point for nodeId and tpId.
+     *
      * @param nodeId String
      * @param tpId String
      * @return network termination point, null otherwise
@@ -2108,6 +2109,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     /**
      * Get a network termination point for nodeId and tpId.
+     *
      * @param nodeId TopologyNodeId
      * @param tpId String
      * @return network termination point, null otherwise
@@ -2120,6 +2122,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     /**
      * Get a network termination point with Common TerminationPoint1 augmentation for nodeId and tpId.
+     *
      * @param nodeId String
      * @param tpId String
      * @return network termination point, null otherwise

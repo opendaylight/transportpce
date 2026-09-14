@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A utility class which may be helpful while manipulating JSON and XML converters.
+ *
  * @param <T> Type of the DataObject to serialize / deserialize
  */
 public abstract class AbstractDataConverter<T extends DataObject> implements DataConverter<T> {
@@ -65,6 +66,7 @@ public abstract class AbstractDataConverter<T extends DataObject> implements Dat
 
     /**
      * Helper method to create a {@link BindingCodecContext}.
+     *
      * @return {@link BindingCodecContext} of loaded {@link YangModuleInfo}
      */
     private AbstractBindingRuntimeContext createBindingRuntimeContext(Set<YangModuleInfo> models)

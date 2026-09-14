@@ -71,6 +71,7 @@ public class DeviceTransaction {
 
     /**
      * Cancels transaction and unlocks it.
+     *
      * @return true if cancel was successful.
      */
     public boolean cancel() {
@@ -124,6 +125,7 @@ public class DeviceTransaction {
 
     /**
      * Returns state of transaction.
+     *
      * @return true if transaction was closed; otherwise false
      */
     public AtomicBoolean wasSubmittedOrCancelled() {

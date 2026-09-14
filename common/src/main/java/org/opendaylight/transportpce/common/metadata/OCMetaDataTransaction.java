@@ -18,6 +18,7 @@ public interface OCMetaDataTransaction {
     /**
      *  This Method is used to get OpenTerminalMetadata.
      *  from MD-Sal
+     *
      * @return OpenTerminalMetaData
      */
     OpenTerminalMetaData getXPDROpenTerminalMetaData();

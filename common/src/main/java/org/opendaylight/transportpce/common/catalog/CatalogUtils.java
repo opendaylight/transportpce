@@ -838,6 +838,7 @@ public class CatalogUtils {
      * launched power and span length Formula comes from
      * OpenROADM_OSNR_Calculation_20220610 Tool The resulting contribution shall be
      * calculated for each fiber span and summed up
+     *
      * @param launchedPowerdB
      *            The power launched in the span (shall account for Optical Distribution
      *            Frame loss)
@@ -932,6 +933,7 @@ public class CatalogUtils {
 
     /**
      * This method is to get central frequency granularity.
+     *
      * @param operationalModeId
      *            operational-mode-id of a specific-operational-mode
      * @return String central frequency
@@ -956,6 +958,7 @@ public class CatalogUtils {
 
     /**
      * This method computes the mix and max slots based on the given operational mode.
+     *
      * @param operationalModeId
      *              operational-mode-id of a specific-operational-mode
      * @return min and max slots
@@ -983,6 +986,7 @@ public class CatalogUtils {
 
     /**
      * This method computes the mix and max power for a given operational mode.
+     *
      * @param operationalModeId operational-mode-id of a specific-operational-mode.
      *
      * @return min and max output power.
