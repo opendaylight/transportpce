@@ -16,6 +16,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.networks.network.network.types.ClliNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.networks.network.network.types.OpenroadmCommonNetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -74,7 +75,9 @@ public class TpceNetwork {
         NetworkTypesBuilder networkTypesBldr = new NetworkTypesBuilder();
         switch (networkId) {
             case StringConstants.CLLI_NETWORK:
-                Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
+                Augmentation<NetworkTypes,
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1> ordClli =
+                        new NetworkTypes1Builder()
                     .setClliNetwork(new ClliNetworkBuilder().build())
                     .build();
                 networkTypesBldr.addAugmentation(ordClli);
@@ -82,7 +85,7 @@ public class TpceNetwork {
             case StringConstants.OPENROADM_NETWORK:
             case StringConstants.OPENROADM_TOPOLOGY:
             case StringConstants.OTN_NETWORK:
-                Augmentation<NetworkTypes> ordTopology = new org.opendaylight.yang.gen.v1.http
+                Augmentation<NetworkTypes, NetworkTypes1> ordTopology = new org.opendaylight.yang.gen.v1.http
                     .org.openroadm.common.network.rev250530.NetworkTypes1Builder()
                     .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                     .build();

@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.amplified.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.amplified.link.attributes.amplified.link.SectionElementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.span.attributes.LinkConcatenation1.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.span.attributes.LinkConcatenation1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
@@ -257,14 +258,14 @@ public final class TransactionUtils {
             .setSectionEltNumber(Uint16.ONE).build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
-        Augmentation<Link> aug1 = new Link1Builder()
+        Augmentation<Link, Link1> aug1 = new Link1Builder()
             .setAmplified(true)
             .setOMSAttributes(new OMSAttributesBuilder()
                 .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                 .setSpan(new SpanBuilder().build())
                 .build())
             .build();
-        Augmentation<Link> aug2 = new Link1Builder()
+        Augmentation<Link, Link1> aug2 = new Link1Builder()
             .setAmplified(true)
             .setOMSAttributes(new OMSAttributesBuilder()
                 .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())

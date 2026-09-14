@@ -21,6 +21,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev241213.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev241213.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
@@ -32,6 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.amplified.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.amplified.link.attributes.amplified.link.SectionElementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.span.attributes.LinkConcatenation1.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250530.span.attributes.LinkConcatenation1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
@@ -182,7 +184,7 @@ public final class TransactionUtils {
             .build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
-        Augmentation<Link> aug11 = new Link1Builder()
+        Augmentation<Link, Link1> aug11 = new Link1Builder()
                 .setAmplified(true)
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
@@ -193,7 +195,7 @@ public final class TransactionUtils {
             .setOppositeLink(new LinkId("link 1"))
             .setLinkType(OpenroadmLinkType.ROADMTOROADM)
             .build();
-        Augmentation<Link> aug21 = new Link1Builder()
+        Augmentation<Link, Link1> aug21 = new Link1Builder()
             .setAmplified(true)
             .setOMSAttributes(new OMSAttributesBuilder()
                 .setAmplifiedLink(new AmplifiedLinkBuilder()
@@ -228,7 +230,7 @@ public final class TransactionUtils {
         return ietfNetworkBldr.build();
     }
 
-    private static Augmentation<Node> getNode1AugImpl() {
+    private static Augmentation<Node, Node1> getNode1AugImpl() {
         return  new Node1Builder().setNodeType(OpenroadmNodeType.DEGREE).build();
     }
 
