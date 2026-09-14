@@ -29,14 +29,15 @@ import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
 import org.opendaylight.mdsal.dom.broker.RouterDOMNotificationService;
 import org.opendaylight.mdsal.dom.broker.RouterDOMPublishNotificationService;
 import org.opendaylight.mdsal.dom.broker.SerializedDOMDataBroker;
-import org.opendaylight.mdsal.dom.spi.FixedDOMSchemaService;
 import org.opendaylight.mdsal.dom.spi.store.DOMStore;
-import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStoreFactory;
+import org.opendaylight.mdsal.dom.store.inmemory.impl.InMemoryDOMStoreImpl;
 import org.opendaylight.yangtools.binding.data.codec.impl.di.DefaultBindingDOMCodecFactory;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
 import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
 import org.opendaylight.yangtools.binding.runtime.spi.BindingRuntimeHelpers;
+import org.opendaylight.yangtools.yang.data.tree.api.DataTreeConfiguration;
+import org.opendaylight.yangtools.yang.data.tree.api.DataTreeFactory;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 
 public class DataStoreContextImpl implements DataStoreContext {
@@ -52,6 +53,7 @@ public class DataStoreContextImpl implements DataStoreContext {
     private AdapterFactory adapterFactory;
     private DOMNotificationService domNotificationService;
     private DOMNotificationPublishService domNotificationPublishService;
+    private DataTreeFactory dataTreeFactory;
 
     @SuppressFBWarnings(value = "MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR")
     public DataStoreContextImpl() {
@@ -67,6 +69,10 @@ public class DataStoreContextImpl implements DataStoreContext {
         domNotificationRouter = new DOMNotificationRouter(16);
         domNotificationService = new RouterDOMNotificationService(domNotificationRouter);
         domNotificationPublishService = new RouterDOMPublishNotificationService(domNotificationRouter);
+        dataTreeFactory = ServiceLoader.load(DataTreeFactory.class).stream().findFirst()
+                .map(p -> p.get())
+                .orElseThrow(() -> new IllegalStateException(
+                        "No DataTreeFactory implementation found in classpath"));
         datastores = createDatastores();
         domDataBroker = createDOMDataBroker();
         dataBroker = adapterFactory.createDataBroker(domDataBroker);
@@ -121,11 +127,19 @@ public class DataStoreContextImpl implements DataStoreContext {
     }
 
     private DOMStore createConfigurationDatastore() {
-        return InMemoryDOMDataStoreFactory.create("DOM-CFG", new FixedDOMSchemaService(schemaCtx));
+        final var store = new InMemoryDOMStoreImpl("DOM-CFG", dataTreeFactory,
+                DataTreeConfiguration.DEFAULT_CONFIGURATION,
+                MoreExecutors.newDirectExecutorService(), 1000, false);
+        store.onModelContextUpdated(schemaCtx);
+        return store;
     }
 
     private DOMStore createOperationalDatastore() {
-        return InMemoryDOMDataStoreFactory.create("DOM-OPER", new FixedDOMSchemaService(schemaCtx));
+        final var store = new InMemoryDOMStoreImpl("DOM-OPER", dataTreeFactory,
+                DataTreeConfiguration.DEFAULT_OPERATIONAL,
+                MoreExecutors.newDirectExecutorService(), 1000, false);
+        store.onModelContextUpdated(schemaCtx);
+        return store;
     }
 
     @Override

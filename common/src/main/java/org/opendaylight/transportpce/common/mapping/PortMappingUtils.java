@@ -187,6 +187,13 @@ public final class PortMappingUtils {
                 .toString();
     }
 
+    protected static String formatMcCapabilityProfile(String profileStr) {
+        if (profileStr == null) {
+            return profileStr;
+        }
+        return profileStr.replaceAll("FrequencyGHz\\{value=([^}]+)\\}", "FrequencyGHz{value=$1, UNITS=GHz}");
+    }
+
     private PortMappingUtils() {
         //Noop - should not be called
     }

@@ -889,7 +889,7 @@ public class PortMappingVersion710 {
                 McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
                 McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
                 String mcNodeName = PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(),
-                        mcCapabilityProfile.toString());
+                        PortMappingUtils.formatMcCapabilityProfile(mcCapabilityProfile.toString()));
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -959,7 +959,7 @@ public class PortMappingVersion710 {
             for (String mcCapabilityProfileName : srg.getMcCapabilityProfileName()) {
                 McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
                 McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
-                String mcNodeName = "SRG" + srg.getSrgNumber().toString() + "-PP-" + mcCapabilityProfile;
+                String mcNodeName = "SRG" + srg.getSrgNumber().toString() + "-PP-" + PortMappingUtils.formatMcCapabilityProfile(mcCapabilityProfile.toString());
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
