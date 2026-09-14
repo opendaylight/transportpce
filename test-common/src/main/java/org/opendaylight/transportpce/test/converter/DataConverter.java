@@ -19,6 +19,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.DataContainer;
  * This interface may be useful to serialize / deserialize {@link DataContainer} or a {@link BindingObject}s to / from
  * its XML or JSON representation. Currently there are two implementations XmlDataConverter and
  * {@link JsonDataConverter}.
+ *
  * @param <T> Type of the DataObject to serialize / deserialize
  */
 public interface DataConverter<T extends DataObject> {
