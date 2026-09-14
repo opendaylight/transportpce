@@ -59,7 +59,7 @@ class PortMappingVersion710Test {
         McCapabilitiesKey expectedKey = new McCapabilitiesKey("DEG1-TTP-McCapabilityProfile{"
                 + "maxSlots=16, minSlots=3, "
                 + "profileName=mcProfile, "
-                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+                + "slotWidthGranularity=FrequencyGHz{value=12.5}}");
 
         McCapabilities expected = new McCapabilitiesBuilder()
                 .withKey(expectedKey)
@@ -112,7 +112,7 @@ class PortMappingVersion710Test {
                 + "maxSlots=16, "
                 + "minSlots=3, "
                 + "profileName=mcProfile1, "
-                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+                + "slotWidthGranularity=FrequencyGHz{value=12.5}}");
         McCapabilities expected1 = new McCapabilitiesBuilder()
                 .withKey(expectedKey1)
                 .setMinSlots(Uint32.valueOf(3))
@@ -124,7 +124,7 @@ class PortMappingVersion710Test {
                 + "maxSlots=8, "
                 + "minSlots=4, "
                 + "profileName=mcProfile2, "
-                + "slotWidthGranularity=FrequencyGHz{value=12.5, UNITS=GHz}}");
+                + "slotWidthGranularity=FrequencyGHz{value=12.5}}");
         McCapabilities expected2 = new McCapabilitiesBuilder()
                 .withKey(expectedKey2)
                 .setMinSlots(Uint32.valueOf(4))
