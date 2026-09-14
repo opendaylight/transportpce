@@ -60,6 +60,7 @@ public final class GridUtils {
     /**
      * Compute the wavelength index from Spectrum assignment begin index.
      * Only for fix grid and device 1.2.1.
+     *
      * @param index int
      * @return the wavelength number.
      */
@@ -69,6 +70,7 @@ public final class GridUtils {
 
     /**
      * Compute the start frequency in THz for the given index.
+     *
      * @param index int
      * @return the start frequency in THz for the provided index.
      */
@@ -84,6 +86,7 @@ public final class GridUtils {
 
     /**
      * Compute the stop frequency in THz for the given index.
+     *
      * @param index int
      * @return the stop frequency in THz for the provided index.
      */
@@ -117,6 +120,7 @@ public final class GridUtils {
 
     /**
      * Get the spectrum width for rate and modulation format.
+     *
      * @param rate Uint32
      * @param modulationFormat ModulationFormat
      * @return spectrum width in GHz compatible with models 10.1
@@ -134,6 +138,7 @@ public final class GridUtils {
 
     /**
      * Get central frequency of spectrum.
+     *
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @return central frequency in THz compatible with models 10.1
@@ -144,6 +149,7 @@ public final class GridUtils {
 
     /**
      * Get central frequency of spectrum with precision.
+     *
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @param precision int
@@ -160,6 +166,7 @@ public final class GridUtils {
 
     /**
      * Compute central frequency from min and max frequency.
+     *
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @return central frequency
@@ -170,6 +177,7 @@ public final class GridUtils {
 
     /**
      * Get central frequency of spectrum with precision for open config models.
+     *
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @param precision int
@@ -185,6 +193,7 @@ public final class GridUtils {
 
     /**
      * Compute central frequency from min and max frequency for open config models.
+     *
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @return central frequency
@@ -195,6 +204,7 @@ public final class GridUtils {
 
     /**
      * Get the lower spectral index for the frequency.
+     *
      * @param frequency BigDecimal
      * @return the lower spectral index
      */
@@ -204,6 +214,7 @@ public final class GridUtils {
 
     /**
      * Get the higher spectral index for the frequency.
+     *
      * @param frequency BigDecimal
      * @return the lower spectral index
      */
@@ -213,6 +224,7 @@ public final class GridUtils {
 
     /**
      * Create spectrum information from service path input.
+     *
      * @param input ServicePathInput
      * @return SpectrumInformation
      */
@@ -259,6 +271,7 @@ public final class GridUtils {
 
     /**
      * Get the N value of range -284 +484 from frequency index array.
+     *
      * @param frequencyIndex the frequency index f range 0 768.
      * @return the N value
      */
@@ -268,6 +281,7 @@ public final class GridUtils {
 
     /**
      * Convert the power from dBm to Watt.
+     *
      * @param  dbm power in dBm.
      * @return outputpower in Watt.
      */

@@ -74,6 +74,7 @@ public class PceTapiOpticalNode implements PceNode {
     /**
      * PceTapiOpticalNode is an abstracted Node in photonic layer corresponding to a Graph Vertex for path computation.
      *  Corresponds to the Photonic part of a XPONDER, or to one of the disaggregated elements of a ROADM (SRG/Degree).
+     *
      * @param serviceType   The service type which for PceTapiOpticalNodes is a photonic service : 100GEt, OTU4, OTUCN.
      * @param node          The Associated node in Tapi-Topology DataStore from which the Pce Node is abstracted.
      * @param nodeType      The Node Type as in OpenROADM topology layer. Currently handled : SRG, DEGREE, XPONDER.
@@ -372,6 +373,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     /**
      * Check that basic generic parameters of the node are available.
+     *
      * @return  True if all required parameters have been set for the node.
      */
     public boolean isValid() {
@@ -409,6 +411,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     /**
      * Retrieves port Operational mode from the standard/souce/sink-Profiles.
+     *
      * @param nepUuid   Uuid of the NEP associated to the network port.
      * @return First    Operational Mode that includes the rate of the service in its name, "UNKNOWN_MODE" if no
      *                  operational mode is populated in any of the NEPs' profiles.
@@ -590,6 +593,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     /**
      * Provides the List of Uuid of the available Network Ports on the OpticalNode (for Xponders).
+     *
      * @return  Uuid of the available network ports.
      */
     public List<String> getXpdrAvailNW() {
@@ -598,6 +602,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     /**
      * Provides the Uuid of the topology the node belongs to.
+     *
      * @return  Uuid of the nodes's topology.
      */
     public Uuid getTopoUuid() {

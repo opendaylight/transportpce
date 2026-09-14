@@ -13,7 +13,7 @@ public interface Index {
     /**
      * Calculates the first center frequency index relative to baseFrequencySlotIndex.
      *
-     *<p>Assuming the frequency range is divided into a grid of 6.25GHz wide chunks
+     * <p>Assuming the frequency range is divided into a grid of 6.25GHz wide chunks
      * and where the base frequency is 193.1 THz (G.694.1).
      * This method will find the FIRST potential center frequency index relative to the base frequency index
      * suitable for the nr of slots required for a service.</p>
@@ -23,7 +23,7 @@ public interface Index {
     /**
      * Calculates the last center frequency index relative to baseFrequencySlotIndex.
      *
-     *<p>Assuming the frequency range is divided into a grid of 6.25GHz wide chunks
+     * <p>Assuming the frequency range is divided into a grid of 6.25GHz wide chunks
      * and where the base frequency is 193.1 THz (G.694.1).
      * This method will find the LAST potential center frequency index relative to the base frequency index
      * suitable for the nr of slots required for a service.</p>

@@ -41,6 +41,7 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 
 /**
  * Utility Class to Build Hard Constraints and Soft Constraints.
+ *
  * @author Ahmed Helmy ( ahmad.helmy@orange.com )
  * @author Gilles Thouenon (gilles.thouenon@orange.com)
  */
@@ -51,6 +52,7 @@ public final class ConstraintsUtils {
 
     /**
      * Build a rather configurable soft-constraint.
+     *
      * @param  customerCode         set the list of customer-code provided
      * @param  operationalMode      set list of operational-mode
      * @param  diversityServiceList set diversity constraints from serviceListId
@@ -87,6 +89,7 @@ public final class ConstraintsUtils {
 
     /**
      * Build a rather configurable hard-constraint.
+     *
      * @param  customerCode         set the list of customer-code provided
      * @param  operationalMode      set list of operational-mode
      * @param  diversityServiceList set diversity constraints from serviceListId

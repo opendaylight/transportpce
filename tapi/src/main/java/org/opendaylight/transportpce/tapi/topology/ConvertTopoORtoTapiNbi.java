@@ -83,6 +83,7 @@ public class ConvertTopoORtoTapiNbi {
 
     /**
      * Instantiate an AbstractORTopoToNbi Object.
+     *
      * @param tapiTopoUuid Uuid of the generated topology provided in the input of GetTopologyDetails used in Builders.
      *        Considered Nodes and links are the ones present in OpenROADM topology.
      * @param tapiLink Instance of TapiLink leveraging its methods.
@@ -97,6 +98,7 @@ public class ConvertTopoORtoTapiNbi {
 
     /**
      * Populate tapiLinks from a list of ietf/OpenROADM links provided as the input of the method.
+     *
      * @param otnLinkMap Map of ietf/openroadm links provided as an input.
      */
     public void convertLinks(Map<

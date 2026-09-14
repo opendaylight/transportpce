@@ -239,7 +239,7 @@ public class R2RTapiLinkDiscovery {
     }
 
     /**
-     * Logs creation of a new TAPI ROADM-to-ROADM (R2R) OMS link, including its name (or "&lt;unnamed&gt;")
+     * Logs creation of a new TAPI ROADM-to-ROADM (R2R) OMS link, including its name (or "{@literal <unnamed>}")
      * and the full link details at DEBUG level.
      *
      * @param link the newly created link

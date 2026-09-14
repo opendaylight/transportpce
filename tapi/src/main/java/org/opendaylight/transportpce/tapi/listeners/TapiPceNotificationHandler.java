@@ -103,6 +103,7 @@ public class TapiPceNotificationHandler {
 
     /**
      * Process path computation request result.
+     *
      * @param notification the result notification.
      */
     private void onPathComputationResult(ServicePathRpcResult notification) {
@@ -156,6 +157,7 @@ public class TapiPceNotificationHandler {
 
     /**
      * Process cancel resource result.
+     *
      * @param serviceName Service name to build uuid.
      */
     private void onCancelResourceResult(String serviceName) {

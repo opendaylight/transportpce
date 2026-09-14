@@ -40,6 +40,7 @@ public class SpectrumInformation {
 
     /**
      * Get the wavelength.
+     *
      * @return the waveLength
      */
     public Uint32 getWaveLength() {
@@ -48,6 +49,7 @@ public class SpectrumInformation {
 
     /**
      * Set the wavelength.
+     *
      * @param waveLength the waveLength to set
      */
     public void setWaveLength(Uint32 waveLength) {
@@ -59,6 +61,7 @@ public class SpectrumInformation {
 
     /**
      * Get the lower spectral slot number.
+     *
      * @return the lowerSpectralSlotNumber
      */
     public int getLowerSpectralSlotNumber() {
@@ -67,6 +70,7 @@ public class SpectrumInformation {
 
     /**
      * Set the lower spectral slot number.
+     *
      * @param lowerSpectralSlotNumber the lowerSpectralSlotNumber to set
      */
     public void setLowerSpectralSlotNumber(int lowerSpectralSlotNumber) {
@@ -75,6 +79,7 @@ public class SpectrumInformation {
 
     /**
      * Get the higher spectral slot number.
+     *
      * @return the higherSpectralSlotNumber
      */
     public int getHigherSpectralSlotNumber() {
@@ -83,6 +88,7 @@ public class SpectrumInformation {
 
     /**
      * Set the higher spectral slot number.
+     *
      * @param higherSpectralSlotNumber the higherSpectralSlotNumber to set
      */
     public void setHigherSpectralSlotNumber(int higherSpectralSlotNumber) {
@@ -91,6 +97,7 @@ public class SpectrumInformation {
 
     /**
      * Get the frequency width.
+     *
      * @return the width
      */
     public BigDecimal getWidth() {
@@ -99,6 +106,7 @@ public class SpectrumInformation {
 
     /**
      * Set the frequency width.
+     *
      * @param width the width to set
      */
     public void setWidth(BigDecimal width) {
@@ -107,6 +115,7 @@ public class SpectrumInformation {
 
     /**
      * Get center frequency.
+     *
      * @return the centerFrequency
      */
     public BigDecimal getCenterFrequency() {
@@ -115,6 +124,7 @@ public class SpectrumInformation {
 
     /**
      * Set center frequency.
+     *
      * @param centerFrequency the centerFrequency to set
      */
     public void setCenterFrequency(BigDecimal centerFrequency) {
@@ -123,6 +133,7 @@ public class SpectrumInformation {
 
     /**
      * Get min frequency.
+     *
      * @return the minFrequency
      */
     public BigDecimal getMinFrequency() {
@@ -131,6 +142,7 @@ public class SpectrumInformation {
 
     /**
      * Set min frequency.
+     *
      * @param minFrequency the minFrequency to set
      */
     public void setMinFrequency(BigDecimal minFrequency) {
@@ -139,6 +151,7 @@ public class SpectrumInformation {
 
     /**
      * Get max frequency.
+     *
      * @return the maxFrequency
      */
     public BigDecimal getMaxFrequency() {
@@ -147,6 +160,7 @@ public class SpectrumInformation {
 
     /**
      * Set max frequency.
+     *
      * @param maxFrequency the maxFrequency to set
      */
     public void setMaxFrequency(BigDecimal maxFrequency) {
@@ -155,6 +169,7 @@ public class SpectrumInformation {
 
     /**
      * Get the modulation format.
+     *
      * @return the modulationFormat
      */
     public String getModulationFormat() {
@@ -163,6 +178,7 @@ public class SpectrumInformation {
 
     /**
      * Set the modulation format.
+     *
      * @param modulationFormat the modulationFormat to set
      */
     public void setModulationFormat(String modulationFormat) {

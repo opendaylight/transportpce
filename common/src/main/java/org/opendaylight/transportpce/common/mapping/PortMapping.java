@@ -167,7 +167,7 @@ public interface PortMapping {
      * some changes on the device port (creation of interface supported on this
      * port, change of port admin state, etc).
      *
-    * @param nodeId
+     * @param nodeId
      *            Unique Identifier for the node of interest.
      * @param mapping
      *            Old mapping to be updated.

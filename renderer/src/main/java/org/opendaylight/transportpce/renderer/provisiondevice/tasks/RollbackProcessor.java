@@ -31,6 +31,7 @@ public class RollbackProcessor {
 
     /**
      * Add task to the rollback processor.
+     *
      * @param task the task to add
      */
     public void addTask(RollbackTask task) {
@@ -40,6 +41,7 @@ public class RollbackProcessor {
     /**
      * Check if any previously added task requires rollback.
      * Rollback is necessary if just single task requires rollback.
+     *
      * @return
      *     true if any of added tasks requires rollback. false if none of added tasks requires rollback.
      */
@@ -56,6 +58,7 @@ public class RollbackProcessor {
      * Rollback all tasks previously added to this processor.
      * It does not matter if any of the tasks requires rollback.
      * All previously added tasks will be rolled back and removed from this processor.
+     *
      * @return
      *     number of tasks rolled back
      */
@@ -79,6 +82,7 @@ public class RollbackProcessor {
     /**
      * Rollback all tasks in case any task has failed.
      * If rollback is necessary, all previously added tasks will be rolled back and removed from this processor.
+     *
      * @return
      *     number of tasks rolled back
      */

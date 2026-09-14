@@ -96,6 +96,7 @@ public class PceNotificationHandler implements PceListener {
 
     /**
      * Process path computation request result.
+     *
      * @param notification the result notification.
      */
     private void onPathComputationResult(ServicePathRpcResult notification) {
@@ -164,6 +165,7 @@ public class PceNotificationHandler implements PceListener {
 
     /**
      * Check status of notification and send nbi notification.
+     *
      * @param notification ServicePathRpcResult the notification to check.
      * @return true is status is Successful, false otherwise.
      */
@@ -355,6 +357,7 @@ public class PceNotificationHandler implements PceListener {
 
     /**
      * Send notification to NBI notification in order to publish message.
+     *
      * @param service PublishNotificationService
      */
     private void sendNbiNotification(PublishNotificationProcessService service) {

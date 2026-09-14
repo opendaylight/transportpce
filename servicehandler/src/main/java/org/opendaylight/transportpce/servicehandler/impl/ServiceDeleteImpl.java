@@ -130,6 +130,7 @@ public class ServiceDeleteImpl implements ServiceDelete {
 
     /**
      * Send notification to NBI notification in order to publish message.
+     *
      * @param service PublishNotificationService
      */
     private void sendNbiNotification(PublishNotificationProcessService service) {

@@ -65,6 +65,7 @@ public class ConvertTopoTapiToTapiNbi {
      * All methods will used Nodes/Link/SIPs that have been populated externally through setters.
      * Thus the constituting elements of the topology do not depend on refTopoUuid which is used as
      * the target topoUuid.
+     *
      * @param refTopoUuid Reference Topology Uuid provided in the input of GetTopologyDetails used in Builders.
      */
     public ConvertTopoTapiToTapiNbi(Uuid refTopoUuid) {

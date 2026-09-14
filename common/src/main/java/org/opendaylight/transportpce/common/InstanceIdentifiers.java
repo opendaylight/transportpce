@@ -68,6 +68,7 @@ public final class InstanceIdentifiers {
 
     /**
      * Get an instance identifier related to network termination point.
+     *
      * @param nodeId String
      * @param tpId String
      * @return InstanceIdentifier
@@ -106,6 +107,7 @@ public final class InstanceIdentifiers {
 
     /**
      * Get an instance identifier related to network termination point.
+     *
      * @param nodeId String
      * @return InstanceIdentifier
      */

@@ -110,6 +110,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
+     *
      * @param tapiTopoUuid Uuid of the generated topology which corresponds to either an Abstracted or a Full view
      *                     of the OpenROAM converted topology.
      * @param tapiLink Instance of TapiLink leveraging its methods.
@@ -127,6 +128,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Populate tapiLinks from a list of ietf/OpenROADM links provided as the input of the method.
+     *
      * @param rdmTordmLinkList List of ietf/openroadm links provided as an input.
      */
     public void convertRdmToRdmLinks(
@@ -184,6 +186,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Selects the right method to convert OpenROADM topology according to the topological mode (Abstracted/Full).
+     *
      * @param roadm A list of ietf/openroadm Nodes provided as an input.
      * @param openroadmTopo A list of ietf/openroadm network provided as an input.
      * @param topoMode Topological mode which corresponds to the desired level of abstraction.
@@ -204,6 +207,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Enriches Nep description of tapiNodes populating their associated cep-list with Cep.
+     *
      * @param cepMap Map of Connection-End-Points with their Keys.
      */
     private void addCepToOnepAndNode(Map<Map<String, String>, ConnectionEndPoint> cepMap) {
@@ -253,6 +257,7 @@ public class ConvertTopoORtoTapiAtInit {
     /**
      * Converts OpenROADM infrastructure of the OpenROADM topology to its equivalent Tapi Topology stored in Data Store.
      * Associated topology name T0_FULL_MULTILAYER.
+     *
      * @param roadm A list of OpenROADM nodes,
      * @param openroadmTopo A list of networks topologies.
      */
@@ -399,6 +404,7 @@ public class ConvertTopoORtoTapiAtInit {
     /**
      * Abstracts OpenROADM infrastructure to a single Photonic Tapi Node "ROADM_INFRA" in Tapi Topology stored in DS.
      * Associated topology name T0_MULTILAYER.
+     *
      * @param openroadmTopo A list of networks topologies.
      */
     private void convertRoadmNodeAbstracted(Network openroadmTopo) {
@@ -472,6 +478,7 @@ public class ConvertTopoORtoTapiAtInit {
     /**
      * Converts OpenROADM infrastructure of the OpenROADM topology to its equivalent Tapi Topology stored in Data Store.
      * Associated topology name T0_FULL_MULTILAYER.
+     *
      * @param nodeUuid Uuid of the node to be created,
      * @param nameMap Name Map of the node to be created,
      * @param layerProtocols Set of layer protocols supported by the node,
@@ -544,6 +551,7 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Provides a Map of Owned Node Edge Point supported by a ROADM node of the Tapi Topology.
+     *
      * @param nodeId OpenROADM nodeId converted to a string,
      * @param tpList List of tps in OpenROADM topology,
      * @param withSip Boolean conditioning the creation of Service Interface Point and Connection End Points,

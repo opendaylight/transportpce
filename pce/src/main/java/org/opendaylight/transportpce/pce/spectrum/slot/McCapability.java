@@ -56,6 +56,7 @@ public interface McCapability {
      * Returns a bitset of frequencies that are supported by this MC interface.
      *
      * <p>0 = not supported, 1 = supported.
+     *
      * @param slotWidthGranularityGHz frequency width of each slot.
      * @param edgeFrequencyTHz lowest frequency on the spectrum grid.
      * @param effectiveBits nr of bits in the spectrum grid.

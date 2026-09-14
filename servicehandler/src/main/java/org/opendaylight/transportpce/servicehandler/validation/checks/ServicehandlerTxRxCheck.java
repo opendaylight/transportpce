@@ -74,6 +74,7 @@ public final class ServicehandlerTxRxCheck {
 
     /**
      * Check Compliance of Service TxRx info.
+     *
      * @param serviceEnd Service Endpoint
      * @param endpointType Endpoint type
      *

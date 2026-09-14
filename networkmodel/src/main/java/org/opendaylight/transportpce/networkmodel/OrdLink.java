@@ -53,8 +53,7 @@ final class OrdLink {
     private static final Logger LOG = LoggerFactory.getLogger(OrdLink.class);
 
     /**
-     *Method to create OMS links if not discovered by LLDP. This is helpful
-     *     to create test topologies using simulators*
+     * Method to create OMS links if not discovered by LLDP. This is helpfulto create test topologies using simulators
      *
      * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .InitRoadmNodesInput} object
@@ -113,8 +112,8 @@ final class OrdLink {
     }
 
     /**
-     *Method to create InterDomain links that can't be discovered by LLDP. This is used
-     *    to create topologies that span across several domains*
+     * Method to create InterDomain links that can't be discovered by LLDP. This is used
+     * to create topologies that span across several domains
      *
      * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .InitInterDomainLinksInput} object
@@ -240,8 +239,8 @@ final class OrdLink {
     }
 
     /**
-     *Generates terminating Tps on TAPI-SBI-ABS-NODE while creating inter-domain or alien-transpondersToRoadm links.
-     *       TAPI-SBI-ABS-NODE abstracts T-API Topology retrieved through SouthBound API. *
+     * Generates terminating Tps on TAPI-SBI-ABS-NODE while creating inter-domain or alien-transpondersToRoadm links.
+     * TAPI-SBI-ABS-NODE abstracts T-API Topology retrieved through SouthBound API.
      *
      * @param tpName a {@link java.lang.String} object
      * @param tpUuid a {@link java.lang.String} object
