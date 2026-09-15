@@ -40,10 +40,16 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2026-09-08 {
+    description
+      "Add support for OpenConfig 5.6.0 models";
+  }
+
   revision 2026-06-12 {
     description
       "Add support for OpenROADM 13.1.1 and 17.1 models";
   }
+
   revision 2026-05-29 {
     description
       "Add min-edge-freq and max-edge-freq to mc-capabilities";
@@ -194,6 +200,11 @@ module transportpce-portmapping {
         description
           "Version 2.0.0 of Open Config";
       }
+        enum 5.6.0 {
+            value 3;
+            description
+            "Version 5.6.0 of Open Config";
+        }
     }
     description
       "YANG enumerations for indicating the version of Open Config model supported ";
