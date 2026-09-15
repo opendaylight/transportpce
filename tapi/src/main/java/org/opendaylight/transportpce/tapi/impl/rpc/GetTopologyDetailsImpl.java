@@ -39,10 +39,10 @@ import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiDefaultTransferCharacteristics;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
@@ -369,7 +369,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             mappingOpt = Optional.ofNullable(networkTransactionService.read(
                     LogicalDatastoreType.CONFIGURATION,
                     DataObjectIdentifier.builder(
-                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908
                                     .Network.class)
                             .child(Nodes.class, new NodesKey(nodeIdPortMap))
                             .child(Mapping.class, new MappingKey(networkLcp))
