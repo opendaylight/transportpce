@@ -48,10 +48,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-13.1.1</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-17.1.0</artifactId>
     </dependency>
     <dependency>
@@ -73,6 +69,22 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openconfig-200</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-platform-5.6.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-terminal-device-5.6.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-interfaces-5.6.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-transport-line-5.6.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
