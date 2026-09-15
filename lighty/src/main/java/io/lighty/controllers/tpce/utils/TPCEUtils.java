@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2018 Pantheon Technologies s.r.o. All Rights Reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -222,7 +222,7 @@ public final class TPCEUtils {
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.olm.rev210618.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.pce.rev240205.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev260612.YangModuleInfoImpl
+            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev260908.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728
                     .YangModuleInfoImpl.INSTANCE,
@@ -239,7 +239,7 @@ public final class TPCEUtils {
             org.opendaylight.yang.svc.v1.gnpy.gnpy.eqpt.config.rev220221.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.gnpy.network.topology.rev220615.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.gnpy.path.rev220615.YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev260612
+            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev260908
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422
                     .YangModuleInfoImpl.INSTANCE,
