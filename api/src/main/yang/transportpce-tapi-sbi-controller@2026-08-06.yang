@@ -1,0 +1,141 @@
+module transportpce-tapi-sbi-controller {
+    yang-version 1.1;
+
+    namespace "http://org/opendaylight/transportpce/tapi-sbi-controller";
+    prefix tpce-tapi-sbi;
+
+    import org-openroadm-service {
+        prefix org-openroadm-service;
+        revision-date 2025-05-30;
+    }
+
+    import org-openroadm-common-service-types {
+        prefix org-openroadm-common-service-types;
+        revision-date 2025-05-30;
+    }
+
+    import ietf-inet-types {
+        prefix inet;
+        revision-date 2013-07-15;
+    }
+
+    organization
+      "transportPCE";
+
+    contact
+      "transportPCE committers - ODL";
+
+    description
+      "YANG definitions for TAPI SBI controller configuration in TransportPCE.
+       This module augments the OpenROADM service model to add TAPI SBI 
+       southbound controller configuration capabilities.";
+
+    revision 2026-08-06 {
+        description
+          "Initial revision.";
+    }
+
+    grouping tapi-sbi-controller-config {
+        description
+          "Configuration of a TAPI SBI controller.";
+
+        leaf controller-id {
+            type string;
+            description
+              "Unique identifier of the controller.";
+        }
+
+        leaf host {
+            type inet:host;
+            description
+              "Hostname or IP address of the SBI controller.";
+        }
+
+        leaf port {
+            type inet:port-number;
+            default "8182";
+            description
+              "RESTCONF port of the SBI controller.";
+        }
+
+        leaf username {
+            type string;
+            description
+              "Username for authentication.";
+        }
+
+        leaf password {
+            type string;
+            description
+              "Encrypted password for authentication.";
+        }
+
+        leaf controller-type {
+            type string;
+            default "transportpce";
+            description "Type of southbound controller (vendor provided controllers)";
+        }
+
+        leaf tapi-version {
+            type string {
+                pattern '[0-9]+\.[0-9]+\.[0-9]+';
+            }
+            default "2.4.0";
+            description
+              "TAPI version (e.g., 2.4.0).";
+        }
+    }
+
+    augment "/org-openroadm-service:controller-behaviour-settings" {
+        description
+          "Augment controller behaviour settings with TAPI SBI controller configuration.";
+
+        container tapi-sbi-controllers {
+            description
+              "Configuration of TAPI SBI controllers.";
+
+            list tapi-sbi-controller {
+                key "controller-id";
+                description
+                  "List of TAPI SBI controllers configured in the system.";
+
+                uses tapi-sbi-controller-config;
+            }
+        }
+    }
+    
+    // RPC to configure/add a controller
+    rpc configure-tapi-sbi-controller {
+        description
+          "Configure or add a TAPI SBI controller to the list. If a controller
+           with the same controller-id exists, it will be updated.";
+        input {
+            uses org-openroadm-common-service-types:sdnc-request-header;
+            uses tapi-sbi-controller-config;
+        }
+         
+        output {
+            uses org-openroadm-common-service-types:configuration-response-common;
+        }
+    }
+
+    // RPC to delete a controller
+    rpc delete-tapi-sbi-controller {
+        description
+          "Delete a TAPI SBI controller from the list based on controller-id.";
+        input {
+            uses org-openroadm-common-service-types:sdnc-request-header;
+            
+            leaf controller-id {
+                type string;
+                mandatory true;
+                description
+                  "Unique identifier of the controller to be deleted.";
+            }
+        }
+         
+        output {
+            uses org-openroadm-common-service-types:configuration-response-common;
+        }
+    }
+}
