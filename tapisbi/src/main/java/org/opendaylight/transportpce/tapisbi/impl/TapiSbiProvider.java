@@ -24,6 +24,8 @@ import org.opendaylight.transportpce.tapisbi.listener.TapiSbiServiceNotification
 import org.opendaylight.transportpce.tapisbi.listener.TapiSbiTopologyNotificationHandler;
 import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererService;
 import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererServiceImpl;
+import org.opendaylight.transportpce.tapisbi.rpcs.ConfigureTapiSbiControllerImpl;
+import org.opendaylight.transportpce.tapisbi.rpcs.DeleteTapiSbiControllerImpl;
 import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServiceDeleteImpl;
 import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServiceImplementationRequestImpl;
 import org.opendaylight.transportpce.tapisbi.rpcs.TapiSbiServicePathImpl;
@@ -77,7 +79,9 @@ public class TapiSbiProvider {
         rpcRegistration = rpcProviderService.registerRpcImplementations(
             new TapiSbiServiceImplementationRequestImpl(rendererListener),
             new TapiSbiServiceDeleteImpl(rendererListener),
-            new TapiSbiServicePathImpl(sbiRenderer));
+            new TapiSbiServicePathImpl(sbiRenderer),
+            new ConfigureTapiSbiControllerImpl(dataBroker),
+            new DeleteTapiSbiControllerImpl(dataBroker));
 
         this.listeners = new ArrayList<>();
 
