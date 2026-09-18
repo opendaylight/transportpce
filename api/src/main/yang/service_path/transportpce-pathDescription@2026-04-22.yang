@@ -138,6 +138,11 @@ module transportpce-pathDescription {
           "Optional attribute set to true if the service spans across TAPI-ABS-NODE abstracting an OLS domain handled
            through a NMS connected to TransportPCE via the TAPI-SBI";
     }
+    leaf cd-service-id {
+      type uint8;
+      description
+        "identifier of the cross-domain service for which the path is provided";
+    }
     container cross-domain-service {
       when "../cross-domain = 'true'";
           description

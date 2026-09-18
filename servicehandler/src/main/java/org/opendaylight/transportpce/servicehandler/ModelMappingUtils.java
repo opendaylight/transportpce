@@ -27,6 +27,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceAEnd1Builder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceZEnd1Builder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.SpectrumAllocation;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -207,6 +209,74 @@ public final class ModelMappingUtils {
             .setPathDescription(
                 new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
                         .service.implementation.request.input.PathDescriptionBuilder()
+                    .setAToZDirection(pathDescription.getAToZDirection())
+                    .setZToADirection(pathDescription.getZToADirection())
+                    .build())
+            .build();
+    }
+
+
+    public static TapiSbiServiceImplementationRequestInput createTapiServiceImplementationRequest(
+            ServiceInput input,
+            PathDescription pathDescription) {
+        return new TapiSbiServiceImplementationRequestInputBuilder()
+            .setConnectionType(input.getConnectionType())
+            .setServiceName(input.getServiceName())
+
+            .setServiceAEnd(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410
+                        .tapi.sbi.service.implementation.request.input.ServiceAEndBuilder()
+                    .setServiceFormat(input.getServiceAEnd().getServiceFormat())
+                    .setServiceRate(input.getServiceAEnd().getServiceRate())
+                    .setOtuServiceRate(getOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()))
+                    .setOduServiceRate(getOduServiceRate(input.getServiceAEnd().getOduServiceRate()))
+                    .setClli(input.getServiceAEnd().getClli())
+                    .setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
+                    .setTxDirection(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
+                                .service.endpoint.sp.TxDirectionBuilder()
+                            .setPort(
+                                input.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
+                            .build())
+                    .setRxDirection(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
+                                .service.endpoint.sp.RxDirectionBuilder()
+                            .setPort(
+                                input.getServiceAEnd().getRxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
+                            .build())
+                    .build())
+            .setServiceZEnd(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410
+                .tapi.sbi.service.implementation.request.input.ServiceZEndBuilder()
+                    .setServiceFormat(input.getServiceZEnd().getServiceFormat())
+                    .setServiceRate(input.getServiceZEnd().getServiceRate())
+                    .setOtuServiceRate(getOtuServiceRate(input.getServiceZEnd().getOtuServiceRate()))
+                    .setOduServiceRate(getOduServiceRate(input.getServiceZEnd().getOduServiceRate()))
+                    .setClli(input.getServiceZEnd().getClli())
+                    .setNodeId(new NodeIdType(input.getServiceZEnd().getNodeId().getValue()).getValue())
+                    .setTxDirection(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
+                                .service.endpoint.sp.TxDirectionBuilder()
+                            .setPort(
+                                input.getServiceZEnd().getTxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
+                            .build())
+                    .setRxDirection(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910
+                                .service.endpoint.sp.RxDirectionBuilder()
+                            .setPort(
+                                input.getServiceZEnd().getRxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
+                            .build())
+                    .build())
+            .setConnectionType(input.getConnectionType())
+            .setServiceHandlerHeader(
+                new ServiceHandlerHeaderBuilder().setRequestId(input.getSdncRequestHeader().getRequestId()).build())
+            .setPathDescription(
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410
+                    .tapi.sbi.service.implementation.request.input.PathDescriptionBuilder()
                     .setAToZDirection(pathDescription.getAToZDirection())
                     .setZToADirection(pathDescription.getZToADirection())
                     .build())
