@@ -304,12 +304,19 @@ module transportpce-pce {
          cross-domain-services to avoid redundant information";
       list cd-service-path-description {
         key "cd-service-id";
-        leaf cd-service-id {
-          type string;
-          description
-            "the cd-service for which service-path is provided";
+        uses transportpce-pathDescription:path-description {
+          refine cross-domain {
+            default false;
+            description
+              "in case of aggregated-path description, rather than providing for each path description a container
+               cross-domain service which would be redundant between the different aggregated path, the cross-domain
+               container is provided separately outside the path-description. The refinement of cross-domain with a
+               default value set to false allows, by default, not triggering the cross-domain container here.";
+          }
+          refine cd-service-id {
+            mandatory true;
+          }
         }
-        uses transportpce-pathDescription:path-description;
       }
     }
     container cross-domain-service {

@@ -74,6 +74,8 @@ public class PathComputationServiceImpl implements PathComputationService {
     private PortMapping portMapping;
     private static String pceOperationalMode;
     private static boolean isSecondStepHybrid;
+    private static boolean isSecondStepSuccessfullyFinished = false;
+    private static boolean isSecondStepAborted = false;
     private static int npathorder;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
@@ -421,6 +423,14 @@ public class PathComputationServiceImpl implements PathComputationService {
         return pceOperationalMode;
     }
 
+    public static boolean getIsSecondStepSuccessfullyFinished() {
+        return  PathComputationServiceImpl.isSecondStepSuccessfullyFinished;
+    }
+
+    public static boolean getHasSecondStepFailed() {
+        return  PathComputationServiceImpl.isSecondStepAborted;
+    }
+
     public static void setPceOperationalMode(String pceOperMode) {
         PathComputationServiceImpl.pceOperationalMode = pceOperMode;
     }
@@ -429,6 +439,9 @@ public class PathComputationServiceImpl implements PathComputationService {
         PathComputationServiceImpl.isSecondStepHybrid = is2ndStepHybrid;
     }
 
+    public static void setIs2ndStepFinished(boolean is2ndStepFinished) {
+        PathComputationServiceImpl.isSecondStepSuccessfullyFinished = is2ndStepFinished;
+    }
 
     public static void setNpathOrder(Integer npathOrder) {
         PathComputationServiceImpl.npathorder = npathOrder;

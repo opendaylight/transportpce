@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.pce;
+package org.opendaylight.transportpce.pce.orchestrator;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -23,6 +23,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev26
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SecondStepHybridPcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SecondStepHybridPcResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEnd;
@@ -42,6 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev24
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirection;
@@ -50,37 +53,46 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
-public class PceCrossDomainOrchestrator {
 
+public final class PceCrossDomainOrchestrator {
+
+    private static PceCrossDomainOrchestrator instance;
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCrossDomainOrchestrator.class);
     private static final String NOTIFICATION_OFFER_REJECTED_MSG = "notification offer rejected : ";
     private static final String PERFORMING_PCE_CROSS_DOMAIN_MSG = "performing TAPI PCE (Cross-Domain-Service...";
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
-    private ServiceRpcResultSh notification = null;
-    private final ListeningExecutorService executor;
+    private static ServiceRpcResultSh notification;
+    private static int kpathOrder;
+    private static final ListeningExecutorService EXECUTOR = MoreExecutors
+        .listeningDecorator(Executors.newFixedThreadPool(5));
 
-    @Activate
-    public PceCrossDomainOrchestrator(
-//            @Reference RpcProviderService rpcProviderService,
-            @Reference PathComputationService pathComputationService,
-            @Reference NotificationPublishService notificationPublishService) {
 
-        this.notificationPublishService = notificationPublishService;
-        this.pathComputationService = pathComputationService;
-        executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
+    private PceCrossDomainOrchestrator(PathComputationService pcs, NotificationPublishService nps) {
+
+        this.notificationPublishService = nps;
+        this.pathComputationService = pcs;
+
     }
 
-    public PathComputationRequestOutput performPCE(ServiceCreateInput serviceCreateInput, boolean reserveResource) {
-        LOG.info(PERFORMING_PCE_CROSS_DOMAIN_MSG);
+    public static synchronized PceCrossDomainOrchestrator getInstance(final PathComputationService pcs,
+        final NotificationPublishService nps) {
+        if (instance == null) {
+            instance = new PceCrossDomainOrchestrator(pcs, nps);
+        }
+        return instance;
+    }
+
+    public static PathComputationRequestOutput performPCE(
+            ServiceCreateInput serviceCreateInput, boolean reserveResource,
+            PathComputationService pcs, NotificationPublishService nps) {
+        LOG.info(PceCrossDomainOrchestrator.PERFORMING_PCE_CROSS_DOMAIN_MSG + "for K path order = {}",
+            PceCrossDomainOrchestrator.kpathOrder);
         if (validateParams(serviceCreateInput.getServiceName(), serviceCreateInput.getSdncRequestHeader())) {
 
             return performPCE(
@@ -91,6 +103,7 @@ public class PceCrossDomainOrchestrator {
                     serviceCreateInput.getServiceAEnd(),
                     serviceCreateInput.getServiceZEnd(),
                     ServiceNotificationTypes.ServiceCreateResult,
+                    ServicePathNotificationTypes.SecondStepHybridPcRequest,
                     reserveResource,
                     serviceCreateInput.getCustomer(),
                     serviceCreateInput
@@ -98,7 +111,10 @@ public class PceCrossDomainOrchestrator {
                             .augmentation(ServiceAEnd2.class),
                     serviceCreateInput
                             .getServiceZEnd()
-                            .augmentation(ServiceZEnd2.class)
+                            .augmentation(ServiceZEnd2.class),
+                    PceCrossDomainOrchestrator.kpathOrder,
+                    pcs,
+                    nps
             );
         } else {
             return returnTapiPCRFailed();
@@ -106,32 +122,39 @@ public class PceCrossDomainOrchestrator {
     }
 
 
-    private PathComputationRequestOutput performPCE(
+    private static PathComputationRequestOutput performPCE(
             HardConstraints hardConstraints,
             SoftConstraints softConstraints,
             String serviceName,
             SdncRequestHeader sdncRequestHeader,
             ServiceEndpoint serviceAEnd,
             ServiceEndpoint serviceZEnd,
-            ServiceNotificationTypes notifType,
+            ServiceNotificationTypes servNotifType,
+            ServicePathNotificationTypes servPathNotifType,
             boolean reserveResource,
             String customerName,
             SpectrumAllocation spectrumAEndAllocation,
-            SpectrumAllocation spectrumZEndAllocation
+            SpectrumAllocation spectrumZEndAllocation,
+            int kpathorder,
+            PathComputationService pcs,
+            NotificationPublishService nps
     ) {
         // TODO: define specific notification type so that nothing happens when recieved in regular PCE and so that
         // we handle where needed the notification associated with this specific tapi-domain PathComputationRequest
         LOG.info("Calling path computation.");
-        notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
+        notification = new ServiceRpcResultShBuilder().setNotificationType(servNotifType).setServiceName(serviceName)
                 .setStatus(RpcStatusEx.Pending)
                 .setStatusMessage("Service compliant, submitting PathComputation Request ...").build();
         try {
-            notificationPublishService.putNotification(notification);
+            nps.putNotification(notification);
         } catch (InterruptedException e) {
             LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
         }
-        FutureCallback<PathComputationRequestOutput> pceCallback =
-                new PathComputationRequestOutputCallback(notifType, serviceName);
+        FutureCallback<PathComputationRequestOutput> pceCallback = PceCrossDomainOrchestrator.getInstance(null, null)
+                    .new Pcro2ndStepCallback(servPathNotifType, serviceName, kpathorder);
+        //TODO: PreProcess the input parameters so that service name is correctly formated and triggers Path computation
+        // Using TAPI PCE (or change Algo of PCE so that it detects the 2nd step PC and slect this criteria rather
+        // than serviceName format == Uuid to use TAPI flavor of the PCE
         PathComputationRequestInput pathComputationRequestInput = createPceRequestInput(
                 serviceName,
                 sdncRequestHeader,
@@ -145,9 +168,8 @@ public class PceCrossDomainOrchestrator {
                 spectrumZEndAllocation
         );
         //TODO : find a way to set pceOperMode where appropriate
-        ListenableFuture<PathComputationRequestOutput> pce = this.pathComputationService
-                .pathComputationRequest(pathComputationRequestInput);
-        Futures.addCallback(pce, pceCallback, executor);
+        ListenableFuture<PathComputationRequestOutput> pce = pcs.pathComputationRequest(pathComputationRequestInput);
+        Futures.addCallback(pce, pceCallback, EXECUTOR);
 
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
             // TODO: define new Response code? so that nothing happens when recieved in regular PCE and so that
@@ -165,7 +187,7 @@ public class PceCrossDomainOrchestrator {
     }
 
 
-    private PathComputationRequestInput createPceRequestInput(
+    private static PathComputationRequestInput createPceRequestInput(
             String serviceName,
             SdncRequestHeader serviceHandler,
             HardConstraints hardConstraints,
@@ -278,7 +300,7 @@ public class PceCrossDomainOrchestrator {
                 .setResponseParameters(reponseParameters).build();
     }
 
-    private Boolean validateParams(String serviceName, SdncRequestHeader sdncRequestHeader) {
+    private static Boolean validateParams(String serviceName, SdncRequestHeader sdncRequestHeader) {
         boolean result = true;
         if (!checkString(serviceName)) {
             result = false;
@@ -294,34 +316,52 @@ public class PceCrossDomainOrchestrator {
         return ((value != null) && (value.compareTo("") != 0));
     }
 
+    public PathComputationService getPathComputationService() {
+        return this.pathComputationService;
+    }
+
+    public NotificationPublishService getnotificationPublishService() {
+        return this.notificationPublishService;
+    }
+
+    public static void setKpathOrder(int kpathorder) {
+        PceCrossDomainOrchestrator.kpathOrder = kpathorder;
+    }
+
     private record EndPoint(String nodeId, Uuid nodeUuid, String tpName, Uuid tpUuid, Uuid topoUuid) {}
 
     private record AzEndPoint(EndPoint aendPoint, EndPoint zendPoint) {}
 
-    private final class PathComputationRequestOutputCallback implements FutureCallback<PathComputationRequestOutput> {
-        private final ServiceNotificationTypes notifType;
+    private final class Pcro2ndStepCallback implements FutureCallback<PathComputationRequestOutput> {
+        private final ServicePathNotificationTypes notifType;
         private final String serviceName;
+        private final int kpathOrder;
         String message = "";
-        ServiceRpcResultSh notification = null;
+        SecondStepHybridPcResult notification = null;
 
-        private PathComputationRequestOutputCallback(ServiceNotificationTypes notifType, String serviceName) {
+        private Pcro2ndStepCallback(ServicePathNotificationTypes notifType, String serviceName, int kpathorder) {
             this.notifType = notifType;
             this.serviceName = serviceName;
+            this.kpathOrder = kpathorder;
         }
 
         @Override
         public void onSuccess(PathComputationRequestOutput response) {
             if (response != null) {
                 /**
-                 * If PCE reply is received before timer expiration with a positive result, a
-                 * service is created with admin and operational status 'down'.
+                 * If PCE reply, in 2nd step of Hybrid path computation, is received before timer expiration with a
+                 * positive result, the second step path computation is successfully terminated and the notification
+                 * triggers first step path computation ending.
                  */
-           // TODO: define specific notification type so that nothing happens when recieved in regular PCE and so that
-           // we handle where needed the notification associated with this specific tapi-domain PathComputationRequest
-                message = "PCE replied to PCR Request !";
-                LOG.info("PCE replied to PCR Request : {}", response);
-                notification = new ServiceRpcResultShBuilder().setNotificationType(notifType)
+
+                message = "PCE replied to PCR Request in second step of hybrid path computation!";
+                LOG.info("PCE replied to PCR Request in second step of hybrid path computation: {}", response);
+                notification = new SecondStepHybridPcResultBuilder()
                         .setServiceName(serviceName)
+                        .setNotificationType(notifType)
+                        .setSelectedKpathOrder(Uint8.valueOf(kpathOrder))
+                        .setAggregatedPathDescription(PceCrossDomainPathAggregator.getInstance().aggPathDescription)
+                        .setCrossDomainService(PceCrossDomainPathAggregator.getInstance().crossDomainService)
                         .setStatus(RpcStatusEx.Successful).setStatusMessage(message).build();
                 try {
                     notificationPublishService.putNotification(notification);
@@ -330,7 +370,9 @@ public class PceCrossDomainOrchestrator {
                 }
             } else {
                 message = "PCE failed ";
-                notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName("")
+                notification = new SecondStepHybridPcResultBuilder()
+                        .setServiceName(serviceName)
+                        .setNotificationType(notifType)
                         .setStatus(RpcStatusEx.Failed).setStatusMessage(message).build();
                 try {
                     notificationPublishService.putNotification(notification);
@@ -343,9 +385,14 @@ public class PceCrossDomainOrchestrator {
         @Override
         public void onFailure(Throwable arg0) {
             LOG.error("Path not calculated..");
-            notification = new ServiceRpcResultShBuilder().setNotificationType(notifType)
+            notification = new SecondStepHybridPcResultBuilder()
                     .setServiceName(serviceName)
-                    .setStatus(RpcStatusEx.Failed).setStatusMessage("PCR Request failed  : " + arg0.getMessage())
+                    .setNotificationType(notifType)
+                    .setSelectedKpathOrder(Uint8.valueOf(kpathOrder))
+                    //.setAggregatedPathDescription(null)
+                    //.setCrossDomainService(null)
+                    .setStatus(RpcStatusEx.Failed).setStatusMessage("2nd step PC failed for K = " + kpathOrder
+                        + "path, " + arg0.getMessage())
                     .build();
             try {
                 notificationPublishService.putNotification(notification);
@@ -354,5 +401,6 @@ public class PceCrossDomainOrchestrator {
             }
         }
     }
+
 
 }
