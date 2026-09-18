@@ -5,24 +5,36 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.pce.graph;
+package org.opendaylight.transportpce.pce.orchestrator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.pce.graph.PceGraph.PathElement;
 import org.opendaylight.transportpce.pce.graph.PceGraph.SubGraphPath;
+import org.opendaylight.transportpce.pce.graph.PceGraphEdge;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.CrossDomainService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.CrossDomainServiceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.ImpairmentParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.AToZImpairmentsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.ZToAImpairmentsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PceCrossDomainPathAggregator {
 
     private static PceCrossDomainPathAggregator instance;
-
-    private List<PathElement> pathElementList = new ArrayList<>();
+    /* Logging. */
+    private static final Logger LOG = LoggerFactory.getLogger(PceCrossDomainPathAggregator.class);
+    private Map<Integer, List<PathElement>> pathElementMap = new HashMap<>();
     private Map<Integer, CdServicesBuilder> crossDomainServiceBldr = new HashMap<>();
     // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
     // and each domains (2NdKey is domain order).
@@ -31,6 +43,11 @@ public final class PceCrossDomainPathAggregator {
     private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> tapiAtoZSubPathImpairments = new HashMap<>();
     private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> tapiZtoASubPathImpairments = new HashMap<>();
     private Map<Integer, Map<Integer, SubGraphPath>> subGraphPathMap = new HashMap<>();
+    private List<Integer> prunedKorderList = new ArrayList<>();
+    public AggregatedPathDescription aggPathDescription = new AggregatedPathDescriptionBuilder().build();
+    public CrossDomainService crossDomainService = new CrossDomainServiceBuilder().build();
+    public int kpathorder = 0;
+    private int kpathorderMax = 0;
 
     private PceCrossDomainPathAggregator() {
 
@@ -48,18 +65,21 @@ public final class PceCrossDomainPathAggregator {
     // Allows to simplify path computation in TAPI domain to avoid computing unnecessary path in TAPI domains
     public void pruneOpenROADMimpairments() {
         // Calls checkOpenROADMimpairments to cleanup AtoZSubImpaiment & Subgraph  maps as well as pathElementList
-        checkOpenRoadmImpairments(0);
+        checkOpenRoadmImpairments(kpathorder);
+        prunedKorderList = openRoadmAtoZSubPathImpairments.entrySet().stream().map(Elt -> Elt.getKey()).toList();
+        kpathorderMax = openRoadmAtoZSubPathImpairments.size();
     }
 
-    public boolean checkE2EpathImpairments(int korder) {
+    public PceResult checkE2EpathImpairments(int korder) {
         // When a path has been analyzed through checkPath in the TAPI PCE, we need to check E2E path consistency
         // and if the path is consistent return true; otherwise false, which makes Graph.calcPath iterate through next
         //path. Korder is used to retrieve the corresponding OpenROADM impairments in Maps.
         calculateE2Emargin();
-        return true;
+        // return a PceResult according to the same process of Papv
+        return new PceResult();
     }
 
-    public boolean buildE2Epath(int korder) {
+    public boolean buildAggregatedPath(int korder) {
         // When a path has been analyzed through checkPath in the TAPI PCE, and E2E path consistency is succesfully
         // check, we need to build the the cross-domain service Container with its attributes and cleanup tables.
         // returns true if successful
@@ -68,7 +88,15 @@ public final class PceCrossDomainPathAggregator {
     }
 
 
-    private void checkOpenRoadmImpairments(Integer kpathorder) {
+    public ServiceCreateInput buildServiceCreateInput(int korder, int norder) {
+        // Builds the service create for TAPI service creation in the TAPI Domain
+        SubGraphPath subgraphpath = getSubGraphPathFromMap(korder, norder);
+        LOG.info("SubgraphPtah under analysis is {}", subgraphpath);
+
+        return new ServiceCreateInputBuilder().build();
+    }
+
+    private void checkOpenRoadmImpairments(Integer kpathOrder) {
 
     }
 
@@ -76,6 +104,16 @@ public final class PceCrossDomainPathAggregator {
         // As most of the K E2E path will probably result in the same entry and exit point in the TAPI-SBI-ABS Node it
         // Makes sense to limit the number of PAth computation Request exercised through the TAPI PCE
     }
+
+    public Map<Integer, List<PathElement>> prunePathElementMap(Map<Integer, List<PathElement>> pathelementMap) {
+        // After pruneOpenROADMimpairments has been purging from the list of Path for which a path needs to be found
+        // in TAPI domain, the path that are not good candidate need to be removed from the PathElemnt Map of PceGraph
+
+        return pathelementMap.entrySet().stream()
+                .filter(pathElt -> prunedKorderList.contains(pathElt.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 
     private void calculateE2Emargin() {
 
@@ -117,8 +155,12 @@ public final class PceCrossDomainPathAggregator {
         return this.tapiZtoASubPathImpairments;
     }
 
-    public void setPathElementList(List<PathElement> pathElementList) {
-        this.pathElementList.addAll(pathElementList);
+    public int getKpathOrderMax() {
+        return this.kpathorderMax;
+    }
+
+    public void addPathElementListToMap(Integer kpathOrder, List<PathElement> pathElementList) {
+        this.pathElementMap.put(kpathOrder, pathElementList);
     }
 
     public void addSubGraphPathToMap(int korder, int norder, SubGraphPath subGraphPath) {
@@ -126,6 +168,19 @@ public final class PceCrossDomainPathAggregator {
         Map<Integer, SubGraphPath> msubGraphPath = new HashMap<>();
         msubGraphPath.put(norder, subGraphPath);
         this.subGraphPathMap.put(korder, msubGraphPath);
+    }
+
+    public SubGraphPath getSubGraphPathFromMap(int korder, int norder) {
+        // retrieves the Subgrapth according to its indexes k and n form subGraphPathMap
+        return this.subGraphPathMap.entrySet().stream()
+            .filter(map -> map.getKey() == korder).findAny().orElseThrow().getValue()
+                .entrySet().stream().filter(map -> map.getKey() == norder).findAny().orElseThrow().getValue();
+    }
+
+    public Map<Integer, SubGraphPath> getkSubGraphPathMap(int korder) {
+        // retrieves the SubgrapthMap according to its k index
+        return this.subGraphPathMap.entrySet().stream()
+            .filter(map -> map.getKey() == korder).findAny().orElseThrow().getValue();
     }
 
     public PceGraphEdge getPrecedingEdge(int korder, int norder) {
@@ -172,11 +227,10 @@ public final class PceCrossDomainPathAggregator {
         this.openRoadmZtoASubPathImpairments = new HashMap<>();
         this.tapiAtoZSubPathImpairments = new HashMap<>();
         this.tapiZtoASubPathImpairments = new HashMap<>();
-        this.pathElementList = new ArrayList<>();
+        this.pathElementMap = new HashMap<>();
         this.crossDomainServiceBldr = new HashMap<>();
         this.subGraphPathMap = new HashMap<>();
     }
-
 
 
 }

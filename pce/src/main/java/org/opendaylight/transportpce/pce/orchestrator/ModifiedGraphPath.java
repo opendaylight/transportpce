@@ -5,13 +5,14 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.pce.graph;
+package org.opendaylight.transportpce.pce.orchestrator;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.opendaylight.transportpce.pce.graph.PceGraphEdge;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 
 @SuppressWarnings("unchecked")
