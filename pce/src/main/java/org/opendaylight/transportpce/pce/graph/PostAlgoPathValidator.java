@@ -76,7 +76,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
-import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -97,8 +96,8 @@ public class PostAlgoPathValidator {
     private String pceOperMode;
     // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
     // and each domains (2NdKey is domain order).
-    private List<Map<Integer, AToZImpairmentsBuilder>> atoZSubPathImpairments = new ArrayList<>();
-    private List<Map<Integer, ZToAImpairmentsBuilder>> ztoASubPathImpairments = new ArrayList<>();
+    private Map<Integer, AToZImpairmentsBuilder> atoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, ZToAImpairmentsBuilder> ztoASubPathImpairments = new HashMap<>();
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint,
             ClientInput clientInput) {
@@ -181,12 +180,10 @@ public class PostAlgoPathValidator {
                             "In PostAlgoPathValidator: Min margin estimated by tpce on AtoZ and ZtoA path is of  {} dB",
                             this.tpceCalculatedMargin);
                     } else {
-                        Map<Integer, AToZImpairmentsBuilder> impairmentMapAZ = new HashMap<>();
-                        impairmentMapAZ.put(npathorder, checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu));
-                        this.atoZSubPathImpairments.add(impairmentMapAZ);
-                        Map<Integer, ZToAImpairmentsBuilder> impairmentMapZA = new HashMap<>();
-                        impairmentMapZA.put(npathorder, checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu));
-                        this.ztoASubPathImpairments.add(impairmentMapZA);
+                        this.atoZSubPathImpairments.put(npathorder,
+                                checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu));
+                        this.ztoASubPathImpairments.put(npathorder,
+                            checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu));
                     }
                 } else {
                     this.tpceCalculatedMargin = 0.0;
@@ -698,10 +695,16 @@ public class PostAlgoPathValidator {
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
 
         atozImpBldr
-            .setAccumulatedCd(Uint32.valueOf(Math.round(signal.get("calcCd"))))
-            .setAccumulatedPmd2(Uint32.valueOf(Math.round(signal.get("calcPmd2"))))
-            .setAccumulatedPdl2(Uint32.valueOf(Math.round(signal.get("calcPdl2"))))
+            .setAccumulatedCd(Decimal64.valueOf(new BigDecimal(signal.get("calcCd"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
+            .setAccumulatedPmd2(Decimal64.valueOf(new BigDecimal(signal.get("calcPmd2"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
+            .setAccumulatedPdl2(Decimal64.valueOf(new BigDecimal(signal.get("calcPdl2"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
             .setTargetRxOsnr(new RatioDB(Decimal64.valueOf(new BigDecimal(rxosnr).setScale(3, RoundingMode.HALF_EVEN))
+                .scaleTo(3)))
+            .setOsnrContribution(new RatioDB(Decimal64.valueOf(new BigDecimal(
+                getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue())).setScale(3, RoundingMode.HALF_EVEN))
                 .scaleTo(3)))
             .setMargin(Decimal64.valueOf(new BigDecimal(margin).setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
         LOG.info("Building AtoZImpairmentBuilder {}", atozImpBldr);
@@ -931,9 +934,16 @@ public class PostAlgoPathValidator {
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
 
         ztoaImpBldr
-            .setAccumulatedCd(Uint32.valueOf(Math.round(signal.get("calcCd"))))
-            .setAccumulatedPmd2(Uint32.valueOf(Math.round(signal.get("calcPmd2"))))
+            .setAccumulatedCd(Decimal64.valueOf(new BigDecimal(signal.get("calcCd"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
+            .setAccumulatedPmd2(Decimal64.valueOf(new BigDecimal(signal.get("calcPmd2"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
+            .setAccumulatedPdl2(Decimal64.valueOf(new BigDecimal(signal.get("calcPdl2"))
+                .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3))
             .setTargetRxOsnr(new RatioDB(Decimal64.valueOf(new BigDecimal(rxosnr).setScale(3, RoundingMode.HALF_EVEN))
+                .scaleTo(3)))
+            .setOsnrContribution(new RatioDB(Decimal64.valueOf(new BigDecimal(
+                getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue())).setScale(3, RoundingMode.HALF_EVEN))
                 .scaleTo(3)))
             .setMargin(Decimal64.valueOf(new BigDecimal(margin).setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
         LOG.info("Building ZtoAImpairmentBuilder {}", ztoaImpBldr);
@@ -1360,11 +1370,11 @@ public class PostAlgoPathValidator {
         this.pceOperMode = pceOperationalMode;
     }
 
-    public List<Map<Integer, AToZImpairmentsBuilder>> getAtoZSubPathImpairments() {
+    public Map<Integer, AToZImpairmentsBuilder> getAtoZSubPathImpairments() {
         return this.atoZSubPathImpairments;
     }
 
-    public List<Map<Integer, ZToAImpairmentsBuilder>> getZtoASubPathImpairments() {
+    public Map<Integer, ZToAImpairmentsBuilder> getZtoASubPathImpairments() {
         return this.ztoASubPathImpairments;
     }
 

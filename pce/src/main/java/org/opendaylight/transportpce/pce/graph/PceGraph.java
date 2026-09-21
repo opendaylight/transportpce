@@ -27,6 +27,7 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.common.device.observer.Ignore;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -102,10 +103,10 @@ public class PceGraph {
     private int npathorder;
     // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
     // and each domains (2NdKey is domain order).
-    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> openRoadmAtoZSubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> openRoadmZtoASubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> tapiAtoZSubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> tapiZtoASubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, AToZImpairmentsBuilder>> openRoadmAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> openRoadmZtoASubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, AToZImpairmentsBuilder>> tapiAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> tapiZtoASubPathImpairments = new HashMap<>();
 
     // results
     private PceResult pceResult = null;
@@ -242,7 +243,9 @@ public class PceGraph {
                         papv.getZtoASubPathImpairments());
                 pcdpa.setTapiAtoZSubPathImpairments(tapiAtoZSubPathImpairments);
                 pcdpa.setTapiZtoASubPathImpairments(tapiZtoASubPathImpairments);
-                pceResult = pcdpa.checkE2EpathImpairments(firstStepKpathOrderInHybidPathComputation);
+                pceResult = pcdpa.checkE2EpathImpairments(firstStepKpathOrderInHybidPathComputation,
+                    new CatalogUtils(
+                        PceCrossDomainOrchestrator.getInstance(null, null, null).getnetworkTransactionService()));
 
                 boolean successfulE2EPathComputation = pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK);
                 if (successfulE2EPathComputation) {
@@ -323,7 +326,8 @@ public class PceGraph {
         if (crossDomainPathComputation) {
             PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
          // do a fist check to see if degradations on different domains do not exceed RX OSNR(MARGIN calculation)
-            pcdpa.pruneOpenROADMimpairments();
+            pcdpa.pruneOpenROADMimpairments(new CatalogUtils(
+                    PceCrossDomainOrchestrator.getInstance(null, null, null).getnetworkTransactionService()));
             // Try to aggregate calculation : rationalization looking an start and end tp on TAPI-SBI ABS node to
             // minimize the number of call of TAPI PCE
             pcdpa.pruneTapiSbiABSpath();
@@ -351,8 +355,8 @@ public class PceGraph {
                 PceCrossDomainOrchestrator.setKpathOrder(korder);
                 PathComputationServiceImpl.setIs2ndStepFinished(false);
                 PceCrossDomainOrchestrator.performPCE(sci, false,
-                    PceCrossDomainOrchestrator.getInstance(null, null).getPathComputationService(),
-                    PceCrossDomainOrchestrator.getInstance(null, null).getnotificationPublishService());
+                    PceCrossDomainOrchestrator.getInstance(null, null, null).getPathComputationService(),
+                    PceCrossDomainOrchestrator.getInstance(null, null, null).getnotificationPublishService());
                         // Build tapi-sbi PCRI, new PceSendingRPC (PceOperationalMode = TAPI if sci correctly formated)
                         // Triggers Path computation through TAPI-PCE
                 // Temporized until we get the result of TAPI PCE Path computation
