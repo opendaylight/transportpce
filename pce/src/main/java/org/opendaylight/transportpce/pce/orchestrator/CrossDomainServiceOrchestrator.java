@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.pce.orchestrator;
 
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -23,17 +24,20 @@ public class CrossDomainServiceOrchestrator {
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
     private PceCrossDomainOrchestrator pceCrossDomainOrchestrator;
+    private NetworkTransactionService networkTransactionService;
 
     @Activate
     public CrossDomainServiceOrchestrator(
 //            @Reference RpcProviderService rpcProviderService,
             @Reference PathComputationService pcs,
-            @Reference NotificationPublishService nps) {
+            @Reference NotificationPublishService nps,
+            @Reference NetworkTransactionService nts) {
 
         this.notificationPublishService = nps;
         this.pathComputationService = pcs;
+        this.networkTransactionService = nts;
         this.pceCrossDomainOrchestrator = PceCrossDomainOrchestrator.getInstance(
-                pathComputationService, notificationPublishService);
+                pathComputationService, notificationPublishService, networkTransactionService);
         LOG.info("CrossDomainServiceOrchestrator Initiated");
         if (pceCrossDomainOrchestrator != null) {
             LOG.info("PceCrossDomainOrchestrator Instantiated");

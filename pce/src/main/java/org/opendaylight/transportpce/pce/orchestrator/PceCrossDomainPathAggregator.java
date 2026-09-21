@@ -7,11 +7,13 @@
  */
 package org.opendaylight.transportpce.pce.orchestrator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.pce.graph.PceGraph.PathElement;
 import org.opendaylight.transportpce.pce.graph.PceGraph.SubGraphPath;
 import org.opendaylight.transportpce.pce.graph.PceGraphEdge;
@@ -31,6 +33,14 @@ import org.slf4j.LoggerFactory;
 
 public final class PceCrossDomainPathAggregator {
 
+    private enum Direction {
+        ATOZ, ZTOA;
+    }
+
+    private enum ImpairementType {
+        OR, Total;
+    }
+
     private static PceCrossDomainPathAggregator instance;
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCrossDomainPathAggregator.class);
@@ -38,15 +48,15 @@ public final class PceCrossDomainPathAggregator {
     private Map<Integer, CdServicesBuilder> crossDomainServiceBldr = new HashMap<>();
     // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
     // and each domains (2NdKey is domain order).
-    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> openRoadmAtoZSubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> openRoadmZtoASubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> tapiAtoZSubPathImpairments = new HashMap<>();
-    private Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> tapiZtoASubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, AToZImpairmentsBuilder>> openRoadmAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> openRoadmZtoASubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, AToZImpairmentsBuilder>> tapiAtoZSubPathImpairments = new HashMap<>();
+    private Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> tapiZtoASubPathImpairments = new HashMap<>();
     private Map<Integer, Map<Integer, SubGraphPath>> subGraphPathMap = new HashMap<>();
     private List<Integer> prunedKorderList = new ArrayList<>();
     public AggregatedPathDescription aggPathDescription = new AggregatedPathDescriptionBuilder().build();
     public CrossDomainService crossDomainService = new CrossDomainServiceBuilder().build();
-    public int kpathorder = 0;
+//    public int kpathorder = 0;
     private int kpathorderMax = 0;
 
     private PceCrossDomainPathAggregator() {
@@ -63,20 +73,50 @@ public final class PceCrossDomainPathAggregator {
     // Checks that impairments calculated on OpenROADM sub-path do not exceed what the device performance allow.
     // If this is the case remove from all subPathImpairment maps the korder path
     // Allows to simplify path computation in TAPI domain to avoid computing unnecessary path in TAPI domains
-    public void pruneOpenROADMimpairments() {
-        // Calls checkOpenROADMimpairments to cleanup AtoZSubImpaiment & Subgraph  maps as well as pathElementList
-        checkOpenRoadmImpairments(kpathorder);
-        prunedKorderList = openRoadmAtoZSubPathImpairments.entrySet().stream().map(Elt -> Elt.getKey()).toList();
+    public void pruneOpenROADMimpairments(CatalogUtils cu) {
+        // Calls checkImpairments to cleanup AtoZSubImpaiment & Subgraph  maps as well as pathElementList
+        List<Integer> intPrunedKorderList = new ArrayList<>();
+        for (int korder = 0; korder < openRoadmAtoZSubPathImpairments.size(); korder ++) {
+            double margin1 = checkImpairments(korder, cu,
+                PceCrossDomainPathAggregator.Direction.ATOZ, PceCrossDomainPathAggregator.ImpairementType.OR);
+            double margin2 = checkImpairments(korder, cu,
+                PceCrossDomainPathAggregator.Direction.ZTOA, PceCrossDomainPathAggregator.ImpairementType.OR);
+            if (margin1 >= 0 && margin2 >= 0) {
+                //Path is valid, and shall not be prune
+                intPrunedKorderList.add(korder);
+            } else {
+              //Path is not valid, and shall be pruned, do nothing
+            }
+            korder++;
+        }
+        openRoadmAtoZSubPathImpairments.entrySet().stream().filter(Imp -> intPrunedKorderList.contains(Imp.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        openRoadmZtoASubPathImpairments.entrySet().stream().filter(Imp -> intPrunedKorderList.contains(Imp.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        tapiAtoZSubPathImpairments.entrySet().stream().filter(Imp -> intPrunedKorderList.contains(Imp.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        tapiZtoASubPathImpairments.entrySet().stream().filter(Imp -> intPrunedKorderList.contains(Imp.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        pathElementMap.entrySet().stream().filter(Imp -> intPrunedKorderList.contains(Imp.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         kpathorderMax = openRoadmAtoZSubPathImpairments.size();
+        prunedKorderList.clear();
+        prunedKorderList.addAll(intPrunedKorderList);
     }
 
-    public PceResult checkE2EpathImpairments(int korder) {
+    public PceResult checkE2EpathImpairments(int korder, CatalogUtils cu) {
         // When a path has been analyzed through checkPath in the TAPI PCE, we need to check E2E path consistency
         // and if the path is consistent return true; otherwise false, which makes Graph.calcPath iterate through next
         //path. Korder is used to retrieve the corresponding OpenROADM impairments in Maps.
-        calculateE2Emargin();
-        // return a PceResult according to the same process of Papv
-        return new PceResult();
+        PceResult pceResult = new PceResult();
+        double margin = calculateE2Emargin(korder, cu);
+        if (margin >= 0) {
+            pceResult.success();
+            return pceResult;
+        }
+        pceResult.error("No path found spanning accross TapiDomain found for path of Korder = " + korder);
+        pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
+        return pceResult;
     }
 
     public boolean buildAggregatedPath(int korder) {
@@ -87,6 +127,13 @@ public final class PceCrossDomainPathAggregator {
         return true;
     }
 
+    public Map<Integer, List<PathElement>> prunePathElementMap(Map<Integer, List<PathElement>> pathelementMap) {
+        // After pruneOpenROADMimpairments has been purging from the list of Path for which a path needs to be found
+        // in TAPI domain, the path that are not good candidate need to be removed from the PathElemnt Map of PceGraph
+        return pathelementMap.entrySet().stream()
+                .filter(pathElt -> prunedKorderList.contains(pathElt.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
     public ServiceCreateInput buildServiceCreateInput(int korder, int norder) {
         // Builds the service create for TAPI service creation in the TAPI Domain
@@ -96,8 +143,126 @@ public final class PceCrossDomainPathAggregator {
         return new ServiceCreateInputBuilder().build();
     }
 
-    private void checkOpenRoadmImpairments(Integer kpathOrder) {
+    @SuppressWarnings("fallthrough")
+    @SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
+    private double checkImpairments(Integer kpathOrder, CatalogUtils cu,
+            PceCrossDomainPathAggregator.Direction direction, PceCrossDomainPathAggregator.ImpairementType impType) {
+        double introducedCd = 0.0;
+        double introducedPdl2 = 0.0;
+        double introducedPmd2 = 0.0;
+        double onsrLin = 0.0;
+        String operationalMode = "";
 
+        if (direction.equals(PceCrossDomainPathAggregator.Direction.ATOZ)) {
+            switch (impType) {
+                case Total:
+                    for (Map.Entry<Integer, AToZImpairmentsBuilder> entryN :
+                        tapiAtoZSubPathImpairments.get(kpathOrder).entrySet()) {
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedCd() != null) {
+                            introducedCd += entryN.getValue().getAccumulatedCd().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPdl2() != null) {
+                            introducedPdl2 += entryN.getValue().getAccumulatedPdl2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPmd2() != null) {
+                            introducedPmd2 += entryN.getValue().getAccumulatedPmd2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getOsnrContribution() != null) {
+                            onsrLin += Math.pow(10,
+                                (entryN.getValue().getOsnrContribution().getValue().doubleValue() * -1.0 / 10));
+                        }
+                        String opMode = entryN.getValue().getXponderOperationalMode();
+                        if (opMode != null && !opMode.isBlank()) {
+                            operationalMode = opMode;
+                        }
+                    }
+                    // No brake, in case of Total impairment calculation, also go through OR after it has calculated
+                    // TAPI Impairments.
+                case OR:
+                    for (Map.Entry<Integer, AToZImpairmentsBuilder> entryN :
+                        openRoadmAtoZSubPathImpairments.get(kpathOrder).entrySet()) {
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedCd() != null) {
+                            introducedCd += entryN.getValue().getAccumulatedCd().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPdl2() != null) {
+                            introducedPdl2 += entryN.getValue().getAccumulatedPdl2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPmd2() != null) {
+                            introducedPmd2 += entryN.getValue().getAccumulatedPmd2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getOsnrContribution() != null) {
+                            onsrLin += Math.pow(10,
+                                (entryN.getValue().getOsnrContribution().getValue().doubleValue() * -1.0 / 10));
+                        }
+                        String opMode = entryN.getValue().getXponderOperationalMode();
+                        if (opMode != null && !opMode.isBlank()) {
+                            operationalMode = opMode;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (impType) {
+                case Total:
+                    for (Map.Entry<Integer, ZToAImpairmentsBuilder> entryN :
+                        tapiZtoASubPathImpairments.get(kpathOrder).entrySet()) {
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedCd() != null) {
+                            introducedCd += entryN.getValue().getAccumulatedCd().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPdl2() != null) {
+                            introducedPdl2 += entryN.getValue().getAccumulatedPdl2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPmd2() != null) {
+                            introducedPmd2 += entryN.getValue().getAccumulatedPmd2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getOsnrContribution() != null) {
+                            onsrLin += Math.pow(10,
+                                (entryN.getValue().getOsnrContribution().getValue().doubleValue() * -1.0 / 10));
+                        }
+                        String opMode = entryN.getValue().getXponderOperationalMode();
+                        if (opMode != null && !opMode.isBlank()) {
+                            operationalMode = opMode;
+                        }
+                    }
+                    // No brake, in case of Total impairment calculation, also go through OR after it has calculated
+                    // TAPI Impairments.
+                case OR:
+                    for (Map.Entry<Integer, ZToAImpairmentsBuilder> entryN :
+                        openRoadmZtoASubPathImpairments.get(kpathOrder).entrySet()) {
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedCd() != null) {
+                            introducedCd += entryN.getValue().getAccumulatedCd().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPdl2() != null) {
+                            introducedPdl2 += entryN.getValue().getAccumulatedPdl2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getAccumulatedPmd2() != null) {
+                            introducedPmd2 += entryN.getValue().getAccumulatedPmd2().doubleValue();
+                        }
+                        if (entryN.getValue() != null && entryN.getValue().getOsnrContribution() != null) {
+                            onsrLin += Math.pow(10,
+                                (entryN.getValue().getOsnrContribution().getValue().doubleValue() * -1.0 / 10));
+                        }
+                        String opMode = entryN.getValue().getXponderOperationalMode();
+                        if (opMode != null && !opMode.isBlank()) {
+                            operationalMode = opMode;
+                        }
+                    }
+                default:
+                    break;
+            }
+        }
+        // All OpenROADM sub-paths have been scanned, check whether impairments already exceed tolerable level
+        if (operationalMode.isBlank()) {
+            return -1.0;
+        }
+        double calcOnsrdB = getOsnrDbfromOnsrLin(onsrLin);
+        double margin = cu.getPceRxTspParameters(operationalMode, introducedCd, Math.sqrt(introducedPmd2),
+                Math.sqrt(introducedPdl2), calcOnsrdB);
+        return margin;
     }
 
     public void pruneTapiSbiABSpath() {
@@ -105,53 +270,51 @@ public final class PceCrossDomainPathAggregator {
         // Makes sense to limit the number of PAth computation Request exercised through the TAPI PCE
     }
 
-    public Map<Integer, List<PathElement>> prunePathElementMap(Map<Integer, List<PathElement>> pathelementMap) {
-        // After pruneOpenROADMimpairments has been purging from the list of Path for which a path needs to be found
-        // in TAPI domain, the path that are not good candidate need to be removed from the PathElemnt Map of PceGraph
-
-        return pathelementMap.entrySet().stream()
-                .filter(pathElt -> prunedKorderList.contains(pathElt.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-
-    private void calculateE2Emargin() {
-
+    private double calculateE2Emargin(int korder, CatalogUtils cu) {
+        double margin1 = checkImpairments(korder, cu,
+            PceCrossDomainPathAggregator.Direction.ATOZ, PceCrossDomainPathAggregator.ImpairementType.Total);
+        double margin2 = checkImpairments(korder, cu,
+            PceCrossDomainPathAggregator.Direction.ZTOA, PceCrossDomainPathAggregator.ImpairementType.Total);
+        if (margin1 >= 0 && margin2 >= 0) {
+            return Math.min(margin1, margin2);
+        } else {
+            return -1.0;
+        }
     }
 
     public void setOpenRoadmAtoZSubPathImpairments(
-            Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> orAtoZSubPathImp) {
+            Map<Integer, Map<Integer, AToZImpairmentsBuilder>> orAtoZSubPathImp) {
         this.openRoadmAtoZSubPathImpairments.putAll(orAtoZSubPathImp);
     }
 
     public void setOpenRoadmZtoASubPathImpairments(
-            Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> orZtoASubPathImp) {
+            Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> orZtoASubPathImp) {
         this.openRoadmZtoASubPathImpairments.putAll(orZtoASubPathImp);
     }
 
     public void setTapiAtoZSubPathImpairments(
-            Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> tapiAtoZSubPathImp) {
+            Map<Integer, Map<Integer, AToZImpairmentsBuilder>> tapiAtoZSubPathImp) {
         this.tapiAtoZSubPathImpairments.putAll(tapiAtoZSubPathImp);
     }
 
     public void setTapiZtoASubPathImpairments(
-            Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> tapiZtoASubPathImp) {
+            Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> tapiZtoASubPathImp) {
         this.tapiZtoASubPathImpairments.putAll(tapiZtoASubPathImp);
     }
 
-    public Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> getAtoZSubPathImpairments() {
+    public Map<Integer, Map<Integer, AToZImpairmentsBuilder>> getAtoZSubPathImpairments() {
         return this.openRoadmAtoZSubPathImpairments;
     }
 
-    public Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> getZtoASubPathImpairments() {
+    public Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> getZtoASubPathImpairments() {
         return this.openRoadmZtoASubPathImpairments;
     }
 
-    public Map<Integer, List<Map<Integer, AToZImpairmentsBuilder>>> getTapiAtoZSubPathImpairments() {
+    public Map<Integer, Map<Integer, AToZImpairmentsBuilder>> getTapiAtoZSubPathImpairments() {
         return this.tapiAtoZSubPathImpairments;
     }
 
-    public Map<Integer, List<Map<Integer, ZToAImpairmentsBuilder>>> getTapiZtoASubPathImpairments() {
+    public Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> getTapiZtoASubPathImpairments() {
         return this.tapiZtoASubPathImpairments;
     }
 
@@ -197,6 +360,10 @@ public final class PceCrossDomainPathAggregator {
         return precedingEdge;
     }
 
+    private double getOsnrDbfromOnsrLin(double osnrLu) {
+        return 10 * Math.log10(1 / osnrLu);
+    }
+
     public PceGraphEdge  getSucceedingEdge(int korder, int norder) {
         PceGraphEdge  succeedingEdge = null;
         for (Map.Entry<Integer, Map<Integer, SubGraphPath>> entry : this.subGraphPathMap.entrySet()) {
@@ -231,6 +398,4 @@ public final class PceCrossDomainPathAggregator {
         this.crossDomainServiceBldr = new HashMap<>();
         this.subGraphPathMap = new HashMap<>();
     }
-
-
 }

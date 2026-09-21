@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
@@ -67,23 +68,26 @@ public final class PceCrossDomainOrchestrator {
     private static final String PERFORMING_PCE_CROSS_DOMAIN_MSG = "performing TAPI PCE (Cross-Domain-Service...";
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
+    private NetworkTransactionService networkTransactionService;
     private static ServiceRpcResultSh notification;
     private static int kpathOrder;
     private static final ListeningExecutorService EXECUTOR = MoreExecutors
         .listeningDecorator(Executors.newFixedThreadPool(5));
 
 
-    private PceCrossDomainOrchestrator(PathComputationService pcs, NotificationPublishService nps) {
+    private PceCrossDomainOrchestrator(PathComputationService pcs, NotificationPublishService nps,
+            NetworkTransactionService nts) {
 
         this.notificationPublishService = nps;
         this.pathComputationService = pcs;
+        this.networkTransactionService = nts;
 
     }
 
     public static synchronized PceCrossDomainOrchestrator getInstance(final PathComputationService pcs,
-        final NotificationPublishService nps) {
+        final NotificationPublishService nps, final NetworkTransactionService nts) {
         if (instance == null) {
-            instance = new PceCrossDomainOrchestrator(pcs, nps);
+            instance = new PceCrossDomainOrchestrator(pcs, nps, nts);
         }
         return instance;
     }
@@ -150,7 +154,8 @@ public final class PceCrossDomainOrchestrator {
         } catch (InterruptedException e) {
             LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
         }
-        FutureCallback<PathComputationRequestOutput> pceCallback = PceCrossDomainOrchestrator.getInstance(null, null)
+        FutureCallback<PathComputationRequestOutput> pceCallback = PceCrossDomainOrchestrator
+                .getInstance(null, null, null)
                     .new Pcro2ndStepCallback(servPathNotifType, serviceName, kpathorder);
         //TODO: PreProcess the input parameters so that service name is correctly formated and triggers Path computation
         // Using TAPI PCE (or change Algo of PCE so that it detects the 2nd step PC and slect this criteria rather
@@ -322,6 +327,10 @@ public final class PceCrossDomainOrchestrator {
 
     public NotificationPublishService getnotificationPublishService() {
         return this.notificationPublishService;
+    }
+
+    public NetworkTransactionService getnetworkTransactionService() {
+        return this.networkTransactionService;
     }
 
     public static void setKpathOrder(int kpathorder) {
