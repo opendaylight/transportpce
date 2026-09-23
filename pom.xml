@@ -33,6 +33,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>artifacts</module>
     <module>api</module>
     <module>common</module>
+    <module>oc200-mapping</module>
+    <module>oc560-mapping</module>
     <module>test-common</module>
     <module>renderer</module>
     <module>networkmodel</module>
