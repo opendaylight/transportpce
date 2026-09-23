@@ -29,17 +29,58 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OpenConfigInterfacesImpl200 {
+/**
+ * OpenConfig 2.0.0 interface implementation.
+ *
+ * <p>Registered as OSGi service with version property for dynamic discovery.
+ * This enables version-specific YANG handling without classloader conflicts.
+ */
+@org.osgi.service.component.annotations.Component(service = OpenConfigInterfacesVersionService.class)
+public class OpenConfigInterfacesImpl200 implements OpenConfigInterfacesVersionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl200.class);
+    private static final String VERSION = "openconfig-200";
 
     private final DeviceTransactionManager deviceTransactionManager;
 
-    public OpenConfigInterfacesImpl200(DeviceTransactionManager deviceTransactionManager) {
+    @Activate
+    public OpenConfigInterfacesImpl200(@Reference DeviceTransactionManager deviceTransactionManager) {
         this.deviceTransactionManager = deviceTransactionManager;
+        LOG.info("OpenConfigInterfacesImpl200 ACTIVATED - service registered in OSGi registry for version {}",
+            VERSION);
+    }
+
+    @Override
+    public String getVersion() {
+        return VERSION;
+    }
+
+    @Override
+    public <T> void configureComponent(String nodeId, T componentBuilder) throws OpenConfigInterfacesException {
+        ComponentBuilder compBuilder = convertInstanceOfInterface(componentBuilder, ComponentBuilder.class);
+        configureComponents(nodeId, compBuilder);
+    }
+
+    @Override
+    public <T> void configureInterface(String nodeId, T interfaceBuilder) throws OpenConfigInterfacesException {
+        InterfaceBuilder interfBuilder = convertInstanceOfInterface(interfaceBuilder, InterfaceBuilder.class);
+        configureInterfaceInternal(nodeId, interfBuilder);
+    }
+
+    private <T> T convertInstanceOfInterface(Object object, Class<T> classToCast) {
+        try {
+            if (classToCast.isInstance(object)) {
+                return classToCast.cast(object);
+            }
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("Cannot cast object to " + classToCast.getName(), e);
+        }
+        throw new IllegalArgumentException("Object is not an instance of " + classToCast.getName());
     }
 
     public <T> void configureComponents(String nodeId, ComponentBuilder componentBuilder)
@@ -94,7 +135,7 @@ public class OpenConfigInterfacesImpl200 {
         }
     }
 
-    public <T> void configureInterface(String nodeId, InterfaceBuilder interfaceBuilder)
+    public <T> void configureInterfaceInternal(String nodeId, InterfaceBuilder interfaceBuilder)
             throws OpenConfigInterfacesException {
         {
             Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);

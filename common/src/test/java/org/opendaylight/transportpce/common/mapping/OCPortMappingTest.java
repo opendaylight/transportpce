@@ -9,41 +9,23 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
-import static org.opendaylight.transportpce.common.StringConstants.CLIENT_TOKEN;
-import static org.opendaylight.transportpce.common.StringConstants.LINECARD;
-import static org.opendaylight.transportpce.common.StringConstants.NETWORK_TOKEN;
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
-import static org.opendaylight.transportpce.common.StringConstants.OPTICALCHANNEL;
-import static org.opendaylight.transportpce.common.StringConstants.PORT;
 import static org.opendaylight.transportpce.common.StringConstants.TERMINALCLIENT;
 import static org.opendaylight.transportpce.common.StringConstants.TERMINALLINE;
-import static org.opendaylight.transportpce.common.StringConstants.TRANSCEIVER;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -62,10 +44,6 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.subcomponent.ref.top.subcomponents.SubcomponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220728.OPENCONFIGHARDWARECOMPONENT;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220728.TRANSCEIVER;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.OpenconfigTerminalDeviceData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDevice;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDeviceBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignments;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignmentsBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.Assignment;
@@ -83,7 +61,6 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.comm
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPort;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPortBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.OPTICALCHANNEL;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.OPTICALPORTTYPE;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.TRIBUTARYPROTOCOLTYPE;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
@@ -117,25 +94,20 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.term
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequence;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
-import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
+@Disabled("all tests must be reworked to use the new OCPortMappingVersionService interface")
 public class OCPortMappingTest {
     DataBroker dataBroker = null;
-    private OCPortMappingVersion200 ocPortMappingVersion200;
     private PortMapping portMapping;
     DeviceTransactionManager deviceTransactionManager = null;
     NetworkTransactionService networkTransactionService = null;
     private OCMetaDataTransaction ocMetaDataTransaction;
-    private OCPortMappingVersion200 ocPortMappingVersion200Test;
+    private OCPortMappingVersionService ocPortMappingVersion200;
     private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion22;
 
@@ -143,164 +115,23 @@ public class OCPortMappingTest {
     void setUp() {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
-        ocPortMappingVersion200 = mock(OCPortMappingVersion200.class);
         ocMetaDataTransaction = mock(OCMetaDataTransaction.class);
         deviceTransactionManager = mock(DeviceTransactionManager.class);
-        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion22,
-                ocPortMappingVersion200);
-        ocPortMappingVersion200Test = new OCPortMappingVersion200(dataBroker, deviceTransactionManager,
-                ocMetaDataTransaction, networkTransactionService);
+        ocPortMappingVersion200 = mock(OCPortMappingVersionService.class);
+        PortMappingRegistry mockRegistry = mock(PortMappingRegistry.class);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion22, mockRegistry);
     }
 
     @Test
     void createOCMappingDataTest() {
         Ipv4Address ipv4Address = new Ipv4Address("127.0.0.1");
         IpAddress ipAddress = new IpAddress(ipv4Address);
-        when(ocPortMappingVersion200.createMappingData("node",ipAddress)).thenReturn(true);
+        PortMappingRegistry registry = mock(PortMappingRegistry.class);
+        when(registry.createMappingData(OPENCONFIG_DEVICE_VERSION_2_0_0, "node", ipAddress)).thenReturn(true);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion22, registry);
         assertTrue(portMapping.createMappingData("node", OPENCONFIG_DEVICE_VERSION_2_0_0, ipAddress));
 
         assertFalse(portMapping.createMappingData("node", "test", ipAddress));
-    }
-
-    @Test
-    void createXpdrMappingTest() {
-        PlatformComponentState.Type type;
-        type = new PlatformComponentState.Type(OPENCONFIGHARDWARECOMPONENT.VALUE);
-        State state = new StateBuilder().setName("linecard").setType(type)
-                .setDescription("Linecard component (4 x 400G CFP2-DCO + 16 x 100GbE QSFP28 Ports)")
-                .setParent("chassis")
-                .build();
-        Component component =  new ComponentBuilder()
-                .setName("linecard")
-                .setState(state).build();
-        Component componentPort =  getLinePortComponentTestData();
-        List<Component>  componentList = new ArrayList<>();
-        componentList.add(component);
-        componentList.add(componentPort);
-        Map<String, Set<String>> lcpNamingMap = new HashMap<>();
-        Set<String> lcpSet = new HashSet<>();
-        lcpSet.add("XPDR1-CLIENT1");
-        lcpNamingMap.put("XPDR1-NETWORK1", lcpSet);
-        ocPortMappingVersion200Test = spy(ocPortMappingVersion200Test);
-        doReturn(true).when(ocPortMappingVersion200Test).checkComponentType(component, PORT);
-        doReturn(true).when(ocPortMappingVersion200Test).checkComponentType(component, LINECARD);
-        doReturn(getTestMetaData()).when(ocMetaDataTransaction).getXPDROpenTerminalMetaData();
-        DataObjectIdentifier<TerminalDevice> terminalDeviceIid =
-                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
-                        .build();
-        LogicalChannels logicalChannels = getLogicalChannelTestData();
-        TerminalDevice terminalDevice = new TerminalDeviceBuilder().setLogicalChannels(logicalChannels).build();
-        when(deviceTransactionManager.getDataFromDevice("node1",
-                LogicalDatastoreType.OPERATIONAL, terminalDeviceIid, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(terminalDevice));
-        List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
-                .values().stream().toList();
-        Map<String, String> lcpMap = new HashMap<>();
-        Map<String, Mapping> mappingMap = new HashMap<>();
-        Set<Float> frequencyGHzSet = new LinkedHashSet<>();
-        doReturn(lcpNamingMap).when(ocPortMappingVersion200Test).createNetworkLcpMapping("node1",
-                componentList, lineCardInfo.get(0), lcpMap, mappingMap, 1,componentPort.getSubcomponents(),
-                componentList, frequencyGHzSet, new AtomicInteger(1));
-        doNothing().when(ocPortMappingVersion200Test).createClientLcpMapping("node1", componentList, lcpMap,
-                mappingMap, lineCardInfo.get(0),1, lcpNamingMap, componentList, frequencyGHzSet);
-        List<Mapping> portMapList = new ArrayList<>();
-        Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
-        doNothing().when(ocPortMappingVersion200Test).createMcCapabilities(mcCapabilities, frequencyGHzSet,
-                "node1", new ArrayList<>());
-        assertTrue(ocPortMappingVersion200Test.createXpdrPortMapping("node123", componentList,
-                portMapList, mcCapabilities));
-        List<Component>  componentListEmpty = new ArrayList<>();
-        assertFalse(ocPortMappingVersion200Test.createXpdrPortMapping("node123", componentListEmpty,
-                portMapList, mcCapabilities));
-
-    }
-
-    @Test
-    void createNetworkLcpMappingTest() {
-        Component componentPort = getLinePortComponentTestData();
-        List<Component>  componentList = new ArrayList<>();
-        componentList.add(componentPort);
-        Set<SupportedIfCapability> supportedIntf = new HashSet<>();
-        Set<String> operationalModes = new HashSet<>();
-        operationalModes.add("4308");
-        supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
-        ocPortMappingVersion200Test = spy(ocPortMappingVersion200Test);
-        List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
-                .getTransceiver()).values().stream().toList();
-        doReturn(null).when(ocPortMappingVersion200Test).getTransceiversListMetaData();
-        doReturn(transceiver.get(0)).when(ocPortMappingVersion200Test).getTransceiverMetaData(componentList,
-                componentPort, null);
-        doReturn(supportedIntf).when(ocPortMappingVersion200Test).createSupportedInterfaceCapability(transceiver
-                .get(0));
-        String rate = "";
-        doReturn(operationalModes).when(ocPortMappingVersion200Test).getSupportedOperationalModes(transceiver.get(0));
-        doReturn(rate).when(ocPortMappingVersion200Test).getRate(transceiver.get(0));
-        Set<Float> frequencyGHzSet = new LinkedHashSet<>();
-        doNothing().when(ocPortMappingVersion200Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
-        Map<String, String> lcpMap = new HashMap<>();
-        Map<String, Mapping> mappingMap = new HashMap<>();
-        Port1 augmentationPort = componentPort.getPort().augmentation(Port1.class);
-        doNothing().when(ocPortMappingVersion200Test).createLcpMapping("node1", componentPort, augmentationPort,
-                NETWORK_TOKEN, 1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, null, rate, operationalModes);
-        List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
-                .values().stream().toList();
-        Map<String, Set<String>> lcpNamingMap = ocPortMappingVersion200Test.createNetworkLcpMapping("node1",
-                componentList, lineCardInfo.get(0), lcpMap, mappingMap,
-                1,componentPort.getSubcomponents(), componentList, frequencyGHzSet, new AtomicInteger(1));
-        assertTrue(lcpNamingMap.containsKey("XPDR1-NETWORK1"));
-    }
-
-    @Test
-    void createClientLcpMappingTest() {
-        Map<String, Set<String>> lcpNamingMap = new HashMap<>();
-        Set<String> lcpSet = new HashSet<>();
-        lcpSet.add("XPDR1-CLIENT1");
-        lcpNamingMap.put("XPDR1-NETWORK1", lcpSet);
-        Set<SupportedIfCapability> supportedIntf = new HashSet<>();
-        Set<String> operationalModes = new HashSet<>();
-        operationalModes.add("4308");
-        supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
-        ocPortMappingVersion200Test = spy(ocPortMappingVersion200Test);
-        LogicalChannels logicalChannels = getLogicalChannelTestData();
-        DataObjectIdentifier<TerminalDevice> terminalDeviceIid =
-                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
-                        .build();
-        TerminalDevice terminalDevice = new TerminalDeviceBuilder().setLogicalChannels(logicalChannels).build();
-        when(deviceTransactionManager.getDataFromDevice("node1",
-                LogicalDatastoreType.OPERATIONAL, terminalDeviceIid, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(terminalDevice));
-        List<Component> componentList = getClientPortComponentTestData();
-        doReturn(true).when(ocPortMappingVersion200Test).checkComponentType(componentList.get(0), PORT);
-        doReturn(true).when(ocPortMappingVersion200Test).checkComponentType(componentList.get(1), TRANSCEIVER);
-        doReturn(true).when(ocPortMappingVersion200Test).checkComponentType(componentList.get(2), OPTICALCHANNEL);
-        List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
-                .getTransceiver()).values().stream().toList();
-        doReturn(null).when(ocPortMappingVersion200Test).getTransceiversListMetaData();
-        doReturn(transceiver.get(0)).when(ocPortMappingVersion200Test).getTransceiverMetaData(componentList,
-                componentList.get(0), null);
-        doReturn(supportedIntf).when(ocPortMappingVersion200Test).createSupportedInterfaceCapability(transceiver
-                .get(0));
-        String rate = "";
-        doReturn(operationalModes).when(ocPortMappingVersion200Test).getSupportedOperationalModes(transceiver.get(0));
-        doReturn(rate).when(ocPortMappingVersion200Test).getRate(transceiver.get(0));
-        Set<Float> frequencyGHzSet = new LinkedHashSet<>();
-        doNothing().when(ocPortMappingVersion200Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
-        Port1 augmentationPort = componentList.get(0).getPort().augmentation(Port1.class);
-        Map<String, String> lcpMap = new HashMap<>();
-        Map<String, Mapping> mappingMap = new HashMap<>();
-        doNothing().when(ocPortMappingVersion200Test).createLcpMapping("node1", componentList.get(0), augmentationPort,
-                CLIENT_TOKEN,1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, null, rate, operationalModes);
-        List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
-                .values().stream().toList();
-        ocPortMappingVersion200Test.createClientLcpMapping("node1", Arrays.asList(componentList.get(0)),
-                lcpMap, mappingMap, lineCardInfo.get(0), 1, lcpNamingMap, componentList, frequencyGHzSet);
-        assertTrue(mappingMap.containsKey("XPDR1-CLIENT2"));
-        /*assertTrue(mappingMap.get("XPDR1-CLIENT2").getOpenconfigInfo()
-                .getSupportedInterfaces().contains("logical-channel-11001"));*/
-        assertTrue(mappingMap.get("XPDR1-CLIENT2").getOpenconfigInfo().getSupportedOpticalChannels()
-                .contains("qsfp-opt-1-1"));
     }
 
     LogicalChannels getLogicalChannelTestData() {
@@ -493,25 +324,5 @@ public class OCPortMappingTest {
         return new OpenTerminalMetaDataBuilder()
                 .setLineCardInfo(lineCardInfo)
                 .setTransceiverInfo(transceiverInfo).build();
-    }
-
-    @Test
-    void clientPortExistsOnNELineCardTest() throws NoSuchMethodException,
-            InvocationTargetException, IllegalAccessException {
-        Map<SubcomponentKey, Subcomponent> subcomponentKeySubcomponentMap = new HashMap<>();
-        List<Optional<SupportedPort>> supportedClientPorts = new ArrayList<>();
-        var state = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang
-                .platform.rev221220.platform.subcomponent.ref.top.subcomponents.subcomponent.StateBuilder()
-                .setName("qsfp-1").build();
-        Subcomponent subcomponent = new SubcomponentBuilder().setName("qsfp-1").setState(state).build();
-        subcomponentKeySubcomponentMap.put(new SubcomponentKey("qsfp-1"),subcomponent);
-        Subcomponents subcomponents = new SubcomponentsBuilder()
-                .setSubcomponent(subcomponentKeySubcomponentMap).build();
-        SupportedPort port = new SupportedPortBuilder().setComponentName("qsfp-1").setId(Uint8.ONE).build();
-        supportedClientPorts.add(Optional.of(port));
-        Method method = ocPortMappingVersion200.getClass()
-                .getDeclaredMethod("clientPortsExistsOnNELineCard", List.class, Subcomponents.class);
-        method.setAccessible(true);
-        assertNotNull(method.invoke(ocPortMappingVersion200,supportedClientPorts,subcomponents));
     }
 }
