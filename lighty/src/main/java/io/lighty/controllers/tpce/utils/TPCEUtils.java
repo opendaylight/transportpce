@@ -249,7 +249,7 @@ public final class TPCEUtils {
                     .INSTANCE,
 
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.YangModuleInfoImpl
-                    .getInstance(),
+                    .INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.yang.iana.afn.safi.rev130704.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.YangModuleInfoImpl
@@ -257,13 +257,13 @@ public final class TPCEUtils {
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.YangModuleInfoImpl
-                    .getInstance(),
+                    .INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.YangModuleInfoImpl
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004
-                     .YangModuleInfoImpl.getInstance(),
+                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206
-                    .YangModuleInfoImpl.getInstance(),
+                    .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.nbi.notifications.rev230728.YangModuleInfoImpl.INSTANCE);
 
