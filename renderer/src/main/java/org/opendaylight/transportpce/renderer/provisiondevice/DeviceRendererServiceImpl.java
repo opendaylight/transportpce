@@ -48,6 +48,7 @@ import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInter
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceFactory;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceRegistry;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServiceListTopology;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
@@ -97,6 +98,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,14 +122,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             @Reference CrossConnect crossConnect,
             @Reference MappingUtils mappingUtils,
             @Reference PortMapping portMapping,
-            @Reference OpenConfigInterfaces openConfigInterfaces)  {
+            @Reference(cardinality = ReferenceCardinality.OPTIONAL) OpenConfigInterfaces openConfigInterfaces,
+            @Reference OpenConfigInterfaceRegistry openConfigInterfaceRegistry)  {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.portMapping = portMapping;
         this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
-        this.openConfigInterfaceFactory = new OpenConfigInterfaceFactory(portMapping, openConfigInterfaces);
+        this.openConfigInterfaceFactory = new OpenConfigInterfaceFactory(openConfigInterfaceRegistry);
     }
 
     @Override
@@ -394,34 +397,35 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             forkJoinTask.get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            success.set(false);
             LOG.error("Error while setting up service paths! Process was interrupted.", e);
-            if (results.isEmpty()) {
-                results.add("Setup service path failed! Process was unexpectedly interrupted.");
-            }
+            results.add("Setup service path failed! Process was unexpectedly interrupted.");
         } catch (ExecutionException e) {
+            success.set(false);
             LOG.error("Error while setting up service paths!", e);
-            if (results.isEmpty()) {
-                results.add("Setup service path failed! Unexpected error during concurrent setup of nodes.");
-            }
+            results.add("Setup service path failed! Unexpected error during concurrent setup of nodes.");
         }
         forkJoinPool.shutdown();
 
+        boolean noExceptionThrown = true;
+        // setting topology in the service list data store
         if (success.get()) {
+            try {
+                ServiceListTopology topology = new ServiceListTopology();
+                setTopologyForService(input.getServiceName(), topology.getTopology());
+            } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
+                results.add("Setup service path failed! Unable to write service topology.");
+                noExceptionThrown = false;
+            }
+        }
+        if (success.get() && noExceptionThrown) {
             String message = "Successfully configured nodes: ";
             results.add(message + String.join(", ", nodesProvisioned));
             LOG.info("Setup service path successful. {} {}", message, nodesProvisioned);
-        }
-        boolean noExceptionThrown = true;
-        // setting topology in the service list data store
-        try {
-            ServiceListTopology topology = new ServiceListTopology();
-            setTopologyForService(input.getServiceName(), topology.getTopology());
-        } catch (InterruptedException | TimeoutException | ExecutionException e) {
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
-            LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
-            noExceptionThrown = false;
         }
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
             LOG.error("Alarm suppression node removal failed!!!!");
@@ -542,6 +546,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
+            success.set(false);
+            results.add("Delete service path failed! Unexpected error during concurrent deletion of nodes.");
             LOG.error("Error while deleting service paths!", e);
         }
         forkJoinPool.shutdown();

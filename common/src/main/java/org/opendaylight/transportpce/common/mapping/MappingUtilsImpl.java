@@ -46,6 +46,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If40
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If40GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If40GEODU3;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If40GEOduflexgfp;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If800GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If800GEOduflexcbr;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCHOTU1ODU1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCHOTU2EODU2E;
@@ -61,6 +63,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOT
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOTUCnODUCnRegen;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOTUCnODUCnUniregen;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOtsiFlexoFlexogroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOtsiOtucnOducn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.SupportedIfCapability;
@@ -141,6 +144,7 @@ public final class MappingUtilsImpl implements MappingUtils {
                 If200GEOduflexcbr.VALUE)
             .put("If400GE{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-400GE}", If400GE.VALUE)
             .put("If400GE{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-400GE}", If400GE.VALUE)
+            .put("If800GE{qname=(http://org/openroadm/port/types?revision=2025-05-30)if-800GE}", If800GE.VALUE)
             .put("If400GEodufleximp{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-400GE-odufleximp}",
                 If400GEOdufleximp.VALUE)
             .put("If400GEodufleximp{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-400GE-odufleximp}",
@@ -149,6 +153,8 @@ public final class MappingUtilsImpl implements MappingUtils {
                 If400GEOduflexcbr.VALUE)
             .put("If400GEoduflexcbr{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-400GE-oduflexcbr}",
                 If400GEOduflexcbr.VALUE)
+            .put("If800GEoduflexcbr{qname=(http://org/openroadm/port/types?revision=2025-05-30)if-800GE-oduflexcbr}",
+                If800GEOduflexcbr.VALUE)
             .put("IfOTU1ODU1{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-OTU1-ODU1}",
                 IfOTU1ODU1.VALUE)
             .put("IfOTU1ODU1{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-OTU1-ODU1}",
@@ -232,10 +238,14 @@ public final class MappingUtilsImpl implements MappingUtils {
     private static final ImmutableMap<String, SupportedIfCapability> OC_CAP_TYPE_MAP =
             ImmutableMap.<String, SupportedIfCapability>builder()
                     .put("if-100GE-ODU4", If100GEODU4.VALUE)
-                    .put("if-OTUCN-ODUCN", IfOTUCnODUCn.VALUE).build();
+                    .put("if-OTUCN-ODUCN", IfOTUCnODUCn.VALUE)
+                    .put("if-800GE", If800GE.VALUE)
+                    .put("if-otsi-flexo-flexogroup", IfOtsiFlexoFlexogroup.VALUE).build();
 
     private static final ImmutableMap<String, String> OC_CAP_MAP =
             ImmutableMap.<String, String>builder()
+                    .put("PROT_800GE", "800GE")
+                    .put("PROT_FLEXO", "otsi-flexo-flexogroup")
                     .put("PROT_100GE", "100GE")
                     .put("PROT_ODU4", "ODU4")
                     .put("PROT_OTUCN", "OTUCN")
@@ -321,9 +331,11 @@ public final class MappingUtilsImpl implements MappingUtils {
                 switch (version) {
                     case _200:
                         return StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
+                    case _560:
+                        return StringConstants.OPENCONFIG_DEVICE_VERSION_5_6_0;
                     case PROTOTYPE:
                     default:
-                        LOG.warn("unknown openConfig device version");
+                        LOG.warn("unknown openConfig device version: {}", version);
                 }
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
