@@ -76,26 +76,6 @@
        <artifactId>tapi-2.4.0</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openconfig-200</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openconfig-platform-5.6.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openconfig-terminal-device-5.6.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openconfig-interfaces-5.6.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openconfig-transport-line-5.6.0</artifactId>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
       <version>${project.version}</version>

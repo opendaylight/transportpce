@@ -179,7 +179,7 @@ public final class PortMappingUtils {
         return String.join("-", array);
     }
 
-    protected static String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
+    public static String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
         return new StringBuilder("XPDR").append(xponderNb)
                 .append("-")
                 .append(token).append(lcpNb)

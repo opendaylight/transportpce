@@ -9,9 +9,11 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
+import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_5_6_0;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -48,33 +50,70 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
+@SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Fields are read via OSGi @Reference")
 public class PortMappingImpl implements PortMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl.class);
 
-    private final DataBroker dataBroker;
-    private final PortMappingVersion710 portMappingVersion710;
-    private final PortMappingVersion221 portMappingVersion22;
-    private final OCPortMappingVersion200 ocPortMappingVersion200;
+    @Reference
+    private DataBroker dataBroker;
+
+    @Reference
+    private DeviceTransactionManager deviceTransactionManager;
+
+    @Reference(cardinality = org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL)
+    private OCMetaDataTransaction ocMetaDataTransaction;
+
+    @Reference(cardinality = org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL)
+    private NetworkTransactionService networkTransactionService;
+
+    private PortMappingVersion710 portMappingVersion710;
+    private PortMappingVersion221 portMappingVersion22;
+    private PortMappingRegistry portMappingRegistry;
 
     @Activate
-    public PortMappingImpl(@Reference DataBroker dataBroker,
-            @Reference DeviceTransactionManager deviceTransactionManager,
-            @Reference OCMetaDataTransaction ocMetaDataTransaction,
-            @Reference NetworkTransactionService networkTransactionService) {
-        this(dataBroker,
-            new PortMappingVersion710(dataBroker, deviceTransactionManager),
-            new PortMappingVersion221(dataBroker, deviceTransactionManager),
-            new OCPortMappingVersion200(dataBroker,deviceTransactionManager,ocMetaDataTransaction,
-                        networkTransactionService));
+    public void activate() {
+        this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
+        this.portMappingVersion22 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
+        LOG.info("PortMappingImpl ACTIVATED");
+    }
+
+    public PortMappingImpl() {
+        // OSGi default constructor
     }
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
-        PortMappingVersion221 portMappingVersion22, OCPortMappingVersion200 ocPortMappingVersion200) {
+        PortMappingVersion221 portMappingVersion22, PortMappingRegistry portMappingRegistry) {
         this.dataBroker = dataBroker;
         this.portMappingVersion710 = portMappingVersion710;
         this.portMappingVersion22 = portMappingVersion22;
-        this.ocPortMappingVersion200 = ocPortMappingVersion200;
+        this.portMappingRegistry = portMappingRegistry;
+    }
+
+    /**
+     * Bind PortMappingRegistry when it becomes available (dynamic discovery).
+     * OPTIONAL cardinality allows PortMappingImpl to work even if registry not ready,
+     * with proper error logging.
+     *
+     * @param registry the registry service
+     */
+    @Reference(
+            cardinality = org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL,
+            policy = org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC
+    )
+    public void setPortMappingRegistry(PortMappingRegistry registry) {
+        this.portMappingRegistry = registry;
+        LOG.info("PortMappingRegistry BOUND - OC200/OC560 support ready");
+    }
+
+    /**
+     * Unbind PortMappingRegistry when it's no longer available.
+     *
+     * @param registry the registry service
+     */
+    public void unsetPortMappingRegistry(PortMappingRegistry registry) {
+        this.portMappingRegistry = null;
+        LOG.warn("PortMappingRegistry UNBOUND");
     }
 
     @Override
@@ -92,9 +131,30 @@ public class PortMappingImpl implements PortMapping {
         return switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_2_2_1 -> portMappingVersion22.createMappingData(nodeId);
             case OPENROADM_DEVICE_VERSION_7_1 -> portMappingVersion710.createMappingData(nodeId);
-            case OPENCONFIG_DEVICE_VERSION_2_0_0 -> ocPortMappingVersion200.createMappingData(nodeId, ipAddress);
+            case OPENCONFIG_DEVICE_VERSION_2_0_0 -> {
+                if (portMappingRegistry != null) {
+                    LOG.info("Creating OC200 mapping for {} via registry", nodeId);
+                    yield portMappingRegistry.createMappingData(
+                        OPENCONFIG_DEVICE_VERSION_2_0_0, nodeId, ipAddress);
+                } else {
+                    LOG.error("PortMappingRegistry not available for OC200 device {}. "
+                        + "Registry will be available shortly after activation", nodeId);
+                    yield false;
+                }
+            }
+            case OPENCONFIG_DEVICE_VERSION_5_6_0 -> {
+                if (portMappingRegistry != null) {
+                    LOG.info("Creating OC560 mapping for {} via registry", nodeId);
+                    yield portMappingRegistry.createMappingData(
+                        OPENCONFIG_DEVICE_VERSION_5_6_0, nodeId, ipAddress);
+                } else {
+                    LOG.error("PortMappingRegistry not available for OC560 device {}. "
+                        + "Registry will be available shortly after activation", nodeId);
+                    yield false;
+                }
+            }
             default -> {
-                LOG.error("Unable to create mapping data for unmanaged device version");
+                LOG.error("Unable to create mapping data for unmanaged device version: {}", nodeVersion);
                 yield false;
             }
         };
@@ -218,12 +278,36 @@ public class PortMappingImpl implements PortMapping {
     @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
         LOG.info("update mapping called");
-        OpenroadmNodeVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        NodeDatamodelType datamodelType = getNode(nodeId).getDatamodelType();
+        Nodes node = getNode(nodeId);
+        if (node == null || node.getNodeInfo() == null) {
+            LOG.error("Could not find node {} in portmapping", nodeId);
+            return false;
+        }
+        NodeDatamodelType datamodelType = node.getDatamodelType();
 
         if (datamodelType != null && datamodelType.equals(NodeDatamodelType.OPENCONFIG)) {
-            return ocPortMappingVersion200.updateMapping(nodeId, oldMapping);
+            // Route OpenConfig devices through the registry based on their version
+            String ocVersion = null;
+            var ocNodeVersion = node.getNodeInfo().getOpenconfigVersion();
+            if (ocNodeVersion != null) {
+                ocVersion = switch (ocNodeVersion) {
+                    case _200 -> OPENCONFIG_DEVICE_VERSION_2_0_0;
+                    case _560 -> OPENCONFIG_DEVICE_VERSION_5_6_0;
+                    default -> null;
+                };
+            }
+
+            if (ocVersion != null && portMappingRegistry != null) {
+                return portMappingRegistry.updateMapping(ocVersion, nodeId, oldMapping);
+            } else if (ocVersion == null) {
+                LOG.error("Unknown OpenConfig version for node {}", nodeId);
+                return false;
+            } else {
+                LOG.warn("PortMappingRegistry not available for OpenConfig devices");
+                return false;
+            }
         } else {
+            OpenroadmNodeVersion openROADMversion = node.getNodeInfo().getOpenroadmVersion();
             return switch (openROADMversion) {
                 case _221 -> portMappingVersion22.updateMapping(nodeId, oldMapping);
                 case _71 -> portMappingVersion710.updateMapping(nodeId, oldMapping);

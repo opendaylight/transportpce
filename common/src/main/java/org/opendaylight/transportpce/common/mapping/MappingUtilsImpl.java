@@ -309,9 +309,11 @@ public final class MappingUtilsImpl implements MappingUtils {
                 switch (version) {
                     case _200:
                         return StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
+                    case _560:
+                        return StringConstants.OPENCONFIG_DEVICE_VERSION_5_6_0;
                     case PROTOTYPE:
                     default:
-                        LOG.warn("unknown openConfig device version");
+                        LOG.warn("unknown openConfig device version: {}", version);
                 }
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);

@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.common.mapping;
+package org.opendaylight.transportpce.oc200.mapping;
 
 import static org.opendaylight.transportpce.common.StringConstants.BIDIRECTIONAL;
 import static org.opendaylight.transportpce.common.StringConstants.CHASSIS;
@@ -51,6 +51,9 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
+import org.opendaylight.transportpce.common.mapping.OCPortMappingVersionService;
+import org.opendaylight.transportpce.common.mapping.PortMappingUtils;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.OpenconfigPlatformData;
@@ -121,18 +124,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class related to  port mapping  operations for openConfig node.
- * Based on terminal device reference 1.9.0.
+ * This class related to port mapping operations for openConfig-200 node.
  */
-public class OCPortMappingVersion200 {
+@org.osgi.service.component.annotations.Component(
+        service = OCPortMappingVersionService.class, immediate = true,
+        property = "version=2.0.0")
+public class OCPortMappingVersion200 implements OCPortMappingVersionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OCPortMappingVersion200.class);
 
-    private final DataBroker dataBroker;
-    private final DeviceTransactionManager deviceTransactionManager;
-    private final OCMetaDataTransaction ocMetaDataTransaction;
-    private final NetworkTransactionService networkTransactionService;
+    @org.osgi.service.component.annotations.Reference
+    private DataBroker dataBroker;
 
+    @org.osgi.service.component.annotations.Reference
+    private DeviceTransactionManager deviceTransactionManager;
+
+    @org.osgi.service.component.annotations.Reference(
+            cardinality = org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL,
+            policy = org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC)
+    private volatile OCMetaDataTransaction ocMetaDataTransaction;
+
+    @org.osgi.service.component.annotations.Reference(
+            cardinality = org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL,
+            policy = org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC)
+    private volatile NetworkTransactionService networkTransactionService;
+
+    /**
+     * Default constructor for OSGi DS instantiation.
+     */
+    public OCPortMappingVersion200() {
+    }
 
     /**
      * constructor of OCPortMappingVersion200.
@@ -151,6 +172,34 @@ public class OCPortMappingVersion200 {
     }
 
     /**
+     * Setter for OCMetaDataTransaction (for DYNAMIC injection from OSGi).
+     */
+    public void setOCMetaDataTransaction(OCMetaDataTransaction service) {
+        this.ocMetaDataTransaction = service;
+        LOG.info("OCPortMappingVersion200: OCMetaDataTransaction injected");
+    }
+
+    /**
+     * Unsetter for OCMetaDataTransaction (called when service is removed).
+     */
+    public void unsetOCMetaDataTransaction(OCMetaDataTransaction service) {
+        LOG.info("OCPortMappingVersion200: OCMetaDataTransaction removed");
+        this.ocMetaDataTransaction = null;
+    }
+
+    /**
+     * Setter for NetworkTransactionService (for DYNAMIC injection from OSGi).
+     */
+    public void setNetworkTransactionService(NetworkTransactionService service) {
+        this.networkTransactionService = service;
+    }
+
+    @Override
+    public String getVersion() {
+        return "2.0.0";
+    }
+
+    /**
      * This method creates port mapping data for a given device.
      *
      * @param nodeId - input
@@ -159,6 +208,7 @@ public class OCPortMappingVersion200 {
      *            ipaddress
      * @return true/false based on status of operation
      */
+    @Override
     public boolean createMappingData(String nodeId, IpAddress ipAddress) {
         LOG.info(PortMappingUtils.CREATE_OC_MAPPING_DATA_LOGMSG, nodeId, "2.0.0");
         NodeInfo nodeInfo = null;
@@ -263,6 +313,10 @@ public class OCPortMappingVersion200 {
                 .toList();
         if (lineCardComponentList.isEmpty()) {
             LOG.error("No LINECARD component found for node {}", nodeId);
+            return false;
+        }
+        if (ocMetaDataTransaction == null) {
+            LOG.error("OCMetaDataTransaction service not available for node {}", nodeId);
             return false;
         }
         OpenTerminalMetaData terminalMetaData = ocMetaDataTransaction.getXPDROpenTerminalMetaData();
@@ -612,8 +666,8 @@ public class OCPortMappingVersion200 {
      *                 subcomponents of NE LineCard.
      * @return supported client id's.
      */
-    private Set<Uint8> clientPortsExistsOnNELineCard(List<Optional<SupportedPort>> supportedClientPorts,
-                                                     Subcomponents subcomponents) {
+    protected Set<Uint8> clientPortsExistsOnNELineCard(List<Optional<SupportedPort>> supportedClientPorts,
+                                                      Subcomponents subcomponents) {
         Set<Uint8> clientIds = new HashSet<>();
         Collection<Subcomponent> lineCardComponentSubcomponents =
                 Objects.requireNonNull(subcomponents.getSubcomponent()).values();
@@ -985,7 +1039,16 @@ public class OCPortMappingVersion200 {
      * This method retrieves the list of transceivers declared in the metadata stored in the MD-SAL.
      */
     protected Map<TransceiverKey, Transceiver> getTransceiversListMetaData() {
-        return ocMetaDataTransaction.getXPDROpenTerminalMetaData().getTransceiverInfo().getTransceiver();
+        if (ocMetaDataTransaction == null) {
+            LOG.error("OCMetaDataTransaction service not available");
+            return null;
+        }
+        OpenTerminalMetaData terminalMetaData = ocMetaDataTransaction.getXPDROpenTerminalMetaData();
+        if (terminalMetaData == null || terminalMetaData.getTransceiverInfo() == null) {
+            LOG.error("No transceiver metadata found");
+            return null;
+        }
+        return terminalMetaData.getTransceiverInfo().getTransceiver();
     }
 
     /**
@@ -1099,6 +1162,10 @@ public class OCPortMappingVersion200 {
      *            frequency set is used populate central frequency by operational mode id
      */
     protected void createCentralFrequency(Transceiver transceiver, Set<Float> frequencySet) {
+        if (networkTransactionService == null) {
+            LOG.warn("NetworkTransactionService not available - skipping operational mode catalog lookup");
+            return;
+        }
         CatalogUtils catalogUtils = new CatalogUtils(networkTransactionService);
         if (transceiver.getOperationalModes() != null && transceiver.getOperationalModes().getOperationalMode()
                 != null) {
@@ -1316,6 +1383,7 @@ public class OCPortMappingVersion200 {
      *
      * @return Result true/false based on status of operation.
      */
+    @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
         LOG.info("OpenConfig update mapping called");
         if (nodeId == null) {

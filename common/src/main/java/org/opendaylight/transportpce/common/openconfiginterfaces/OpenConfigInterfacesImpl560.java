@@ -18,16 +18,16 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.OpenconfigInterfacesData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.Interfaces;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.Interface;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.OpenconfigPlatformData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.Components;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.Component;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev241205.OpenconfigInterfacesData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev241205.interfaces.top.Interfaces;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev241205.interfaces.top.interfaces.Interface;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev241205.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev241205.interfaces.top.interfaces.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.OpenconfigPlatformData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.component.top.Components;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.component.top.components.Component;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.component.top.components.ComponentKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Reference;
@@ -35,23 +35,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * OpenConfig 2.0.0 interface implementation.
+ * OpenConfig 5.6.0 interface implementation.
  *
  * <p>Registered as OSGi service with version property for dynamic discovery.
  * This enables version-specific YANG handling without classloader conflicts.
  */
 @org.osgi.service.component.annotations.Component(service = OpenConfigInterfacesVersionService.class)
-public class OpenConfigInterfacesImpl200 implements OpenConfigInterfacesVersionService {
+public class OpenConfigInterfacesImpl560 implements OpenConfigInterfacesVersionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl200.class);
-    private static final String VERSION = "openconfig-200";
+    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl560.class);
+    private static final String VERSION = "openconfig-560";
 
     private final DeviceTransactionManager deviceTransactionManager;
 
     @Activate
-    public OpenConfigInterfacesImpl200(@Reference DeviceTransactionManager deviceTransactionManager) {
+    public OpenConfigInterfacesImpl560(@Reference DeviceTransactionManager deviceTransactionManager) {
         this.deviceTransactionManager = deviceTransactionManager;
-        LOG.info("OpenConfigInterfacesImpl200 ACTIVATED - service registered in OSGi registry for version {}",
+        LOG.info("OpenConfigInterfacesImpl560 ACTIVATED - service registered in OSGi registry for version {}",
             VERSION);
     }
 

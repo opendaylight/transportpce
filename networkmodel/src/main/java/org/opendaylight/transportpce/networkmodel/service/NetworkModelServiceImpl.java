@@ -177,11 +177,48 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     @Override
     public void createOpenConfigNode(String nodeId, String openConfigVersion, IpAddress ipAddress) {
         LOG.info("create openconfig node {}", nodeId);
-        if (!portMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
-            LOG.error("could not generate portmapping {}", nodeId);
+
+        // Retry logic for OCMetaDataTransaction and PortMappingRegistry availability (OSGi dynamic binding)
+        // Increased retries and delays to allow services time to fully initialize
+        final int maxRetries = 10;
+        final long retryDelayMs = 1000;
+        boolean mappingCreated = false;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            if (portMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
+                mappingCreated = true;
+                LOG.info("Successfully created portmapping for {} on attempt {}/{}", nodeId, attempt, maxRetries);
+                break;
+            }
+
+            if (attempt < maxRetries) {
+                LOG.warn("Attempt {}/{} to create portmapping for {} failed. "
+                    + "PortMappingRegistry or OCMetaDataTransaction service may not be available yet. "
+                    + "Retrying in {}ms...",
+                    attempt, maxRetries, nodeId, retryDelayMs);
+                try {
+                    Thread.sleep(retryDelayMs);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    LOG.error("Interrupted while waiting to retry portmapping creation for {}", nodeId);
+                    return;
+                }
+            }
         }
+
+        if (!mappingCreated) {
+            LOG.error("Failed to create portmapping for {} after {} attempts ({}s total). "
+                + "PortMappingRegistry or OCMetaDataTransaction services were not available.",
+                nodeId, maxRetries, (maxRetries * retryDelayMs) / 1000);
+            return;
+        }
+
         Nodes mappingNode = portMapping.getNode(nodeId);
-        NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
+        if (mappingNode == null) {
+            LOG.error("failed to retrieve mapping node after creation for {}", nodeId);
+            return;
+        }
+        NodeInfo nodeInfo = mappingNode.getNodeInfo();
         // node creation in clli-network
         addNodeInClliNetwork(nodeId, nodeInfo);
         // node creation in openroadm-network

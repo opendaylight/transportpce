@@ -35,6 +35,7 @@ public final class StringConstants {
     public static final String OPENROADM_DEVICE_VERSION_7_1 = "(http://org/openroadm/device?revision=2020-05-29)org-openroadm-device";
 
     public static final String OPENCONFIG_DEVICE_VERSION_2_0_0 = "(http://openconfig.net/yang/terminal-device?revision=2021-07-29)openconfig-terminal-device";
+    public static final String OPENCONFIG_DEVICE_VERSION_5_6_0 = "(http://openconfig.net/yang/terminal-device?revision=2026-01-14)openconfig-terminal-device";
 
     public static final String T0_TAPI_MULTILAYER = "T0 - Tapi-Multi-layer Abstracted topology";
     public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";

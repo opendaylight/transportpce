@@ -44,7 +44,6 @@ public class PortMappingImplTest {
     private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion221;
     private PortMapping portMapping;
-    private OCPortMappingVersion200 ocPortMappingVersion200;
 
     @BeforeEach
     void setUp() {
@@ -52,9 +51,9 @@ public class PortMappingImplTest {
         dataBroker = dataStoreContext.getDataBroker();
         portMappingVersion710 = mock(PortMappingVersion710.class);
         portMappingVersion221 = mock(PortMappingVersion221.class);
-        ocPortMappingVersion200 = mock(OCPortMappingVersion200.class);
-        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710,
-            portMappingVersion221, ocPortMappingVersion200);
+        PortMappingRegistry portMappingRegistry = mock(PortMappingRegistry.class);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221,
+                portMappingRegistry);
     }
 
     @Test
