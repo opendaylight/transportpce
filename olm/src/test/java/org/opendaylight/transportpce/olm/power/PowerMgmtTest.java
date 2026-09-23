@@ -41,6 +41,7 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigPortConfiguration;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -68,6 +69,7 @@ class PowerMgmtTest {
     private NetworkTransactionService networkTransactionService;
     private PortMapping portMapping;
     private PowerMgmt powerMgmt;
+    private OpenConfigPortConfiguration openConfigPortConfiguration;
 
     @BeforeEach
     void setUp() {
@@ -79,6 +81,24 @@ class PowerMgmtTest {
         this.portMapping = mock(PortMapping.class);
         this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.openConfigInterfaces, this.crossConnect,
                 this.deviceTransactionManager, this.networkTransactionService, this.portMapping, 1000, 1000);
+
+        this.openConfigPortConfiguration = mock(OpenConfigPortConfiguration.class);
+        when(this.openConfigPortConfiguration.getOpenConfigVersion()).thenReturn("2.0.0");
+        when(this.openConfigPortConfiguration.getPortPowerParameters(anyString()))
+                .thenReturn(Map.of("MaxTx", 2.0, "MinTx", -5.0));
+
+        injectOpenConfigPortConfigurations(List.of(this.openConfigPortConfiguration));
+    }
+
+    private void injectOpenConfigPortConfigurations(List<OpenConfigPortConfiguration> configurations) {
+        try {
+            java.lang.reflect.Field field =
+                    PowerMgmtImpl.class.getDeclaredField("openConfigPortConfigurations");
+            field.setAccessible(true);
+            field.set(this.powerMgmt, new java.util.concurrent.CopyOnWriteArrayList<>(configurations));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new AssertionError("Failed to inject mock OpenConfigPortConfiguration", e);
+        }
     }
 
     @Test
@@ -402,25 +422,16 @@ class PowerMgmtTest {
                 .build();
         when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
 
-        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
-                mockStatic(PowerMgmtVersionOC200.class)) {
-            pmvOC200.when(() -> PowerMgmtVersionOC200
-                    .getXponderPowerRange(anyString(), any()))
-                    .thenReturn(new HashMap<>());
+        doNothing().when(this.openConfigInterfaces)
+                .configureComponent(anyString(), any());
 
-            doNothing().when(this.openConfigInterfaces)
-                    .configureComponent(anyString(), any());
+        ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                .getServicePowerSetupInputForOpenConfigTransponder();
+        boolean result = this.powerMgmt.setPower(input);
+        assertTrue(result);
 
-            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
-                    .getServicePowerSetupInputForOpenConfigTransponder();
-            boolean result = this.powerMgmt.setPower(input);
-            assertTrue(result);
-
-            pmvOC200.verify(() -> PowerMgmtVersionOC200
-                    .getXponderPowerRange(anyString(), any()), times(1));
-            verify(this.openConfigInterfaces, times(1))
-                    .configureComponent(matches("xpdr-OC"), any());
-        }
+        verify(this.openConfigInterfaces, times(1))
+                .configureComponent(matches("xpdr-OC"), any());
     }
 
     @Test
@@ -438,21 +449,27 @@ class PowerMgmtTest {
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
                     OpenroadmNodeVersion._221, List.of("srg1")));
 
-        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
-                mockStatic(PowerMgmtVersionOC200.class)) {
-            pmvOC200.when(() -> PowerMgmtVersionOC200
-                    .getXponderPowerRange(anyString(), any()))
-                    .thenReturn(null);
+        Mapping portMap = new MappingBuilder()
+                .setLogicalConnectionPoint("network-OC")
+                .setSupportingCircuitPackName("circuit pack")
+                .setSupportingPort("port")
+                .setOpenconfigInfo(new OpenconfigInfoBuilder()
+                        .setSupportedOpticalChannels(opticalChannels)
+                        .build())
+                .build();
+        when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
 
-            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
-                    .getServicePowerSetupInputForOpenConfigTransponder();
-            boolean result = this.powerMgmt.setPower(input);
-            assertFalse(result);
+        OpenConfigPortConfiguration mockPortConfig = mock(OpenConfigPortConfiguration.class);
+        when(mockPortConfig.getOpenConfigVersion()).thenReturn("2.0.0");
+        when(mockPortConfig.getPortPowerParameters(anyString())).thenReturn(null);
+        injectOpenConfigPortConfigurations(List.of(mockPortConfig));
 
-            pmvOC200.verify(() -> PowerMgmtVersionOC200
-                    .getXponderPowerRange(anyString(), any()), times(1));
-            verifyNoInteractions(this.openConfigInterfaces);
-        }
+        ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                .getServicePowerSetupInputForOpenConfigTransponder();
+        boolean result = this.powerMgmt.setPower(input);
+        assertFalse(result);
+
+        verifyNoInteractions(this.openConfigInterfaces);
     }
 
     @Test
@@ -481,25 +498,18 @@ class PowerMgmtTest {
                 .build();
         when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
 
-        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
-                mockStatic(PowerMgmtVersionOC200.class)) {
-            pmvOC200.when(() -> PowerMgmtVersionOC200
-                    .getXponderPowerRange(anyString(), any()))
-                    .thenReturn(new HashMap<>());
+        org.mockito.Mockito.doThrow(
+                new OpenConfigInterfacesException("Configuration failed"))
+                .when(this.openConfigInterfaces)
+                .configureComponent(anyString(), any());
 
-            org.mockito.Mockito.doThrow(
-                    new OpenConfigInterfacesException("Configuration failed"))
-                    .when(this.openConfigInterfaces)
-                    .configureComponent(anyString(), any());
+        ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                .getServicePowerSetupInputForOpenConfigTransponder();
+        boolean result = this.powerMgmt.setPower(input);
+        assertTrue(result);
 
-            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
-                    .getServicePowerSetupInputForOpenConfigTransponder();
-            boolean result = this.powerMgmt.setPower(input);
-            assertTrue(result);
-
-            verify(this.openConfigInterfaces, times(1))
-                    .configureComponent(matches("xpdr-OC"), any());
-        }
+        verify(this.openConfigInterfaces, times(1))
+                .configureComponent(matches("xpdr-OC"), any());
     }
 
 }

@@ -32,6 +32,7 @@ import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInter
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceFactory;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceRegistry;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.OtnServicePathInput;
@@ -50,6 +51,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,13 +74,14 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference MappingUtils mappingUtils,
             @Reference PortMapping portMapping,
-            @Reference OpenConfigInterfaces openConfigInterfaces) {
+            @Reference(cardinality = ReferenceCardinality.OPTIONAL) OpenConfigInterfaces openConfigInterfaces,
+            @Reference OpenConfigInterfaceRegistry openConfigInterfaceRegistry) {
         this.crossConnect = crossConnect;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
         this.portMapping = portMapping;
-        this.openConfigInterfaceFactory = new OpenConfigInterfaceFactory(portMapping, openConfigInterfaces);
+        this.openConfigInterfaceFactory = new OpenConfigInterfaceFactory(openConfigInterfaceRegistry);
 
     }
 

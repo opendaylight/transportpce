@@ -37,12 +37,10 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion200;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
-import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
@@ -135,9 +133,6 @@ public class PceGraphTest extends AbstractTest {
     private PortMapping portMapping;
     private NetworkTransactionService netTransServ;
     private ClientInput clientInput;
-    private OCPortMappingVersion200 ocPortMappingVersion200;
-    private OCMetaDataTransaction ocMetaDataTransaction;
-    private NetworkTransactionService networkTransactionService;
 
     // Test of integration for PceGraph
 
@@ -150,10 +145,8 @@ public class PceGraphTest extends AbstractTest {
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         this.portMappingVersion22 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
         this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
-        this.ocPortMappingVersion200 = new OCPortMappingVersion200(dataBroker, deviceTransactionManager,
-                ocMetaDataTransaction, networkTransactionService);
-        this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,  this.portMappingVersion22,
-                this.ocPortMappingVersion200);
+        this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,
+                this.portMappingVersion22, null);
         this.clientInput = mock(ClientInput.class);
         when(this.clientInput.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
         when(this.clientInput.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
