@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.renderer.openconfiginterface;
+package org.opendaylight.transportpce.oc200.mapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaceConfiguration;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceBuilder;
@@ -45,60 +46,64 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev230126.EthernetCsmacd;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OpenConfigInterface200 {
+/**
+ * OpenConfigInterface200Impl - OSGI service implementation for OC2.0.0 devices.
+ * Handles OpenConfig component and interface configuration with platform@2022-12-20 and terminal-device@2021-07-29.
+ * Registered with version property "2.0.0" for dynamic discovery by renderer via OSGI service registry.
+ */
+@Component(service = OpenConfigInterfaceConfiguration.class, property = "openconfig.version=2.0.0")
+public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterface200.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterface200Impl.class);
+    private static final String VERSION = "2.0.0";
 
     private final PortMapping portMapping;
     private final OpenConfigInterfaces openConfigInterfaces;
 
-    public OpenConfigInterface200(PortMapping portMapping, OpenConfigInterfaces openConfigInterfaces) {
+    @Activate
+    public OpenConfigInterface200Impl(
+            @Reference(cardinality = ReferenceCardinality.OPTIONAL) PortMapping portMapping,
+            @Reference(target = "(openconfig.version=2.0.0)")
+            OpenConfigInterfaces openConfigInterfaces) {
         this.portMapping = portMapping;
         this.openConfigInterfaces = openConfigInterfaces;
+        LOG.info("OpenConfigInterface200Impl OSGI service activated for OC version {}", VERSION);
     }
 
-    /**
-     * This method updates the admin-state of a line/client port component to enable/disable.
-     *
-     * @param nodeId node to be provisioned
-     * @param logicalConnPoint logical connection point/termination point read from input
-     * @param adminStateType admin state of the component, enable/disable
-     *
-     * @return configured component name.
-     * @throws OpenConfigInterfacesException openConfig exception with successfully configured port
-     */
+    @Override
+    public String getOpenConfigVersion() {
+        return VERSION;
+    }
 
-    public Set<String> configurePortAdminState(String nodeId, String logicalConnPoint, AdminStateType adminStateType)
+    @Override
+    public Set<String> configurePortAdminState(String nodeId, String logicalConnPoint, Object adminStateType)
             throws OpenConfigInterfacesException {
-        LOG.info("Configuring OpenConfig port admin state to {} on node {}", adminStateType.name(), nodeId);
+        LOG.info("Configuring OpenConfig port admin state to {} on node {}",
+                (adminStateType != null ? adminStateType.toString() : "null"), nodeId);
         Set<String> portIds = new HashSet<>();
         try {
             Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
             ComponentBuilder portComponentBuilder =
-                    createPortComponentBuilder(mapping.getSupportingPort(), adminStateType);
+                    createPortComponentBuilder(mapping.getSupportingPort(),
+                            (AdminStateType) adminStateType);
             openConfigInterfaces.configureComponent(nodeId, portComponentBuilder);
             portIds.add(portComponentBuilder.getName());
             LOG.info("Successfully updated port admin state to {} at port {} on node {}",
-                    adminStateType.name(), mapping.getSupportingPort(), nodeId);
+                    adminStateType, mapping.getSupportingPort(), nodeId);
         } catch (OpenConfigInterfacesException e) {
             throw new OpenConfigInterfacesException(portIds, e);
         }
         return portIds;
     }
 
-    /**
-     * This method will be used during rollback operation to disable admin-state of network/client component.
-     *
-     * @param nodeId Node ID
-     * @param supportingPort portId of the node to be rolled back
-     *
-     * @return set of rolled back ports
-     * @throws OpenConfigInterfacesException openConfig exception
-     */
-
+    @Override
     public Set<String> disablePortAdminState(String nodeId, String supportingPort) throws
             OpenConfigInterfacesException {
         LOG.info("Disabling OpenConfig port admin state at port {} on node {}", supportingPort, nodeId);
@@ -111,18 +116,7 @@ public class OpenConfigInterface200 {
         return portIds;
     }
 
-    /**
-     * This method configures client optical-channel components.
-     *
-     * @param nodeId node to be provisioned
-     * @param logicalConnPoint logical connection point/termination point read from input
-     * @param componentProperty enable/disable optical output of client optical-channel, FALSE/TRUE
-     *
-     * @return configured components name
-     * @throws OpenConfigInterfacesException openConfig exception with successfully configured
-     *         client optical-channel list
-     */
-
+    @Override
     public Set<String> configureClientOpticalChannel(String nodeId, String logicalConnPoint, String componentProperty)
             throws OpenConfigInterfacesException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -140,17 +134,7 @@ public class OpenConfigInterface200 {
         return opticalChannelComponentNames;
     }
 
-    /**
-     * This method is used to roll back the configured client optical-channels.
-     *
-     * @param nodeId Node ID
-     * @param opticalChannelIds optical channels to be rolled back
-     * @param componentProperty enable/disable optical output of client optical-channel, FALSE/TRUE
-     *
-     * @return rolled back component name
-     * @throws OpenConfigInterfacesException open config exception
-     */
-
+    @Override
     public Set<String> configureClientOpticalChannel(String nodeId, Set<String> opticalChannelIds,
                                                      String componentProperty)
             throws OpenConfigInterfacesException {
@@ -163,15 +147,6 @@ public class OpenConfigInterface200 {
         }
         return opticalChannelComponentNames;
     }
-
-    /**
-     * This method generates ComponentBuilder needed for client optical-channel configuration.
-     *
-     * @param supportedOpticalChannels set of optical channels to be configured
-     * @param componentProperty enable/disable optical output of client optical-channel, FALSE/TRUE
-     *
-     * @return ComponentBuilders of client optical-channels to be configured
-     */
 
     private List<ComponentBuilder> getClientOpticalChannelBuilders(Set<String> supportedOpticalChannels,
                                                                    String componentProperty) {
@@ -204,26 +179,19 @@ public class OpenConfigInterface200 {
         return componentBuilders;
     }
 
-    /**
-     * This method generates ComponentBuilder needed for network optical-channel configuration.
-     *
-     * @param nodeId NodeID
-     * @param logicalConnPoint logical connection point/termination point read from input
-     * @param input payload passed from the rest client
-     *
-     * @return component name which was configured successfully.
-     */
-
-    public String configureNetworkOpticalChannel(String nodeId, String logicalConnPoint, ServicePathInput input)
+    @Override
+    public String configureNetworkOpticalChannel(String nodeId, String logicalConnPoint, Object input)
             throws OpenConfigInterfacesException {
+        ServicePathInput servicePathInput = (ServicePathInput) input;
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         boolean isAend = false;
-        if (input.getAEndApiInfo() != null && input.getAEndApiInfo().getNodeId() != null) {
-            isAend = input.getAEndApiInfo().getNodeId().equals(nodeId);
+        if (servicePathInput.getAEndApiInfo() != null && servicePathInput.getAEndApiInfo().getNodeId() != null) {
+            isAend = servicePathInput.getAEndApiInfo().getNodeId().equals(nodeId);
         }
         LOG.info("Configuring operational mode and central frequency for {} on node {}",
                 mapping.getSupportingPort(), nodeId);
-        List<ComponentBuilder> opticalChannelBuilders = createOpticalChannelComponentBuilder(mapping, input, isAend);
+        List<ComponentBuilder> opticalChannelBuilders =
+                createOpticalChannelComponentBuilder(mapping, servicePathInput, isAend);
         StringBuilder opticalChannelComponentNames = new StringBuilder();
         for (ComponentBuilder opticalChannelBuilder : opticalChannelBuilders) {
             openConfigInterfaces.configureComponent(nodeId, opticalChannelBuilder);
@@ -234,6 +202,7 @@ public class OpenConfigInterface200 {
         return opticalChannelComponentNames.toString();
     }
 
+    @Override
     public String configureTransceiversTxLaser(String nodeId, String logicalConnPoint,
                     List<Integer> channelIndexes, boolean isTxLaserEnabled) throws OpenConfigInterfacesException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -247,6 +216,7 @@ public class OpenConfigInterface200 {
         return lineTransceiverComponentBuilder.getName();
     }
 
+    @Override
     public String disableTxLaser(String nodeId, String transceiver) throws OpenConfigInterfacesException {
         LOG.info("Disabling tx-laser for transceiver {} on node {}", transceiver, nodeId);
         ComponentBuilder lineTransceiverComponentBuilder =
@@ -276,14 +246,6 @@ public class OpenConfigInterface200 {
                 .Component1Builder().setTransceiver(transceiver).build();
         return new ComponentBuilder().setName(componentName).addAugmentation(transceiverAug);
     }
-    /**
-     * This method is used to generate ComponentBuilder for configuring port admin state.
-     *
-     * @param supportingPort Port to be configured
-     * @param adminStateType enable/disable
-     *
-     * @return ComponentBuilder with port admin state configuration.
-     */
 
     private ComponentBuilder createPortComponentBuilder(String supportingPort, AdminStateType adminStateType) {
         Config config = new ConfigBuilder().setAdminState(adminStateType).build();
@@ -294,15 +256,6 @@ public class OpenConfigInterface200 {
         componentBuilder.setPort(portBuilder.build());
         return componentBuilder;
     }
-
-    /**
-     * This method generates list of ComponentBuilders for optical-channels.
-     *
-     * @param portMap Mapping containing optical-channel list
-     * @param input payload from the rest client
-     *
-     * @return ComponentBuilder list containing optical-channel configuration.
-     */
 
     private List<ComponentBuilder> createOpticalChannelComponentBuilder(Mapping portMap, ServicePathInput input,
         boolean isAend) {
@@ -316,7 +269,7 @@ public class OpenConfigInterface200 {
         configBuilder.setOperationalMode(operationalMode);
         LOG.debug("Configuring OpenConfig network optical channel with operational mode {} at port {}",
                 operationalMode.intValue(), portMap.getSupportingPort());
-        if (input.getCenterFreq() != null) { //input.getCenterFreq().getValue().intValue()
+        if (input.getCenterFreq() != null) {
             FrequencyType frequency = FrequencyType
                     .getDefaultInstance(String.valueOf((long) (input.getCenterFreq().getValue()
                             .doubleValue() * 1_000_000)));
@@ -338,17 +291,7 @@ public class OpenConfigInterface200 {
         return componentBuilderList;
     }
 
-    /**
-     * This method is used to disable/enable optical output of client optical-channel.
-     *
-     * @param nodeId Node ID
-     * @param logicalConnPoint Logical connection point / termination point of respective optical port
-     * @param enableState Enable/disable
-     *
-     * @return client optical channels configured
-     * @throws OpenConfigInterfacesException openConfig exception with successfully configured interface list.
-     */
-
+    @Override
     public Set<String> configureInterface(String nodeId, String logicalConnPoint, boolean enableState)
             throws OpenConfigInterfacesException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -366,17 +309,7 @@ public class OpenConfigInterface200 {
         return clientInterfaces;
     }
 
-    /**
-     * This method is used during roll back of optical output of client optical-channel.
-     *
-     * @param nodeId Node ID
-     * @param interfaceIds Optical channels to be roll backed
-     * @param enableState Enable/disable
-     *
-     * @return client optical channels rolled back
-     * @throws OpenConfigInterfacesException openConfig exception.
-     */
-
+    @Override
     public Set<String> configureInterface(String nodeId, Set<String> interfaceIds, boolean enableState)
             throws OpenConfigInterfacesException {
         List<InterfaceBuilder> clientInterfaceBuilders = getClientInterfaceBuilders(interfaceIds, enableState);
@@ -388,15 +321,6 @@ public class OpenConfigInterface200 {
         return clientInterfaces;
     }
 
-    /**
-     * This method generated the InterfaceBuilder used to configuring optical output of client optical-channel.
-     *
-     * @param supportedInterfaces Optical channels to be configured
-     * @param enableState enable/disable
-     *
-     * @return InterfaceBuilders for configuring optical output of client optical-channel
-     */
-
     public List<InterfaceBuilder> getClientInterfaceBuilders(Set<String> supportedInterfaces, boolean enableState) {
         ArrayList<InterfaceBuilder> interfaceBuilderList = new ArrayList<>();
         if (supportedInterfaces != null) {
@@ -407,7 +331,7 @@ public class OpenConfigInterface200 {
                         ._interface.ConfigBuilder configBuilder = new org.opendaylight.yang.gen.v1.http.openconfig.net
                         .yang.interfaces.rev221025.interfaces.top.interfaces._interface.ConfigBuilder();
                 configBuilder.setName(supportedInterface);
-                configBuilder.setType(EthernetCsmacd.VALUE);//mandatory parameter
+                configBuilder.setType(EthernetCsmacd.VALUE);
                 configBuilder.setEnabled(enableState);
                 interfaceBuilder.setConfig(configBuilder.build());
                 interfaceBuilderList.add(interfaceBuilder);
