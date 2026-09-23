@@ -27,9 +27,11 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaceConfiguration;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceRegistry;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.mapping.MappingBuilder;
@@ -52,13 +54,20 @@ public class OtnDeviceRendererServiceImplTest  extends AbstractTest {
     private MappingUtils mappingUtils;
     private final OpenConfigInterfaces openConfigInterfaces = mock(OpenConfigInterfaces.class);
     private final PortMapping portMapping = mock(PortMapping.class);
+    private final OpenConfigInterfaceRegistry openConfigInterfaceRegistry = mock(OpenConfigInterfaceRegistry.class);
     private OtnDeviceRendererServiceImpl otnDeviceRendererServiceImplTest;
 
     @Test
     public void disableOpenConfigClientTest() throws OpenConfigInterfacesException {
         otnDeviceRendererServiceImplTest = new OtnDeviceRendererServiceImpl(crossConnect, openRoadmInterfaces,
-                deviceTransactionManager, mappingUtils, portMapping, openConfigInterfaces);
+                deviceTransactionManager, mappingUtils, portMapping, openConfigInterfaces, openConfigInterfaceRegistry);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(getMappingTestData());
+
+        OpenConfigInterfaceConfiguration mockService = mock(OpenConfigInterfaceConfiguration.class);
+        when(openConfigInterfaceRegistry.getService("2.0.0")).thenReturn(mockService);
+        when(mockService.configurePortAdminState(anyString(), anyString(), any()))
+                .thenReturn(new HashSet<>());
+
         Nodes node = new NodesBuilder().setNodeId("node1").setClientTp("XPDR1-CLIENT1").build();
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         LinkTp linkTp = otnDeviceRendererServiceImplTest.disableOpenConfigClient(node,
@@ -70,8 +79,14 @@ public class OtnDeviceRendererServiceImplTest  extends AbstractTest {
     @Test
     public void disableOpenConfigClientFailureTest() throws OpenConfigInterfacesException {
         otnDeviceRendererServiceImplTest = new OtnDeviceRendererServiceImpl(crossConnect, openRoadmInterfaces,
-                deviceTransactionManager, mappingUtils, portMapping, openConfigInterfaces);
+                deviceTransactionManager, mappingUtils, portMapping, openConfigInterfaces, openConfigInterfaceRegistry);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(getMappingTestData());
+
+        OpenConfigInterfaceConfiguration mockService = mock(OpenConfigInterfaceConfiguration.class);
+        when(openConfigInterfaceRegistry.getService("2.0.0")).thenReturn(mockService);
+        when(mockService.configurePortAdminState(anyString(), anyString(), any()))
+                .thenThrow(new OpenConfigInterfacesException("failed"));
+
         doThrow(new OpenConfigInterfacesException("failed")).when(openConfigInterfaces)
                 .configureComponent(anyString(), any());
         Nodes node = new NodesBuilder().setNodeId("node1").setClientTp("XPDR1-CLIENT1").build();

@@ -26,8 +26,10 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceRegistry;
 import org.opendaylight.transportpce.renderer.utils.CreateOtsOmsDataUtils;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.CreateOtsOmsInput;
@@ -49,13 +51,17 @@ public class DeviceRendererServiceImplCreateOtsOmsTest {
     private MappingUtils mappingUtils;
     @Mock
     private PortMapping portMapping;
+    @Mock
+    private OpenConfigInterfaces openConfigInterfaces;
+    @Mock
+    private OpenConfigInterfaceRegistry openConfigInterfaceRegistry;
     private DeviceRendererService deviceRendererService;
     private CreateOtsOmsInput input;
 
     @BeforeEach
     void setup() {
         deviceRendererService = new DeviceRendererServiceImpl(dataBroker, deviceTransactionManager, openRoadmInterfaces,
-                crossConnect, mappingUtils, portMapping, null);
+                crossConnect, mappingUtils, portMapping, openConfigInterfaces, openConfigInterfaceRegistry);
         input = CreateOtsOmsDataUtils.buildCreateOtsOms();
     }
 
