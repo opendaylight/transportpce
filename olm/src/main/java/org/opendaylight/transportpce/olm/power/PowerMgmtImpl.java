@@ -11,10 +11,8 @@ package org.opendaylight.transportpce.olm.power;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -28,14 +26,10 @@ import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigPortConfiguration;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.Component1Builder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannel;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannelBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908.NodeDatamodelType;
@@ -68,11 +62,14 @@ public class PowerMgmtImpl implements PowerMgmt {
     }
     private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtImpl.class);
     private final OpenRoadmInterfaces openRoadmInterfaces;
-    private final OpenConfigInterfaces openConfigInterfaces;
     private final CrossConnect crossConnect;
     private final DeviceTransactionManager deviceTransactionManager;
     private final NetworkTransactionService networkTransactionService;
     private final PortMapping portMapping;
+    @Reference(cardinality = org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE,
+               policy = org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC)
+    private volatile java.util.List<OpenConfigPortConfiguration> openConfigPortConfigurations =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
     private static final BigDecimal DEFAULT_TPDR_PWR_100G = new BigDecimal(-5);
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
@@ -85,21 +82,19 @@ public class PowerMgmtImpl implements PowerMgmt {
 
     @Activate
     public PowerMgmtImpl(@Reference OpenRoadmInterfaces openRoadmInterfaces,
-            @Reference OpenConfigInterfaces openConfigInterfaces,
             @Reference CrossConnect crossConnect,
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference NetworkTransactionService networkTransactionService,
             @Reference PortMapping portMapping, final Configuration configuration) {
-        this(openRoadmInterfaces, openConfigInterfaces, crossConnect, deviceTransactionManager,
+        this(openRoadmInterfaces, crossConnect, deviceTransactionManager,
             networkTransactionService, portMapping, configuration.timer1(), configuration.timer2());
     }
 
-    public PowerMgmtImpl(OpenRoadmInterfaces openRoadmInterfaces, OpenConfigInterfaces openConfigInterfaces,
-                         CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager,
+    public PowerMgmtImpl(OpenRoadmInterfaces openRoadmInterfaces, CrossConnect crossConnect,
+                         DeviceTransactionManager deviceTransactionManager,
                          NetworkTransactionService networkTransactionService,
                          PortMapping portMapping, long timer1, long timer2) {
         this.openRoadmInterfaces = openRoadmInterfaces;
-        this.openConfigInterfaces = openConfigInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
         this.networkTransactionService = networkTransactionService;
@@ -185,8 +180,10 @@ public class PowerMgmtImpl implements PowerMgmt {
                     if (isOpenConfig) {
                         if (!callSetTransponderPower(nodeId, destTpId, powerVal,
                                 inputNode.getNodeInfo().getOpenconfigVersion())) {
-                            LOG.info("Configuring target-output-power for node {}, {} failed ", nodeId, destTpId);
-                            continue;
+                            LOG.error("Configuring target-output-power for node {}, {} failed", nodeId, destTpId);
+                            errorSubscriber.error("Configuring target-output-power failed for node %s, %s"
+                                    .formatted(nodeId, destTpId));
+                            return false;
                         }
                     } else {
                         String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
@@ -315,6 +312,49 @@ public class PowerMgmtImpl implements PowerMgmt {
         }
     }
 
+    private Map<String, Double> getTxPowerRangeMap(Nodes inputNode, String destTpId, String nodeId,
+        OpenconfigNodeVersion openConfigVersion) {
+        Optional<Mapping> mappingObject = inputNode.nonnullMapping().values().stream()
+                .filter(o -> o.key().equals(new MappingKey(destTpId))).findFirst();
+        if (mappingObject.isEmpty()) {
+            LOG.info("Mapping object not found for nodeId: {}", nodeId);
+            return null;
+        }
+
+        String opmode = mappingObject
+                .flatMap(m -> Objects.requireNonNull(m.getSupportedOperationalMode()).stream().findFirst())
+                .orElseThrow(() -> new IllegalStateException("No supported operational mode found"));
+        OpenConfigPortConfiguration portConfig = getOpenConfigPortConfig(openConfigVersion.getIntValue());
+        if (portConfig != null) {
+            return portConfig.getPortPowerParameters(opmode);
+        } else {
+            LOG.error("No OpenConfigPortConfiguration service available for version: {}",
+                      openConfigVersion.getIntValue());
+            return new HashMap<>();
+        }
+    }
+
+    /**
+     * Gets the OpenConfigPortConfiguration service for the specified OpenConfig version.
+     *
+     * @param openConfigVersion the version number (2 for OC200, 5 for OC560, etc)
+     * @return the service implementation, or null if not found
+     */
+    private OpenConfigPortConfiguration getOpenConfigPortConfig(int openConfigVersion) {
+        return openConfigPortConfigurations.stream()
+                .filter(svc -> {
+                    String version = svc.getOpenConfigVersion();
+                    if (openConfigVersion == 2) {
+                        return version.startsWith("2.");
+                    } else if (openConfigVersion == 5) {
+                        return version.startsWith("5.");
+                    }
+                    return false;
+                })
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * Retrieves the min and max output power based on the operational mode.
      *
@@ -329,26 +369,6 @@ public class PowerMgmtImpl implements PowerMgmt {
      *
      * @return min and max output power of the node
      */
-    private Map<String, Double> getTxPowerRangeMap(Nodes inputNode, String destTpId, String nodeId,
-        OpenconfigNodeVersion openConfigVersion) {
-        Optional<Mapping> mappingObject = inputNode.nonnullMapping().values().stream()
-                .filter(o -> o.key().equals(new MappingKey(destTpId))).findFirst();
-        if (mappingObject.isEmpty()) {
-            LOG.info("Mapping object not found for nodeId: {}", nodeId);
-            return null;
-        }
-
-        String opmode = mappingObject
-                .flatMap(m -> Objects.requireNonNull(m.getSupportedOperationalMode()).stream().findFirst())
-                .orElseThrow(() -> new IllegalStateException("No supported operational mode found"));
-        switch (openConfigVersion.getIntValue()) {
-            case 2:
-                return PowerMgmtVersionOC200.getXponderPowerRange(opmode, networkTransactionService);
-            default:
-                LOG.error("Unrecognized OpenConfig version");
-                return new HashMap<>();
-        }
-    }
 
     private Map<String, Double> getSRGRxPowerRangeMap(String srgId, String nodeId) {
 
@@ -617,28 +637,23 @@ public class PowerMgmtImpl implements PowerMgmt {
             switch (openconfigNodeVersion.getIntValue()) {
                 case 2:
                     Mapping portMap = portMapping.getMapping(nodeId, destTp);
-                    var configBuilder = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device
-                           .rev210729.terminal.optical.channel.top.optical.channel.ConfigBuilder();
-                    configBuilder.setTargetOutputPower(Decimal64.valueOf(txPower));
                     LOG.info("Configuring OpenConfig target-output-power as {} on the node {}", txPower, nodeId);
-                    OpticalChannel opticalChannel =
-                            new OpticalChannelBuilder().setConfig(configBuilder.build()).build();
-                    Component1Builder component1Builder = new Component1Builder().setOpticalChannel(opticalChannel);
+                    if (portMap == null || portMap.getOpenconfigInfo() == null) {
+                        LOG.error("No OpenConfig mapping available for node {} port {}", nodeId, destTp);
+                        return false;
+                    }
                     Set<String> supportedOpticalChannels = portMap.getOpenconfigInfo().getSupportedOpticalChannels();
-                    List<ComponentBuilder> componentBuilderList = new ArrayList<>();
-                    if (supportedOpticalChannels != null) {
-                        for (String supportedOpticalChannel : supportedOpticalChannels) {
-                            ComponentBuilder componentBuilder = new ComponentBuilder()
-                                    .addAugmentation(component1Builder.build());
-                            componentBuilder.setName(supportedOpticalChannel);
-                            componentBuilderList.add(componentBuilder);
-                        }
+                    OpenConfigPortConfiguration portConfig =
+                            getOpenConfigPortConfig(openconfigNodeVersion.getIntValue());
+                    if (portConfig == null) {
+                        LOG.error("No OpenConfig port configuration service available for node {}", nodeId);
+                        return false;
                     }
-                    StringBuilder opticalChannelComponentNames = new StringBuilder();
-                    for (ComponentBuilder opticalChannelBuilder : componentBuilderList) {
-                        openConfigInterfaces.configureComponent(nodeId, opticalChannelBuilder);
-                        opticalChannelComponentNames.append(opticalChannelBuilder.getName()).append(" ");
+                    if (supportedOpticalChannels == null || supportedOpticalChannels.isEmpty()) {
+                        LOG.error("No optical channels available for node {} port {}", nodeId, destTp);
+                        return false;
                     }
+                    portConfig.configureTargetOutputPower(nodeId, supportedOpticalChannels, txPower);
                     return true;
                 default:
                     LOG.error("OpenConfig version not recognized");

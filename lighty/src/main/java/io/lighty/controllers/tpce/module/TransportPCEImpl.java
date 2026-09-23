@@ -23,18 +23,15 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
-import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion200;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
+import org.opendaylight.transportpce.common.mapping.PortMappingRegistry;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
-import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
-import org.opendaylight.transportpce.common.metadata.OCMetaDataTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
-import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl;
-import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl200;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
@@ -54,6 +51,7 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.impl.PceServiceRPCImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceRegistry;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 // Adding OTN interface
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
@@ -95,7 +93,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // because implementation has additional public methods ...
     private final DeviceTransactionManagerImpl deviceTransactionManager;
     private final NetworkTransactionService networkTransaction;
-    private final OCMetaDataTransaction ocMetaDataTransaction;
     // network model beans
     private final NetworkModelProvider networkModelProvider;
     // service-handler beans
@@ -114,7 +111,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(), MAX_TIME_FOR_TRANSACTION);
         DataBroker dataBroker = lightyServices.getBindingDataBroker();
         networkTransaction = new NetworkTransactionImpl(dataBroker);
-        ocMetaDataTransaction = new OCMetaDataTransactionImpl(dataBroker);
 
         LOG.info("Creating network-model beans ...");
         PortMapping portMapping = initPortMapping(dataBroker);
@@ -145,19 +141,32 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         MappingUtils mappingUtils = new MappingUtilsImpl(dataBroker);
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
-        OpenConfigInterfaces openConfigInterfaces = initOpenConfigInterfaces();
+        LOG.warn("OpenConfig device configuration is not available in Lighty");
+        final OpenConfigInterfaces openConfigInterfaces = new OpenConfigInterfaces() {
+            @Override
+            public <T> void configureComponent(String nodeId, T componentBuilder)
+                    throws OpenConfigInterfacesException {
+                throw new OpenConfigInterfacesException("OpenConfig device configuration is not available in Lighty");
+            }
+
+            @Override
+            public <T> void configureInterface(String nodeId, T interfaceBuilder)
+                    throws OpenConfigInterfacesException {
+                throw new OpenConfigInterfacesException("OpenConfig device configuration is not available in Lighty");
+            }
+        };
+        PowerMgmtImpl powerMgmt = new PowerMgmtImpl(
+                openRoadmInterfaces,
+                crossConnect,
+                deviceTransactionManager,
+                networkTransaction,
+                portMapping,
+                Long.valueOf(olmtimer1).longValue(),
+                Long.valueOf(olmtimer2).longValue());
         OlmPowerServiceRpcImpl olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
             new OlmPowerServiceImpl(
                     dataBroker,
-                    new PowerMgmtImpl(
-                            openRoadmInterfaces,
-                            openConfigInterfaces,
-                            crossConnect,
-                            deviceTransactionManager,
-                            networkTransaction,
-                            portMapping,
-                            Long.valueOf(olmtimer1).longValue(),
-                            Long.valueOf(olmtimer2).longValue()),
+                    powerMgmt,
                     deviceTransactionManager,
                     portMapping,
                     mappingUtils,
@@ -167,6 +176,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
         LOG.info("Creating renderer beans ...");
         new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
+        OpenConfigInterfaceRegistry openConfigInterfaceRegistry = new OpenConfigInterfaceRegistry();
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
                 dataBroker,
                 deviceTransactionManager,
@@ -174,14 +184,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 crossConnect,
                 mappingUtils,
                 portMapping,
-                null);
+                openConfigInterfaces,
+                openConfigInterfaceRegistry);
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(
                 crossConnect,
                 openRoadmInterfaces,
                 deviceTransactionManager,
                 mappingUtils,
                 portMapping,
-                null);
+                openConfigInterfaces,
+                openConfigInterfaceRegistry);
         //FIXME: need mdsal.binding;api.RpcService from LightyServices
         RpcService rpcService = lightyServices.getRpcConsumerRegistry();
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
@@ -302,9 +314,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private PortMapping initPortMapping(DataBroker dataBroker) {
         PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
-        OCPortMappingVersion200 ocPortMappingVersion200 = new OCPortMappingVersion200(dataBroker,
-                deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
-        return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, ocPortMappingVersion200);
+        return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, new PortMappingRegistry());
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {
@@ -314,12 +324,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl221,
                 openRoadmInterfacesImpl710);
-    }
-
-    private OpenConfigInterfaces initOpenConfigInterfaces() {
-        OpenConfigInterfacesImpl200 openConfigInterfacesImpl200 =
-                new OpenConfigInterfacesImpl200(deviceTransactionManager);
-        return new OpenConfigInterfacesImpl(openConfigInterfacesImpl200);
     }
 
     private CrossConnect initCrossConnect(MappingUtils mappingUtils) {
