@@ -41,6 +41,9 @@ import org.slf4j.LoggerFactory;
 public class ConvertTopoTapiToTapiNbi {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConvertTopoTapiToTapiNbi.class);
+    private static final Set<String> KEPT_NEP_VALUE_NAMES = Set.of(
+        TapiConstants.PHTNC_MEDIA_OTS + "NodeEdgePoint",
+        TapiConstants.OTSI_MC + "NodeEdgePoint");
     private Map<NodeKey, Node> tapiNodes;
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
@@ -103,11 +106,9 @@ public class ConvertTopoTapiToTapiNbi {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         for (Node node : tapiPhotonicNodes) {
             for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
-                var valStream = entry.getValue().getName().values().stream();
-                if ((valStream.filter(name -> name.getValueName().equals("PHOTONIC_MEDIA_OTSNodeEdgePoint")).count() > 0
-                            && valStream.filter(name -> name.getValue().contains("DEG")).count() == 0)
-                        || (valStream.filter(name -> name.getValueName().equals("OTSI_MCNodeEdgePoint")).count() > 0
-                            && valStream.filter(name -> name.getValue().contains("DEG")).count() == 0)) {
+                var names = entry.getValue().nonnullName().values();
+                if (names.stream().anyMatch(name -> KEPT_NEP_VALUE_NAMES.contains(name.getValueName()))
+                        && names.stream().noneMatch(name -> name.getValue().contains("DEG"))) {
                     onepMap.put(entry.getKey(), entry.getValue());
                 }
             }
@@ -130,9 +131,8 @@ public class ConvertTopoTapiToTapiNbi {
      * Removes from TapiNodes List all nodes that corresponds ROADM Nodes, filtering nodes on NameKeys.
      */
     private void purgeTapiNodes() {
-        this.tapiNodes = this.tapiNodes.values().stream()
-            .filter(n -> !n.getName().containsKey(new NameKey(TapiConstants.VALUE_NAME_ROADM_NODE)))
-            .collect(BindingMap.toMap());
+        this.tapiNodes.values()
+            .removeIf(n -> n.getName().containsKey(new NameKey(TapiConstants.VALUE_NAME_ROADM_NODE)));
     }
 
     /**
