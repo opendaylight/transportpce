@@ -8,26 +8,45 @@
 package org.opendaylight.transportpce.pce.orchestrator;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.pce.graph.PceGraph.PathElement;
 import org.opendaylight.transportpce.pce.graph.PceGraph.SubGraphPath;
 import org.opendaylight.transportpce.pce.graph.PceGraphEdge;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceTapiLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescriptionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.CrossDomainService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.CrossDomainServiceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServices;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.ImpairmentParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.SourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.AToZImpairmentsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.cd.services.impairment.parameters.ZToAImpairmentsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.PceMetric;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +64,6 @@ public final class PceCrossDomainPathAggregator {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCrossDomainPathAggregator.class);
     private Map<Integer, List<PathElement>> pathElementMap = new HashMap<>();
-    private Map<Integer, CdServicesBuilder> crossDomainServiceBldr = new HashMap<>();
     // Storage of impairment result (OpenROADM domains) for each KorderPath (FirstKey)
     // and each domains (2NdKey is domain order).
     private Map<Integer, Map<Integer, AToZImpairmentsBuilder>> openRoadmAtoZSubPathImpairments = new HashMap<>();
@@ -55,9 +73,9 @@ public final class PceCrossDomainPathAggregator {
     private Map<Integer, Map<Integer, SubGraphPath>> subGraphPathMap = new HashMap<>();
     private List<Integer> prunedKorderList = new ArrayList<>();
     public AggregatedPathDescription aggPathDescription = new AggregatedPathDescriptionBuilder().build();
-    public CrossDomainService crossDomainService = new CrossDomainServiceBuilder().build();
-//    public int kpathorder = 0;
+    private PathComputationRequestInput pcri = null;
     private int kpathorderMax = 0;
+    private static final String SUFFIXSERVICENAME = "-SUBSERVICE-";
 
     private PceCrossDomainPathAggregator() {
 
@@ -119,12 +137,94 @@ public final class PceCrossDomainPathAggregator {
         return pceResult;
     }
 
-    public boolean buildAggregatedPath(int korder) {
-        // When a path has been analyzed through checkPath in the TAPI PCE, and E2E path consistency is succesfully
-        // check, we need to build the the cross-domain service Container with its attributes and cleanup tables.
-        // returns true if successful
-        // calls populateCDServBlderWithOpticalParams(int cdServiceOrder,AToZImpairmentsBuilder atozBldr/ztoaBldr)
-        return true;
+    public Map<Integer, List<PceLink>> getOpenRoadmPathDescription(int korder) {
+        Map<Integer, SubGraphPath> openRoadmSubgraphPathMap = subGraphPathMap.get(korder).entrySet()
+            .stream().filter(entry -> entry.getValue().domainType().equals(DomainTypeEnum.Openroadm))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Integer, List<PceLink>> mapOfAtoZpath = new HashMap<>();
+        for (Map.Entry<Integer, SubGraphPath> entryN : openRoadmSubgraphPathMap.entrySet()) {
+            mapOfAtoZpath.put(
+                entryN.getKey(),
+                entryN.getValue().edgeList().stream().map(PceGraphEdge::link).toList());
+        }
+        return mapOfAtoZpath;
+    }
+
+    public Map<Integer, List<PceLink>> getTapiPathDescription(int korder) {
+        Map<Integer, SubGraphPath> tapiSubgraphPathMap = subGraphPathMap.get(korder).entrySet()
+            .stream().filter(entry -> entry.getValue().domainType().equals(DomainTypeEnum.TapiSbi))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if (tapiSubgraphPathMap.size() > 1) {
+            LOG.error("Detection of Different TAPI subdomains interconnected: unsupported Feature");
+            return null;
+        }
+        Map<Integer, List<PceLink>> mapOfAtoZpath = new HashMap<>();
+        for (Map.Entry<Integer, SubGraphPath> entryN : tapiSubgraphPathMap.entrySet()) {
+            mapOfAtoZpath.put(
+                entryN.getKey(),
+                entryN.getValue().edgeList().stream().map(PceGraphEdge::link).toList());
+        }
+        return mapOfAtoZpath;
+    }
+
+    public Map<CdServicesKey, CdServices> buildCdService(int korder) {
+        Map<CdServicesKey, CdServices> cdServiceMap = new HashMap<>();
+        for (Map.Entry<Integer, SubGraphPath> entryN : subGraphPathMap.get(korder).entrySet()) {
+            DomainTypeEnum domaintype;
+            AToZImpairmentsBuilder atozImpBldr;
+            ZToAImpairmentsBuilder ztoaImpBldr;
+            SourceBuilder srcBldr = new SourceBuilder();
+            DestinationBuilder dstBldr = new DestinationBuilder();
+            if (openRoadmAtoZSubPathImpairments.get(korder).get(entryN.getKey()) != null) {
+                atozImpBldr = openRoadmAtoZSubPathImpairments.get(korder).get(entryN.getKey());
+                ztoaImpBldr = openRoadmZtoASubPathImpairments.get(korder).get(entryN.getKey());
+                domaintype = DomainTypeEnum.Openroadm;
+                srcBldr.setSrcNodeId(entryN.getValue().intermediateGraphPath().getStartVertex());
+                srcBldr.setSrcTpId(entryN.getValue().intermediateGraphPath().getEdgeList().iterator().next()
+                    .link().getSourceTP());
+                dstBldr.setDestNodeId(entryN.getValue().intermediateGraphPath().getEndVertex());
+                dstBldr.setDestTpId(entryN.getValue().intermediateGraphPath().getEdgeList().get(
+                    entryN.getValue().intermediateGraphPath().getEdgeList().size() - 1).link().getDestTP());
+
+            } else {
+                if (tapiAtoZSubPathImpairments.get(korder).get(entryN.getKey()) == null) {
+                    return null;
+                }
+                atozImpBldr = tapiAtoZSubPathImpairments.get(korder).get(entryN.getKey());
+                ztoaImpBldr = tapiZtoASubPathImpairments.get(korder).get(entryN.getKey());
+                domaintype = DomainTypeEnum.TapiSbi;
+                PceLink firstLink = entryN.getValue().intermediateGraphPath().getEdgeList().iterator().next()
+                    .link();
+                srcBldr.setSrcNodeId(entryN.getValue().intermediateGraphPath().getStartVertex());
+                srcBldr.setSrcSupNodeUuid(firstLink.getsourceNetworkSupNodeId());
+                srcBldr.setSrcTopoUuid(((PceTapiLink) firstLink).getTopologyUuid().getValue());
+                srcBldr.setSrcTpUuid(firstLink.getSourceTP());
+                srcBldr.setSrcTpId(entryN.getValue().intermediateGraphPath().getEdgeList().iterator().next()
+                    .link().getSourceTP());
+                dstBldr.setDestNodeId(entryN.getValue().intermediateGraphPath().getEndVertex());
+                dstBldr.setDestTpId(entryN.getValue().intermediateGraphPath().getEdgeList().get(
+                    entryN.getValue().intermediateGraphPath().getEdgeList().size() - 1).link().getDestTP());
+                PceLink lastLink = entryN.getValue().intermediateGraphPath().getEdgeList().get(
+                    entryN.getValue().intermediateGraphPath().getEdgeList().size() - 1).link();
+                dstBldr.setDestSupNodeUuid(lastLink.getdestNetworkSupNodeId());
+                dstBldr.setDestTopoUuid(((PceTapiLink) lastLink).getTopologyUuid().getValue());
+                dstBldr.setDestTpUuid(lastLink.getDestTP());
+            }
+
+            CdServicesBuilder cdsbldr = new CdServicesBuilder()
+                .setCdServiceId(Uint8.valueOf(entryN.getKey()))
+                .setTopologyDomain(domaintype)
+                .setCalculatedImpairments(true)
+                .setSource(srcBldr.build())
+                .setDestination(dstBldr.build())
+                .setImpairmentParameters(new ImpairmentParametersBuilder()
+                    .setAToZImpairments(atozImpBldr.build())
+                    .setZToAImpairments(ztoaImpBldr.build())
+                    .build());
+            cdServiceMap.put(new CdServicesKey(Uint8.valueOf(entryN.getKey())), cdsbldr.build());
+        }
+
+        return cdServiceMap;
     }
 
     public Map<Integer, List<PathElement>> prunePathElementMap(Map<Integer, List<PathElement>> pathelementMap) {
@@ -135,12 +235,87 @@ public final class PceCrossDomainPathAggregator {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public ServiceCreateInput buildServiceCreateInput(int korder, int norder) {
-        // Builds the service create for TAPI service creation in the TAPI Domain
-        SubGraphPath subgraphpath = getSubGraphPathFromMap(korder, norder);
-        LOG.info("SubgraphPtah under analysis is {}", subgraphpath);
+    public PathComputationRequestInput buildPathComputationRequestCreateInput(int korder, int norder) {
+        Map<Integer, SubGraphPath> tapiSubgraphPathMap = subGraphPathMap.get(korder).entrySet()
+            .stream().filter(entry -> entry.getValue().domainType().equals(DomainTypeEnum.TapiSbi))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if (tapiSubgraphPathMap.size() > 1) {
+            LOG.error("Detection of Different TAPI subdomains interconnected: unsupported Feature");
+            return null;
+        }
+        String firstTpId = "";
+        String lastTpId = "";
+        SubGraphPath subGraphPath = tapiSubgraphPathMap.get(0);
+        if (subGraphPath.precedingEdge() == null) {
+            firstTpId = subGraphPath.edgeList().get(0).link().getSourceTP();
+        } else {
+            firstTpId = subGraphPath.precedingEdge().link().getDestTP();
+        }
+        if (subGraphPath.succeedingEdge() == null) {
+            lastTpId = subGraphPath.edgeList().get(subGraphPath.edgeList().size() - 1).link().getDestTP();
+        } else {
+            lastTpId = subGraphPath.succeedingEdge().link().getSourceTP();
+        }
 
-        return new ServiceCreateInputBuilder().build();
+        TerminationPoint tp = PceCrossDomainOrchestrator.getInstance(null, null, null)
+            .getTapiSbiNodeTPinORTopology(new TpId(firstTpId), StringConstants.OPENROADM_TOPOLOGY);
+        if (tp == null) {
+            LOG.info("Fail to find first TP {} of PceGraphEdge in Datastore, abort 2nd Step of Hybrid Path Computation",
+                firstTpId);
+            return null;
+        }
+        String nodeAid = tp.augmentation(TerminationPoint1.class).getSupportingNodeUuid();
+        String intermediateNodeAid = nodeAid.substring(2, nodeAid.length());
+        if (getUuidFromInput(intermediateNodeAid).getValue().equals(intermediateNodeAid)) {
+            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
+            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
+            // as the Node Id. Otherwise use as is.
+            nodeAid = intermediateNodeAid;
+        }
+        ServiceAEndBuilder serviceAEndBldr = new ServiceAEndBuilder(pcri.getServiceAEnd());
+        serviceAEndBldr.setNodeId(nodeAid);
+        serviceAEndBldr.setTxDirection(new TxDirectionBuilder().setLogicalConnectionPoint(firstTpId).build());
+        serviceAEndBldr.setRxDirection(new RxDirectionBuilder().setLogicalConnectionPoint(firstTpId).build());
+
+        tp = PceCrossDomainOrchestrator.getInstance(null, null, null)
+            .getTapiSbiNodeTPinORTopology(new TpId(lastTpId), StringConstants.OPENROADM_TOPOLOGY);
+        if (tp == null) {
+            LOG.info("Fail to find last TP {} of PceGraphEdge in Datastore, abort 2nd Step of Hybrid Path Computation",
+                lastTpId);
+            return null;
+        }
+        String nodeZid = tp.augmentation(TerminationPoint1.class).getSupportingNodeUuid();
+        String intermediateNodeZid = nodeZid.substring(2, nodeZid.length());
+        if (getUuidFromInput(intermediateNodeZid).getValue().equals(intermediateNodeZid)) {
+            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
+            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
+            // as the Node Id. Otherwise use as is.
+            nodeZid = intermediateNodeZid;
+        }
+        ServiceZEndBuilder serviceZEndBldr = new ServiceZEndBuilder(pcri.getServiceZEnd());
+        serviceZEndBldr.setNodeId(nodeZid);
+        serviceZEndBldr.setTxDirection(new TxDirectionBuilder().setLogicalConnectionPoint(lastTpId).build());
+        serviceZEndBldr.setRxDirection(new RxDirectionBuilder().setLogicalConnectionPoint(lastTpId).build());
+
+        String serviceName = getUuidFromInput(
+            pcri.getServiceName() + SUFFIXSERVICENAME + norder).getValue();
+
+        PathComputationRequestInput secondStepPcri = new PathComputationRequestInputBuilder()
+            .setServiceName(serviceName)
+            .setResourceReserve(pcri.getResourceReserve())
+            .setServiceHandlerHeader(pcri.getServiceHandlerHeader())
+            // For TAPI path computation ignore Constraint in a firts step (too complex to analyze whether the
+            // expressed constraints apply to OR or TAPI domain!
+            .setHardConstraints(null)
+            .setSoftConstraints(null)
+            .setPceRoutingMetric(PceMetric.TEMetric)
+            .setCustomerName(pcri.getCustomerName())
+            .setServiceAEnd(serviceAEndBldr.build())
+            .setServiceZEnd(serviceZEndBldr.build())
+            .build();
+
+
+        return secondStepPcri;
     }
 
     @SuppressWarnings("fallthrough")
@@ -265,11 +440,6 @@ public final class PceCrossDomainPathAggregator {
         return margin;
     }
 
-    public void pruneTapiSbiABSpath() {
-        // As most of the K E2E path will probably result in the same entry and exit point in the TAPI-SBI-ABS Node it
-        // Makes sense to limit the number of PAth computation Request exercised through the TAPI PCE
-    }
-
     private double calculateE2Emargin(int korder, CatalogUtils cu) {
         double margin1 = checkImpairments(korder, cu,
             PceCrossDomainPathAggregator.Direction.ATOZ, PceCrossDomainPathAggregator.ImpairementType.Total);
@@ -280,6 +450,10 @@ public final class PceCrossDomainPathAggregator {
         } else {
             return -1.0;
         }
+    }
+
+    public void setPcri(PathComputationRequestInput pcri) {
+        this.pcri = pcri;
     }
 
     public void setOpenRoadmAtoZSubPathImpairments(
@@ -340,6 +514,21 @@ public final class PceCrossDomainPathAggregator {
                 .entrySet().stream().filter(map -> map.getKey() == norder).findAny().orElseThrow().getValue();
     }
 
+    private Uuid getUuidFromInput(String inString) {
+        if (inString == null) {
+            return null;
+        }
+        Uuid outUuid;
+        Pattern uuidRegex =
+            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(inString).matches()) {
+            outUuid = new Uuid(inString);
+        } else {
+            outUuid = new Uuid(UUID.nameUUIDFromBytes(inString.getBytes(StandardCharsets.UTF_8)).toString());
+        }
+        return outUuid;
+    }
+
     public Map<Integer, SubGraphPath> getkSubGraphPathMap(int korder) {
         // retrieves the SubgrapthMap according to its k index
         return this.subGraphPathMap.entrySet().stream()
@@ -378,24 +567,12 @@ public final class PceCrossDomainPathAggregator {
         return succeedingEdge;
     }
 
-    public void populateCDServBlderWithOpticalParams(int cdServiceOrder,
-            AToZImpairmentsBuilder atozBldr, ZToAImpairmentsBuilder ztoaBldr) {
-        ImpairmentParametersBuilder impairments = new ImpairmentParametersBuilder()
-            .setAToZImpairments(atozBldr.build())
-            .setZToAImpairments(ztoaBldr.build());
-        this.crossDomainServiceBldr.get(cdServiceOrder)
-            .setCalculatedImpairments(true)
-            .setImpairmentParameters(impairments.build());
-    }
-
-
     public void resetInstance() {
         this.openRoadmAtoZSubPathImpairments = new HashMap<>();
         this.openRoadmZtoASubPathImpairments = new HashMap<>();
         this.tapiAtoZSubPathImpairments = new HashMap<>();
         this.tapiZtoASubPathImpairments = new HashMap<>();
         this.pathElementMap = new HashMap<>();
-        this.crossDomainServiceBldr = new HashMap<>();
         this.subGraphPathMap = new HashMap<>();
     }
 }
