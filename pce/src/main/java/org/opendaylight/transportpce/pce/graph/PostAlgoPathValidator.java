@@ -182,8 +182,14 @@ public class PostAlgoPathValidator {
                     } else {
                         this.atoZSubPathImpairments.put(npathorder,
                                 checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu));
+                        this.atoZSubPathImpairments.get(npathorder)
+                            .setSectionAvailableFreqMap(toByteArray(spectrumOccupation))
+                            .setLatency(Decimal64.valueOf(getLatency(path), RoundingMode.HALF_UP));
                         this.ztoASubPathImpairments.put(npathorder,
                             checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu));
+                        this.ztoASubPathImpairments.get(npathorder)
+                            .setSectionAvailableFreqMap(toByteArray(spectrumOccupation))
+                            .setLatency(Decimal64.valueOf(getLatency(path), RoundingMode.HALF_UP));
                     }
                 } else {
                     this.tpceCalculatedMargin = 0.0;
@@ -276,6 +282,20 @@ public class PostAlgoPathValidator {
             LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId(), latency);
         }
         return (latency < maxLatency);
+    }
+
+    // Get the latency
+    private double getLatency(ModifiedGraphPath path) {
+        double latency = 0;
+        for (PceGraphEdge edge : path.getEdgeList()) {
+            if (edge.link() == null || edge.link().getLatency() == null) {
+                LOG.warn("- In checkLatency: the link {} does not contain latency field", edge.link().getLinkId());
+                return -1;
+            }
+            latency += edge.link().getLatency();
+            LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId(), latency);
+        }
+        return latency;
     }
 
     // Check the inclusion if it is defined in the hard constraints
@@ -1397,5 +1417,18 @@ public class PostAlgoPathValidator {
             outUuid = new Uuid(inString);
         }
         return outUuid;
+    }
+
+    public static byte[] toByteArray(BitSet bitset) {
+        byte[] bytes = new byte[bitset.length() / 8 + 1];
+        for (int index = 0; index < bitset.length(); index++) {
+            if (bitset.get(index)) {
+                // If reverse order
+                //bytes[bytes.length - index / 8 - 1] |= 1 << (index % 8);
+                // with same order (our assumption here)
+                bytes[index / 8] |= 1 << (index % 8);
+            }
+        }
+        return bytes;
     }
 }

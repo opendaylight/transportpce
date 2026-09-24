@@ -7,9 +7,9 @@
  */
 package org.opendaylight.transportpce.pce.orchestrator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.pce.graph.PceGraphEdge;
@@ -20,6 +20,11 @@ public class ModifiedGraphPath implements GraphPath<String, PceGraphEdge> {
 
 
     private Object gpath;
+
+    private List<String> vertexListForMap = new ArrayList<>();
+    private List<PceGraphEdge> edgeListForMap = new ArrayList<>();
+    private String endVertexForMap = "";
+    private String startVertexForMap = "";
 
     public ModifiedGraphPath(Map<String, PceGraphEdge> pceGraphEdgeMap) {
         this.gpath = pceGraphEdgeMap;
@@ -72,7 +77,7 @@ public class ModifiedGraphPath implements GraphPath<String, PceGraphEdge> {
         if (isGraphPath()) {
             return ((GraphPath<String, PceGraphEdge>) gpath).getStartVertex();
         }
-        return null;
+        return this.startVertexForMap;
     }
 
     @Override
@@ -80,14 +85,15 @@ public class ModifiedGraphPath implements GraphPath<String, PceGraphEdge> {
         if (isGraphPath()) {
             return ((GraphPath<String, PceGraphEdge>) gpath).getEndVertex();
         }
-        return null;
+        return this.endVertexForMap;
     }
 
     @Override
     public List<PceGraphEdge> getEdgeList() {
         if (isPceGraphEdgeMap()) {
-            return (List<PceGraphEdge>) ((Map<String, PceGraphEdge>) gpath)
-                .values().stream().collect(Collectors.toList());
+            return this.edgeListForMap;
+                //(List<PceGraphEdge>) ((Map<String, PceGraphEdge>) gpath)
+                //.values().stream().collect(Collectors.toList());
         }
 
         return getGraphPath().getEdgeList();
@@ -97,7 +103,8 @@ public class ModifiedGraphPath implements GraphPath<String, PceGraphEdge> {
     @Override
     public List<String> getVertexList() {
         if (isPceGraphEdgeMap()) {
-            return (List<String>) ((Map<String, PceGraphEdge>) gpath).keySet().stream().collect(Collectors.toList());
+            return this.vertexListForMap;
+                //(List<String>) ((Map<String, PceGraphEdge>) gpath).keySet().stream().collect(Collectors.toList());
         }
         return getGraphPath().getVertexList();
 
@@ -115,6 +122,22 @@ public class ModifiedGraphPath implements GraphPath<String, PceGraphEdge> {
     @Override
     public int getLength() {
         return getEdgeList().size();
+    }
+
+    public void setVertexListForMap(List<String> mdVertexList) {
+        this.vertexListForMap = mdVertexList;
+    }
+
+    public void setEdgeListForMap(List<PceGraphEdge> mdEdgeList) {
+        this.edgeListForMap = mdEdgeList;
+    }
+
+    public void setEndVertexForMap(String mdendVertex) {
+        this.endVertexForMap = mdendVertex;
+    }
+
+    public void setStartVertexForMap(String mdStartVertex) {
+        this.startVertexForMap = mdStartVertex;
     }
 
 }

@@ -17,6 +17,11 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+* OSGi component orchestrating cross-domain services.
+*   Used to initialize the path computation, notification, and network transaction services,
+*   and to manage manage the lifecycle.
+*/
 @Component
 public class CrossDomainServiceOrchestrator {
 
@@ -26,6 +31,13 @@ public class CrossDomainServiceOrchestrator {
     private PceCrossDomainOrchestrator pceCrossDomainOrchestrator;
     private NetworkTransactionService networkTransactionService;
 
+    /**
+    * Retrieves the singleton instance of the orchestrator, initializing dependencies.
+    *
+    * @param pcs the path computation service
+    * @param nps the notification publish service
+    * @param nts the network transaction service
+    */
     @Activate
     public CrossDomainServiceOrchestrator(
 //            @Reference RpcProviderService rpcProviderService,
@@ -44,6 +56,9 @@ public class CrossDomainServiceOrchestrator {
         }
     }
 
+    /**
+    * Called when the component is deactivated, performing cleanup.
+    */
     @Deactivate
     public void close() {
         LOG.info("CrossDomainServiceOrchestrator Closed");
