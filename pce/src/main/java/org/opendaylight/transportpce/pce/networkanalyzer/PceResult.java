@@ -16,6 +16,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250530.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.CrossDomainService;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.ZToADirection;
 import org.slf4j.event.Level;
 
@@ -41,6 +42,7 @@ public class PceResult {
 
     private AToZDirection atozDirection = null;
     private ZToADirection ztoaDirection = null;
+    private CrossDomainService crossDomainService = null;
 
     /**
      * Set the state of this object to "Success".
@@ -203,6 +205,22 @@ public class PceResult {
      */
     public void setMaxFreq(BigDecimal maxFreq) {
         this.maxFreq = maxFreq;
+    }
+
+    /**
+     * Set the Cross domain Service Container.
+     * @param cds the Cross Domain service container.
+     */
+    public void setCrossDomainService(CrossDomainService cds) {
+        this.crossDomainService = cds;
+    }
+
+    /**
+     * Get Cross domain Service Container.
+     * @return the Cross domain Service Container.
+     */
+    public CrossDomainService getCrossDomainService() {
+        return this.crossDomainService;
     }
 
 }
