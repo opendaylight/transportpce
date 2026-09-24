@@ -30,6 +30,7 @@ import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.input.ServiceCreateClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.transportpce.pce.orchestrator.PceCrossDomainPathAggregator;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PceConstraintMode;
@@ -37,6 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev26
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.CrossDomainServiceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.PceMetric;
 import org.slf4j.Logger;
@@ -79,8 +81,10 @@ public class PceSendingPceRPCs {
     private Endpoints endpoints;
     // Define PCE mode of operation (OpenROADM/TAPI)
     private String pceOperMode;
+    private boolean isFirstStepHybridPC;
     private boolean isSecondStepHybridPC;
     private int npathorder;
+    private int kpathorder;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
     public static final String SERVICE_LAYER_OTN = "OTN";
@@ -97,7 +101,8 @@ public class PceSendingPceRPCs {
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
                              GnpyConsumer gnpyConsumer, PortMapping portMapping, String pceOperationalMode,
-                             boolean isSecondStepHybridPC, int npathorder) {
+                             boolean isSecondstepHybridPC, boolean isFirststepHybridPC,
+                             int npathorder, int kpathorder) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         // TODO compliance check to check that input is not empty
@@ -106,8 +111,10 @@ public class PceSendingPceRPCs {
         this.portMapping = portMapping;
         this.endpoints = null;
         this.pceOperMode = pceOperationalMode;
-        this.isSecondStepHybridPC = isSecondStepHybridPC;
+        this.isSecondStepHybridPC = isSecondstepHybridPC;
+        this.isFirstStepHybridPC = isFirststepHybridPC;
         this.npathorder = npathorder;
+        this.kpathorder = kpathorder;
 
     }
 
@@ -116,7 +123,8 @@ public class PceSendingPceRPCs {
                              Endpoints endpoints,
                              String pceOperationalMode,
                              boolean isSecondStepHybridPC,
-                             int npathorder) {
+                             boolean isFirststepHybridPC,
+                             int npathorder, int kpathorder) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         this.input = input;
@@ -125,7 +133,9 @@ public class PceSendingPceRPCs {
         this.endpoints = endpoints;
         this.pceOperMode = pceOperationalMode;
         this.isSecondStepHybridPC = isSecondStepHybridPC;
+        this.isFirstStepHybridPC = isFirststepHybridPC;
         this.npathorder = npathorder;
+        this.kpathorder = kpathorder;
     }
 
     public void cancelResourceReserve() {
@@ -180,7 +190,7 @@ public class PceSendingPceRPCs {
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
             nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
             rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-            clientInput, nwAnalizer.getServiceLayer(), isSecondStepHybridPC, npathorder);
+            clientInput, nwAnalizer.getServiceLayer(), isSecondStepHybridPC, npathorder, input);
 
         Subscriber errorSubscriber = new EventSubscriber();
         graph.setPceOperMode(this.pceOperMode);
@@ -206,6 +216,40 @@ public class PceSendingPceRPCs {
                 rc.error(errorSubscriber.first(Level.ERROR, "No path found by PCE.", 3));
                 return;
             }
+        }
+        PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
+        if (isSecondStepHybridPC) {
+            LOG.info("PcePathDescription ...Building PathDescription for Tapi Domain");
+            pcdpa.buildCdService(kpathorder);
+            rc.setCrossDomainService(new CrossDomainServiceBuilder()
+                    .setCdServices(pcdpa.buildCdService(kpathorder))
+                    .build());
+            PcePathDescription description = new PcePathDescription(
+                    pcdpa.getTapiPathDescription(kpathorder), nwAnalizer.getAllPceLinks(), rc);
+            description.setAendOperationalMode(graph.getAendOperationalMode());
+            description.setZendOperationalMode(graph.getZendOperationalMode());
+            description.buildDescriptions();
+            rc = description.getReturnStructure();
+        } else if (isFirstStepHybridPC) {
+            LOG.info("PcePathDescription ...Building PathDescription for OpenRoadm Domain");
+            pcdpa.buildCdService(kpathorder);
+            rc.setCrossDomainService(new CrossDomainServiceBuilder()
+                    .setCdServices(pcdpa.buildCdService(kpathorder))
+                    .build());
+            PcePathDescription description = new PcePathDescription(
+                    pcdpa.getOpenRoadmPathDescription(kpathorder), nwAnalizer.getAllPceLinks(), rc);
+            description.setAendOperationalMode(graph.getAendOperationalMode());
+            description.setZendOperationalMode(graph.getZendOperationalMode());
+            description.buildDescriptions();
+            rc = description.getReturnStructure();
+        } else {
+            LOG.info("PcePathDescription ...");
+            PcePathDescription description = new PcePathDescription(
+                    graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
+            description.setAendOperationalMode(graph.getAendOperationalMode());
+            description.setZendOperationalMode(graph.getZendOperationalMode());
+            description.buildDescriptions();
+            rc = description.getReturnStructure();
         }
         LOG.info("PcePathDescription ...");
         PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);

@@ -12,11 +12,12 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
+import java.util.BitSet;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -26,34 +27,29 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev26
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SecondStepHybridPcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SecondStepHybridPcResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceAEnd2;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceZEnd2;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.SpectrumAllocation;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.CrossDomainServiceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.endpoint.sp.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev260910.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,29 +89,19 @@ public final class PceCrossDomainOrchestrator {
     }
 
     public static PathComputationRequestOutput performPCE(
-            ServiceCreateInput serviceCreateInput, boolean reserveResource,
-            PathComputationService pcs, NotificationPublishService nps) {
+            PathComputationRequestInput pathComputationRequestInput, String initialRequestId, String customerName,
+            BitSet spectrumConstraint, PathComputationService pcs, NotificationPublishService nps) {
         LOG.info(PceCrossDomainOrchestrator.PERFORMING_PCE_CROSS_DOMAIN_MSG + "for K path order = {}",
             PceCrossDomainOrchestrator.kpathOrder);
-        if (validateParams(serviceCreateInput.getServiceName(), serviceCreateInput.getSdncRequestHeader())) {
+        if (validateParams(pathComputationRequestInput.getServiceName(), initialRequestId)) {
 
             return performPCE(
-                    serviceCreateInput.getHardConstraints(),
-                    serviceCreateInput.getSoftConstraints(),
-                    serviceCreateInput.getServiceName(),
-                    serviceCreateInput.getSdncRequestHeader(),
-                    serviceCreateInput.getServiceAEnd(),
-                    serviceCreateInput.getServiceZEnd(),
+                    pathComputationRequestInput,
+                    initialRequestId,
+                    customerName,
                     ServiceNotificationTypes.ServiceCreateResult,
                     ServicePathNotificationTypes.SecondStepHybridPcRequest,
-                    reserveResource,
-                    serviceCreateInput.getCustomer(),
-                    serviceCreateInput
-                            .getServiceAEnd()
-                            .augmentation(ServiceAEnd2.class),
-                    serviceCreateInput
-                            .getServiceZEnd()
-                            .augmentation(ServiceZEnd2.class),
+                    spectrumConstraint,
                     PceCrossDomainOrchestrator.kpathOrder,
                     pcs,
                     nps
@@ -127,18 +113,12 @@ public final class PceCrossDomainOrchestrator {
 
 
     private static PathComputationRequestOutput performPCE(
-            HardConstraints hardConstraints,
-            SoftConstraints softConstraints,
-            String serviceName,
-            SdncRequestHeader sdncRequestHeader,
-            ServiceEndpoint serviceAEnd,
-            ServiceEndpoint serviceZEnd,
+            PathComputationRequestInput pathComputationRequestInput,
+            String initialRequestId,
+            String customerName,
             ServiceNotificationTypes servNotifType,
             ServicePathNotificationTypes servPathNotifType,
-            boolean reserveResource,
-            String customerName,
-            SpectrumAllocation spectrumAEndAllocation,
-            SpectrumAllocation spectrumZEndAllocation,
+            BitSet spectrumConstraint,
             int kpathorder,
             PathComputationService pcs,
             NotificationPublishService nps
@@ -146,7 +126,9 @@ public final class PceCrossDomainOrchestrator {
         // TODO: define specific notification type so that nothing happens when recieved in regular PCE and so that
         // we handle where needed the notification associated with this specific tapi-domain PathComputationRequest
         LOG.info("Calling path computation.");
-        notification = new ServiceRpcResultShBuilder().setNotificationType(servNotifType).setServiceName(serviceName)
+        notification = new ServiceRpcResultShBuilder()
+                .setNotificationType(servNotifType)
+                .setServiceName(pathComputationRequestInput.getServiceName())
                 .setStatus(RpcStatusEx.Pending)
                 .setStatusMessage("Service compliant, submitting PathComputation Request ...").build();
         try {
@@ -155,23 +137,9 @@ public final class PceCrossDomainOrchestrator {
             LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
         }
         FutureCallback<PathComputationRequestOutput> pceCallback = PceCrossDomainOrchestrator
-                .getInstance(null, null, null)
-                    .new Pcro2ndStepCallback(servPathNotifType, serviceName, kpathorder);
-        //TODO: PreProcess the input parameters so that service name is correctly formated and triggers Path computation
-        // Using TAPI PCE (or change Algo of PCE so that it detects the 2nd step PC and slect this criteria rather
-        // than serviceName format == Uuid to use TAPI flavor of the PCE
-        PathComputationRequestInput pathComputationRequestInput = createPceRequestInput(
-                serviceName,
-                sdncRequestHeader,
-                hardConstraints,
-                softConstraints,
-                reserveResource,
-                serviceAEnd,
-                serviceZEnd,
-                customerName,
-                spectrumAEndAllocation,
-                spectrumZEndAllocation
-        );
+                .getInstance(null, null, null).new Pcro2ndStepCallback(
+                        servPathNotifType, pathComputationRequestInput.getServiceName(), kpathorder);
+        createPceRequestInput(pathComputationRequestInput, initialRequestId, customerName, spectrumConstraint);
         //TODO : find a way to set pceOperMode where appropriate
         ListenableFuture<PathComputationRequestOutput> pce = pcs.pathComputationRequest(pathComputationRequestInput);
         Futures.addCallback(pce, pceCallback, EXECUTOR);
@@ -180,7 +148,7 @@ public final class PceCrossDomainOrchestrator {
             // TODO: define new Response code? so that nothing happens when recieved in regular PCE and so that
             // we handle where needed the notification associated with this specific tapi-domain PathComputationRequest
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
-                .setRequestId(sdncRequestHeader.getRequestId())
+                .setRequestId(initialRequestId)
                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                 .setResponseMessage("PCE calculation in progress")
                 .build();
@@ -191,109 +159,27 @@ public final class PceCrossDomainOrchestrator {
                 .build();
     }
 
-
     private static PathComputationRequestInput createPceRequestInput(
-            String serviceName,
-            SdncRequestHeader serviceHandler,
-            HardConstraints hardConstraints,
-            SoftConstraints softConstraints,
-            Boolean reserveResource,
-            ServiceEndpoint serviceAEnd,
-            ServiceEndpoint serviceZEnd,
-            String customerName,
-            SpectrumAllocation spectrumAEndAllocation,
-            SpectrumAllocation spectrumZEndAllocation) {
-
+            PathComputationRequestInput pathComputationRequestInput, String initialRequestId, String customerName,
+            BitSet spectrumConstraint) {
+        // Do not use/implement  Spectrum constraint at that time
         LOG.info("Mapping ServiceCreateInput or ServiceFeasibilityCheckInput or serviceReconfigureInput to PCE"
                 + "requests");
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
-        if (serviceHandler != null) {
-            serviceHandlerHeader.setRequestId(serviceHandler.getRequestId());
+        if (initialRequestId != null && !initialRequestId.isBlank()) {
+            serviceHandlerHeader.setRequestId(initialRequestId + "2nd-Step-hybridPC");
         }
         return new PathComputationRequestInputBuilder()
-            .setServiceName(serviceName)
-            .setResourceReserve(reserveResource)
+            .setServiceName(pathComputationRequestInput.getServiceName())
+            .setResourceReserve(pathComputationRequestInput.getResourceReserve())
             .setServiceHandlerHeader(serviceHandlerHeader.build())
-            .setHardConstraints(hardConstraints)
-            .setSoftConstraints(softConstraints)
+            .setHardConstraints(pathComputationRequestInput.getHardConstraints())
+            .setSoftConstraints(pathComputationRequestInput.getSoftConstraints())
             .setPceRoutingMetric(PceMetric.TEMetric)
             .setCustomerName(customerName)
-            .setServiceAEnd(createServiceAEnd(serviceAEnd))
-            .setServiceZEnd(createServiceZEnd(serviceZEnd))
+            .setServiceAEnd(pathComputationRequestInput.getServiceAEnd())
+            .setServiceZEnd(pathComputationRequestInput.getServiceZEnd())
             .build();
-    }
-
-    public static ServiceAEnd createServiceAEnd(ServiceEndpoint serviceAEnd) {
-
-        String nodeAid = serviceAEnd.getNodeId().getValue();
-        String intermediateNodeAid = nodeAid.substring(2, nodeAid.length());
-        if (getUuidFromInput(intermediateNodeAid).getValue().equals(intermediateNodeAid)) {
-            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
-            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
-            // as the Node Id. Otherwise use as is.
-            nodeAid = intermediateNodeAid;
-        }
-        ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
-                .setClli(serviceAEnd.getClli())
-                .setNodeId(nodeAid)
-                .setRxDirection(
-                        createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
-                .setServiceFormat(serviceAEnd.getServiceFormat())
-                .setServiceRate(serviceAEnd.getServiceRate())
-                .setTxDirection(
-                        createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()));
-
-        return serviceAEndBuilder.build();
-    }
-
-    public static ServiceZEnd createServiceZEnd(ServiceEndpoint serviceZEnd) {
-
-        String nodeZid = serviceZEnd.getNodeId().getValue();
-        String intermediateNodeZid = nodeZid.substring(2, nodeZid.length());
-        if (getUuidFromInput(intermediateNodeZid).getValue().equals(intermediateNodeZid)) {
-            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
-            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
-            // as the Node Id. Otherwise use as is.
-            nodeZid = intermediateNodeZid;
-        }
-        ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
-                .setClli(serviceZEnd.getClli())
-                .setNodeId(nodeZid)
-                .setRxDirection(
-                        createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
-                .setServiceFormat(serviceZEnd.getServiceFormat())
-                .setServiceRate(serviceZEnd.getServiceRate())
-                .setTxDirection(
-                        createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().orElseThrow()));
-
-        return serviceZEndBuilder.build();
-    }
-
-    private static RxDirection createRxDirection(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530
-                .service.endpoint.RxDirection rxDirection) {
-        return new RxDirectionBuilder().setPort(rxDirection.getPort()).build();
-    }
-
-    private static TxDirection createTxDirection(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530
-                .service.endpoint.TxDirection txDirection) {
-        return new TxDirectionBuilder().setPort(txDirection.getPort()).build();
-    }
-
-    private static Uuid getUuidFromInput(String inString) {
-        if (inString == null) {
-            return null;
-        }
-        Uuid outUuid;
-        Pattern uuidRegex =
-            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
-        if (uuidRegex.matcher(inString).matches()) {
-            outUuid = new Uuid(inString);
-        } else {
-            outUuid = new Uuid(UUID.nameUUIDFromBytes(inString.getBytes(StandardCharsets.UTF_8)).toString());
-        }
-        return outUuid;
     }
 
     private static PathComputationRequestOutput returnTapiPCRFailed() {
@@ -305,20 +191,50 @@ public final class PceCrossDomainOrchestrator {
                 .setResponseParameters(reponseParameters).build();
     }
 
-    private static Boolean validateParams(String serviceName, SdncRequestHeader sdncRequestHeader) {
+    private static Boolean validateParams(String serviceName, String initialRequestId) {
         boolean result = true;
         if (!checkString(serviceName)) {
             result = false;
             LOG.error("Service Name (common-id for Temp service) is not set");
-        } else if (sdncRequestHeader == null) {
+        } else if (initialRequestId == null || initialRequestId.isBlank()) {
             LOG.error("Service sdncRequestHeader 'request-id' is not set");
             result = false;
         }
         return result;
     }
 
+    public TerminationPoint getTapiSbiNodeTPinORTopology(TpId tpId, String netLayer) {
+
+        String tapiSBInode = "TAPI-SBI-ABS-NODE";
+        TerminationPoint sbiTp = null;
+        DataObjectIdentifier<TerminationPoint> orTopologyTpIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(netLayer)))
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.Node.class,
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.NodeKey(new NodeId(tapiSBInode)))
+            .augmentation(Node1.class)
+            .child(TerminationPoint.class, new TerminationPointKey(tpId))
+            .build();
+        try {
+            Optional<TerminationPoint> tpOptional = networkTransactionService
+                .read(LogicalDatastoreType.CONFIGURATION, orTopologyTpIID).get();
+            if (tpOptional.isPresent()) {
+                sbiTp = tpOptional.orElseThrow();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+
+            LOG.error("readMdSal: Error reading TAPI-SBI-ABS-NODE tp {} , tp does not exist", orTopologyTpIID);
+            throw new RuntimeException(
+                "readMdSal: Error reading from operational store, Operational Mode Catalog : " + orTopologyTpIID + " :"
+                    + e);
+        }
+        return sbiTp;
+    }
+
     private static boolean checkString(String value) {
-        return ((value != null) && (value.compareTo("") != 0));
+        return ((value != null) && (!value.isBlank()));
     }
 
     public PathComputationService getPathComputationService() {
@@ -370,7 +286,8 @@ public final class PceCrossDomainOrchestrator {
                         .setNotificationType(notifType)
                         .setSelectedKpathOrder(Uint8.valueOf(kpathOrder))
                         .setAggregatedPathDescription(PceCrossDomainPathAggregator.getInstance().aggPathDescription)
-                        .setCrossDomainService(PceCrossDomainPathAggregator.getInstance().crossDomainService)
+                        .setCrossDomainService(new CrossDomainServiceBuilder().setCdServices(
+                                PceCrossDomainPathAggregator.getInstance().buildCdService(kpathOrder)).build())
                         .setStatus(RpcStatusEx.Successful).setStatusMessage(message).build();
                 try {
                     notificationPublishService.putNotification(notification);

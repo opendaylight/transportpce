@@ -62,7 +62,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
         gnpyConsumer = new GnpyConsumerImpl(
             "http://localhost:9998", "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
-                networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE, false, 0);
+                networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE, false, false, 0, 0);
         mapping = new MappingBuilder()
             .setLogicalConnectionPoint("logicalConnectionPoint")
             .setPortQual("xpdr-client")
@@ -94,7 +94,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
                                 .readString(
                                         Path.of("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE, false, 0);
+                networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE, false, false, 0, 0);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
         // WHEN
         pceSendingPceRPCs.pathComputation();

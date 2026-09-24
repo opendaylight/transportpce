@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce;
 
 import com.google.common.collect.ImmutableList;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class PcePathDescription {
     private static final Logger LOG = LoggerFactory.getLogger(PcePathDescription.class);
 
     private List<PceLink> pathAtoZ = null;
+    private Map<Integer, List<PceLink>> pathAtoZmap = new HashMap<>();
     private PceResult rc;
     private Map<LinkId, PceLink> allPceLinks = null;
     private String aendOperationalMode;
@@ -58,6 +60,14 @@ public class PcePathDescription {
         super();
         this.allPceLinks = allPceLinks;
         this.pathAtoZ = pathAtoZ;
+        this.rc = rc;
+    }
+
+    public PcePathDescription(Map<Integer, List<PceLink>> mapOfAtoZpath,
+            Map<LinkId, PceLink> allPceLinks, PceResult rc) {
+        super();
+        this.allPceLinks = allPceLinks;
+        this.pathAtoZmap = mapOfAtoZpath;
         this.rc = rc;
     }
 
@@ -82,6 +92,43 @@ public class PcePathDescription {
             return rc;
         }
         buildZtoA(ztoaMap, pathZtoA);
+        rc.setZtoADirection(buildZtoADirection(ztoaMap).build());
+
+        return rc;
+    }
+
+    public PceResult buildCompositeDescriptions() {
+        LOG.info("In buildDescriptions: AtoZ =  {}", pathAtoZ);
+        Map<AToZKey,AToZ> atozMap = new HashMap<>();
+        if (pathAtoZmap == null || pathAtoZmap.isEmpty()) {
+            rc.error("The Map of AtoZ path is empty.");
+            LOG.error("In buildDescriptions: there is empty AtoZ path Map");
+            return rc;
+        }
+        Map<AToZKey,AToZ> compositeAtoZmap = new HashMap<>();
+        List<PceLink> compositePathAtoZ = new ArrayList<>();
+        for (Map.Entry<Integer, List<PceLink>> entry : pathAtoZmap.entrySet()) {
+            buildAtoZ(atozMap, entry.getValue());
+            for (Map.Entry<AToZKey,AToZ> atozEntry : atozMap.entrySet()) {
+                compositeAtoZmap.put(new AToZKey(atozEntry.getKey()), atozEntry.getValue());
+            }
+            // TODO: See if we need to add TAPI-SBI-ABS node as a one of the HOP, or if it comes naturally as it the end
+            // of 2 following interdomain links!
+            compositePathAtoZ.addAll(entry.getValue());
+            atozMap.clear();
+        }
+        buildAtoZ(compositeAtoZmap, compositePathAtoZ);
+        rc.setAtoZDirection(buildAtoZDirection(compositeAtoZmap).build());
+        List<PceLink> compositePathZtoA = ImmutableList.copyOf(compositePathAtoZ).reverse();
+        LOG.info("In buildCompositeDescriptions: composite ZtoA {}", compositePathZtoA);
+
+        Map<ZToAKey,ZToA> ztoaMap = new HashMap<>();
+        if (compositePathZtoA == null) {
+            rc.error("The composite path ZtoA is empty.");
+            LOG.error("In buildCompositeDescriptions: there is empty composite ZtoA path");
+            return rc;
+        }
+        buildZtoA(ztoaMap, compositePathZtoA);
         rc.setZtoADirection(buildZtoADirection(ztoaMap).build());
 
         return rc;
