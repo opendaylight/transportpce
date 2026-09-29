@@ -5,8 +5,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.servicehandler.listeners;
+package org.opendaylight.transportpce.tapisbi.servicehandler;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +17,10 @@ import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SecondStepHybridPcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescription;
@@ -28,6 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev26
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
@@ -44,6 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 @Component
 public class Pce2ndStepPCNotificationHandler {
 
@@ -52,7 +55,7 @@ public class Pce2ndStepPCNotificationHandler {
 
 //    private ServicePathRpcResult servicePathRpcResult;
     private SecondStepHybridPcResult secondStepHybridPcResult;
-//    private RendererServiceOperations rendererServiceOperations;
+    private TapiSbiRendererOperations tapiSbiRendererOperations;
     private ServiceDataStoreOperations serviceDataStoreOperations;
 //    private ServiceInput input;
     private Map<Integer, ServiceInput> serviceInputMap = new HashMap<>();
@@ -60,14 +63,16 @@ public class Pce2ndStepPCNotificationHandler {
 
     @Activate
     public Pce2ndStepPCNotificationHandler(
-            @Reference RendererServiceOperations rendererServiceOperations,
+//            @Reference RendererServiceOperations rendererServiceOperations,
             @Reference PathComputationService pathComputationService,
             @Reference NotificationPublishService notificationPublishService,
-            @Reference ServiceDataStoreOperations serviceDataStoreOperations) {
-//        this.rendererServiceOperations = rendererServiceOperations;
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations,
+            @Reference TapiSbiRendererOperations tapiSbiRendererOperations) {
+        this.tapiSbiRendererOperations = tapiSbiRendererOperations;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
 //        this.input = null;
         this.notificationPublishService = notificationPublishService;
+//        this.tapiSbiRendererOperations = TapiSbiRendererOperationsImpl;
     }
 
     public CompositeListener getCompositeListener() {
@@ -185,10 +190,9 @@ public class Pce2ndStepPCNotificationHandler {
                             .getValue()
                             );
                 LOG.info("Sending tapiSbiServiceImplementation request : {}", tsir);
-                // TODO: Activate following line after we have solved the issue of having cyclic redundancy if creating
-                // in the POM of the serviceHandler a dependency to tapi-sbi which depends on tapi (which has dependency
-                //  to service handler)
-                //  this.tapiSbirendererServiceOperations.serviceImplementation(tsir, false);
+                ListenableFuture<TapiSbiServiceImplementationRequestOutput> tsiro =
+                    this.tapiSbiRendererOperations.serviceImplementation(tsir, false);
+                LOG.debug("Calling  {}", tsiro.getClass());
                 PathComputationServiceImpl.setIs2ndStepFinished(true);
             }
         }

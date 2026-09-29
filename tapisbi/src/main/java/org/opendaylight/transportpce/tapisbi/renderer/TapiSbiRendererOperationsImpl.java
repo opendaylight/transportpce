@@ -35,16 +35,16 @@ import org.slf4j.LoggerFactory;
 
 
 @Component
-public class TapiSbiRendererOperationImpl implements TapiSbiRendererOperation {
+public class TapiSbiRendererOperationsImpl implements TapiSbiRendererOperations {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiSbiRendererOperationImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TapiSbiRendererOperationsImpl.class);
 
     private static final int NUMBER_OF_THREADS = 4;
     private final Notification notification;
     private ListeningExecutorService executor;
 
     @Activate
-    public TapiSbiRendererOperationImpl(
+    public TapiSbiRendererOperationsImpl(
                 @Reference DataBroker dataBroker,
                 @Reference Notification notification,
                 @Reference RpcService rpcService) {

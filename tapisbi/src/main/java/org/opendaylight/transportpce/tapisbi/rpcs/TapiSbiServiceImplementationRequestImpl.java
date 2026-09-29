@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapisbi.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperation;
+import org.opendaylight.transportpce.tapisbi.renderer.TapiSbiRendererOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapisbi.rev260410.TapiSbiServiceImplementationRequestOutput;
@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
 
 public class TapiSbiServiceImplementationRequestImpl implements TapiSbiServiceImplementationRequest {
     private static final Logger LOG = LoggerFactory.getLogger(TapiSbiServiceImplementationRequestImpl.class);
-    private final TapiSbiRendererOperation tapiSbiRendererOperation;
+    private final TapiSbiRendererOperations tapiSbiRendererOperation;
 
-    public TapiSbiServiceImplementationRequestImpl(TapiSbiRendererOperation sbiRendererOperation) {
+    public TapiSbiServiceImplementationRequestImpl(TapiSbiRendererOperations sbiRendererOperation) {
         this.tapiSbiRendererOperation = sbiRendererOperation;
 
     }
