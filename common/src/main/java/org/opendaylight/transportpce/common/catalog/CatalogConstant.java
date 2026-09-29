@@ -24,6 +24,8 @@ public final class CatalogConstant {
     public static final String ORW400GOFEC631GBD = "OR-W-400G-oFEC-63.1Gbd";
     public static final String MWWRCORE = "MW-WR-core";
     public static final String MWMWCORE = "MW-MW-core";
+    public static final String MWMWNNIRX = "MW-MW-core-NNI-RX";
+    public static final String MWMWNNITX = "MW-MW-core-NNI-TX";
     public static final String MWISTANDARD = "MWi-standard";
     public static final String MWILOWNOISE = "MWi-low-noise";
     public static final double NLCONSTANTC1 = -2.0;
@@ -35,7 +37,7 @@ public final class CatalogConstant {
     public static final double NLCONSTANTCE = 11.33;
     public static final double NLCONSTANTEX = -0.09;
 
-    public enum CatalogNodeType { ADD, DROP, EXPRESS, AMP, TSP }
+    public enum CatalogNodeType { ADD, DROP, EXPRESS, AMP, TSP, NNIADD, NNIDROP }
 
     private CatalogConstant() {
     }

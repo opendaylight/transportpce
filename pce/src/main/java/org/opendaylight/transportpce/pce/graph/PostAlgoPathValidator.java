@@ -113,7 +113,7 @@ public class PostAlgoPathValidator {
     public PceResult checkPath(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
             String serviceType, PceConstraintMode mode, boolean isPartialPath,
-            PceGraphEdge preceedingEdge, PceGraphEdge followingEdge, Integer npathorder) {
+            PceGraphEdge precedingEdge, PceGraphEdge followingEdge, Integer npathorder) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -166,9 +166,9 @@ public class PostAlgoPathValidator {
                 if (cu.isCatalogFilled()) {
                     if (!isPartialPath) {
                         double margin1 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                                StringConstants.SERVICE_DIRECTION_AZ, cu);
+                                StringConstants.SERVICE_DIRECTION_AZ, cu, precedingEdge, followingEdge);
                         double margin2 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                                StringConstants.SERVICE_DIRECTION_ZA, cu);
+                                StringConstants.SERVICE_DIRECTION_ZA, cu, precedingEdge, followingEdge);
                         if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
                                 || margin2 == Double.NEGATIVE_INFINITY) {
                             pceResult.error(String.format("OSNR out of range (%s - %s)", margin1, margin2));
@@ -181,12 +181,14 @@ public class PostAlgoPathValidator {
                             this.tpceCalculatedMargin);
                     } else {
                         this.atoZSubPathImpairments.put(npathorder,
-                                checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu));
+                                checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu,
+                                    precedingEdge,followingEdge));
                         this.atoZSubPathImpairments.get(npathorder)
                             .setSectionAvailableFreqMap(toByteArray(spectrumOccupation))
                             .setLatency(Decimal64.valueOf(getLatency(path), RoundingMode.HALF_UP));
                         this.ztoASubPathImpairments.put(npathorder,
-                            checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu));
+                            checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu,
+                                precedingEdge,followingEdge));
                         this.ztoASubPathImpairments.get(npathorder)
                             .setSectionAvailableFreqMap(toByteArray(spectrumOccupation))
                             .setLatency(Decimal64.valueOf(getLatency(path), RoundingMode.HALF_UP));
@@ -495,12 +497,15 @@ public class PostAlgoPathValidator {
     }
 
     private double checkOSNR(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
+            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu,
+            PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         switch (direction) {
             case StringConstants.SERVICE_DIRECTION_AZ:
-                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu).getMargin().doubleValue();
+                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu, precedingEdge, followingEdge)
+                    .getMargin().doubleValue();
             case StringConstants.SERVICE_DIRECTION_ZA:
-                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu).getMargin().doubleValue();
+                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu, precedingEdge, followingEdge)
+                    .getMargin().doubleValue();
             default:
                 LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported direction {}", direction);
                 return 0.0;
@@ -515,12 +520,15 @@ public class PostAlgoPathValidator {
      * @param allPceLinks               The map of PceLinks build corresponding to the whole topology.
      * @param serviceType               The service Type used to extrapolate Operational mode when it is not provided.
      * @param cu                        CatalogUtils instance.
+     * @param precedingEdge             The PceGraphEdge that precedes first node of the path.
+     * @param followingEdge             The PceGraphEdge that follows last node of the path.
      * @return an AToZImpairmentBuilder which includes intermediate results such as cumulated PMD/CD/PDL and OSNR to be
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
     private AToZImpairmentsBuilder checkOSNRaz(ModifiedGraphPath path,
-            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu,
+            PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -581,6 +589,41 @@ public class PostAlgoPathValidator {
                     bypassDegree = 1;
                     break;
                 case DEGREE:
+                    // If path starts with degree, we are in the case of Cross-domain path computation where 2 WSS-NNI
+                    // ports are interconnected through an inter-domain link
+                    LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", pathElement);
+                    calcBypassContrib(cu, signal, currentNode, nextNode,
+                        precedingEdge.link(),
+                        edges.get(pathElement).link());
+                    double calcOnsrLin = signal.get("calcOnsrLin").doubleValue();
+                    LOG.debug(
+                        "Loop pathElement= {}, DEGREE, calcOnsrdB= {}", pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+                    }
+                    // increment pathElement so that in next step we will not point to Degree2 but
+                    // next node
+                    if (edges.get(pathElement).link().getlinkType().equals(OpenroadmLinkType.EXPRESSLINK)
+                            && nextNode.getORNodeType().equals(OpenroadmNodeType.DEGREE)) {
+                        // This is the case of Cross-domain interconnection where the interco is provided through a
+                        // WSS-TTP NNI port : increment pathElement so that in next step we will not point to Degree2
+                        //  but exit loop.
+                        pathElement++;
+                    } else if (edges.get(pathElement).link().getlinkType().equals(OpenroadmLinkType.ROADMTOROADM)
+                            && nextNode.getORNodeType().equals(OpenroadmNodeType.DEGREE)) {
+                        // This is the case of Cross-domain interconnection where the interco is provided through a
+                        // WSS-CTP NNI port : increment pathElement so that in next step we will not point to Degree2
+                        // but exit loop. Also need to set bypassDegree to -1 so that in next loop we point to the first
+                        // regular degree
+                        bypassDegree = -1;
+                    }
+
+                    LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
+                        + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId(), nextNode.getNodeId(),
+                        signal.get("calcCd"), signal.get("calcPmd2"), signal.get("calcPdl2"),
+                        getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
                 default:
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
@@ -705,6 +748,23 @@ public class PostAlgoPathValidator {
                 }
                 break;
             case DEGREE:
+                // If path ends with degree, we are in the case of Cross-domain path computation where 2 WSS-NNI
+                // ports are interconnected through an inter-domain link
+                // If the interconnection is done through a line port, the degradation associated with the 2 last
+                // degrees has been accounted in previous loop. There is nothing more to do.
+                // If the interconnection is done through a WSS-CTP-NNI port we need to account for degradation
+                //  according to the WSS EXPRESS RX Specification.
+                LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", vertices.size() - 1);
+                calcBypassContrib(cu, signal, currentNode, null, edges.get(vertices.size() - 2).link(),
+                    followingEdge.link());
+                double calcOnsrLin = signal.get("calcOnsrLin").doubleValue();
+                LOG.debug("Loop pathElement= {}, DEGREE, calcOnsrdB= {}", vertices.size() - 1,
+                    getOsnrDbfromOnsrLin(calcOnsrLin));
+                if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                    return atozImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+                }
+                break;
             default:
                 LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain last element");
         }
@@ -757,12 +817,15 @@ public class PostAlgoPathValidator {
      * @param allPceLinks               The map of PceLinks build corresponding to the whole topology.
      * @param serviceType               The service Type used to extrapolate Operational mode when it is not provided.
      * @param cu                        CatalogUtils instance.
+     * @param precedingEdge             The PceGraphEdge that precedes first node of the path.
+     * @param followingEdge             The PceGraphEdge that follows last node of the path.
      * @return an ZToAImpairmentBuilder which includes intermediate results such as cumulated PMD/CD/PDL and OSNR to be
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
     private ZToAImpairmentsBuilder checkOSNRza(ModifiedGraphPath path,
-            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu,
+            PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -821,6 +884,41 @@ public class PostAlgoPathValidator {
                     bypassDegree = 1;
                     break;
                 case DEGREE:
+                    // If path starts with degree, we are in the case of Cross-domain path computation where 2 WSS-NNI
+                    // ports are interconnected through an inter-domain link
+                    LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", pathElement);
+                    calcBypassContrib(cu, signal, currentNode, nextNode,
+                        precedingEdge.link(),
+                        edges.get(pathElement).link());
+                    double calcOnsrLin = signal.get("calcOnsrLin").doubleValue();
+                    LOG.debug(
+                        "Loop pathElement= {}, DEGREE, calcOnsrdB= {}", pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                            .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+                    }
+                    // increment pathElement so that in next step we will not point to Degree2 but
+                    // next node
+                    if (edges.get(pathElement).link().getlinkType().equals(OpenroadmLinkType.EXPRESSLINK)
+                            && nextNode.getORNodeType().equals(OpenroadmNodeType.DEGREE)) {
+                        // This is the case of Cross-domain interconnection where the interco is provided through a
+                        // WSS-TTP NNI port : increment pathElement so that in next step we will not point to Degree2
+                        //  but exit loop.
+                        pathElement--;
+                    } else if (edges.get(pathElement).link().getlinkType().equals(OpenroadmLinkType.ROADMTOROADM)
+                            && nextNode.getORNodeType().equals(OpenroadmNodeType.DEGREE)) {
+                        // This is the case of Cross-domain interconnection where the interco is provided through a
+                        // WSS-CTP NNI port : increment pathElement so that in next step we will not point to Degree2
+                        // but exit loop. Also need to set bypassDegree to -1 so that in next loop we point to the first
+                        // regular degree
+                        bypassDegree = -1;
+                    }
+
+                    LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
+                        + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId(), nextNode.getNodeId(),
+                        signal.get("calcCd"), signal.get("calcPmd2"), signal.get("calcPdl2"),
+                        getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
                 default:
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
@@ -944,6 +1042,23 @@ public class PostAlgoPathValidator {
                 }
                 break;
             case DEGREE:
+                // If path ends with degree, we are in the case of Cross-domain path computation where 2 WSS-NNI
+                // ports are interconnected through an inter-domain link
+                // If the interconnection is done through a line port, the degradation associated with the 2 last
+                // degrees has been accounted in previous loop. There is nothing more to do.
+                // If the interconnection is done through a WSS-CTP-NNI port we need to account for degradation
+                //  according to the WSS EXPRESS RX Specification.
+                LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", 0);
+                calcBypassContrib(cu, signal, currentNode, null, edges.get(1).link(),
+                    followingEdge.link());
+                double calcOnsrLin = signal.get("calcOnsrLin").doubleValue();
+                LOG.debug("Loop pathElement= {}, DEGREE, calcOnsrdB= {}", 0,
+                    getOsnrDbfromOnsrLin(calcOnsrLin));
+                if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                    return ztoaImpBldr.setMargin(Decimal64.valueOf(new BigDecimal(-1.0)
+                        .setScale(3, RoundingMode.HALF_EVEN)).scaleTo(3));
+                }
+                break;
             default:
                 LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain last element");
         }
@@ -1146,35 +1261,89 @@ public class PostAlgoPathValidator {
     private void calcBypassContrib(CatalogUtils cu, Map<String, Double> signal,
             PceNode currentNode, PceNode nextNode, PceLink pceLink0, PceLink pceLink1) {
         // If the operational mode of the Degree is not consistent or declared in the topology
-        // Operational mode is set by default to standard opMode for Degree
-        String degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-        // Same for next node which is the second degree of a ROADM node
-        String degree2Mode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-        // At that time OpenROADM provides only one spec for the ROADM nodes
-        if (!degree1Mode.equals(degree2Mode)) {
-            LOG.warn("Unsupported Hybrid ROADM configuration with Degree1 {} of {} operational mode and Degree2 "
-                + "{} of {} operational mode. Will by default use operational mode of Degree2",
-                currentNode.getNodeId(), degree1Mode, nextNode.getNodeId(), degree2Mode);
-        }
-        calcLineDegradation(cu, signal, pceLink0);
+        // Operational mode is set by default to standard opMode for Degree, except for the case of CrossDomain interco
+        // where one of the link is an express link. In this last case the mode is set to MWMWNNI either TX or RX mode.
+        // At that time this mode has not been specified by OR MSA. When it will be, TODO: just need to adjust the
+        // expressions in CatalogConstant so that it reflects defined Operational mode.
+
+        // Default value of CNT for impairment calculation is Express
         CatalogNodeType cnt = CatalogConstant.CatalogNodeType.EXPRESS;
-        double pwrOut = cu.getPceRoadmAmpOutputPower(cnt, degree2Mode, pceLink1.getspanLoss(),
-            signal.get("spacing").doubleValue(), pceLink1.getpowerCorrection());
-        // Adds to accumulated impairments the degradation associated with the Express
-        // path of ROADM : Degree1, express link, Degree2
-        Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, degree2Mode,
-            signal.get("pwrIn").doubleValue(), signal.get("calcCd").doubleValue(),
-            signal.get("calcPmd2").doubleValue(), signal.get("calcPdl2").doubleValue(),
-            signal.get("calcOnsrLin").doubleValue(), signal.get("spacing").doubleValue());
-        signal.putAll(
-            Map.of(
-                "calcCd", impairments.get("CD"),
-                "calcPmd2", impairments.get("DGD2"),
-                "calcPdl2", impairments.get("PDL2"),
-                "calcOnsrLin", impairments.get("ONSRLIN"),
-                "pwrOut", Double.valueOf(pwrOut)));
+        // Default value of Operational mode for degree 1 and 2 are the following
+        String degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
+        if (nextNode == null) {
+            //This is the case where the ROADM detected is the last node (Cross-domain interconnection)
+            if (pceLink1.getlinkType().equals(OpenroadmLinkType.EXPRESSLINK)) {
+                //This is the case of WSS-NNI port interconnection
+                cnt = CatalogNodeType.NNIDROP;
+                degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWNNITX);
+            }
+            if (pceLink0.getlinkType().equals(OpenroadmLinkType.EXPRESSLINK)
+                    && pceLink1.getlinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+              //This is the case of ROADM to ROADM line port interconnection / Nothing to dod since impairments were
+              //calculated in previous loop when antepenultimate ROADM was detected.
+                return;
+            }
+        }
+        if (pceLink0.getlinkType().equals(OpenroadmLinkType.EXPRESSLINK)
+            && pceLink1.getlinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+            // The only case where we have PceLInk0 of Express type and PceLInk1 of Roadm to Roadm Type, (apart when
+            // PceNode2 is null, which was handled before is the case of Cross-domain interconnection through WSS-NNI
+            // port when Degree 1 is the first ROADM providing NNI port
+            cnt = CatalogNodeType.NNIADD;
+            degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWNNIRX);
+        }
+
+        if (pceLink0.getlinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+            calcLineDegradation(cu, signal, pceLink0);
+        }
+        if (nextNode != null && cnt.equals(CatalogConstant.CatalogNodeType.EXPRESS)) {
+            // We are in the standard case case where we have 2 degrees connected through an express link.
+            // This includes the line ROADM use case, and the Cross domain use case where the
+            // interconnection with the other domain is provided through a line link.
+            String degree2Mode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWMWCORE);
+
+            if (!degree1Mode.equals(degree2Mode)) {
+                LOG.warn("Detected Hybrid ROADM configuration with Degree1 {} of {} operational mode and Degree2 "
+                    + "{} of {} operational mode; which corresponds to a ROADM to ROADM NNI port interconnection",
+                    currentNode.getNodeId(), degree1Mode, nextNode.getNodeId(), degree2Mode);
+            }
+
+            double pwrOut = cu.getPceRoadmAmpOutputPower(cnt, degree2Mode, pceLink1.getspanLoss(),
+                signal.get("spacing").doubleValue(), pceLink1.getpowerCorrection());
+            // Adds to accumulated impairments the degradation associated with the Express
+            // path of ROADM : Degree1, express link, Degree2
+            Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, degree2Mode,
+                signal.get("pwrIn").doubleValue(), signal.get("calcCd").doubleValue(),
+                signal.get("calcPmd2").doubleValue(), signal.get("calcPdl2").doubleValue(),
+                signal.get("calcOnsrLin").doubleValue(), signal.get("spacing").doubleValue());
+            signal.putAll(
+                Map.of(
+                    "calcCd", impairments.get("CD"),
+                    "calcPmd2", impairments.get("DGD2"),
+                    "calcPdl2", impairments.get("PDL2"),
+                    "calcOnsrLin", impairments.get("ONSRLIN"),
+                    "pwrOut", Double.valueOf(pwrOut)));
+        } else {
+            // These are the cross domain use cases (first or last Node) where the interconnection is provided on
+            // a WSS-NNI port
+            double pwrOut = cu.getPceRoadmAmpOutputPower(cnt, degree1Mode, pceLink1.getspanLoss(),
+                signal.get("spacing").doubleValue(), pceLink1.getpowerCorrection());
+            // Adds to accumulated impairments the degradation associated with the Express
+            // path of ROADM : Degree1, open express link available through WSS-NNI port
+            Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, degree1Mode,
+                signal.get("pwrIn").doubleValue(), signal.get("calcCd").doubleValue(),
+                signal.get("calcPmd2").doubleValue(), signal.get("calcPdl2").doubleValue(),
+                signal.get("calcOnsrLin").doubleValue(), signal.get("spacing").doubleValue());
+            signal.putAll(
+                Map.of(
+                    "calcCd", impairments.get("CD"),
+                    "calcPmd2", impairments.get("DGD2"),
+                    "calcPdl2", impairments.get("PDL2"),
+                    "calcOnsrLin", impairments.get("ONSRLIN"),
+                    "pwrOut", Double.valueOf(pwrOut)));
+        }
     }
-    //TODO these methods might be more indicated in a catalog utils refactoring
+
 
     private void calcLineDegradation(CatalogUtils cu, Map<String, Double> signal, PceLink pceLink) {
         // Calculate degradation accumulated across incoming Link and add them to
