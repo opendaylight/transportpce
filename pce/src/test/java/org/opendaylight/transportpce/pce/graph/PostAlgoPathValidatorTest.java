@@ -20,6 +20,7 @@ import java.util.Map;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
@@ -30,6 +31,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.slf4j.event.Level;
 
 class PostAlgoPathValidatorTest {
 
@@ -265,6 +267,37 @@ class PostAlgoPathValidatorTest {
                 .build();
 
         assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, mock(Subscriber.class)));
+    }
+
+    /**
+     * The last error reported when a 37.5GHz service is rejected should explain which node
+     * rejected the slot width, not a generic "no frequencies" message.
+     *
+     * <p>Same path and mc capabilities as spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFails.</p>
+     *
+     * @see PostAlgoPathValidatorTest#spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFails()
+     */
+    @Test
+    void spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFailsReportsUnsupportedSlotWidth() {
+        List<PceGraphEdge> edges = List.of(
+                mockEdge("ROADM-A-SRG4", "ROADM-A-DEG1", "(ROADM-A-SRG4 : ROADM-A-DEG1)"),
+                mockEdge("ROADM-A-DEG1", "ROADM-B-DEG1", "(ROADM-A-DEG1 : ROADM-B-DEG1)"),
+                mockEdge("ROADM-B-DEG1", "ROADM-B-DEG2", "(ROADM-B-DEG1 : ROADM-B-DEG2)"),
+                mockEdge("ROADM-B-DEG2", "ROADM-C-DEG2", "(ROADM-B-DEG2 : ROADM-C-DEG2)"),
+                mockEdge("ROADM-C-DEG2", "ROADM-C-SRG12", "(ROADM-C-DEG2 : ROADM-C-SRG12)")
+        );
+        GraphPath<String, PceGraphEdge> path = mockGraphPath(edges, 5.0, 5);
+
+        PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
+                customerAvailableFrequencies, clientInputMock);
+
+        Subscriber subscriber = new EventSubscriber();
+        postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, subscriber);
+
+        assertEquals("ROADM-B-DEG2 does not support a service slot width of 37.5GHz (ROADM-B-DEG2 supports "
+                        + "slot-width-granularity: 12.5GHz, and min-slots: 4, and max-slots 8, "
+                        + "i.e. slot width: 50GHz to 100GHz).",
+                subscriber.last(Level.ERROR));
     }
 
     /**
