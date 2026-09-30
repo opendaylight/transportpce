@@ -44,20 +44,13 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 //import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.transportpce.pce.spectrum.assignment.Assign;
-import org.opendaylight.transportpce.pce.spectrum.assignment.AssignSpectrumHighToLow;
-import org.opendaylight.transportpce.pce.spectrum.assignment.Range;
 import org.opendaylight.transportpce.pce.spectrum.centerfrequency.CenterFrequencyGranularityCollection;
 import org.opendaylight.transportpce.pce.spectrum.centerfrequency.Collection;
-import org.opendaylight.transportpce.pce.spectrum.index.Base;
-import org.opendaylight.transportpce.pce.spectrum.index.BaseFrequency;
-import org.opendaylight.transportpce.pce.spectrum.index.SpectrumIndex;
 import org.opendaylight.transportpce.pce.spectrum.slot.CapabilityCollection;
 import org.opendaylight.transportpce.pce.spectrum.slot.McCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.McCapabilityCollection;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250530.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250530.OpenroadmNodeType;
@@ -121,9 +114,14 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTHER:
                 Subscriber subscriber = new EventSubscriber();
-                LOG.info("PostAlgoValidator, checkPath, calling getSpectrumAssignment with spectralWidthSlotNber = {}",
-                    spectralWidthSlotNumber);
-                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber, subscriber);
+                LOG.info("PostAlgoValidator, checkPath, calling computeAssignableSpectrum with "
+                    + "spectralWidthSlotNber = {}", spectralWidthSlotNumber);
+                AssignableSpectrum assignableSpectrum = computeAssignableSpectrum(
+                        path,
+                        allPceNodes,
+                        spectralWidthSlotNumber,
+                        subscriber);
+                spectrumAssignment = assignableSpectrum.computeBestSpectrumAssignment(subscriber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.ZERO)
                         && spectrumAssignment.getStopIndex().equals(Uint16.ZERO)) {
@@ -1069,17 +1067,17 @@ public class PostAlgoPathValidator {
     }
 
     /**
-     * Get spectrum assignment for path.
+     * Compute the spectrum assignable to a service on the path.
      *
-     * @param path                    the path for which we get spectrum assignment.
+     * @param path                    the path for which we compute the assignable spectrum.
      * @param allPceNodes             all optical nodes.
      * @param spectralWidthSlotNumber number of slot for spectral width. Depends on
      *                                service type.
      * @param subscriber              will be notified about errors.
-     * @return a spectrum assignment object which contains begin and end index. If
-     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     * @return the slots that remain assignable after node frequency maps, media-channel capabilities and service
+     *         constraints have been applied. If no slots remain, an empty assignable spectrum is returned.
      */
-    public SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
+    public AssignableSpectrum computeAssignableSpectrum(GraphPath<String, PceGraphEdge> path,
             Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber) {
         byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
@@ -1133,7 +1131,7 @@ public class PostAlgoPathValidator {
 
         if (result.isEmpty()) {
             subscriber.error("No frequencies available");
-            return createEmptySpectrumAssignment();
+            return new EmptyAssignableSpectrum();
         }
 
         result = mcCapabilityCollection.usableFrequencyRange(
@@ -1146,13 +1144,13 @@ public class PostAlgoPathValidator {
 
         if (result.isEmpty()) {
             subscriber.error("No frequencies available (restricted by McCapabilities)");
-            return createEmptySpectrumAssignment();
+            return new EmptyAssignableSpectrum();
         }
 
         int slotCount = clientInput.slotWidth(spectralWidthSlotNumber);
 
         if (!mcCapabilityCollection.isCompatibleService(GridConstant.GRANULARITY, slotCount)) {
-            return createEmptySpectrumAssignment();
+            return new EmptyAssignableSpectrum();
         }
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
@@ -1166,63 +1164,15 @@ public class PostAlgoPathValidator {
 
         if (assignableBitset.isEmpty()) {
             subscriber.error("No frequencies are assignable to the service.");
-            return createEmptySpectrumAssignment();
+            return new EmptyAssignableSpectrum();
         }
 
-        return computeBestSpectrumAssignment(
+        return new DefaultAssignableSpectrum(
                 assignableBitset,
                 clientInput.slotWidth(spectralWidthSlotNumber),
                 centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
-                isFlexGrid,
-                subscriber);
-    }
-
-    private SpectrumAssignment createEmptySpectrumAssignment() {
-        return new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(0))
-                .setStopIndex(Uint16.valueOf(0))
-                .setFlexGrid(true)
-                .build();
-    }
-
-    /**
-     * Compute spectrum assignment from spectrum occupation for spectral width.
-     *
-     * @param spectrumOccupation                   the spectrum occupation BitSet.
-     * @param spectralWidthSlotNumber              the nb slots for spectral width.
-     * @param nrOfSlotsSeparatingCenterFrequencies The nr of slots separating each central frequency.
-     * @param isFlexGrid                           true if flexible grid, false otherwise.
-     * @param subscriber                           will be notified about errors.
-     * @return a spectrum assignment object which contains begin and stop index. If
-     *         no spectrum assignment found, beginIndex = stopIndex = 0
-     */
-    public SpectrumAssignment computeBestSpectrumAssignment(BitSet spectrumOccupation, int spectralWidthSlotNumber,
-            int nrOfSlotsSeparatingCenterFrequencies, boolean isFlexGrid, Subscriber subscriber) {
-
-        Base baseFrequency = new BaseFrequency();
-        Assign assignSpectrum = new AssignSpectrumHighToLow(new SpectrumIndex());
-
-        Range range = assignSpectrum.range(
-                GridConstant.EFFECTIVE_BITS,
-                baseFrequency.referenceFrequencySpectrumIndex(
-                        GridConstant.CENTRAL_FREQUENCY_THZ,
-                        GridConstant.START_EDGE_FREQUENCY_THZ,
-                        GridConstant.GRANULARITY
-                ),
-                spectrumOccupation,
-                nrOfSlotsSeparatingCenterFrequencies,
-                spectralWidthSlotNumber
+                isFlexGrid
         );
-
-        if (range.lower() == 0 && range.upper() == 0) {
-            subscriber.event(Level.ERROR, "No frequencies available.");
-        }
-
-        return new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(range.lower()))
-                .setStopIndex(Uint16.valueOf(range.upper()))
-                .setFlexGrid(isFlexGrid)
-                .build();
     }
 
     public Double getTpceCalculatedMargin() {
