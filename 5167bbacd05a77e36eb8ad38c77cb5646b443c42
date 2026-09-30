@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa7ac6e_f8479572",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "Hi Olivier! \n\nAfter reviewing this, I decided to push an alternative solution in change [126575](https://git.opendaylight.org/gerrit/c/transportpce/+/126575) that addresses the comments below. Happy to discuss which way to go.",
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "190b0957_5349f633",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "Minor: set bits in the returned BitSet mean available (AVAILABLE_SLOT_VALUE), but the method name and @return say \"spectrum occupation\", which invites inverted use by callers.",
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b36b90f5_94d1d536",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "This method changes the contents of `centerFreqGranularityCollection`. \n\nAlso, this method has two return values while the signature suggests only one (centerFreqGranularityCollection is manipulated in the method).\n\nReturning a small record (BitSet plus granularity) would fix this, as an example.",
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a1e9c3_91fe51ef",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "This boolean is effectively unused: it\u0027s a hard-coded true that only appears in a debug log.\n\nDefined in two places (the other one is in the method `getSpectrumAssignment`) but only actually used in one. This one is only used during logging.\n\nHaving the same boolean variable in two places means they must be updated synchronously. If the logic drifts in either method, they might end up silently disagreeing with each other. It would be safer to get rid of having this variable defined in two places.",
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74fbea9b_622611f0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "Same as 1083, but from the caller\u0027s side. \n\nThis line might be somewhat difficult to understand for someone unfamiliar with the code. `computeSpectrumOccupation` actually generates two outputs, and a reader might mistakenly assume there is only one.\n\nAccidentally reusing one collection across several paths would mix their granularities.",
+      "range": {
+        "startLine": 1184,
+        "startChar": 0,
+        "endLine": 1186,
+        "endChar": 0
+      },
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76b0b570_a4104d86",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:31:02Z",
+      "side": 1,
+      "message": "Regression: the early returns in computeSpectrumOccupation (no frequencies / restricted by McCapabilities / incompatible slot width) now return an empty BitSet that falls through to this check, so this generic message becomes the last error and hides the specific reason. The early exits shouldn\u0027t reach this line.\n\nUnfortunately, the tests mock the `Subscriber` interface, so they don\u0027t catch this. A test such as this one will catch it though:\n\n```\nimport org.opendaylight.transportpce.common.device.observer.EventSubscriber;\nimport org.slf4j.event.Level;\n...\n/**\n * The last error reported when a 37.5GHz service is rejected should explain which node\n * rejected the slot width, not a generic \"no frequencies\" message.\n *\n * \u003cp\u003eSame path and mc capabilities as spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFails.\u003c/p\u003e\n *\n * @see PostAlgoPathValidatorTest#spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFails()\n */\n@Test\nvoid spectrumAssignmentRoadmA_SRG4_to_RoadmC_SRG12_37_5GHzFailsReportsUnsupportedSlotWidth() {\n    List\u003cPceGraphEdge\u003e edges \u003d List.of(\n            mockEdge(\"ROADM-A-SRG4\", \"ROADM-A-DEG1\", \"(ROADM-A-SRG4 : ROADM-A-DEG1)\"),\n            mockEdge(\"ROADM-A-DEG1\", \"ROADM-B-DEG1\", \"(ROADM-A-DEG1 : ROADM-B-DEG1)\"),\n            mockEdge(\"ROADM-B-DEG1\", \"ROADM-B-DEG2\", \"(ROADM-B-DEG1 : ROADM-B-DEG2)\"),\n            mockEdge(\"ROADM-B-DEG2\", \"ROADM-C-DEG2\", \"(ROADM-B-DEG2 : ROADM-C-DEG2)\"),\n            mockEdge(\"ROADM-C-DEG2\", \"ROADM-C-SRG12\", \"(ROADM-C-DEG2 : ROADM-C-SRG12)\")\n    );\n    GraphPath\u003cString, PceGraphEdge\u003e path \u003d mockGraphPath(edges, 5.0, 5);\n\n    PostAlgoPathValidator postAlgoPathValidator \u003d new PostAlgoPathValidator(networkTransactionService,\n            customerAvailableFrequencies, clientInputMock);\n\n    Subscriber subscriber \u003d new EventSubscriber();\n    postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, subscriber);\n\n    assertEquals(\"ROADM-B-DEG2 does not support a service slot width of 37.5GHz (ROADM-B-DEG2 supports \"\n                    + \"slot-width-granularity: 12.5GHz, and min-slots: 4, and max-slots 8, \"\n                    + \"i.e. slot width: 50GHz to 100GHz).\",\n            subscriber.last(Level.ERROR));\n}\n```\n\nThis test has been added in this change: [126574](https://git.opendaylight.org/gerrit/c/transportpce/+/126574)",
+      "revId": "5167bbacd05a77e36eb8ad38c77cb5646b443c42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
