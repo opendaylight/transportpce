@@ -1,4 +1,147 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1790779068 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1790779068-934AF1D42FCD0A723768FB2AF6264147B227E62B\n\n0000000000000000000000000000000000000000 a114e738c95c868d32eb4ea4b3a11f3a077fca21 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQJPBAABCAA5FiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmq9HrwbFIAAAAAABAAO\nbWFudTIsMi41KzEuMTIsMCwzAAoJEF+9+bkxT61xDUMQAK33hnyZl8Uyej8sx37Q\nm4sMGhHe6r0K46BkixhL8HyUDZ3eag2hhgSnzPHJYPoj9XOnUDG2+Mk4GA7XSb3I\nU7jWpIsCl5RgsDzgFdR9yhQ5yK1iV+Plg65WdKc66HUvtT61QmQgqgBvVfFZszn0\nYp5qQImKGQ0qk1xg4C5pq/UmkH3jztc+0USBna4pS+0gsXYzQcyQ6eYT1+ehyLrx\nmN/J1EKwyVR03UEnQjV47nzUKUMhCHd957+JmvUDu2wPJ6KYz6lXNU6xnMFTilAz\nDkNtBzDwOeiC9SCYlAkRJYmZC/lJq4UC6MiFzMUpDRS6LLg4tGPTQQNnENxJx5Zs\nOmNOJfk0N7QH1yLhEY6xoRa0bgESdjZTvHwz1K0AQq3F8uzOveXdmeGbqm8Hqqm9\npHbUkbZIfCpBmEf794JrYUgS4F1DeD1M5ECNOkWsqEl0iK2m8nY5B9VtnUQYNHVS\nFEpRELmqsrRZ/AuvewuOwgRXTUwUSkfMpbtmy3Uxt91alLYHB+CEEOab8q2rDFvR\nLTVNVuBJDeUGL6X4bjMpKWCgIARne/8iYBuPCNaWL7ny2gGr+QVDeFvCyyvRQkTf\nToebxepyQ2EDTuLAZXWylE5pd94jfbEshBgXlFV0kdt/CcX/YJk6y6fwXX651uaO\nuNZ4Nx5Xk+Oe/dIrB0ZqKP72\n\u003do0zh\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56f70e30_3ece5d1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "Inline comments walk through the design, starting at PostAlgoPathValidator line 124",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "819e4405_07071173",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/AssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "## Benefits of this interface\n\nThanks to this interface, we can simplify some of the processing originally written in this change: [125509 - PostAlgoPathValidator](https://git.opendaylight.org/gerrit/c/transportpce/+/125509/4/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#1083)\n\nBy altering the signature of `computeAssignableSpectrum` to return an instance of  `AssignableSpectrum`, we can get rid of the need to manipulate the parameter `centerFreqGranularityCollection` in the method `computeSpectrumOccupation`.\n\nAlso, `getSpectrumAssignment()` doesn\u0027t need this code which means we can also get rid of the extra `isFlexGrid \u003d true`:\n\n````\nboolean isFlexGrid \u003d true;\nCollection centerFrequencyGranularityCollection \u003d \n    new CenterFrequencyGranularityCollection(50);\nBitSet assignableBitset \u003d computeSpectrumOccupation(path, allPceNodes,\n    spectralWidthSlotNumber, subscriber, centerFrequencyGranularityCollection);\n```\n\n## Interface implementations\n\nNote that there are two implementations of this interface:\n1. [DefaultAssignableSpectrum](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/DefaultAssignableSpectrum.java)\n2. [EmptyAssignableSpectrum](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/EmptyAssignableSpectrum.java#20)\n\n### In short\n\n- An instance of.`DefaultAssignableSpectrum` is returned in normal operation, when a frequency range is found.\n- `EmptyAssignableSpectrum` is returned in all other cases.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "febf7610_9fd80d51",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/AssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "This is the new method. Calling this method will return the available frequency slots, where a set bit means the slot is free expressed as a `BitSet` object.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afd9dd9_29536a9b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/AssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "This gives the same result as the old `getSpectrumAssignment()`. Meaning, calling the method returns the same result as the original method `SpectrumAssignment getSpectrumAssignment() {...}` in `PostAlgoPathValidator`.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56feb2c0_86632cdb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/DefaultAssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "This class is instantiated on row [1170](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#1170) in PostAlgoPathValidator.\n\nThe available bitset can be accessed using `public BitSet availableBitSet() {}` in this class.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f7ca30_4427176d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/DefaultAssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "This is almost a verbatim copy of the original method [computeBestSpectrumAssignment](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#b1199) in the class PostAlgoPathValidator. The corresponding method is therefore deleted in PostAlgoPathValidator in this change since it\u0027s no longer needed.\n\nThe difference is where the inputs come from: the old method took the BitSet, slot width and granularity as parameters. Now they are passed once, when the object is created on line [1170](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#1170) in PostAlgoPathValidator, and `computeBestSpectrumAssignment` reads them from the object.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f36802d3_2647a048",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/EmptyAssignableSpectrum.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "This class replaces the need for this code in [125509](https://git.opendaylight.org/gerrit/c/transportpce/+/125509/4/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#1105) (PostAlgoPathValidator):\n\n```\nBitSet occupied \u003d BitSet.valueOf(freqMap);\n...\nif (result.isEmpty()) {\n  return occupied;\n}\n```\n\nThis part can also be deleted from PostAlgoPathValidator:\n\n```\nprivate SpectrumAssignment createEmptySpectrumAssignment() {\n  return new SpectrumAssignmentBuilder()\n          .setBeginIndex(Uint16.valueOf(0))\n          .setStopIndex(Uint16.valueOf(0))\n          .setFlexGrid(true)\n          .build();\n}\n```\n\nEmptyAssignableSpectrum is returned whenever path validation finds no usable spectrum. Its `availableBitSet()` is empty and its `computeBestSpectrumAssignment()` returns begin and stop index 0, so the caller treats it like any other result.",
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f1cd8ea_0e7ba1ba",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-09-30T19:40:00Z",
+      "side": 1,
+      "message": "## Overview\nThe refactor in this relation chain centers around `AssignableSpectrum computeAssignableSpectrum() {...}` on line 1080 in this class. The refactor is an alternate solution to [125509 - Adjust PostAlgoValidator.getSpectrumAssignement](https://git.opendaylight.org/gerrit/c/transportpce/+/125509)\n\n1. Before this refactor, `computeAssignableSpectrum` was called `getSpectrumAssignment`.\n2. `getSpectrumAssignment` returned an instance of `SpectrumAssignment`\n3. It is my understanding, that change [Adjust PostAlgoValidator.getSpectrumAssignement](https://git.opendaylight.org/gerrit/c/transportpce/+/125509) aimed at adding a separate method returning a `BitSet`, while getSpectrumAssignment still returns a SpectrumAssignment.\n\nAlso, in [125823](https://git.opendaylight.org/gerrit/c/transportpce/+/125823/2/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#142) the path is processed twice with the same inputs. The solution below mitigates that.\n\n## Suggested alternate solution\n\nInstead, I propose returning an object that can serve *both* a `SpectrumAssignment` object and a `BitSet`. \n\nThe object `assignableSpectrum` is an instance of [AssignableSpectrum](https://git.opendaylight.org/gerrit/c/transportpce/+/126575/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/AssignableSpectrum.java) (used on line 119) and therefore has two methods; one returning `SpectrumAssignment` and one returning `BitSet`:\n\n1. `computeBestSpectrumAssignment()`, returning `SpectrumAssignment` (called on line 124). This gives the same result as the old `getSpectrumAssignment()`\n2. `availableBitSet()`, returning `BitSet`, suitable as a solution in the change \"Pce orchestration Step 1\" in change [125823](https://git.opendaylight.org/gerrit/c/transportpce/+/125823)\n\nSo in `PostAlgoPathValidator` in change [125823](https://git.opendaylight.org/gerrit/c/transportpce/+/125823/2/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#142), instead of...\n\n```\nspectrumOccupation \u003d computeSpectrumOccupation(path, allPceNodes, \n    spectralWidthSlotNumber, subscriber, \n    new CenterFrequencyGranularityCollection(50));\n```\n\n... you can use ...\n\n```\nspectrumOccupation \u003d assignableSpectrum.availableBitSet();\n```\n\nThe full example is then:\n\n```\nAssignableSpectrum assignableSpectrum \u003d computeAssignableSpectrum(\n    path,\n    allPceNodes,\n    spectralWidthSlotNumber,\n    subscriber);\nspectrumAssignment \u003d assignableSpectrum.computeBestSpectrumAssignment(subscriber);\nspectrumOccupation \u003d assignableSpectrum.availableBitSet();\n```",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 98
+      },
+      "revId": "a114e738c95c868d32eb4ea4b3a11f3a077fca21",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
