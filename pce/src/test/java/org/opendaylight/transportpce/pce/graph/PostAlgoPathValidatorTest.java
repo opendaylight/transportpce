@@ -55,48 +55,6 @@ class PostAlgoPathValidatorTest {
         when(clientInputMock.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
     }
 
-    @Test
-    void computeBestSpectrumAssignmentFixGrid50CenterFreqGranularity() {
-        PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService, new BitSet(),
-                mock(ClientInput.class));
-
-        BitSet available = new BitSet(768);
-        available.set(12, 28);
-
-        boolean isFlexGrid = false;
-        SpectrumAssignment expected = new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(16))
-                .setStopIndex(Uint16.valueOf(23))
-                .setFlexGrid(isFlexGrid)
-                .build();
-
-        SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(
-                available, 8, 8, isFlexGrid, mock(Subscriber.class));
-
-        assertEquals(expected, fixGrid);
-    }
-
-    @Test
-    void computeBestSpectrumAssignmentFlexGrid6point25CenterFreqGranularity() {
-        PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService, new BitSet(),
-                mock(ClientInput.class));
-
-        BitSet available = new BitSet(768);
-        available.set(12, 28);
-
-        boolean isFlexGrid = true;
-        SpectrumAssignment expected = new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(20))
-                .setStopIndex(Uint16.valueOf(27))
-                .setFlexGrid(isFlexGrid)
-                .build();
-
-        SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(
-                available, 8, 1, isFlexGrid, mock(Subscriber.class));
-
-        assertEquals(expected, flexGrid);
-    }
-
     /**
      * Setting up a service of 100GHz should be possible given this path and the following mc capabilities.
      *
@@ -146,7 +104,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 16, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -198,7 +158,9 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 6, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
 
@@ -266,7 +228,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 6, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -366,7 +330,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 8, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 8, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -433,7 +399,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 16, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -486,7 +454,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 10, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 10, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -541,7 +511,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 10, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 10, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -595,7 +567,9 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(
+                path, nodes, 16, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     /**
@@ -650,7 +624,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
+        AssignableSpectrum spectrumAssignment = postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class));
+        assertEquals(expected, spectrumAssignment.computeBestSpectrumAssignment(mock(Subscriber.class)));
     }
 
     private PceGraphEdge mockXponder(String sourceId, String destId, String edgeString) {
