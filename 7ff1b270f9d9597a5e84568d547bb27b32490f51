@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6fc8851_6eb02d42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "Hi Olivier!\n\nI know this change is flagged as WIP, but I thought I leave a few comments anyway. If any of them is outdated due to the latest changes, please feel free to resolve them.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef4c51e2_84168f53",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceCrossDomainOrchestrator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "This 5-thread pool is created in the `@Activate` constructor but never shut down, and the component has no `@Deactivate` method. Each bundle restart or component reactivation leaks 5 non-daemon threads.\n\nSuggest adding:\n\n```\n@Deactivate\npublic void close() {\n   executor.shutdown();\n}\n```",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83667bec_16b02ea9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/ModifiedGraphPath.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "What does `ModifiedGraphPath` add over `GraphPath`? \n\n- Wrapping a real path, it only passes calls through.\n- Wrapping a `Map`, it loses vertex order, needs a null trailing edge, and returns `null` from `getStartVertex()`/`getEndVertex()`/`getGraph()` and thereby inviting unexpected NPEs unless the client is defensive.\n- None of its own methods (`isGraphPath`, `getPceGraphEdgeMap`, …) are used outside the class.\n\nFor sub-paths, jgrapht\u0027s GraphWalk (org.jgrapht.graph.GraphWalk) builds a proper `GraphPath` from `vertices.subList(lowIndex, highIndex + 1)` and `edges.subList(lowIndex, highIndex)`.\n\nI suggest dropping this class and keeping the validator signatures as `GraphPath\u003cString, PceGraphEdge\u003e`. This would also remove the cast at PostAlgoPathValidator.java:1281 and fix the ordering and trailing-null issues in `splitPath`.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e8c7f7_f6a00055",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceCrossDomainPathAggregator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "Global mutable state. The singleton aggregator and the static `isSecondStepHybrid/npathorder` in `PathComputationServiceImpl` are shared across the 5-thread executor, so concurrent requests overwrite each other. \n\n`resetInstance()` is also called inside the per-k loop, which wipes the previous k\u0027s results.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a53f3ae_f58865c0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceCrossDomainPathAggregator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "Only the last sub-path is kept. `addSubGraphPathToMap` replaces the whole inner map on every call.\n\nUsing `computeIfAbsent(korder, ...).put(norder, ...)` would fix it.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "255b5283_b2975195",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "`pathElementList` is an instance field. `isPathHybrid` only ever appends to it, and nothing clears it between the k candidate paths.\n\nWhen path #2 reaches `splitPath`, the list still holds path #1\u0027s elements, so path #2\u0027s vertices get indexed with path #1\u0027s lowIndex/highIndex. That gives wrong sub-paths or an IndexOutOfBoundsException. The double `isPathHybrid` call (see line 212) adds every element twice on top of that.\n\nThe same goes for crossDomainServiceBldr. PceCrossDomainPathAggregator.setPathElementList also uses addAll, so the aggregator collects elements from every path too.\n\nI suggest clearing both at the start of each loop iteration. Better still, have isPathHybrid return a fresh per-path list instead of filling a field.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcabdb77_2cb41a35",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "The continue taken when validation fails skips the increment `kpathorder`, so a later hybrid path\u0027s sub-paths are stored under the wrong k.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3cab289_afff9798",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "This branch can never run. The if at line 167 already takes every path where !isPathHybrid(path, allPceNodes) is true, so this else if is never reached, whatever isSecondStepHybridPC is. As it stands, the step-2 logic is dead code.\n\nAlso, isPathHybrid has side effects: it appends to pathElementList and crossDomainServiceBldr. Calling it twice adds those entries twice for every hybrid path.\n\nI suggest calling it once and storing the result. Then check isSecondStepHybridPC first, for example:\n\n```\nI suggest calling it once and storing the result. Then check isSecondStepHybridPC first, for example:\nboolean hybrid \u003d isPathHybrid(path, allPceNodes);\nif (!hybrid \u0026\u0026 isSecondStepHybridPC) {\n   // step 2\n} else if (!hybrid) {\n   // regular\n} else {\n   // hybrid\n}\n```",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f76fa0_c7fbfbdc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "Vertex order is lost. splitPath builds the sub-path with a HashMap, so getVertexList()/getEdgeList() return an arbitrary order, which breaks the positional OSNR loops. The map also holds a trailing null edge for the path\u0027s last vertex, which causes an NPE in computeSpectrumOccupation. A LinkedHashMap or an ordered list, plus dropping the null, would fix both.\n\nThe map is also created once, outside the per-PathElement loop, so every SubGraphPath wraps the same growing map. The first OR sub-path ends up holding the whole end-to-end path, including the TAPI node. Create the map inside the loop.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d8d978_fb11ad4a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "The successor ternaries are backwards, and the edge index is off by one: the next edge should be `edges.get(highIndex)`, not `highIndex + 1`.\n\nThe last sub-path throws an IOOBE, and middle sub-paths get a null successor.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "315202c2_6c34ca3f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "This causes the path to be processed twice: getSpectrumAssignment already calls computeSpectrumOccupation internally, with the same inputs. \n\nOne way to avoid it is to call `computeSpectrumOccupation` once and pass its result to the public `computeBestSpectrumAssignment(...)`. Another is the alternative in [126575](https://git.opendaylight.org/gerrit/c/transportpce/+/126575), where one object provides both results (see the comment on PostAlgoPathValidator line 124 there).",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96055f1_534c925a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T13:37:57Z",
+      "side": 1,
+      "message": "Unchecked cast. `getSpectrumAssignment` takes a `GraphPath` but casts it to `ModifiedGraphPath`, so a real `GraphPathImpl` throws `ClassCastException`. The tests now pass a mocked `ModifiedGraphPath`, which hides this.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
