@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
+import org.opendaylight.transportpce.pce.orchestrator.PceCrossDomainPathAggregator;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.Response;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.CancelResourceReserveOutput;
@@ -73,10 +74,6 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
     private static String pceOperationalMode;
-    private static boolean isFirstStepHybrid = false;
-    private static boolean isSecondStepHybrid = false;
-    private static boolean isSecondStepSuccessfullyFinished = false;
-    private static boolean isSecondStepAborted = false;
     private static int npathorder = 0;
     private static int kpathorder = 0;
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
@@ -92,7 +89,6 @@ public class PathComputationServiceImpl implements PathComputationService {
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
         this.portMapping = portMapping;
-        PathComputationServiceImpl.setIs2ndStepHybrid(false);
         PathComputationServiceImpl.setNpathOrder(0);
         LOG.info("PathComputationServiceImpl instantiated");
     }
@@ -217,9 +213,13 @@ public class PathComputationServiceImpl implements PathComputationService {
                     RpcStatusEx.Pending,
                     "Service compliant, submitting pathComputation Request ...",
                     null);
+                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
                 PceSendingPceRPCs sendingPCE =
                     new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping,
-                        getPceOperationalMode(), isSecondStepHybrid, isFirstStepHybrid, npathorder, kpathorder);
+//                        getPceOperationalMode(), isSecondStepHybrid, isFirstStepHybrid, npathorder, kpathorder);
+                            getPceOperationalMode(), pcdpa.getIsSecondStepHybrid(), pcdpa.getIsFirstStepHybrid(),
+                            npathorder, kpathorder);
+                pcdpa.setSecondStepPCtoAborted(false);
                 sendingPCE.pathComputation();
                 String message = sendingPCE.getMessage();
                 String responseCode = sendingPCE.getResponseCode();
@@ -244,6 +244,9 @@ public class PathComputationServiceImpl implements PathComputationService {
 
                 PathDescriptionBuilder path = sendingPCE.getPathDescription();
                 if (Boolean.FALSE.equals(sendingPCE.getSuccess()) || (path == null)) {
+                    if (pcdpa.getIsSecondStepHybrid()) {
+                        pcdpa.setSecondStepPCtoAborted(false);
+                    }
                     sendNotifications(
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
@@ -342,9 +345,10 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setSoftConstraints(input.getSoftConstraints())
                     .setRoutingMetric(input.getRoutingMetric())
                     .build();
+            PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
                     gnpyConsumer, portMapping, input.getEndpoints(), getPceOperationalMode(),
-                    isSecondStepHybrid, isFirstStepHybrid, npathorder, kpathorder);
+                    pcdpa.getIsSecondStepHybrid(), pcdpa.getIsFirstStepHybrid(), npathorder, kpathorder);
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
@@ -425,28 +429,8 @@ public class PathComputationServiceImpl implements PathComputationService {
         return pceOperationalMode;
     }
 
-    public static boolean getIsSecondStepSuccessfullyFinished() {
-        return  PathComputationServiceImpl.isSecondStepSuccessfullyFinished;
-    }
-
-    public static boolean getHasSecondStepFailed() {
-        return  PathComputationServiceImpl.isSecondStepAborted;
-    }
-
     public static void setPceOperationalMode(String pceOperMode) {
         PathComputationServiceImpl.pceOperationalMode = pceOperMode;
-    }
-
-    public static void setIs2ndStepHybrid(boolean is2ndStepHybrid) {
-        PathComputationServiceImpl.isSecondStepHybrid = is2ndStepHybrid;
-    }
-
-    public static void setIsFirstStepHybrid(boolean isFirststepHybrid) {
-        PathComputationServiceImpl.isFirstStepHybrid = isFirststepHybrid;
-    }
-
-    public static void setIs2ndStepFinished(boolean is2ndStepFinished) {
-        PathComputationServiceImpl.isSecondStepSuccessfullyFinished = is2ndStepFinished;
     }
 
     public static void setNpathOrder(Integer npathOrder) {

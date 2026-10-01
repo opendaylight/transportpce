@@ -367,15 +367,17 @@ public final class PceCrossDomainOrchestrator {
                  * triggers first step path computation ending.
                  */
 
+                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
                 message = "PCE replied to PCR Request in second step of hybrid path computation!";
                 LOG.info("PCE replied to PCR Request in second step of hybrid path computation: {}", response);
                 notification = new SecondStepHybridPcResultBuilder()
                         .setServiceName(serviceName)
                         .setNotificationType(notifType)
                         .setSelectedKpathOrder(Uint8.valueOf(kpathOrder))
-                        .setAggregatedPathDescription(PceCrossDomainPathAggregator.getInstance().aggPathDescription)
+                        .setOlsServiceCreateInput(pcdpa.getOlsServiceCreateInputBuilder().build())
+                        .setAggregatedPathDescription(pcdpa.getAggregatedPathDescriptionBldr().build())
                         .setCrossDomainService(new CrossDomainServiceBuilder().setCdServices(
-                                PceCrossDomainPathAggregator.getInstance().buildCdService(kpathOrder)).build())
+                                pcdpa.buildCdService(kpathOrder)).build())
                         .setStatus(RpcStatusEx.Successful).setStatusMessage(message).build();
                 try {
                     notificationPublishService.putNotification(notification);

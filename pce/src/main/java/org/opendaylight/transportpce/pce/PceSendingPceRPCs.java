@@ -81,7 +81,7 @@ public class PceSendingPceRPCs {
     private Endpoints endpoints;
     // Define PCE mode of operation (OpenROADM/TAPI)
     private String pceOperMode;
-    private boolean isFirstStepHybridPC;
+//    private boolean isFirstStepHybridPC;
     private boolean isSecondStepHybridPC;
     private int npathorder;
     private int kpathorder;
@@ -112,7 +112,6 @@ public class PceSendingPceRPCs {
         this.endpoints = null;
         this.pceOperMode = pceOperationalMode;
         this.isSecondStepHybridPC = isSecondstepHybridPC;
-        this.isFirstStepHybridPC = isFirststepHybridPC;
         this.npathorder = npathorder;
         this.kpathorder = kpathorder;
 
@@ -133,7 +132,6 @@ public class PceSendingPceRPCs {
         this.endpoints = endpoints;
         this.pceOperMode = pceOperationalMode;
         this.isSecondStepHybridPC = isSecondStepHybridPC;
-        this.isFirstStepHybridPC = isFirststepHybridPC;
         this.npathorder = npathorder;
         this.kpathorder = kpathorder;
     }
@@ -217,46 +215,22 @@ public class PceSendingPceRPCs {
                 return;
             }
         }
-        PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
-        if (isSecondStepHybridPC) {
-            LOG.info("PcePathDescription ...Building PathDescription for Tapi Domain");
-            pcdpa.buildCdService(kpathorder);
-            rc.setCrossDomainService(new CrossDomainServiceBuilder()
-                    .setCdServices(pcdpa.buildCdService(kpathorder))
-                    .build());
-            PcePathDescription description = new PcePathDescription(
-                    pcdpa.getTapiPathDescription(kpathorder), nwAnalizer.getAllPceLinks(), rc);
-            description.setAendOperationalMode(graph.getAendOperationalMode());
-            description.setZendOperationalMode(graph.getZendOperationalMode());
-            description.buildDescriptions();
-            rc = description.getReturnStructure();
-        } else if (isFirstStepHybridPC) {
-            LOG.info("PcePathDescription ...Building PathDescription for OpenRoadm Domain");
-            pcdpa.buildCdService(kpathorder);
-            rc.setCrossDomainService(new CrossDomainServiceBuilder()
-                    .setCdServices(pcdpa.buildCdService(kpathorder))
-                    .build());
-            PcePathDescription description = new PcePathDescription(
-                    pcdpa.getOpenRoadmPathDescription(kpathorder), nwAnalizer.getAllPceLinks(), rc);
-            description.setAendOperationalMode(graph.getAendOperationalMode());
-            description.setZendOperationalMode(graph.getZendOperationalMode());
-            description.buildDescriptions();
-            rc = description.getReturnStructure();
-        } else {
-            LOG.info("PcePathDescription ...");
-            PcePathDescription description = new PcePathDescription(
-                    graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
-            description.setAendOperationalMode(graph.getAendOperationalMode());
-            description.setZendOperationalMode(graph.getZendOperationalMode());
-            description.buildDescriptions();
-            rc = description.getReturnStructure();
-        }
+
         LOG.info("PcePathDescription ...");
         PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
         description.setAendOperationalMode(graph.getAendOperationalMode());
         description.setZendOperationalMode(graph.getZendOperationalMode());
         description.buildDescriptions();
         rc = description.getReturnStructure();
+        PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
+        if (isSecondStepHybridPC) {
+            LOG.info("PcePathDescription ...Building Cross-Domain Service container to store info on cd-sub-services");
+            pcdpa.buildCdService(kpathorder);
+            rc.setCrossDomainService(new CrossDomainServiceBuilder()
+                    .setCdServices(pcdpa.buildCdService(kpathorder))
+                    .build());
+
+        }
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, description: result = {}", rc);
             rc.error(errorSubscriber.first(Level.ERROR, "No path found by PCE.", 3));

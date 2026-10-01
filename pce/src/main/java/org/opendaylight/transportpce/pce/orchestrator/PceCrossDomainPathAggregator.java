@@ -28,10 +28,20 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.AggregatedPathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.OlsServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.aggregated.path.description.CdServicePathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.aggregated.path.description.CdServicePathDescriptionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirectionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServices;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
@@ -77,9 +87,16 @@ public final class PceCrossDomainPathAggregator {
     private Map<Integer, Map<Integer, ZToAImpairmentsBuilder>> tapiZtoASubPathImpairments = new HashMap<>();
     private Map<Integer, Map<Integer, SubGraphPath>> subGraphPathMap = new HashMap<>();
     private List<Integer> prunedKorderList = new ArrayList<>();
-    public AggregatedPathDescription aggPathDescription = new AggregatedPathDescriptionBuilder().build();
+    private AggregatedPathDescriptionBuilder aggPathDescription = new AggregatedPathDescriptionBuilder();
     private PathComputationRequestInput pcri = null;
+    private OlsServiceCreateInputBuilder olssciBldr = null;
     private int kpathorderMax = 0;
+
+    private boolean isFirstStepHybrid = false;
+    private boolean isSecondStepHybrid = false;
+    private boolean isSecondStepSuccessfullyFinished = false;
+    private boolean isSecondStepAborted = false;
+
     private static final String SUFFIXSERVICENAME = "-SUBSERVICE-";
 
     private PceCrossDomainPathAggregator() {
@@ -422,8 +439,8 @@ public final class PceCrossDomainPathAggregator {
 
         return secondStepPcri;
     }
-    /**
 
+    /**
     * Checks impairments for a specific path, direction, and impairment type.
     *
     * @param kpathOrder the path order index
@@ -575,6 +592,91 @@ public final class PceCrossDomainPathAggregator {
         }
     }
 
+    /**
+    * Builds a OLS Service Create input Builder from the path computation request input.
+    * Uses the PathComputationRequestInput is used to exercise the Path computation in the second step of Cross-domain
+    * hybrid path computation.
+    * @param pcrinput The PathComputationRequestInput used to exercise the Path computation in the second step of Cross-
+    *             domain hybrid path computation
+    * @return the constructed {@link OlsServiceCreateInputBuilder} or null if construction fails
+    */
+    public OlsServiceCreateInputBuilder buildOlsServiceCreateInputBldr(PathComputationRequestInput pcrinput) {
+        ServiceAEnd servAend = pcrinput.getServiceAEnd();
+        if (servAend == null) {
+            return null;
+        }
+        var txdirBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530
+                .service.endpoint.TxDirectionBuilder()
+            .setIndex(Uint8.ZERO)
+            .setPort(servAend.getTxDirection().getPort());
+        var rxdirBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530
+                .service.endpoint.RxDirectionBuilder()
+            .setIndex(Uint8.ZERO)
+            .setPort(servAend.getRxDirection().getPort());
+        Map<TxDirectionKey,TxDirection> txMap = new HashMap<>();
+        txMap.put(new TxDirectionKey(Uint8.ZERO), txdirBldr.build());
+        Map<RxDirectionKey,RxDirection> rxMap = new HashMap<>();
+        rxMap.put(new RxDirectionKey(Uint8.ZERO), rxdirBldr.build());
+
+        var servAendBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910
+                .second.step.hybrid.pc.result.ols.service.create.input.ServiceAEndBuilder()
+            .setSourceRxTpId(pcri.getServiceAEnd().getRxDirection().getLogicalConnectionPoint())
+            .setSourceTxTpId(pcri.getServiceAEnd().getTxDirection().getLogicalConnectionPoint())
+            .setTxDirection(txMap)
+            .setRxDirection(rxMap)
+            .setServiceFormat(servAend.getServiceFormat())
+            .setServiceRate(servAend.getServiceRate())
+            .setOduServiceRate(servAend.getOduServiceRate())
+            .setOtuServiceRate(servAend.getOtuServiceRate())
+            .setOtherServiceFormatAndRate(servAend.getOtherServiceFormatAndRate())
+            .setClli(servAend.getClli())
+            .setNodeId(new NodeIdType(servAend.getNodeId()));
+        LOG.debug("PCDPA, build serviceCreateInput, serviceAend = {}", servAendBldr);
+
+        ServiceZEnd servZend = pcrinput.getServiceZEnd();
+        if (servZend == null) {
+            return null;
+        }
+        txdirBldr
+            .setIndex(Uint8.ZERO)
+            .setPort(servZend.getTxDirection().getPort());
+        rxdirBldr
+            .setIndex(Uint8.ZERO)
+            .setPort(servAend.getRxDirection().getPort());
+        txMap = new HashMap<>();
+        txMap.put(new TxDirectionKey(Uint8.ZERO), txdirBldr.build());
+        rxMap = new HashMap<>();
+        rxMap.put(new RxDirectionKey(Uint8.ZERO), rxdirBldr.build());
+        var servZendBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910
+                .second.step.hybrid.pc.result.ols.service.create.input.ServiceZEndBuilder()
+            .setSourceRxTpId(pcri.getServiceZEnd().getRxDirection().getLogicalConnectionPoint())
+            .setSourceTxTpId(pcri.getServiceZEnd().getTxDirection().getLogicalConnectionPoint())
+            .setTxDirection(txMap)
+            .setRxDirection(rxMap)
+                .setServiceFormat(servZend.getServiceFormat())
+                .setServiceRate(servZend.getServiceRate())
+                .setOduServiceRate(servZend.getOduServiceRate())
+                .setOtuServiceRate(servZend.getOtuServiceRate())
+                .setOtherServiceFormatAndRate(servZend.getOtherServiceFormatAndRate())
+                .setClli(servZend.getClli())
+                .setNodeId(new NodeIdType(servZend.getNodeId()))
+                .setTxDirection(txMap)
+                .setRxDirection(rxMap);
+        LOG.debug("PCDPA, build serviceCreateInput, serviceZend = {}", servZendBldr);
+
+        OlsServiceCreateInputBuilder olsSciBldr = new OlsServiceCreateInputBuilder()
+            .setCustomer(pcrinput.getCustomerName())
+            .setRoutingMetric(pcrinput.getRoutingMetric())
+            .setServiceName(pcrinput.getServiceName())
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("999").build())
+            .setServiceAEnd(servAendBldr.build())
+            .setServiceZEnd(servZendBldr.build())
+            .setHardConstraints(null);
+
+        this.olssciBldr = olsSciBldr;
+        return olsSciBldr;
+    }
+
     public void setPcri(PathComputationRequestInput pcri) {
         this.pcri = pcri;
     }
@@ -582,6 +684,10 @@ public final class PceCrossDomainPathAggregator {
     public void setOpenRoadmAtoZSubPathImpairments(
             Map<Integer, Map<Integer, AToZImpairmentsBuilder>> orAtoZSubPathImp) {
         this.openRoadmAtoZSubPathImpairments.putAll(orAtoZSubPathImp);
+    }
+
+    public AggregatedPathDescriptionBuilder getAggregatedPathDescriptionBldr() {
+        return this.aggPathDescription;
     }
 
     public void setOpenRoadmZtoASubPathImpairments(
@@ -619,6 +725,38 @@ public final class PceCrossDomainPathAggregator {
         return this.kpathorderMax;
     }
 
+    public boolean getIsFirstStepHybrid() {
+        return this.isFirstStepHybrid;
+    }
+
+    public void setIsFirstStepHybrid(boolean is1stStepHybrid) {
+        this.isFirstStepHybrid = is1stStepHybrid;
+    }
+
+    public boolean getIsSecondStepHybrid() {
+        return this.isSecondStepHybrid;
+    }
+
+    public void setIsSecondStepHybrid(boolean is2ndStepHybrid) {
+        this.isSecondStepHybrid = is2ndStepHybrid;
+    }
+
+    public boolean getIsSecondStepSuccessfullyFinished() {
+        return this.isSecondStepSuccessfullyFinished;
+    }
+
+    public void setIsSecondStepSuccessfullyFinished(boolean is2ndStepSuccess) {
+        this.isSecondStepSuccessfullyFinished = is2ndStepSuccess;
+    }
+
+    public boolean hasSecondStepPCaborted() {
+        return this.isSecondStepAborted;
+    }
+
+    public void setSecondStepPCtoAborted(boolean isaborted) {
+        this.isSecondStepAborted = isaborted;
+    }
+
     /**
     * Adds a list of path elements to the internal map for a specific path order.
     *
@@ -627,6 +765,26 @@ public final class PceCrossDomainPathAggregator {
     */
     public void addPathElementListToMap(Integer kpathOrder, List<PathElement> pathElementList) {
         this.pathElementMap.put(kpathOrder, pathElementList);
+    }
+
+    /**
+    * Get the list of path elements in pathElementMap for a specific path order.
+    *
+    * @param kpathOrder the path order index
+    * @return the corresponding list of path elements
+    */
+    public List<PathElement> getPathElementListK(Integer kpathOrder) {
+        return this.pathElementMap.get(kpathOrder);
+    }
+
+    /**
+    * Get the Service Create Input sci.
+    *
+    * @return the Service Create Input computed through buildServiceCreateInput, required for service creation
+    *         in Data Store
+    */
+    public OlsServiceCreateInputBuilder getOlsServiceCreateInputBuilder() {
+        return this.olssciBldr;
     }
 
     /**
@@ -642,6 +800,20 @@ public final class PceCrossDomainPathAggregator {
         msubGraphPath.put(norder, subGraphPath);
         this.subGraphPathMap.put(korder, msubGraphPath);
     }
+
+
+    /**
+    * Adds a Map of Cross Domain Service Path to Aggregated Path Description Builder aggPathDescription.
+    *
+    * @param cdspMap the MapCdServicePathDescription to be added to this.aggPathDescription.
+    */
+    public void addCdServiceMapToAggregatedPath(Map<CdServicePathDescriptionKey, CdServicePathDescription> cdspMap) {
+        Map<CdServicePathDescriptionKey, CdServicePathDescription> initialCdspMap = aggPathDescription
+            .getCdServicePathDescription();
+        initialCdspMap.putAll(cdspMap);
+        aggPathDescription.setCdServicePathDescription(initialCdspMap);
+    }
+
 
     /**
     * Retrieves a subgraph path from the map based on path and node order.
@@ -758,5 +930,6 @@ public final class PceCrossDomainPathAggregator {
         this.tapiZtoASubPathImpairments = new HashMap<>();
         this.pathElementMap = new HashMap<>();
         this.subGraphPathMap = new HashMap<>();
+        this.aggPathDescription = new AggregatedPathDescriptionBuilder();
     }
 }

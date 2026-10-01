@@ -46,6 +46,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.networ
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.TerminationPoint2;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.PceConstraintMode;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.aggregated.path.description.CdServicePathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.aggregated.path.description.CdServicePathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.second.step.hybrid.pc.result.aggregated.path.description.CdServicePathDescriptionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.DomainTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.cross.domain.service.attributes.CdServicesBuilder;
@@ -173,6 +176,8 @@ public class PceGraph {
         Map<Integer, List<SubGraphPath>> subGraphPathMap = new HashMap<>();
         boolean crossDomainPathComputation = false;
         boolean hybridPath = false;
+        Map<Integer, GraphPath<String, PceGraphEdge>> pathMap1stStep = new HashMap<>();
+        PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             hybridPath = isPathHybrid(path, allPceNodes);
@@ -235,7 +240,6 @@ public class PceGraph {
                         spectrumConstraint,
                         clientInput);
                 papv.setPceOperMode(pceOperMode);
-                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
                 pceResult = papv.checkPath(ModifiedGraphPath.fromGraphPath(path),
                     allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
                     true, pcdpa.getPrecedingEdge(firstStepKpathOrderInHybidPathComputation, npathorder),
@@ -247,8 +251,8 @@ public class PceGraph {
                 pcdpa.setTapiAtoZSubPathImpairments(tapiAtoZSubPathImpairments);
                 pcdpa.setTapiZtoASubPathImpairments(tapiZtoASubPathImpairments);
                 pceResult = pcdpa.checkE2EpathImpairments(firstStepKpathOrderInHybidPathComputation,
-                    new CatalogUtils(
-                        PceCrossDomainOrchestrator.getInstance(null, null, null).getnetworkTransactionService()));
+                        new CatalogUtils(
+                            PceCrossDomainOrchestrator.getInstance(null, null, null).getnetworkTransactionService()));
 
                 boolean successfulE2EPathComputation = pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK);
                 if (successfulE2EPathComputation) {
@@ -257,6 +261,12 @@ public class PceGraph {
                     // Tapi portion of the path not validated, goes to next iteration of the Graph
                     continue;
                 }
+                // build pathAtoZ
+                pathAtoZ.clear();
+                for (PceGraphEdge edge : path.getEdgeList()) {
+                    pathAtoZ.add(edge.link());
+                }
+                shortestPathAtoZ = new ArrayList<>(pathAtoZ);
                 break;
             } else {
                  // This is the path computation process for First Step of cross-domain-service creation
@@ -269,8 +279,8 @@ public class PceGraph {
                 // this call to contain through its list of SubGraphPath, notably, a Map<VerticeNames, PceGraphEdge>
                 // for each of the domains.
                 crossDomainPathComputation = true;
-                PathComputationServiceImpl.setIsFirstStepHybrid(true);
-                PathComputationServiceImpl.setIs2ndStepHybrid(false);
+                pcdpa.setIsFirstStepHybrid(true);
+                pcdpa.setIsSecondStepHybrid(false);
                 PathComputationServiceImpl.setKpathOrder(kpathorder);
                 LOG.info("Detected TAPI-SBI-ABS-NODE in the path, entering splitting process of PathK {} ",
                     entry.getKey());
@@ -279,7 +289,6 @@ public class PceGraph {
                         spectrumConstraint,
                         clientInput);
                 papv.setPceOperMode(pceOperMode);
-                PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
                 pcdpa.resetInstance();
                 pcdpa.setPcri(input);
                 //pathElementList has been filled calling isPathHybrid
@@ -297,7 +306,7 @@ public class PceGraph {
                         ModifiedGraphPath subpath = (ModifiedGraphPath) subGraphPathMap
                             .get(kpathorder).get(subPathPointer).intermediateGraphPath();
 
-                        papv.checkPath(
+                        pceResult = papv.checkPath(
                                 subpath,
                                 allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType,
                                 pceConstraintMode, true,
@@ -320,11 +329,12 @@ public class PceGraph {
                     subPathPointer ++;
                 }
             }
+            pathMap1stStep.put(kpathorder, path);
             kpathorder++;
         }
 
         if (crossDomainPathComputation) {
-            PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
+         // We are in first step of HybridPath computation where potentially kpath have found in OpenROADM domain
          // do a fist check to see if degradations on different domains do not exceed RX OSNR(MARGIN calculation)
             pcdpa.pruneOpenROADMimpairments(new CatalogUtils(
                     PceCrossDomainOrchestrator.getInstance(null, null, null).getnetworkTransactionService()));
@@ -335,7 +345,9 @@ public class PceGraph {
             }
             // For potentially each of the K path identified and valid; launch path computation in the TAPI Domain until
             // we find an acceptable path
+            int lastLoopKey = 0;
             for (int korder = 0; korder < pcdpa.getKpathOrderMax(); korder++) {
+                lastLoopKey = korder;
                 // Identify the order of the TAPI-SBI path in the path list for the 1st step Korder path -> nporder
                 int nporder = 0;
                 for (PathElement pathelement : pathElementMap.get(korder)) {
@@ -349,9 +361,10 @@ public class PceGraph {
                     korder);
                 LOG.info("Launching path computation for subpath N = {} in TAPI domain", nporder);
                 PceCrossDomainOrchestrator.setKpathOrder(korder);
-                PathComputationServiceImpl.setIs2ndStepFinished(false);
+                pcdpa.setIsSecondStepSuccessfullyFinished(false);
                 PathComputationServiceImpl.setKpathOrder(kpathorder);
                 PathComputationRequestInput pcri = pcdpa.buildPathComputationRequestCreateInput(korder, nporder);
+                pcdpa.buildOlsServiceCreateInputBldr(pcri);
                 PceCrossDomainOrchestrator.performPCE(pcri, input.getServiceHandlerHeader().getRequestId(),
                     input.getCustomerName(), spectrumConstraint,
                     PceCrossDomainOrchestrator.getInstance(null, null, null).getPathComputationService(),
@@ -361,39 +374,66 @@ public class PceGraph {
                 // Temporized until we get the result of TAPI PCE Path computation
                 long timer = 0;
                 long macroTimer = 100000;
-                while (!PathComputationServiceImpl.getIsSecondStepSuccessfullyFinished()) {
+                while (!pcdpa.getIsSecondStepSuccessfullyFinished()) {
                     timer++;
                     if (timer == macroTimer) {
                         macroTimer = macroTimer + 100000;
                         LOG.info("waiting for successful PC on TAPI Domain for the Kpath order = {}", korder);
                     }
-                    if (timer > 10000000 || PathComputationServiceImpl.getHasSecondStepFailed()) {
+                    if (timer > 10000000 || pcdpa.hasSecondStepPCaborted()) {
                         LOG.info("TIMER Exceeded for PC on TAPI Domain for the Kpath order = {}, iterate k", korder);
                         break;
                     }
                 }
-                if (PathComputationServiceImpl.getIsSecondStepSuccessfullyFinished()) {
-                    LOG.info("PC on TAPI Domain SUCCEEDED for the Kpath order = {}", korder);
+
+            }
+            // At this stage, we are in a crossDomain Path computation process, still running on this PceGraph instance
+            // FirstPath computation. The 2nd step of the process (another instance of PceGraph) has ended, successfully
+            // or was terminated (timer exceeded / no Path found)
+            if (pcdpa.getIsSecondStepSuccessfullyFinished()) {
+                LOG.info("PC on TAPI Domain SUCCEEDED for the Kpath order = {}", lastLoopKey);
+                // The result of first step Path computation includes a path description corresponding to the initial
+                // path description in OpenROADM domain. A unique path including TAPI-SBI-ABS Node. We are going to use
+                // it to set the AggegatedPathDescription of the unique instance of PceCrossDomainPathAggegator.
+                GraphPath<String, PceGraphEdge> path = pathMap1stStep.get(lastLoopKey);
+                pathAtoZ.clear();
+                for (PceGraphEdge edge : path.getEdgeList()) {
+                    pathAtoZ.add(edge.link());
+                }
+                shortestPathAtoZ = new ArrayList<>(pathAtoZ);
+                Map<CdServicePathDescriptionKey, CdServicePathDescription> cdspdMap = new HashMap<>();
+                for (PathElement entry : pcdpa.getPathElementListK(lastLoopKey)) {
+                    if (entry.domainType.equals(DomainTypeEnum.Openroadm)) {
+                        CdServicePathDescription cdspd = new CdServicePathDescriptionBuilder()
+                            .setCdServiceId(Uint8.valueOf(entry.cdServiceOrder()))
+                            .setAToZDirection(pceResult.getAtoZDirection())
+                            .setZToADirection(pceResult.getZtoADirection())
+                            .setCrossDomain(false)
+                            .build();
+                        cdspdMap.put(cdspd.key(), cdspd);
+                    }
+                }
+                pcdpa.addCdServiceMapToAggregatedPath(cdspdMap);
+
+            }
+        }
+        if (isSecondStepHybridPC && pcdpa.getIsSecondStepSuccessfullyFinished()) {
+            // At this stage, we are in PceGraph instance that runs the 2nd step of crossDomain Path computation process
+            // The 2nd step of the process has ended successfully
+            Map<CdServicePathDescriptionKey, CdServicePathDescription> cdspdMap = new HashMap<>();
+            for (PathElement entry : pcdpa.getPathElementListK(kpathorder)) {
+                if (entry.domainType.equals(DomainTypeEnum.Openroadm)) {
+                    CdServicePathDescription cdspd = new CdServicePathDescriptionBuilder()
+                        .setCdServiceId(Uint8.valueOf(entry.cdServiceOrder()))
+                        .setAToZDirection(pceResult.getAtoZDirection())
+                        .setZToADirection(pceResult.getZtoADirection())
+                        .setCrossDomain(false)
+                        .build();
+                    cdspdMap.put(cdspd.key(), cdspd);
                 }
             }
+            pcdpa.addCdServiceMapToAggregatedPath(cdspdMap);
 
-        }
-        if (isSecondStepHybridPC) {
-            // Path has been validated build pathAtoZ
-            pathAtoZ.clear();
-            PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
-            for (Map.Entry<Integer, List<PceLink>> pathDescMap : pcdpa.getOpenRoadmPathDescription(kpathorder)
-                    .entrySet()) {
-                pathAtoZ.addAll(pathDescMap.getValue());
-            }
-            LOG.info("In calcPath, HybridPC: PATH for wl [{}], min freq {}, max freq {}, hops {}, OpenRoadm path {}",
-                pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
-                pathAtoZ.size(), pathAtoZ);
-            pathAtoZ.clear();
-            for (Map.Entry<Integer, List<PceLink>> pathDescMap : pcdpa.getTapiPathDescription(kpathorder)
-                    .entrySet()) {
-                pathAtoZ.addAll(pathDescMap.getValue());
-            }
             LOG.info("In calcPath, HybridPC: PATH for wl [{}], min freq {}, max freq {}, hops {}, Tapi path {}",
                 pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
                 pathAtoZ.size(), pathAtoZ);

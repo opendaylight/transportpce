@@ -296,6 +296,46 @@ module transportpce-pce {
         "K order of the path provided through first step of path computation, for which a sub-path was successfully
          computed in second step of the path computation";
     }
+    container ols-service-create-input {
+      description
+          "Contains information required to exercise connectivity service in OLS domain.";
+      leaf service-name {
+        type string;
+        description
+          "Identifier for the service to be created in OLS domain for cross-domain service creation.";
+      }
+      leaf common-id {
+        type string;
+        description
+          "To be used by the ROADM controller to identify the routing constraints received from planning
+           application (PED).";
+      }
+      uses org-openroadm-common-service-types:sdnc-request-header;
+      uses org-openroadm-common-service-types:routing-metric;
+      leaf connection-type {
+        type org-openroadm-common-service-types:connection-type;
+      }
+      container service-a-end {
+        uses org-openroadm-common-service-types:service-endpoint;
+        leaf source-tx-tp-id {
+          type string;
+        }
+        leaf source-rx-tp-id {
+          type string;
+        }
+      }
+      container service-z-end {
+        uses org-openroadm-common-service-types:service-endpoint;
+        leaf source-tx-tp-id {
+          type string;
+        }
+        leaf source-rx-tp-id {
+          type string;
+        }
+      }
+      uses org-openroadm-routing-constraints:routing-constraints;
+      uses org-openroadm-common-service-types:service-information;
+    }
     container aggregated-path-description {
       description
         "Host a list of all paths corresponding to the different cd-services that builds the E2E service.

@@ -15,8 +15,8 @@ import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.pce.orchestrator.PceCrossDomainPathAggregator;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -179,6 +179,7 @@ public class Pce2ndStepPCNotificationHandler {
 
         // Only launch TapiSbiServiceImplementationRequest for service spanning accross TAPI domain
         // Other sub service creation will be launched from the regular 1step path computation process.
+        PceCrossDomainPathAggregator pcdpa = PceCrossDomainPathAggregator.getInstance();
         for (Map.Entry<Integer, ServiceInput> entry : serviceInputMap.entrySet()) {
             if (entry.getKey().equals(tapiServiceId.intValue())) {
                 TapiSbiServiceImplementationRequestInput tsir = ModelMappingUtils
@@ -193,7 +194,7 @@ public class Pce2ndStepPCNotificationHandler {
                 ListenableFuture<TapiSbiServiceImplementationRequestOutput> tsiro =
                     this.tapiSbiRendererOperations.serviceImplementation(tsir, false);
                 LOG.debug("Calling  {}", tsiro.getClass());
-                PathComputationServiceImpl.setIs2ndStepFinished(true);
+                pcdpa.setIsSecondStepSuccessfullyFinished(true);
             }
         }
 
