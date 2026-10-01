@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "661d089e_aff34dd7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "`orTspOM.getPenalties()` may return `null` causing `penaltiesMap.putAll(...getPenalties())` to throw NPE.",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28201648_e40b984f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Same as line 377.",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a248fa_816b1474",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "`Uint32.valueOf(Math.round(calcCd))` throws if the accumulated chromatic dispersion is negative, are we sure this won\u0027t happen i practice?",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba465f1_a2660983",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Need to protect this line from a NaN value. e.g.\n\n```\nif (!Double.isFinite(margin)) {\n    LOG.error(\"calculated margin {} is not a finite value, path is rejected\", \n        margin);\n\n    return atozImpBldr.setMargin(\n            Decimal64.valueOf(BigDecimal.valueOf(-1.0)\n                    .setScale(3, RoundingMode.HALF_EVEN))\n                    .scaleTo(3));\n}\n```",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36d3ab7f_da225fd3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Should also use `BigDecimal.setScale(3, …) with .scaleTo(3)`, as the other `setMargin` calls do.",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0542cca3_af8151a2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Same as 681",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b5affc_b165bb80",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "`checkOSNRaz` and `checkOSNRza` populate the impairments builder differently. The A-to-Z version sets all three accumulated values (lines 681–683):\n\n```\n.setAccumulatedCd(Uint32.valueOf(Math.round(signal.get(\"calcCd\"))))\n.setAccumulatedPmd2(Uint32.valueOf(Math.round(signal.get(\"calcPmd2\"))))\n.setAccumulatedPdl2(Uint32.valueOf(Math.round(signal.get(\"calcPdl2\"))))\n```\n\nThe Z-to-A version leaves out `setAccumulatedPdl2(...)` (lines 914–915). calcPdl2 is still calculated and logged in the ZA case, but it never reaches ZToAImpairmentsBuilder. \n\nPlease add the missing setter to checkOSNRza:\n\n```\n.setAccumulatedPdl2(Uint32.valueOf(Math.round(signal.get(\"calcPdl2\"))))\n```\n\nThe two methods are now nearly identical up to this point. A small helper that fills the shared impairment-params fields would prevent this kind of drift. A unit test that checks every field on both builders for the same path would also catch it.",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5fef8bd_aa2089d5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Same as 686",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bd4005c_65799aea",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-01T12:34:47Z",
+      "side": 1,
+      "message": "Same as 703",
+      "revId": "cab96d9e0c3658414de25a7747d48d76bce7023f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
