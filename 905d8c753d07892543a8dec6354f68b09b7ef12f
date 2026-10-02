@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077734cf_3a6d00ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "Hi Olivier! This change is also WIP, but I wanted to offer some ideas nonetheless. Please disregard any comment that is effectively irrelevant due to work that haven\u0027t been pushed yet.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ce4cfe_f3990598",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "This is a follow-up to my comment on 125823 [PceGraph.java:93](https://git.opendaylight.org/gerrit/c/transportpce/+/125823/comment/255b5283_b2975195) about clearing `pathElementList`. In step1, `setPathElementList` used `addAll`, which copied the list. `addPathElementListToMap` now stores the list itself, so every k key points to the same list.\n\nAs a result, clearing it with `pathElementList.clear()` would also empty the entries already stored for earlier k-paths. I suggest assigning a new list in `isPathHybrid` instead, or storing a copy here:\n\n```\npcdpa.addPathElementListToMap(kpathorder, List.copyOf(pathElementList));\n```",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbeac326_bf2d01ee",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "`crossDomainPathComputation` stays `true` once any earlier k-path was hybrid. Consider `k\u003d0` hybrid and `k\u003d1` a valid OpenROADM path: the regular branch sets `shortestPathAtoZ` and breaks, but this block still runs. It can return `false` at line 333 and throw away the valid path, or it launches TAPI path computations that aren\u0027t needed.\n\nWhen the TAPI step does succeed, the result is never written to `pceResult` or `shortestPathAtoZ`, so `calcPath` returns the stale status.\n\nI suggest skipping this block when `shortestPathAtoZ !\u003d null`.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "242bfa97_fc93782a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "Nothing ever writes to the `pathElementMap` field (line 99). Line 283 only fills the aggregator\u0027s own map. `prunePathElementMap` therefore always gets an empty map, the size check at line 331 fails, and the method returns `false` before any TAPI path computation starts.\n\nI suggest either filling the local map at line 283 or reading the map from the aggregator.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d6f0b6_5d519293",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "The loop expects the pruned keys to be 0..kpathOrderMax-1 with no gaps, but `prunedKorderList` can be any subset. For example, if k-paths {1, 2} remain, `pathElementMap.get(0)` at line 340 returns null and the for-each throws an NPE.\n\nAlso, if no `TapiSbi` element is found, `nporder` ends up equal to the list size, and `getSubGraphPathFromMap(...).orElseThrow()` throws `NoSuchElementException`.\n\nI suggest iterating over `pathElementMap.entrySet()` and skipping (or logging) a path that has no TAPI element.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb556cbb_c1cfc163",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "`setIs2ndStepHybrid(true)` is never called. The constructor of `PathComputationServiceImpl` sets it to `false`, and nothing changes it. The path computation launched from here therefore runs as a normal one, and the `!hybridPath \u0026\u0026 isSecondStepHybridPC` branch at line 221 is never taken. The same applies to `setNpathOrder(nporder)`.\n\nRather than adding the missing static setter calls, I suggest passing `isSecondStepHybrid` and `npathorder` along with the path computation request that `PceCrossDomainOrchestrator.performPCE` sends. `PceSendingPceRPCs` already takes both as constructor arguments. Only the step from `PathComputationServiceImpl` goes through static fields, which concurrent requests would overwrite (see my comment on 125823 about global mutable state).\n\nFor example, an overload in `PathComputationService`:\n\n```\nListenableFuture\u003cPathComputationRequestOutput\u003e pathComputationRequest(\n        PathComputationRequestInput input,\n        boolean isSecondStepHybrid,\n        int npathorder);\n```\n\nThe existing `pathComputationRequest(input)` would delegate with `false, 0`, and `performPCE` would call the overload with `true, nporder`.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8eab55e_2157b535",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "`getInstance(null, null)` creates the singleton with `null` services if it runs before `CrossDomainServiceOrchestrator` is activated. That can happen if a request arrives early or in a unit test without OSGi. Later calls to `getInstance(pcs, nps)` ignore their arguments, so the `null` services stay cached, and `pcs.pathComputationRequest` / `nps.putNotification` throw an NPE.\n\nAlso, `CrossDomainServiceOrchestrator.close()` never resets the instance. After a bundle restart, the stale services are kept.\n\nI suggest a getter that fails fast when no instance exists, and clearing the instance in `close()`. Better still, inject the orchestrator into its users.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f150d07_f6d11c0a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "This loop isn\u0027t a timeout:\n\n- It\u0027s a busy-spin of 10M iterations, which finishes in a few milliseconds while keeping a PCE thread at 100% CPU. The TAPI PCE answers asynchronously, typically after hundreds of milliseconds or more.\n- `isSecondStepSuccessfullyFinished` and `isSecondStepAborted` aren\u0027t `volatile`. The JIT may hoist the reads, and then the loop never sees the update.\n- `isSecondStepAborted` has no setter, so `getHasSecondStepFailed()` is always false.\n- After a success (line 372), the outer loop still goes on to launch a path computation for the next k.\n\nI suggest waiting on the result directly, for example with a `CompletableFuture` that the callback completes, and `get(timeout, TimeUnit.SECONDS)`. Then `break` on success. For example:\n\n```\n// Pcro2ndStepCallback\nprivate final CompletableFuture\u003cBoolean\u003e result \u003d new CompletableFuture\u003c\u003e();\n\npublic void onSuccess(PathComputationRequestOutput response) {\n    ...\n    result.complete(isResponseOk(response));\n}\n\npublic void onFailure(Throwable cause) {\n    ...\n    result.complete(false);\n}\n\n// PceGraph\ntry {\n    if (callback.result.get(30, TimeUnit.SECONDS)) {\n        break;\n    }\n} catch (TimeoutException | ExecutionException e) {\n    LOG.warn(\"PC on TAPI Domain failed or timed out for the Kpath order \u003d {}\", \n              korder, e);\n} catch (InterruptedException e) {\n    Thread.currentThread().interrupt();\n    break;\n}\n```",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "764dc2cb_13cd3cd3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/orchestrator/PceCrossDomainOrchestrator.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "Any non-null response is reported as `RpcStatusEx.Successful`, including a response whose `ConfigurationResponseCommon` has a failed response code.\n\nI suggest checking `response.getConfigurationResponseCommon().getResponseCode()` before choosing the status.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d19cac8_d9c22852",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/orchestrator/PceCrossDomainPathAggregator.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "`new PceResult()` defaults to `RESPONSE_FAILED`. The check at PceGraph.java:247 is therefore always false, and every second-step path hits `continue`. It also overwrites the result of `papv.checkPath` from PceGraph.java:235, so a real validation failure is lost as well.\n\nUntil `calculateE2Emargin` is implemented, I suggest passing in the `PceResult` from `papv.checkPath` and returning it.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b334d519_da7bb5f0",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/Pce2ndStepPCNotificationHandler.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "This listener is never registered. `ServiceHandlerProvider` registers the composite listeners of the other handlers, but not this one. As a result, `SecondStepHybridPcResult` is never handled and `setIs2ndStepFinished(true)` (line 192) is never reached.\n\nAlso, nothing calls `setInput()`. So even once it\u0027s registered, `serviceInputMap` is empty and the method returns at line 117.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17598217_4516f11d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/Pce2ndStepPCNotificationHandler.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:58:20Z",
+      "side": 1,
+      "message": "There are two NPEs here:\n\n- The orchestrator publishes an empty `AggregatedPathDescription` (`PceCrossDomainPathAggregator.aggPathDescription`), so `getCdServicePathDescription()` at line 125 returns null.\n- Per the YANG model, the per-path `cross-domain-service` is only present `when cross-domain \u003d true`, and the service list lives in the notification\u0027s top-level `cross-domain-service`. So `entry.getValue().getCrossDomainService()` is null here.\n\nI suggest reading the services from `secondStepHybridPcResult.getCrossDomainService()` and using `nonnullCdServicePathDescription()`.",
+      "revId": "905d8c753d07892543a8dec6354f68b09b7ef12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
