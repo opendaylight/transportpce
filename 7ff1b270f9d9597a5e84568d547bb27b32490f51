@@ -139,6 +139,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f001a94_7e41bd0d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-02T12:55:02Z",
+      "side": 1,
+      "message": "This is fixed in [126250 (Cross-Domain Orchestration step2)](https://git.opendaylight.org/gerrit/c/transportpce/+/126250/6/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java): `isPathHybrid` is called once and stored in `hybridPath`, and the first condition is now `!hybridPath \u0026\u0026 !isSecondStepHybridPC` (PceGraph.java:174-176 in patch set 6).\n\nCould you move that change into this commit, so that this change is correct on its own?",
+      "parentUuid": "b3cab289_afff9798",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08f76fa0_c7fbfbdc",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
         "patchSetId": 2
