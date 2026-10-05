@@ -7,13 +7,14 @@
  */
 package org.opendaylight.transportpce.test;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import java.io.InputStream;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -95,8 +96,8 @@ public final class DeviceWrapper {
             @NonNull QName intialDataQName) {
         requireNonNull(initialDataXmlInputStream, "Input stream cannot be null");
         requireNonNull(intialDataQName, "QName cannot be null");
-        return createDeviceWrapper(key, Lists.newArrayList(
-                new AbstractMap.SimpleEntry<QName, InputStream>(intialDataQName, initialDataXmlInputStream)));
+        return createDeviceWrapper(key, new ArrayList<>(asList(
+                new AbstractMap.SimpleEntry<QName, InputStream>(intialDataQName, initialDataXmlInputStream))));
     }
 
     /**

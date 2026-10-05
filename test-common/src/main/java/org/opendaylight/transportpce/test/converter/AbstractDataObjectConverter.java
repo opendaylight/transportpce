@@ -78,7 +78,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
             Optional<NormalizedNode> directChild =
                     NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier);
             if (!directChild.isPresent()) {
-                throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
+                throw new IllegalStateException("Could not get the direct child of %s".formatted(rootNode));
             }
             normalizedNode = directChild.orElseThrow();
         }
