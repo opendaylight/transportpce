@@ -67,6 +67,46 @@
       "message": "recheck",
       "revId": "33639c8a09164b1e0b1c736d9ecc2b9e9093e061",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf622921_f773bde8",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2026-04-22.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T06:39:20Z",
+      "side": 1,
+      "message": "Add a new revision. Don\u0027t change this description. Instead, explain the modifications in the new revision description.",
+      "revId": "33639c8a09164b1e0b1c736d9ecc2b9e9093e061",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25f80e54_4d55d01f",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2026-04-22.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T06:39:20Z",
+      "side": 1,
+      "message": "How is this `section-available-freq-map` going to be used?\n\nI read this relation chain as `section-available-freq-map` will eventually contain the result from computing available spectrum on a given path.\n\nSince a path will take constraints into account defined by the nodes in the path (constraints such as `center-frequency-granularity` and `mc-capabilities`), the resulting available frequencies will not be complete without those constraints. \n\nChoosing a service frequency range from this available Bitset will therefore need these constrains. If we do intend to support choosing a service frequency from this Bitset, I propose we add applicable constraints to this yang model.\n\ne.g. \n\n## 1 - Add a reference to mc-capabilities:\n\n```\n    container spectrum-allocation {\n      leaf section-available-freq-map {\n        type binary;\n        description\n          \"bitmap providing spectrum availability on the section of the cross-\n           domain service\";\n      }\n      uses mc-capabilities;\n    }\n```\n\n## 2 - Add the mc-capabilities definition\n\n```\n  grouping mc-capabilities {\n    leaf center-freq-granularity {\n      type org-openroadm-common-optical-channel-types:frequency-GHz;\n      default \"50\";\n      description\n        \"Width of a slot measured in GHz.\";\n    }\n    leaf slot-width-granularity {\n      type org-openroadm-common-optical-channel-types:frequency-GHz;\n      default \"50\";\n      description\n        \"Width of a slot measured in GHz.\";\n    }\n    leaf min-slots {\n      type uint32;\n      default \"1\";\n      description\n        \"Minimum number of slots permitted to be joined together to form a media channel.  Must be less than or equal to the max-slots\";\n    }\n    leaf max-slots {\n      type uint32;\n      default \"1\";\n      description\n        \"Maximum number of slots permitted to be joined together to form a media channel.  Must be greater than or equal to the min-slots\";\n    }\n    leaf min-edge-freq {\n      type org-openroadm-common-optical-channel-types:frequency-THz;\n      description\n        \"Minimum edge frequency\";\n    }\n    leaf max-edge-freq {\n      type org-openroadm-common-optical-channel-types:frequency-THz;\n      description\n        \"Maximum edge frequency\";\n    }\n  }\n```\n\nHowever, if we are only intend to communicate available/occupied frequencies on a given path, then the constraints outlined above are not needed in the yang-model.",
+      "range": {
+        "startLine": 272,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 0
+      },
+      "revId": "33639c8a09164b1e0b1c736d9ecc2b9e9093e061",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
