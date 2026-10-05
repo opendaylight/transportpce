@@ -40,6 +40,7 @@ public class OCMetaDataTransactionImpl implements OCMetaDataTransaction {
     /**
      * This method is used to get OpenTerminalMetaData.
      * from MD-Sal
+     *
      * @return OpenTerminalMetaData from md sal.
      */
     @Override

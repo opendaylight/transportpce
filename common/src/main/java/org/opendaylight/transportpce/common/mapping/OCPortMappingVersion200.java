@@ -136,6 +136,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * constructor of OCPortMappingVersion200.
+     *
      * @param dataBroker
      *            data broker
      * @param deviceTransactionManager
@@ -606,6 +607,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This Method checks Supported Client Ports from Metadata on NE LineCard.
+     *
      * @param supportedClientPorts - input
      *                 supported client ports from metadata.
      * @param subcomponents - input
@@ -662,6 +664,7 @@ public class OCPortMappingVersion200 {
     /**
      * This Method is used to create switching pool for Network ports on Line Card.
      * inputs of this method
+     *
      * @param nblVal - input
      *           non-blocking entry of the port.
      * @param xpdrType - input
@@ -719,6 +722,7 @@ public class OCPortMappingVersion200 {
     /**
      * This method creates client lcp mapping.
      * inputs of this method
+     *
      * @param nodeId - input
      *            node id of device
      * @param portComponentList - input
@@ -829,6 +833,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method creates lcp mapping.
+     *
      * @param nodeId - input
      *            node id of device
      * @param portComponent - input
@@ -961,6 +966,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method is to get  supporting circuit packname.
+     *
      * @param componentsList - input
      *            components list from device
      * @param portComponent - input
@@ -990,6 +996,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method is to get  transceiver metadata from MD-SAL.
+     *
      * @param componentsList - input
      *            components list from device
      * @param portComponent - input
@@ -1029,6 +1036,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method is to check  component type present in device or not and that it matches the specified type.
+     *
      * @param component - input
      *             component
      * @param componentType - input
@@ -1093,6 +1101,7 @@ public class OCPortMappingVersion200 {
      * Ideally all modes will have the same granularity.
      * We will use this value as CF granularity and double it to get the slot-width granularity.
      * inputs of this method
+     *
      * @param transceiver - input
      *            transceiver object of meta data
      * @param frequencySet - output
@@ -1129,6 +1138,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method is to update xpdr mapping with connection map lcp.
+     *
      * @param nodeId - input
      *            node id of device
      * @param portComponent - input
@@ -1176,6 +1186,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method to build a new xpdr mapping object.
+     *
      * @param nodeId - input
      *            node id of device
      * @param portComponent - input
@@ -1251,6 +1262,7 @@ public class OCPortMappingVersion200 {
 
     /**
      * This method to write port mapping data into MD-SAL.
+     *
      * @param nodeId - input
      *            node id
      * @param nodeInfo - input

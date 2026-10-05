@@ -154,6 +154,7 @@ public final class PortMappingUtils {
      * Otherwise, the hash cannot be stored in a UTF-8 string.
      * https://www.wikiwand.com/en/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#/FNV-1_hash
      * https://github.com/pmdamora/fnv-cracker-app/blob/master/src/main/java/passwordcrack/cracking/HashChecker.java
+     *
      * @param stringdata the String to be hashed
      * @return the hash string
      */
