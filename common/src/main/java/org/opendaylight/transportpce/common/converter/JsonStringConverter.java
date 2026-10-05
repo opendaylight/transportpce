@@ -50,6 +50,7 @@ public class JsonStringConverter<T extends DataObject> {
 
     /**
      * Create a json string from dataobject T.
+     *
      * @param id InstanceIdentifier
      * @param dataObject T
      * @param supplier RFC7951 or DRAFT_LHOTKA_NETMOD_YANG_JSON_02
@@ -88,6 +89,7 @@ public class JsonStringConverter<T extends DataObject> {
 
     /**
      * Create a dataObject of T type from json string.
+     *
      * @param path YangInstanceIdentifier
      * @param jsonString String
      * @param supplier RFC7951 or DRAFT_LHOTKA_NETMOD_YANG_JSON_02
@@ -105,6 +107,7 @@ public class JsonStringConverter<T extends DataObject> {
 
     /**
      * Create a dataObject of T type from Reader.
+     *
      * @param path YangInstanceIdentifier
      * @param inputReader Reader (could be all class implementing Reader) containing Json data.
      * @param supplier RFC7951 or DRAFT_LHOTKA_NETMOD_YANG_JSON_02

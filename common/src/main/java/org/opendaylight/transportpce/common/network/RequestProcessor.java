@@ -135,6 +135,7 @@ public class RequestProcessor {
 
     /**
      * Return the dataBroker related to RequestProcessor.
+     *
      * @return the dataBroker
      */
     public DataBroker getDataBroker() {

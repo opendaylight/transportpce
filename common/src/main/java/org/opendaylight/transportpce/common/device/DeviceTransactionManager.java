@@ -108,7 +108,8 @@ public interface DeviceTransactionManager {
     Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId);
 
     /**
-    * Works same as {@link DeviceTransactionManager#getDeviceTransaction(String)} but with option to set custom timeout.
+     * Works same as {@link DeviceTransactionManager#getDeviceTransaction(String)}
+     * but with option to set custom timeout.
      *
      * @param deviceId device id on which will be transaction created.
      * @param timeoutToSubmit timeout will start running when transaction is created. If transaction will not be

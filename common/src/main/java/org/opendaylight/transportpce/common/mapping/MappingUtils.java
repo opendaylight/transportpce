@@ -26,6 +26,7 @@ public interface MappingUtils {
 
     /**
      * Get list of mc capabilities for node with nodeId.
+     *
      * @param nodeId String
      * @return the list of McCapabilities for the node.
      */
