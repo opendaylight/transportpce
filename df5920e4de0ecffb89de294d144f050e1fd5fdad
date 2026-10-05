@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80c75c6_5a0d4a47",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2026-09-10.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T05:46:00Z",
+      "side": 1,
+      "message": "Unrelated white space removal.",
+      "revId": "df5920e4de0ecffb89de294d144f050e1fd5fdad",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00e85c5_b0bf3196",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2026-09-10.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T05:46:00Z",
+      "side": 1,
+      "message": "Use the same type for `cd-service-id` in both lists\n\nThis list keys `cd-service-id` as string, but the `cd-services` list from `cross-domain-service-attributes` keys the same id as `uint8`, and `PceGraph` fills it with `Uint8.valueOf(...)`.\n\nAs it stands, the two ids have different Java types (`String` vs `Uint8`), so matching a path description to its cd-service needs a string-to-number conversion, and the type allows values that aren\u0027t a `cd-service-id` at all.\n\nI suggest using `uint8` here too, so `getCdServiceId()` returns `Uint8` on both sides and the join is just `cdServices.get(new CdServicesKey(pd.getCdServiceId()))`.\n\n```\nlist cd-service-path-description {\n  key \"cd-service-id\";\n  leaf cd-service-id {\n    type uint8;\n    description\n      \"Identifier of the cd-service this path applies to. Matches\n       cd-service-id in ../../../cross-domain-service/cd-services.\";\n  }\n  ...\n}\n```\n\nIf you want the schema to state the relationship, use a leafref instead. It generates the same Uint8 Java type:\n\n```\n  leaf cd-service-id {\n    type leafref {\n      path \"../../../cross-domain-service/cd-services/cd-service-id\";\n    }\n  }\n```\n\nPlain `uint8` is enough to fix the mismatch. The leafref additionally documents and constrains the reference in the schema.",
+      "revId": "df5920e4de0ecffb89de294d144f050e1fd5fdad",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc5f8c41_f7beb2e3",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2026-09-10.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T05:46:00Z",
+      "side": 1,
+      "message": "Keep the cross-domain data out of the per-service entries\n\nThis uses brings in the whole `path-description` grouping, including the `cross-domain` leaf and the `cross-domain-service` container. The `aggregated-path-description` description says those must not be filled here, but nothing in the model enforces that. A producer that copies a complete PathDescription into each entry puts the cross-domain data into the notification N+1 times, and the copies can disagree with the top-level `cross-domain-service` container.\n\nSuggestion: in transportpce-pathDescription@2026-04-22.yang, move the two direction containers into a grouping of their own and have `path-description` use it. PathDescription keeps the same children, so existing callers and generated code don\u0027t change.\n\n```\ngrouping path-directions {\n  description\n    \"A-to-Z and Z-to-A hop lists of a path, without cross-domain data.\";\n  container aToZ-direction { ... }   // moved unchanged\n  container zToA-direction { ... }   // moved unchanged\n}\n\ngrouping path-description {\n  description \"...\";\n  leaf cross-domain { ... }\n  container cross-domain-service { ... }\n  uses path-directions;\n}\n````\n\nThen here:\n\n```\nlist cd-service-path-description {\n  key \"cd-service-id\";\n  leaf cd-service-id { ... }\n  uses transportpce-pathDescription:path-directions;\n}\n```\n\nThe \"not supposed to be filled\" sentence in the aggregated-path-description description can then go, since the schema enforces it. Also mention the new grouping in the 2026-04-22 revision description.",
+      "revId": "df5920e4de0ecffb89de294d144f050e1fd5fdad",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

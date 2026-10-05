@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3f64666_e4c2b3cd",
+        "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2026-09-10.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-05T05:46:00Z",
+      "side": 0,
+      "message": "Removed whitespace unrelated to the functional yang model update.",
+      "revId": "7ff1b270f9d9597a5e84568d547bb27b32490f51",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
