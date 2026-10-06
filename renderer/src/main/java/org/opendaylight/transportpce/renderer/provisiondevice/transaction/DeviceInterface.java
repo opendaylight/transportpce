@@ -29,7 +29,7 @@ public class DeviceInterface implements Transaction {
 
     @Override
     public String description() {
-        return String.format("Node: %s interface id: %s", nodeId, interfaceId);
+        return "Node: %s interface id: %s".formatted(nodeId, interfaceId);
     }
 
     @Override

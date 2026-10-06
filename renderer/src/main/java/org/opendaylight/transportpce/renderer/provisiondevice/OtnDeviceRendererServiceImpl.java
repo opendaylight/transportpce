@@ -377,7 +377,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     try {
                         this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     } catch (OpenRoadmInterfaceException e) {
-                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
+                        String result = "Failed to delete interface %s on node %s!".formatted(interfaceId, nodeId);
                         success.set(false);
                         LOG.error(result, e);
                         results.add(result);
@@ -440,12 +440,12 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         .setNodeId(node.getNodeId())
                         .setTpId(clientTp)
                         .build();
-                String result = String.format("successfully disabled entities on node %s!",  node.getNodeId());
+                String result = "successfully disabled entities on node %s!".formatted(node.getNodeId());
                 results.add(result);
             } catch (OpenConfigInterfacesException e) {
                 LOG.error("Error will disabling entities  for node {} and dest {}", node.getNodeId(),
                         clientTp);
-                String result = String.format("Failed to disable entities on node %s!",  node.getNodeId());
+                String result = "Failed to disable entities on node %s!".formatted(node.getNodeId());
                 success.set(false);
                 results.add(result);
                 linkTp = new LinkTpBuilder()

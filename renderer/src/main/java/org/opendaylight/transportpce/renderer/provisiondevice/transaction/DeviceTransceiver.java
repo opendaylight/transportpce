@@ -33,7 +33,7 @@ public class DeviceTransceiver implements Transaction {
 
     @Override
     public String description() {
-        return String.format("Node: %s port id: %s", nodeId, transceiverId);
+        return "Node: %s port id: %s".formatted(nodeId, transceiverId);
     }
 
     @Override

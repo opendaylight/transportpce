@@ -86,9 +86,8 @@ public class OpenRoadmOtnInterface221 {
 
     private void throwException(String nodeId, String logicalConnPoint)
             throws OpenRoadmInterfaceException {
-        throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                nodeId, logicalConnPoint));
+        throw new OpenRoadmInterfaceException(("Unable to get mapping from PortMapping for node %s and logical "
+                + "connection port %s").formatted(nodeId, logicalConnPoint));
     }
 
     private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, InterfaceType type, String key) {
@@ -136,8 +135,7 @@ public class OpenRoadmOtnInterface221 {
 
         Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(MAPPING_ERROR_EXCEPTION_MESSAGE.formatted(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2e" + ":" + serviceName);
@@ -212,8 +210,7 @@ public class OpenRoadmOtnInterface221 {
 
         Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(MAPPING_ERROR_EXCEPTION_MESSAGE.formatted(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU0" + ":" + servicename);
@@ -288,8 +285,7 @@ public class OpenRoadmOtnInterface221 {
 
         Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(MAPPING_ERROR_EXCEPTION_MESSAGE.formatted(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2" + ":" + servicename);
