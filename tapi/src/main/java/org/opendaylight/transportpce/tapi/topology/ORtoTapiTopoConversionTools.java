@@ -271,6 +271,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Instantiate an ORToTapiTopoConversionFactory Object.
+     *
      * @param tapiTopoUuid Uuid of the generated topology used in Builders.
      */
     public ORtoTapiTopoConversionTools(Uuid tapiTopoUuid) {
@@ -322,6 +323,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Convert Xponder Node from OpenROADM to Tapi.
+     *
      * @param ietfNode the OpenROADM node to be converted.
      * @param networkPorts The list of Node's network/line port.
      */
@@ -399,6 +401,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Creates one elementary Node Rule Group including NEPs that can/can't forward among each others in a ROADM node.
+     *
      * @param topoType The level of abstraction of the topology.
      * @param nodeUuid The Uuid of the node.
      * @param subNodeName The extension in OpenROADM NodeId that identifies the  considered SRG/DEG. this subnode Name
@@ -459,6 +462,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Creates Node Rule Group(s) that describe(s) the connectivity of the ROADM node.
+     *
      * @param topoType The level of abstraction of the topology which determines the way the NRG is computed :
      *                 (For abstracted topology, a single ROADM node summarizes the ROADM infrastructure with an
      *                 Any to Any connectivity),
@@ -572,6 +576,7 @@ public class ORtoTapiTopoConversionTools {
 
 /**
  * Creates Inter Rule Group(s) that describe(s) forwarding rules between the different NRGs.
+ *
  * @param topoType The level of abstraction of the topology which conditions IRG name,
  * @param nodeUuid Uuid of the node,
  * @param orNodeId id of the openROADM node,
@@ -652,6 +657,7 @@ public class ORtoTapiTopoConversionTools {
      * Provides a list of Mapped Service Interface Points associated with a tp/NEP and add SIPs to tapiSip List.
      * so that they can be added later on to the SIP context.
      * Returns a List of Mapped Service Interface Points.
+     *
      * @param nb The number of SIPs to be created for the NEP,
      * @param layerProtocol Layer protocol the SIP is associated to,
      * @param tpId id of the tp converted to a string,
@@ -687,6 +693,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides a list of Available Payload Structure supported by a Photonic Media Node Edge Point.
      * Returns an Available Payload Structure List.
+     *
      * @param rate remaining capacity supported by the Photonic NEP,
      * @param otsiProvisioned Boolean providing information on whether 1 OTSi service has been provisioned on the port,
      * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
@@ -761,6 +768,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides a list of Available Payload Structure supported by a generic Node Edge Point.
      * Returns an Available Payload Structure List.
+     *
      * @param rate remaining capacity supported by the Photonic NEP,
      * @param isProvisioned Boolean providing information on whether a service has been provisioned on the port,
      * @param lpnList A list of layer protocol qualifiers that the tp/NEP supports.
@@ -786,6 +794,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides a list of Supported Payload Structure supported by a Photonic Media Node Edge Point.
      * Returns a Supported Payload Structure List.
+     *
      * @param rate Rounded maximum rate supported by the Photonic NEP,
      * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
      * @param supportedOpModes List of operational Modes (as they appear in catalog) that the tp/NEP supports.
@@ -856,6 +865,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides a list of Supported Payload Structure supported by a Generic Node Edge Point.
      * Returns a Supported Payload Structure List.
+     *
      * @param isProvisioned Boolean providing information on whether a service has been provisioned on the port,
      * @param rate Rounded maximum rate supported by the Photonic NEP,
      * @param nberOfInstances Number of instances the tp/NEP supports for the layer protocol qualifiers,
@@ -880,6 +890,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides TotalSize for a Generic Node Edge Point whether it is for total-potential or available capacity.
      * Returns a Total Size.
+     *
      * @param rate The rate to be set in either total-potential or available capacity,
      */
     public TotalSize createTotalSizeForCommonNeps(Double rate) {
@@ -892,6 +903,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Creates Connection End Point for ROADMs.
      * Returns a Connection End Point.
+     *
      * @param lowerFreqIndex Index of the slot corresponding to lower boundary of the spectrum occupied by the channel
      *                       in the flex-grid,
      * @param higherFreqIndex Index of the slot corresponding to higher boundary of the spectrum occupied by the channel
@@ -1057,6 +1069,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Provides a list of the Cep Layer Protocol Qualifier Instances that are Supported by Node Edge Point.
      * Returns a List of Supported Cep Layer Protocol Qualifier Instances.
+     *
      * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
      * @param lpn Layer protocol qualifier that the tp/NEP supports.
      * @param key String key used to refine the case of Digital-OTN that does not separate OTU from ODU case.
@@ -1109,6 +1122,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Creates an empty frequency maps.
+     *
      * @return an AvailFreqMaps object with only a name, and a freqMap with no bytes.
      */
     @VisibleForTesting
@@ -1122,6 +1136,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Adds the Payload Structure and the Photonic Node Edge Point Spec to an OwnedNodeEdgePointBuilder.
      * Returns  Augmented OnepBuilder provided as an input.
+     *
      * @param nodeId OpenROADM node Id.
      * @param freqMap Map of Min/Max Frequency corresponding to the different occupied-slots low/high boundaries.
      * @param operModeList List of Keys of the operational modes supported by the NEP.
@@ -1205,6 +1220,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Adds the Photonic Node Edge Point Spec to a ROADM OwnedNodeEdgePointBuilder.
      * Returns Augmented OnepBuilder provided as an input.
+     *
      * @param nodeId OpenROADM node Id,
      * @param usedFreqMap Map of Min/Max Frequency corresponding to the different occupied-slots low/high boundaries.
      * @param onepBldr The onepBuilder of the NEP to augment.
@@ -1278,6 +1294,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Create Tapi Node from class parameters setting automatically some mandatory default parameters.
+     *
      * @param nodeNames Map of NameKey and Name provided as an input of the method.
      * @param layerProtocols Set of layer protocol names supported by the Node.
      */
@@ -1344,6 +1361,7 @@ public class ORtoTapiTopoConversionTools {
      * Main method used to populate and create the Node Neps, node rule groups of a Xponder.
      * Done scanning all OpenROADM termination points and switching pool.
      * Returns the Uuid of the Node returned by the method in case of successfull Nep and NRG creation.
+     *
      * @param onepl A map of owned node edge point filled scanning the Node OpenROADM tps.
      * @param nodeRuleGroupList A map of Node Rule Group filled scanning the Node Odu Switching Pool.
      */
@@ -1465,6 +1483,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Creates Node Rule Group for Xponders.
      * Returns a Map of Node Rule Groups returned by the method in case of successful creation.
+     *
      * @param nodeId of OpenROADM Node.
      * @param oorOduSwPool OpenROADM Node Odu Switching Pool.
      */
@@ -1665,6 +1684,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Creates a Node Edge Point from an OpenROADM termination point.
      * Returns a List of owned node edge points returned by the method in case of successful Nep creation.
+     *
      * @param oorTp OpenROADM tp the NEP is mapped to.
      * @param nepNames A map of Names associated to the created NEP.
      * @param nepProtocol Layer protocol the NEP is associated to,
@@ -1972,6 +1992,7 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Creates a ROADM Node Edge Point.
      * Returns an owned node edge point in case of successful Nep creation.
+     *
      * @param orNodeId Id of the OpenROADM Node the NEP is mapped to.
      * @param tpId Id of the OpenROADM tp the NEP is mapped to.
      * @param withSip Boolean used to trigger the creation of SIP associated to the Nep,
@@ -2011,6 +2032,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Creates a Service Interface Point.
+     *
      * @param sipUuid The SIP Uuid,
      * @param layerProtocol Layer protocol the SIP is associated to,
      * @param tpId OpenROADM termination Point Id,
@@ -2044,6 +2066,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Generates a list of Supported Cep Layer Protocol Qualifier Instances supported by a Service Interface Point.
+     *
      * @param supportedInterfaceCapability Collection of supported interface capabilities,
      * @param lpn Layer protocol the SIP is associated to,
      */
@@ -2095,6 +2118,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Converts an OpenROADM compliant administrative state (provided as a string) to a Tapi administrative state.
+     *
      * @param adminState Administrative state in OpenROADM format converted to a string,
      */
     public AdministrativeState transformAsToTapiAdminState(String adminState) {
@@ -2106,6 +2130,7 @@ public class ORtoTapiTopoConversionTools {
 
     /**
      * Converts an OpenROADM compliant operational state (provided as a string) to a Tapi operational state.
+     *
      * @param operState Operational state in OpenROADM format converted to a string,
      */
     public OperationalState transformOsToTapiOperationalState(String operState) {

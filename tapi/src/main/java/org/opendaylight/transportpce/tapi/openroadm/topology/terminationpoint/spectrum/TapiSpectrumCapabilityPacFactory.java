@@ -36,8 +36,8 @@ public interface TapiSpectrumCapabilityPacFactory {
     /**
      * Creates a {@link SpectrumCapabilityPac} from precomputed occupied and available spectrum ranges.
      *
-     * @param usedFreqMap occupied spectrum ranges (lower -&gt; upper), may be {@code null} or empty
-     * @param availableFreqMap available spectrum ranges (lower -&gt; upper), may be {@code null} or empty
+     * @param usedFreqMap occupied spectrum ranges (lower {@literal <->} upper), may be {@code null} or empty
+     * @param availableFreqMap available spectrum ranges (lower {@literal <->} upper), may be {@code null} or empty
      * @return a {@link SpectrumCapabilityPac}
      */
     SpectrumCapabilityPac create(

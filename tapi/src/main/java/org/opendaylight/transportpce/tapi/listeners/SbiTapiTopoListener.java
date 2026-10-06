@@ -179,6 +179,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Removes a TP from TAPI-SBI-ABS-NODE if the corresponding NodeEdgePoint has disappeared.
      * Returns a message trunk to be included in an LOG.info.
+     *
      * @param onepTpId  Name of the NEP converted to a OpenROADM TPid.
      * @param tpType    OpenROADM tp type used to evaluate in which layers the tp is present.
      */
@@ -193,6 +194,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Adds a TP to TAPI-SBI-ABS-NODE.
      * Returns a message trunk to be included in an LOG.info.
+     *
      * @param onep      the OwnedNodeEdgePoint that was modified in TAPI SBI Topology.
      * @param nodeUuid  The Uuid of the Node the onep belongs to.
      * @param nodeName  The name (value) of the Node the onep belongs to.
@@ -242,6 +244,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Identifies the OpenROADM equivalent type of the TP corresponding to an OwnedNodeEdgePoint.
      * Returns the OpenROADM Tp Type.
+     *
      * @param onep      the OwnedNodeEdgePoint that was modified in TAPI SBI Topology.
      */
     private OpenroadmTpType identifyTpType(OwnedNodeEdgePoint onep) {
@@ -255,6 +258,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Evaluate the different OpenROADM topological layers the TP is associated to.
      * Returns a List of String that identify the corresponding topological layers.
+     *
      * @param tpType      OpenROADM equivalent type of the TP.
      */
     private List<String> evaluateLayers(OpenroadmTpType tpType) {
@@ -268,6 +272,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Updates a TP of the TAPI-SBI-ABS-NODE.
      * Returns a message trunk to be included in an LOG.info.
+     *
      * @param onep      the OwnedNodeEdgePoint that was modified in TAPI SBI Topology.
      * @param nodeUuid  The Uuid of the Node the onep belongs to.
      * @param nodeName  The name (value) of the Node the onep belongs to.
@@ -281,6 +286,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Deletes a TP from the TAPI-SBI-ABS-NODE.
      * Returns true if the TP was successfully deleted, false otherwise.
+     *
      * @param onepTpId          The TpId of the TP to be deleted.
      * @param networkLayers     The list of topological layer where the TP appears.
      */
@@ -303,6 +309,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Build a DataObjectIdentifier pointing to a Tp of in a specific openROADM topological layer.
      * Returns a DataObjectIdentifier<TerminationPoint> for a specific topological layer.
+     *
      * @param onepTpId          The TpId of the TP to be deleted.
      * @param networkLayer     The topological layer that the DataObjectIdentifier points to.
      */
@@ -323,6 +330,7 @@ public class SbiTapiTopoListener implements DataTreeChangeListener<Topology> {
     /**
      * Adds a TP to TAPI-SBI-ABS node through a write (merge) operation in the different specified topological layers.
      * Returns true if the TP was successfully added, false otherwise.
+     *
      * @param tp            The TerminationPoint to be added in TAPI-SBI-ABS-NODE.
      * @param networkLayers The list of topological layers in which the TP shall be added.
      */
