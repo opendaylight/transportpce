@@ -105,6 +105,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Process service delete result for serviceName.
+     *
      * @param notification RendererRpcResultSp
      */
     private void onServiceDeleteResult(RendererRpcResultSp notification) {
@@ -148,6 +149,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Process service implementation result for serviceName.
+     *
      * @param notification RendererRpcResultSp
      */
     private void onServiceImplementationResult(RendererRpcResultSp notification) {
@@ -169,6 +171,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Process succeeded service implementation for service.
+     *
      * @param notification RendererRpcResultSp
      */
     private void onSuccededServiceImplementation(RendererRpcResultSp notification) {
@@ -261,6 +264,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Create and send service handler notification.
+     *
      * @param notification RendererRpcResultSp
      * @param type ServiceNotificationTypes
      */
@@ -332,6 +336,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Process failed service implementation for serviceName.
+     *
      * @param serviceName String
      */
     private void onFailedServiceImplementation(String serviceName) {
@@ -398,6 +403,7 @@ public class RendererNotificationHandler implements RendererListener {
 
     /**
      * Send notification to NBI notification in order to publish message.
+     *
      * @param service PublishNotificationService
      */
     private void sendNbiNotification(PublishNotificationProcessService service) {

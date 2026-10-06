@@ -42,10 +42,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.resiliency.ServiceResiliency;
@@ -250,8 +248,8 @@ public class ServiceListenerTest {
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.ONE)
                         .setNodeId(new NodeIdType("XPONDER-3-2"))
-                        .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
-                        .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                        .setTxDirection(Map.of(getTxDirection().key(), getTxDirection()))
+                        .setRxDirection(Map.of(getRxDirection().key(), getRxDirection()))
                         .build())
                 .setOperationalState(state)
                 .setAdministrativeState(adminStates)
@@ -264,8 +262,8 @@ public class ServiceListenerTest {
                 .setServiceFormat(ServiceFormat.Ethernet)
                 .setServiceRate(Uint32.ONE)
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
-                .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
-                .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
+                .setTxDirection(Map.of(getTxDirection().key(), getTxDirection()))
+                .setRxDirection(Map.of(getRxDirection().key(), getRxDirection()));
     }
 
     private TxDirection getTxDirection() {

@@ -26,7 +26,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev24
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.SoftConstraints;
 
 /**
- * Class to test downgrading and updating Constraints .
+ * Class to test downgrading and updating Constraints.
+ *
  * @author Ahmed Helmy ( ahmad.helmy@orange.com )
  * @author Gilles Thouenon (gilles.thouenon@orange.com)
  */
