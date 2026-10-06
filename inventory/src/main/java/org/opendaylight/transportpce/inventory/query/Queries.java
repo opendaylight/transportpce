@@ -815,6 +815,7 @@ public final class Queries {
         private String schema;
 
         private Query() {
+            this.sql = "";
             this.schema = "";
         }
 
@@ -1056,7 +1057,7 @@ public final class Queries {
 
         public String get() {
             Preconditions.checkArgument(!Strings.isNullOrEmpty(this.sql), "No query selected");
-            return String.format(this.sql, this.schema.concat("."));
+            return this.sql.formatted(this.schema.concat("."));
         }
     }
 }
