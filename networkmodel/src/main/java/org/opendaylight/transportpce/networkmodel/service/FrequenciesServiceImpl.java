@@ -111,6 +111,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update frequency map for nodes and tp in atozDirection and ztoadirection.
+     *
      * @param atoZDirection AToZDirection
      * @param ztoADirection ZToADirection
      * @param used used boolean true if frequencies are used, false otherwise.
@@ -160,6 +161,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get network node with nodeId from datastore.
+     *
      * @param nodeId String
      * @return Node1, null otherwise.
      */
@@ -189,6 +191,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get common network node with nodeId from datastore.
+     *
      * @param nodeId String
      * @return Node1, null otherwise.
      */
@@ -221,6 +224,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Set frequency map for nodes in nodeIds.
+     *
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
      * @param nodeIds List of node id
@@ -234,6 +238,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get a network termination point for nodeId and tpId.
+     *
      * @param nodeId String
      * @param tpId String
      * @return network termination point, null otherwise
@@ -260,6 +265,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get a common network termination point for nodeId and tpId.
+     *
      * @param nodeId String
      * @param tpId String
      * @return common network termination point, null otherwise
@@ -293,6 +299,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update availFreqMapsMap for min and max frequencies for termination point in tpIds.
+     *
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
      * @param rate Uint32
@@ -406,6 +413,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update availFreqMapsMap for min and max frequencies for nodes in nodeIds.
+     *
      * @param nodeIds  List of node id
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -460,6 +468,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get list of NodeIdPair from atoZDirection.
+     *
      * @param atoZDirection AToZDirection
      * @return List of NodeIdPair
      */
@@ -484,6 +493,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Get list of NodeIdPair from ztoADirection.
+     *
      * @param ztoADirection ZToADirection
      * @return List of NodeIdPair
      */
@@ -508,6 +518,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update Wavelength for xpdr port attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -541,6 +552,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update Wavelength for xpdr network attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -575,6 +587,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for pp attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -600,6 +613,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for cp attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -625,6 +639,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for ctp attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -650,6 +665,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for rxtp attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -675,6 +691,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for txtp attributes.
+     *
      * @param networkTerminationPoint TerminationPoint1
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -700,6 +717,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for srg attributes of srgAttributes.
+     *
      * @param srgAttributes SrgAttributes
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -723,6 +741,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update freqMaps for degree attributes of degreeAttributes.
+     *
      * @param degreeAttributes DegreeAttributes
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
@@ -746,6 +765,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update availFreqMapsMap for min and max frequencies for cband AvailFreqMaps.
+     *
      * @param atozMinFrequency BigDecimal
      * @param atozMaxFrequency BigDecimal
      * @param availFreqMapsMap Map
