@@ -26,6 +26,7 @@ public interface FrequencyRange {
      * Returns a BitSet of grid slots that fall within this frequency range.
      *
      * <p>0 = outside range, 1 = within range.
+     *
      * @param slotWidthGranularityGHz frequency width of each slot.
      * @param edgeFrequencyTHz lowest frequency on the spectrum grid.
      * @param effectiveBits nr of bits in the spectrum grid.

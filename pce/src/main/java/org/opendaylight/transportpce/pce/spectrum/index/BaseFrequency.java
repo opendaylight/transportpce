@@ -21,16 +21,14 @@ public class BaseFrequency implements Base {
         BigDecimal granularity = (BigDecimal.valueOf(frequencyGranularityGHz)).multiply(BigDecimal.valueOf(0.001));
 
         if (referenceFrequency.compareTo(edgeFrequency) < 0) {
-            throw new NoIndexFoundException(
-                    String.format("Cannot find an index for %s (THz) since it's lower than the edge frequency %s (THz)",
-                            referenceFrequencyTHz, edgeFrequencyTHz));
+            throw new NoIndexFoundException("Cannot find an index for %s (THz) since it's lower than the edge "
+                    + "frequency %s (THz)".formatted(referenceFrequencyTHz, edgeFrequencyTHz));
         }
 
         if (referenceFrequency.subtract(edgeFrequency).remainder(granularity).compareTo(BigDecimal.ZERO) != 0) {
-            throw new NoIndexFoundException(
-                    String.format("Cannot find an index for %s (THz) since it's not on a grid separated by %s (GHz)"
-                                    + " starting with the edge frequency %sTHz (THz)",
-                            referenceFrequencyTHz, frequencyGranularityGHz, edgeFrequencyTHz));
+            throw new NoIndexFoundException("Cannot find an index for %s (THz) since it's not on a grid separated by "
+                    + "%s (GHz) starting with the edge frequency %sTHz (THz)"
+                    .formatted(referenceFrequencyTHz, frequencyGranularityGHz, edgeFrequencyTHz));
         }
 
         return referenceFrequency.subtract(edgeFrequency).divide(granularity).intValue();

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -152,7 +153,7 @@ public class PostAlgoPathValidator {
                             StringConstants.SERVICE_DIRECTION_ZA, cu);
                     if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
                             || margin2 == Double.NEGATIVE_INFINITY) {
-                        pceResult.error(String.format("OSNR out of range (%s - %s)", margin1, margin2));
+                        pceResult.error("OSNR out of range (%s - %s)".formatted(margin1, margin2));
                         pceResult.setLocalCause(PceResult.LocalCause.OUT_OF_SPEC_OSNR);
                         return pceResult;
                     }
@@ -202,8 +203,8 @@ public class PostAlgoPathValidator {
                             + "TAPI PCE OPER MODE tribPort and tribSlot do not need to be qualified");
                         return pceResult;
                     } else {
-                        pceResult.error(String.format("no trib-port/trib-slot found :Unsupported service type %s",
-                            serviceType));
+                        pceResult.error("no trib-port/trib-slot found :Unsupported service type %s"
+                                .formatted(serviceType));
                         LOG.warn("In PostAlgoPathValidator did not succed finding trib-port/slot for serviceType {}, "
                             + "found {}", serviceType, path);
                         return pceResult;
@@ -231,7 +232,7 @@ public class PostAlgoPathValidator {
                 LOG.info("In PostAlgoPathValidator: ODU4/ODUCn path found {}", path);
                 return pceResult;
             default:
-                pceResult.error(String.format("Unsupported service type %s", serviceType));
+                pceResult.error("Unsupported service type %s".formatted(serviceType));
                 LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
                     serviceType, path);
                 return pceResult;
@@ -406,14 +407,14 @@ public class PostAlgoPathValidator {
                     commonEdgeTsPoolList.add(integer);
                 }
             }
-            Collections.sort(commonEdgeTsPoolList);
+            commonEdgeTsPoolList.sort(Comparator.naturalOrder());
             List<Uint16> commonGoodStartEdgeTsPoolList = new ArrayList<>();
             for (Uint16 startEdgeTsPool : commonEdgeTsPoolList) {
                 if (Integer.valueOf(1).equals(startEdgeTsPool.toJava() % nbSlot) || nbSlot == 1) {
                     commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
                 }
             }
-            Collections.sort(commonGoodStartEdgeTsPoolList);
+            commonGoodStartEdgeTsPoolList.sort(Comparator.naturalOrder());
             boolean goodTsList = false;
             List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 goodStartTsPool : commonGoodStartEdgeTsPoolList) {

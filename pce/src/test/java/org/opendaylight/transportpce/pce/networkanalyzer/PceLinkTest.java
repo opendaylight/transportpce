@@ -241,7 +241,7 @@ public class PceLinkTest extends AbstractTest {
 
     private static LinkBuilder createLinkBuilder(boolean pmdpresent, boolean omspresent, double length,
             String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
-        LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
+        LinkId linkId = new LinkId(LINK_ID_FORMAT.formatted(srcNode, srcTp, destNode, destTp));
         LinkBuilder linkBuilder = new LinkBuilder()
             .setSource(
                 new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(new TpId(srcTp)).build())

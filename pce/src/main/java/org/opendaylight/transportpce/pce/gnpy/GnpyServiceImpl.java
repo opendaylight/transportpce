@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -147,7 +146,7 @@ public class GnpyServiceImpl {
         if (listAtoZ.isEmpty()) {
             extractHardConstraints(pceHardConstraints);
         } else {
-            Collections.sort(listAtoZ, atoZComparator);
+            listAtoZ.sort(atoZComparator);
             extractRouteObjectIcludeAtoZ(listAtoZ);
         }
 
@@ -187,7 +186,7 @@ public class GnpyServiceImpl {
         if (listZtoA.isEmpty()) {
             extractHardConstraints(pceHardConstraints);
         } else {
-            Collections.sort(listZtoA, ztoAComparator);
+            listZtoA.sort(ztoAComparator);
             extractRouteObjectIcludeZtoA(listZtoA);
         }
 
@@ -291,7 +290,7 @@ public class GnpyServiceImpl {
                 return idx;
             }
         }
-        throw new GnpyException(String.format("In gnpyServiceImpl : NodeRef %s does not exist",nodeRef));
+        throw new GnpyException("In gnpyServiceImpl : NodeRef %s does not exist".formatted(nodeRef));
     }
 
     //Add a link to the route object
@@ -306,7 +305,7 @@ public class GnpyServiceImpl {
         }
         List<String> listSubLink = this.mapLinkFiber.get(linkId);
         if (listSubLink == null) {
-            throw new GnpyException(String.format("In gnpyServiceImpl addNodeRouteObject : no sublink in %s",linkId));
+            throw new GnpyException("In gnpyServiceImpl addNodeRouteObject : no sublink in %s".formatted(linkId));
         }
         for (String subLink : listSubLink) {
             RouteObjectIncludeExclude routeObjectIncludeExclude =
