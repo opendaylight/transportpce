@@ -203,8 +203,8 @@ public class CrossConnectImpl221 {
             RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();
             GetConnectionPortTrailOutput connectionPortTrailOutput = connectionPortTrailOutputRpcResult.getResult();
             if (connectionPortTrailOutput == null) {
-                throw new OpenRoadmInterfaceException(String.format(
-                    "RPC get connection port trail called on node %s returned null!", nodeId));
+                throw new OpenRoadmInterfaceException(
+                        "RPC get connection port trail called on node %s returned null!".formatted(nodeId));
             }
             LOG.info("Getting port trail for node {}'s connection number {}", nodeId, connectionName);
             final List<Ports> ports = connectionPortTrailOutput.getPorts();

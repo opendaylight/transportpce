@@ -475,7 +475,7 @@ public class PortMappingVersion221 {
                     cp : srgCpEntry.getValue()) {
                 String circuitPackName = cp.getCircuitPackName();
                 List<Ports> portList = getPortList(circuitPackName, nodeId);
-                Collections.sort(portList, new SortPort221ByName());
+                portList.sort(new SortPort221ByName());
                 for (Ports port : portList) {
                     if (!checkPortQual(port, circuitPackName, nodeId)) {
                         continue;
