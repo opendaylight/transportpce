@@ -49,8 +49,7 @@ public class Connection implements Transaction {
 
     @Override
     public String description() {
-        return String.format("Connection %s connection number %s isOtn %s", deviceId,
-                connectionNumber, isOtn);
+        return "Connection %s connection number %s isOtn %s".formatted(deviceId, connectionNumber, isOtn);
     }
 
     @Override

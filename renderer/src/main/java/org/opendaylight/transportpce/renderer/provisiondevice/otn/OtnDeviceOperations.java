@@ -17,6 +17,7 @@ public interface OtnDeviceOperations {
 
     /**
      * This method checks if the client port can be used or not.
+     *
      * @param circuitPackName circuit pack name of the client port
      * @param portName port name of the client port
      * @param capacity rate of the service needed
@@ -30,7 +31,7 @@ public interface OtnDeviceOperations {
     /**
      * This method retrieves the possible network ports.
      *
-     *<p>checks for the possible network ports in odu-switching-pool
+     * <p>checks for the possible network ports in odu-switching-pool
      *
      * @param circuitPackName Circuit pack name of the client port
      * @param portName port name of the client port

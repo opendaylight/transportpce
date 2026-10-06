@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
@@ -157,12 +156,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         Map<NodeInterfaceKey, NodeInterface> nodeInterfaces = new ConcurrentHashMap<>();
-        Set<String> nodesProvisioned = Sets.newConcurrentHashSet();
+        Set<String> nodesProvisioned = ConcurrentHashMap.newKeySet();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
-            boolean isOpenConfig = false;
             String nodeId = node.getNodeId();
             LOG.info("Starting provisioning for node : {}", nodeId);
             AEndApiInfo apiInfoA = null;
@@ -182,6 +180,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
             Set<String> portIds = new HashSet<>();
             String transceiver = "";
+            boolean isOpenConfig = false;
 
             try {
                 // if the node is currently mounted then proceed
@@ -523,8 +522,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     try {
                         this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     } catch (OpenRoadmInterfaceException e) {
-                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId,
-                                nodeId);
+                        String result = "Failed to delete interface %s on node %s!".formatted(interfaceId, nodeId);
                         success.set(false);
                         LOG.error(result, e);
                         results.add(result);
@@ -860,8 +858,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         Mapping oldMapping = this.portMapping.getMapping(input.getNodeId(), input.getLogicalConnectionPoint());
         if (oldMapping == null) {
             return new CreateOtsOmsOutputBuilder()
-                    .setResult(String.format("Logical Connection point %s does not exist for %s",
-                            input.getLogicalConnectionPoint(), input.getNodeId()))
+                    .setResult("Logical Connection point %s does not exist for %s"
+                            .formatted(input.getLogicalConnectionPoint(), input.getNodeId()))
                     .setSuccess(false)
                     .build();
         }
@@ -880,8 +878,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             count++;
             if (count >= 6) {
-                String result = String.format("Unable to get ots interface from mapping %s - %s",
-                        oldMapping.getLogicalConnectionPoint(), input.getNodeId());
+                String result = "Unable to get ots interface from mapping %s - %s"
+                        .formatted(oldMapping.getLogicalConnectionPoint(), input.getNodeId());
                 LOG.error(result);
                 return new CreateOtsOmsOutputBuilder().setResult(result).setSuccess(false).build();
             }
@@ -891,13 +889,13 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String omsInterface = this.openRoadmInterfaceFactory.createOpenRoadmOmsInterface(input.getNodeId(),
                 newMapping);
         if (omsInterface == null) {
-            String result = String.format("Fail to create OpenRoadmOms Interface for node : %s", input.getNodeId());
+            String result = "Fail to create OpenRoadmOms Interface for node : %s".formatted(input.getNodeId());
             LOG.error(result);
             return new CreateOtsOmsOutputBuilder().setResult(result).setSuccess(false).build();
         }
         return new CreateOtsOmsOutputBuilder()
-                .setResult(String.format("Interfaces %s - %s successfully created on node %s",
-                        otsInterface, omsInterface, input.getNodeId()))
+                .setResult("Interfaces %s - %s successfully created on node %s"
+                        .formatted(otsInterface, omsInterface, input.getNodeId()))
                 .setSuccess(true)
                 .build();
     }
