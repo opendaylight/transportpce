@@ -105,10 +105,11 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * PceTapiLink joining 2 PceTapiOpticalNodes is an abstraction of a physical link (Graph edge for path computation).
-     *  As far as the 2 PceNodes on both end of the link are PceTapiOpticalNodes, the link corresponds to a physical
-     *  optical link (Photonic layer). Considering OpenROADM representation, it can be an ADD/Drop/Express link for
-     *  ROADM's internal links, a ROADM/ILA to ROADM/ILA link for physical optical links interconnecting ROADMs, or an
-     *  XPONDER to ROADM link.
+     * As far as the 2 PceNodes on both end of the link are PceTapiOpticalNodes, the link corresponds to a physical
+     * optical link (Photonic layer). Considering OpenROADM representation, it can be an ADD/Drop/Express link for
+     * ROADM's internal links, a ROADM/ILA to ROADM/ILA link for physical optical links interconnecting ROADMs, or an
+     * XPONDER to ROADM link.
+     *
      * @param topologyId    A Uuid (TopologyKey) used to define the topology the link belongs to
      * @param link          A link of the T-API topology.
      * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
@@ -186,9 +187,10 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * PceTapiLink joining 2 TapiOtnNodes is an abstraction of an OTN link (Graph edge for path computation).
-     *  As far as the 2 PceNodes on both end of the link are PceTapiOtnNodes, the link corresponds to an OTN link which
-     *  can be of different sub-layers/LayerProtocolQualifier (OTU4, OTUCN, ODUCN, ODU4/3/2).
-     *  In T-API topology, OTN links are Top-connections established between ConnectionEndPoints.
+     * As far as the 2 PceNodes on both end of the link are PceTapiOtnNodes, the link corresponds to an OTN link which
+     * can be of different sub-layers/LayerProtocolQualifier (OTU4, OTUCN, ODUCN, ODU4/3/2).
+     * In T-API topology, OTN links are Top-connections established between ConnectionEndPoints.
+     *
      * @param topologyId    A Uuid (TopologyKey) used to define the topology the link belongs to.
      * @param conn           A connection of the T-API connectivity-context.
      * @param nodeX         A PceNode (TapiPceOtnNode) corresponding to one end of the PceTapiLink,
@@ -266,7 +268,8 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Generic PceTapiLink joining 2 Tapi Nodes is an abstraction of topological link (Graph edge for path computation).
-     *  Generic Link defined between 2 PceNodes that could be either a physical or an OTN link.
+     * Generic Link defined between 2 PceNodes that could be either a physical or an OTN link.
+     *
      * @param linkName      The link Name used in the T-API topology.
      * @param linkUuid      The link Uuid used to define uniquely the link in the T-API topology.
      * @param sourceTpUuid  The source Tp Uuid.
@@ -312,6 +315,7 @@ public class PceTapiLink implements Serializable, PceLink {
      * The generated PceTapiLink corresponds the the reverse link of the pceLink provided as input parameter.
      * LinkName and Uuid are provided as input to make sure they are unique and correspond to what is generated in PCE,
      * as they can not be easily deduced from original PceLink name and Uuid.
+     *
      * @param pceLink       The revert PceLink used as a base to construct the opposite PceLink.
      * @param linkName      The link Name to be used.
      * @param linkUuid      The link Uuid to be used.
@@ -372,6 +376,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Sets availableBandwidth from the source Tp AvailableCapacity container for OTN Links.
+     *
      * @param nodeX         A PceNode (TapiPceOtnNode) corresponding to one end of the PceTapiLink,
      * @param nodeY         A PceNode (TapiPceOtnNode) corresponding to the other end of the PceTapiLink.
      */
@@ -393,6 +398,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Qualifies the link type from the Tp Type of the Origin NEP for physical optical links.
+     *
      * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
      * @param nodeY         A PceNode (TapiPceOpticalNode) corresponding to the other end of the PceTapiLink.
      */
@@ -454,6 +460,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Set main Node parameters for both source and Destination of the PceLink.
+     *
      * @param nodeX         A PceNode corresponding to one end of the PceTapiLink,
      * @param nodeY         A PceNode corresponding to the other end of the PceTapiLink.
      */
@@ -468,6 +475,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Defines which ends is the source/destination, sets sourceindex  and source/destTpId accordingly.
+     *
      * @param topoIid       TopologyKey (Uuid) of the Topology the node belongs to.
      * @param linkUuid      Uuid of the Link,
      * @param dir           ForwardingDirection as defined by T-API,
@@ -611,6 +619,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Retrieve the OtsMediaConnectionEndPointSpec of source/destination CEPs and sets link's params accordingly.
+     *
      * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
      * @param nodeY         A PceNode (TapiPceOpticalNode) corresponding to the other end of the PceTapiLink.
      */
@@ -633,6 +642,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Calculates latency from length for physical optical links.
+     *
      * @param fiberLength   The link length expressed in kms.
      * @return              Long the latency expressed in seconds.
      */
@@ -644,7 +654,8 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Compute the main parameters of line physical Optical Links from preset T-API CEP OtsMediaCepSpecs.
-     *  Main link physical parameters includes length, loss, pmd and cd.
+     * Main link physical parameters includes length, loss, pmd and cd.
+     *
      * @param link The Link as defined in T-API topology.
      */
     private void qualifyLineLink(Link link) {
@@ -760,6 +771,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Calculates typical launch power reference according to fiber type for line physical optical links.
+     *
      * @param fiberType     FiberType as coded in OpenROADM enumeration.
      * @return              Double corresponding to typical launch power expressed in dBm.
      */
@@ -789,6 +801,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Provides typical Chromatic Dispersion value (ps/km) according to fiber type for line physical optical links.
+     *
      * @param fiberType     FiberType as coded in OpenROADM enumeration.
      * @return              Double corresponding to typical Chromatic Dispersion expressed in ps/nm.
      */
@@ -828,7 +841,8 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Evaluates the validity of line physical optical links.
-     *   Checks generic parameters partially relying on checkParams for parameters common to optical and OTN links.
+     * Checks generic parameters partially relying on checkParams for parameters common to optical and OTN links.
+     *
      * @return      Boolean set to true if the link is considered as valid, false otherwise.
      */
     private boolean isPhyValid() {
@@ -849,8 +863,9 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Evaluates the validity of OTN links.
-     *   Checks generic parameters (available bandwidth, connection LayerProtocQualifier), partially relying on
-     *   checkParams for parameters common to optical and Otn links.
+     * Checks generic parameters (available bandwidth, connection LayerProtocQualifier), partially relying on
+     * checkParams for parameters common to optical and Otn links.
+     *
      * @param serviceType   The serviceType used to check whether the evaluated OTN link (a connection) is valid or not
      *                      for supporting the corresponding service.
      * @return      Boolean set to true if the link is considered as valid, false otherwise.
@@ -939,8 +954,9 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Check generic parameters common to optical and OTN links to evaluate link validity.
-     *   Checked parameters include : linkId, linkType, administrative and operational states, the presence of source
-     *   and destination Node/tpIds.
+     * Checked parameters include : linkId, linkType, administrative and operational states, the presence of source
+     * and destination Node/tpIds.
+     *
      * @return  Boolean set to true if the link is considered as valid, false otherwise.
      */
     private boolean checkParams() {
@@ -1117,6 +1133,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Provides the LinkName corresponding to the Link.
+     *
      * @return      Name of the link.
      */
     public Name getLinkName() {
@@ -1125,6 +1142,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Provides for OTN link the client Link if the link corresponds to a server.
+     *
      * @return String corresponding to the client link/connection.
      */
     public String getClient() {
@@ -1143,6 +1161,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Allows setting the client link (a TOP-connection) for OTN links.
+     *
      * @param client String corresponding to client link name.
      */
     public void setClient(String client) {
@@ -1277,6 +1296,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Provides Layer Protocol Name of the link.
+     *
      * @return  LayerProtocolName of the link (either ETH, DSR, PHOTONIC_MEDIA or DIGITAL_OTN).
      */
     public LayerProtocolName getLpn() {
@@ -1345,6 +1365,7 @@ public class PceTapiLink implements Serializable, PceLink {
 
     /**
      * Provides the Uuid of the topology the link belongs to.
+     *
      * @return Uuid of the topology the node belongs to.
      */
     public Uuid getTopologyUuid() {

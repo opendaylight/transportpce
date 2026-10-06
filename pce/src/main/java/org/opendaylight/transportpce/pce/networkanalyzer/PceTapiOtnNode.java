@@ -206,6 +206,7 @@ public class PceTapiOtnNode implements PceNode {
     /**
      * PceTapiOtnNode is an abstracted Node in the OTN layer corresponding to a Graph Vertex for path computation.
      *  Corresponds to the OTN/DSR part of a XPONDER.
+     *
      * @param serviceType   The service type which for PceTapiOtnNodes is an OTN service : 1GE, 10GE, 100GEm, 100GEs,
      *                      ODU4, ODUCN.
      * @param node          The Associated node in Tapi-Topology DataStore from which the Pce Node is abstracted.
@@ -245,6 +246,7 @@ public class PceTapiOtnNode implements PceNode {
      *   List availableXpdrClientTps is filled only with Client NEPs that are in visibility of Network through valid
      *   Network NEPs.
      *   Both lists are purged from irrelevant NEPs. Internal connectivity is checked calling checkSwPool
+     *
      * @param mode  Mode of operation that defines whether the XPonder is considered as an end node or an intermediate
      *              node for path computation : AZ_MODETYPE/ INTERMEDIATE_MODETYPE.
      */
@@ -357,6 +359,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Checks the validity of a NEP/CEP, according to its LayerProtocolQualifier and its AvailablePayloadStructure.
+     *
      * @param bpn           The input BasePceNep to check.
      * @param isHighOrder   Boolean indicating whether the nEP/CEP is is of high or low Order.
      * @param isDSR         Boolean indicating if a NEP/CEP is a Client DRS NEP.
@@ -414,6 +417,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Validates/invalidates a XPONDER node calling initXndrTp() that checks the presence of required NEPs.
+     *
      * @param endNodeId   NodeId of the service end potentially associated with the XPONDER (if the XPONDER is not used
      *                    as a regenerator.
      * @return            Boolean corresponding to the status of the validation.
@@ -437,6 +441,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Allows checking the validity of a NEP whether the service end correspond to the NEP or has kindred relationships.
+     *
      * @param bpn   The BasePceNep to check.
      * @return      Boolean : true if the NEP/CEP has some kindred relationship with the service end that could be
      *              either a SIP, CEP or NEP.
@@ -465,6 +470,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Provides the child CEP's Uuid of an input NEP.
+     *
      * @param nepUuid  The NEP Uuid provided as an input.
      * @return      Uuid of the CEP that corresponds to child of the input NEP.
      */
@@ -494,6 +500,7 @@ public class PceTapiOtnNode implements PceNode {
      * Provides the NEP Uuid that corresponds to a BasePceNep, whether it is the NEP itself or its parent NEP.
      *  Checks whether it finds the Uuid provided as an input in the Node Map of OwnedNodeEdgePoint,
      *  or if the Uuid corresponds to a CEP. In the last case returns the CEP's parent NEP Uuid.
+     *
      * @param nepCepUuid  The Uuid of a BasePceNep.
      * @return      Uuid of the NEP that corresponds to the parent of the BasePceNep or the NEP Uuid itself, if the
      *              the BasePceNep is a NEP.
@@ -527,6 +534,7 @@ public class PceTapiOtnNode implements PceNode {
      *   Analyze Node internal connectivity scanning NRGs and if needed IRGs and returns a boolean that reflect the
      *   ability of the node to interconnect the client and network tps provided as input list.
      *   Populates lists usableXpdrClientTps and usableXpdrNWTps.
+     *
      * @param netwTps       A list of Network BasePceNeps
      * @param clientTps     A list of Client BasePceNeps
      * @return              Boolean set to true if the connectivity defined through the Node's NRGs and IRGs allows
@@ -661,6 +669,7 @@ public class PceTapiOtnNode implements PceNode {
      *   Check consistency of the request service Type, checks modeType that defines how the XPONDER shall be considered
      *   and calls either checkIntermediateSwPool() (if the XPONDER is considered as a regenerator) or
      *   checkAZSwPool() if it is considered as an end of the service.
+     *
      * @param netwTps       List of BasePceNEp corresponding to Network ports
      * @param clientTps     List of BasePceNEp corresponding to Client ports
      * @return              True if node characteristics are consistent with the service request and the node provides
@@ -697,6 +706,7 @@ public class PceTapiOtnNode implements PceNode {
     /**
      * Verifies that Node's internal connectivity allows cross-connecting the network ports provided in the input list.
      *   Also populates list usableXpdrNWTps.
+     *
      * @param netwTps       List of BasePceNEp corresponding to Network ports
      * @return              True if the node provides adequate internal connectivity, false if the other case.
      */
@@ -776,6 +786,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Provides NEP available bandwidth if the relevant augmentation is present in the OwnedNodeEdgePoint of the topo.
+     *
      * @param nepCepUuid    The Uuid of the NEP
      * @return              Double value of the available bandwidth if present in the OwnedNodeEdgePoint.
      */
@@ -807,6 +818,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Checks basic parameter of a node (NodeType, presence of Supporting Node and Clli Node).
+     *
      * @param serviceType The type of service which shall correspond to either a DSR or an OTN service type for the node
      *                    to be declared as Valid
      * @return Boolean set to true if the Node basic parameters are valid.
@@ -969,6 +981,7 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Provides the Uuid of the topology the node belongs to.
+     *
      * @return  Uuid of the nodes's topology.
      */
     public Uuid getTopoUuid() {

@@ -31,6 +31,7 @@ public interface SpectrumSet {
     /**
      * Returns the Bitset intersection of the frequency interval collection
      * to the available BitSet.
+     *
      * @param effectiveBits the effective number of bits, i.e. entire BitSet length of which
      *                      the intervals are a subset of.
      */
@@ -38,6 +39,7 @@ public interface SpectrumSet {
 
     /**
      * Turn a frequency interval into a BitSet.
+     *
      * @param intervals the frequency interval collection.
      * @param effectiveBits the effective number of bits, i.e. entire BitSet length of which
      *                      the intervals are a subset of.

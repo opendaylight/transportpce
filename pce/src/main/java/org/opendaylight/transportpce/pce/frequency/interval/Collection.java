@@ -20,6 +20,7 @@ public interface Collection {
      *
      * <p>Only adds the interval to the collection if
      * the interval isn't already present.
+     *
      * @return true if the interval was added.
      */
     boolean add(Interval interval);
@@ -34,6 +35,7 @@ public interface Collection {
 
     /**
      * Returns the Bitset subset.
+     *
      * @see #subset(BitSet)
      */
     BitSet subset(Collection collection);
@@ -46,6 +48,7 @@ public interface Collection {
 
     /**
      * Returns the Bitset intersection.
+     *
      * @see #intersection(BitSet)
      */
     BitSet intersection(Collection collection);

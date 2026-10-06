@@ -308,7 +308,7 @@ public class PceSendingPceRPCs {
             LOG.info("In pceSendingPceRPC: the new path computed by GNPy is not valid");
             this.success = false;
             if (rc.getLocalCause() != null) {
-                this.message = String.format("No path available (%s)", rc.getLocalCause());
+                this.message = "No path available (%s)".formatted(rc.getLocalCause());
                 LOG.error("No path available ({})", rc.getLocalCause());
             } else {
                 this.message = "No path available (the new path computed by GNPy is not valid)";

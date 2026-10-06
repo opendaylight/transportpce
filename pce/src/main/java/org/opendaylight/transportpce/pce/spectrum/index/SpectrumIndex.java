@@ -20,8 +20,8 @@ public class SpectrumIndex implements Index {
             int centerFrequencySlotWidth, int baseFrequencySlotIndex, int serviceSlotWidth) {
 
         if (serviceSlotWidth % 2 != 0) {
-            throw new ServiceSlotWidthException(String.format("Cannot process an odd service slot width: %s",
-                    serviceSlotWidth));
+            throw new ServiceSlotWidthException("Cannot process an odd service slot width: %s"
+                    .formatted(serviceSlotWidth));
         }
 
         int slotIndexCandidate = (baseFrequencySlotIndex % centerFrequencySlotWidth);
@@ -42,8 +42,8 @@ public class SpectrumIndex implements Index {
             int effectiveBits) {
 
         if (serviceSlotWidth % 2 != 0) {
-            throw new ServiceSlotWidthException(String.format("Cannot process an odd service slot width: %s",
-                    serviceSlotWidth));
+            throw new ServiceSlotWidthException("Cannot process an odd service slot width: %s"
+                    .formatted(serviceSlotWidth));
         }
 
         int slotIndexCandidate =

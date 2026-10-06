@@ -344,7 +344,7 @@ public class PceCalculation {
 
         if (readTopology(nwInstanceIdentifier) == null) {
             LOG.error("PceCalculation:readMdSal: network is null: {}", nwInstanceIdentifier);
-            subscriber.event(Level.ERROR, String. format("Network is null: %s", nwInstanceIdentifier));
+            subscriber.event(Level.ERROR, "Network is null: %s".formatted(nwInstanceIdentifier));
             return false;
         }
 
@@ -406,7 +406,7 @@ public class PceCalculation {
             }
             if (conCont == null) {
                 LOG.error("PceCalculation:readMdSalTapi : no ConnectivityContext ");
-                subscriber.event(Level.ERROR, String. format("ConnectivityContext is null: %s", conContIID));
+                subscriber.event(Level.ERROR, "ConnectivityContext is null: %s".formatted(conContIID));
                 return false;
             }
             for (Entry<ConnectionKey, Connection> con : conCont.getConnection().entrySet()) {
@@ -474,7 +474,7 @@ public class PceCalculation {
         }
         if (topo == null) {
             LOG.error("PceCalculation:readTapiTopology : network is null for topology: {}", topoUuid);
-            subscriber.event(Level.ERROR, String. format("Network is null: %s", topoIID));
+            subscriber.event(Level.ERROR, "Network is null: %s".formatted(topoIID));
             return;
         }
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node>
@@ -1945,6 +1945,7 @@ public class PceCalculation {
 
     /**
      * Get mc capability for device.
+     *
      * @param deviceNodeId String
      * @param nodeId NodeId
      * @return mc capability

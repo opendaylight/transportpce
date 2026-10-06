@@ -75,9 +75,9 @@ public final class NodeUtils {
 
     public static LinkBuilder createLinkBuilder(boolean omsPresent,
             String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
-        LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
+        LinkId linkId = new LinkId(LINK_ID_FORMAT.formatted(srcNode, srcTp, destNode, destTp));
         var oppLink1 = link1Builder
-            .setOppositeLink(new LinkId(String.format(LINK_ID_FORMAT, destNode, destTp, srcNode, srcTp)))
+            .setOppositeLink(new LinkId(LINK_ID_FORMAT.formatted(destNode, destTp, srcNode, srcTp)))
             .build();
         LinkBuilder linkBldr =
             new LinkBuilder()

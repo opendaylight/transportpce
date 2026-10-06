@@ -24,7 +24,7 @@ public class ValidFormat implements Format {
             return true;
         }
 
-        observer.error(String.format("Service format %s does not support manually setting slot-width.", serviceFormat));
+        observer.error("Service format %s does not support manually setting slot-width.".formatted(serviceFormat));
         return false;
     }
 }
