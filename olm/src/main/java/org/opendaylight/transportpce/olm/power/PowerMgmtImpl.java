@@ -156,8 +156,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             Nodes inputNode = this.portMapping.getNode(nodeId);
             if (inputNode == null || inputNode.getNodeInfo() == null) {
                 LOG.error("OLM-PowerMgmtImpl : Error retrieving mapping node for {}", nodeId);
-                errorSubscriber.error(
-                    String.format("Error retrieving mapping node for %s", nodeId));
+                errorSubscriber.error("Error retrieving mapping node for %s".formatted(nodeId));
                 return false;
             }
             switch (inputNode.getNodeInfo().getNodeType()) {
@@ -178,7 +177,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     BigDecimal powerVal = getXpdrPowerValue(inputNode, destTpId, nodeId,
                             input.getNodes().get(i + 1).getSrcTp(), input.getNodes().get(i + 1).getNodeId());
                     if (powerVal == null) {
-                        errorSubscriber.error(String.format("No transponder power found for node %s", nodeId));
+                        errorSubscriber.error("No transponder power found for node %s".formatted(nodeId));
                         return false;
                     }
                     boolean isOpenConfig = inputNode.getDatamodelType() != null
@@ -243,12 +242,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                     if (spanLossTx == null || spanLossTx.intValue() < 0 || spanLossTx.intValue() > 27) {
                         LOG.error("Power Value is null: spanLossTx null or out of openROADM range [0,27] {}",
                             spanLossTx);
-                        errorSubscriber.error(
-                            String.format("spanLossTx is null or negative: %s (node %s, dest TP id %s)",
-                                spanLossTx,
-                                nodeId,
-                                destTpId)
-                        );
+                        errorSubscriber.error("spanLossTx is null or negative: %s (node %s, dest TP id %s)"
+                                .formatted(spanLossTx, nodeId, destTpId));
                         return false;
                     }
                     Decimal64 powerValue = Decimal64.valueOf(getRdmPowerValue(spanLossTx, input)).scaleTo(2);
@@ -257,11 +252,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 connectionNumber)) {
                             LOG.error("Set Power failed for Roadm-connection: {} on Node: {}",
                                     connectionNumber, nodeId);
-                            errorSubscriber.error(
-                                String.format("Set Power failed for Roadm-connection: %s on Node: %s",
-                                    connectionNumber,
-                                    nodeId)
-                            );
+                            errorSubscriber.error("Set Power failed for Roadm-connection: %s on Node: %s"
+                                    .formatted(connectionNumber, nodeId));
                             return false;
                         }
                         LOG.info("Roadm-connection: {} updated ", connectionNumber);
@@ -275,10 +267,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 connectionNumber)) {
                             LOG.error("Set GainLoss failed for Roadm-connection: {} on Node: {}",
                                     connectionNumber, nodeId);
-                            errorSubscriber.error(String.format(
-                                "Set GainLoss failed for Roadm-connection: %s on Node: %s",
-                                connectionNumber, nodeId
-                            ));
+                            errorSubscriber.error("Set GainLoss failed for Roadm-connection: %s on Node: %s"
+                                    .formatted(connectionNumber, nodeId));
                             return false;
                         }
                     } catch (InterruptedException e) {
