@@ -207,9 +207,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         if (successValPowerCalculation) {
             powerSetupOutput.setResult(ResponseCodes.SUCCESS_RESULT);
         } else {
-            powerSetupOutput.setResult(
-                String.format("OLM power setup failed (%s)",
-                    errorSubscriber.last(Level.ERROR, "OLM power setup failed due to an unknown error.")
+            powerSetupOutput.setResult("OLM power setup failed (%s)"
+                    .formatted(errorSubscriber.last(Level.ERROR,
+                            "OLM power setup failed due to an unknown error.")
                 )
             );
         }
@@ -770,8 +770,8 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
         if (!realNode.isPresent() || (realNode.orElseThrow().getSupportingNode() == null)) {
             LOG.error("supporting node is null");
-            throw new IllegalArgumentException(
-                String.format("Could not find node %s, or supporting node is not present", mappedNodeId));
+            throw new IllegalArgumentException("Could not find node %s, or supporting node is not present"
+                    .formatted(mappedNodeId));
         }
         List<SupportingNode> collect = realNode.orElseThrow().nonnullSupportingNode().values().stream()
             .filter(node -> (node.getNetworkRef() != null)
@@ -779,8 +779,8 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 && (node.getNodeRef() != null) && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))
             .collect(Collectors.toList());
         if (collect.isEmpty() || (collect.size() > 1)) {
-            throw new IllegalArgumentException(String.format("Invalid support node count [%d] was found for node %s",
-                collect.size(), mappedNodeId));
+            throw new IllegalArgumentException("Invalid support node count [%d] was found for node %s"
+                    .formatted(collect.size(), mappedNodeId));
 
         }
         LOG.info("getRealNodeId - return {}", collect.iterator().next().getNodeRef().getValue());
