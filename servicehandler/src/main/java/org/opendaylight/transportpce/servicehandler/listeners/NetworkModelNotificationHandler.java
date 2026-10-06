@@ -82,6 +82,7 @@ public class NetworkModelNotificationHandler implements NetworkListener {
 
     /**
      * Process topology update result.
+     *
      * @param notification the result notification.
      */
     protected void updateServicePaths(TopologyUpdateResult notification) {
