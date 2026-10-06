@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -84,6 +83,7 @@ public class ConvertTopoORtoTapiNbi {
 
     /**
      * Instantiate an AbstractORTopoToNbi Object.
+     *
      * @param tapiTopoUuid Uuid of the generated topology provided in the input of GetTopologyDetails used in Builders.
      *        Considered Nodes and links are the ones present in OpenROADM topology.
      * @param tapiLink Instance of TapiLink leveraging its methods.
@@ -98,6 +98,7 @@ public class ConvertTopoORtoTapiNbi {
 
     /**
      * Populate tapiLinks from a list of ietf/OpenROADM links provided as the input of the method.
+     *
      * @param otnLinkMap Map of ietf/openroadm links provided as an input.
      */
     public void convertLinks(Map<
@@ -107,7 +108,7 @@ public class ConvertTopoORtoTapiNbi {
                 .networks.network.Link> otnLinkMap) {
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> otnLinkList = new ArrayList<>(otnLinkMap.values());
-        Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
+        otnLinkList.sort((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} otn links", otnLinkMap.size() / 2);
         for (var otnlink : otnLinkList) {
@@ -279,7 +280,7 @@ public class ConvertTopoORtoTapiNbi {
                 uuidNameMap.put(
                     String.join("--", nodeUuid, nep.getUuid().getValue()),
                     String.join("--", nodeName,
-                        nep.getName().get(new NameKey(nep.getName().keySet().stream().findFirst().orElseThrow()))
+                        nep.getName().get(nep.getName().keySet().stream().findFirst().orElseThrow())
                             .getValue()));
             }
         }

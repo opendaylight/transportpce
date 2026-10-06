@@ -92,6 +92,7 @@ public class TapiRendererNotificationHandler {
 
     /**
      * Process service implementation result for serviceName.
+     *
      * @param notification RendererRpcResultSp
      */
     private void onServiceImplementationResult(RendererRpcResultSp notification) {
@@ -140,6 +141,7 @@ public class TapiRendererNotificationHandler {
 
     /**
      * Process failed service implementation for serviceName.
+     *
      * @param serviceName String
      */
     private void onFailedServiceImplementation(String serviceName) {

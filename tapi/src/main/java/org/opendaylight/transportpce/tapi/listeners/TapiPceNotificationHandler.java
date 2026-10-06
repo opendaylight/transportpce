@@ -103,6 +103,7 @@ public class TapiPceNotificationHandler {
 
     /**
      * Process path computation request result.
+     *
      * @param notification the result notification.
      */
     private void onPathComputationResult(ServicePathRpcResult notification) {
@@ -156,6 +157,7 @@ public class TapiPceNotificationHandler {
 
     /**
      * Process cancel resource result.
+     *
      * @param serviceName Service name to build uuid.
      */
     private void onCancelResourceResult(String serviceName) {
@@ -229,7 +231,7 @@ public class TapiPceNotificationHandler {
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
             if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null) {
-                ConnectionEndPointKey key = new ConnectionEndPointKey(cep.key());
+                ConnectionEndPointKey key = cep.key();
                 Map<ConnectionEndPointKey, ConnectionEndPoint> cep1 = onep1.getCepList().getConnectionEndPoint();
                 if (cep1.containsKey(key)) {
                     LOG.info("CEP {} already in topology, skipping merge", connectionEndPointName(cep1.get(key)));

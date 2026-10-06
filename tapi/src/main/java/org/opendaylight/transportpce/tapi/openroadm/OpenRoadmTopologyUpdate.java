@@ -218,7 +218,7 @@ public class OpenRoadmTopologyUpdate implements TopologyUpdate {
      * Reads the OpenROADM topology {@link Network} from the datastore.
      *
      * <p>The OpenROADM topology is used as a resolution snapshot when building termination point mappings
-     * (nodeId/tpId -&gt; OpenROADM TP type -&gt; derived TAPI NEP names).
+     * (nodeId/tpId {@literal ->} OpenROADM TP type {@literal ->} derived TAPI NEP names).
      *
      * @return OpenROADM topology network; never {@code null}
      * @throws IllegalStateException if the topology cannot be read from the datastore
