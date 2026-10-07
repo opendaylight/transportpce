@@ -51,11 +51,13 @@ public class DeviceRendererRPCImpl {
         this.pools = pools;
         ListeningExecutorService serviceExecutor =
                 pools.executorService(DeviceRendererRPCImpl.class, ThreadPoolName.SERVICE_PATH);
+        ListeningExecutorService otnExecutor =
+                pools.executorService(DeviceRendererRPCImpl.class, ThreadPoolName.OTN_SERVICE_PATH);
         RpcRejections rpcRejections = new DefaultRpcRejections();
 
         this.reg = rpcProviderService.registerRpcImplementations(
                 new ServicePathImpl(deviceRenderer, serviceExecutor, rpcRejections),
-                new OtnServicePathImpl(otnDeviceRendererService),
+                new OtnServicePathImpl(otnDeviceRendererService, otnExecutor, rpcRejections),
                 new RendererRollbackImpl(deviceRenderer),
                 new CreateOtsOmsImpl(deviceRenderer));
         LOG.debug("RPC of DeviceRendererRPCImpl instantiated");

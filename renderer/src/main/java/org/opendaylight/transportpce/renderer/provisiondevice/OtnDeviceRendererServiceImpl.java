@@ -393,8 +393,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     .setResult("Error while deleting service paths!")
                     .setSuccess(false)
                     .build();
+        } finally {
+            forkJoinPool.shutdown();
         }
-        forkJoinPool.shutdown();
         return new OtnServicePathOutputBuilder()
                 .setSuccess(success.get())
                 .setLinkTp(otnLinkTps)

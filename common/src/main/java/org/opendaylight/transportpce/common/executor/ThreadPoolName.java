@@ -10,7 +10,8 @@ package org.opendaylight.transportpce.common.executor;
 
 public enum ThreadPoolName {
     OLM_GET_PM("olm-get-pm"),
-    SERVICE_PATH("service-path");
+    SERVICE_PATH("service-path"),
+    OTN_SERVICE_PATH("otn-service-path");
 
     private final String name;
 
