@@ -9,8 +9,9 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.concurrent.ExecutionException;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDelete;
@@ -24,23 +25,28 @@ import org.slf4j.LoggerFactory;
 public class ServiceDeleteImpl implements ServiceDelete {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDeleteImpl.class);
     private final RendererServiceOperations rendererServiceOperations;
+    private final RequestLimit requestLimit;
 
-    public ServiceDeleteImpl(final RendererServiceOperations rendererServiceOperations) {
+    /**
+     * Creates the RPC implementation.
+     *
+     * @param rendererServiceOperations the renderer that deletes the service
+     * @param maxRequests maximum number of requests in progress; further requests are rejected
+     */
+    public ServiceDeleteImpl(final RendererServiceOperations rendererServiceOperations, final int maxRequests) {
         this.rendererServiceOperations = requireNonNull(rendererServiceOperations);
+        this.requestLimit = new RequestLimit("service-delete", maxRequests);
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> invoke(ServiceDeleteInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service delete request {}", serviceName);
-        ServiceDeleteOutput output = null;
-        try {
-            output = this.rendererServiceOperations.serviceDelete(input, null).get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("RPC service delete failed !", e);
-            Thread.currentThread().interrupt();
-        }
-        return ModelMappingUtils.createServiceDeleteRpcResponse(output);
+
+        return requestLimit.run(() -> Futures.transformAsync(
+                this.rendererServiceOperations.serviceDelete(input, null),
+                ModelMappingUtils::createServiceDeleteRpcResponse,
+                MoreExecutors.directExecutor()));
     }
 
 }

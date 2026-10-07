@@ -31,7 +31,7 @@ public class RendererRPCImpl {
             @Reference RpcProviderService rpcProviderService) {
         this.reg = rpcProviderService.registerRpcImplementations(
                 new ServiceImplementationRequestImpl(rendererServiceOperations, MAX_REQUESTS_IN_PROGRESS),
-                new ServiceDeleteImpl(rendererServiceOperations));
+                new ServiceDeleteImpl(rendererServiceOperations, MAX_REQUESTS_IN_PROGRESS));
         LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
 
