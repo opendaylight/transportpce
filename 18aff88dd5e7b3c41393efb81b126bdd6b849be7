@@ -17,6 +17,23 @@
       "message": "recheck",
       "revId": "18aff88dd5e7b3c41393efb81b126bdd6b849be7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea0f10dd_c143dc70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-10-07T17:30:58Z",
+      "side": 1,
+      "message": "Looks good.\n\nSmall comment:\nRewrite the description to match the commit: drop the NegativeArraySizeException, synchronizedSet and toArray text, and call it latent-bug hardening.\n\nFix the fe3a960ca reference.",
+      "revId": "18aff88dd5e7b3c41393efb81b126bdd6b849be7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
