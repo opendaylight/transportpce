@@ -7,9 +7,9 @@ update-java-alternatives -l
 
 #select JAVA-21
 sudo update-java-alternatives -s java-1.21.0-openjdk-amd64
-JAVA_VER=$(java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*".*$/\1/p;')
+JAVA_VER=$(java -version 2>&1 | sed -n 's/.* version "\([0-9]*\).*/\1/p')
 echo "$JAVA_VER"
-JAVAC_VER=$(javac -version 2>&1 |  sed -n ';s/javac \(.*\)\.\(.*\)\..*.*$/\1/p;')
+JAVAC_VER=$(javac -version 2>&1 | sed -n 's/^javac \([0-9]*\).*/\1/p')
 echo "$JAVAC_VER"
 if [ "$JAVA_VER" -ge 21 ] && [ "$JAVAC_VER" -ge 21 ];then
     echo "ok, java is 21 or newer"
