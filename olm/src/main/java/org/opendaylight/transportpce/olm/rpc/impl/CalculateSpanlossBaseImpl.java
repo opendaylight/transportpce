@@ -10,6 +10,10 @@ package org.opendaylight.transportpce.olm.rpc.impl;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import java.util.concurrent.RejectedExecutionException;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBase;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
@@ -35,14 +39,27 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
  */
 public class CalculateSpanlossBaseImpl implements CalculateSpanlossBase {
     private final OlmPowerService olmPowerService;
+    private final ListeningExecutorService executor;
+    private final RpcRejections rpcRejections;
 
-    public CalculateSpanlossBaseImpl(final OlmPowerService olmPowerService) {
+    public CalculateSpanlossBaseImpl(
+            final OlmPowerService olmPowerService,
+            final ListeningExecutorService executor,
+            final RpcRejections rpcRejections) {
         this.olmPowerService = requireNonNull(olmPowerService);
+        this.executor = requireNonNull(executor);
+        this.rpcRejections = requireNonNull(rpcRejections);
     }
 
     @Override
     public ListenableFuture<RpcResult<CalculateSpanlossBaseOutput>> invoke(CalculateSpanlossBaseInput input) {
-        return RpcResultBuilder.success(this.olmPowerService.calculateSpanlossBase(input)).buildFuture();
+        try {
+            // Returns at once; the spanloss calculation runs later on an executor thread
+            return executor.submit(
+                () -> RpcResultBuilder.success(olmPowerService.calculateSpanlossBase(input)).build());
+        } catch (RejectedExecutionException e) {
+            return rpcRejections.rejected(executor, ThreadPoolName.OLM_SPANLOSS, e);
+        }
     }
 
 }

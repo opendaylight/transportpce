@@ -143,7 +143,11 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInputAll();
         when(this.olmPowerService.calculateSpanlossBase(any()))
             .thenReturn(new CalculateSpanlossBaseOutputBuilder().build());
-        var output = new CalculateSpanlossBaseImpl(olmPowerService).invoke(input);
+        var output = new CalculateSpanlossBaseImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new CalculateSpanlossBaseOutputBuilder().build(), output.get().getResult());
     }
@@ -153,7 +157,11 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         CalculateSpanlossCurrentInput input = new CalculateSpanlossCurrentInputBuilder().build();
         when(this.olmPowerService.calculateSpanlossCurrent(any()))
             .thenReturn(new CalculateSpanlossCurrentOutputBuilder().build());
-        var output = new CalculateSpanlossCurrentImpl(olmPowerService).invoke(input);
+        var output = new CalculateSpanlossCurrentImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new CalculateSpanlossCurrentOutputBuilder().build(), output.get().getResult());
     }

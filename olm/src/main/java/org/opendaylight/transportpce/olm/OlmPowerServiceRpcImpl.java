@@ -57,13 +57,16 @@ public class OlmPowerServiceRpcImpl {
         this.pools = pools;
         ListeningExecutorService getPmExecutor =
             pools.executorService(OlmPowerServiceRpcImpl.class, ThreadPoolName.OLM_GET_PM);
+        // Separate pool, so long spanloss calculations cannot starve get-pm
+        ListeningExecutorService spanlossExecutor =
+            pools.executorService(OlmPowerServiceRpcImpl.class, ThreadPoolName.OLM_SPANLOSS);
         RpcRejections rpcRejections = new DefaultRpcRejections();
         this.rpcRegistration = rpcProviderService.registerRpcImplementations(
             new GetPmImpl(olmPowerService, getPmExecutor, rpcRejections),
             new ServicePowerSetupImpl(olmPowerService),
             new ServicePowerTurndownImpl(olmPowerService),
-            new CalculateSpanlossBaseImpl(olmPowerService),
-            new CalculateSpanlossCurrentImpl(olmPowerService),
+            new CalculateSpanlossBaseImpl(olmPowerService, spanlossExecutor, rpcRejections),
+            new CalculateSpanlossCurrentImpl(olmPowerService, spanlossExecutor, rpcRejections),
             new ServicePowerResetImpl(olmPowerService));
         LOG.info("OlmPowerServiceRpcImpl instantiated");
     }
