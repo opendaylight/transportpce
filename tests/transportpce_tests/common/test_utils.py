@@ -529,7 +529,7 @@ def get_tapi_topology_node(topouuid: str, nodeuuid: str, onepuuid: str, content:
     # pylint: disable=line-too-long
     url = {'rfc8040': '{}/data/tapi-common:context/tapi-topology:topology-context/topology={}/node={}/owned-node-edge-point={}?content={}',
            'draft-bierman02': '{}/{}/tapi-common:context/topology-context/tapi-topology:topology/{}/node/{}/owned-node-edge-point/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', topouuid, nodeuuid, onepuuid, content)
     elif content == 'config':
         format_args = ('{}', content, topouuid, nodeuuid, onepuuid)
@@ -552,7 +552,7 @@ def get_tapi_topology_link(topouuid: str, linkuuid: str, content: str):
     # pylint: disable=line-too-long
     url = {'rfc8040': '{}/data/tapi-common:context/tapi-topology:topology-context/topology={}/link={}?content={}',
            'draft-bierman02': '{}/{}/tapi-common:context/topology-context/tapi-topology:topology/{}/link/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', topouuid, linkuuid, content)
     elif content == 'config':
         format_args = ('{}', content, topouuid, linkuuid)
@@ -578,7 +578,7 @@ def get_tapi_topology_link(topouuid: str, linkuuid: str, content: str):
 def get_ietf_network_request(network: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', network, content)
     elif content == 'config':
         format_args = ('{}', content, network)
@@ -614,7 +614,7 @@ def del_ietf_network(network: str):
 def get_ietf_network_link_request(network: str, link: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', network, link, content)
     elif content == 'config':
         format_args = ('{}', content, network, link)
@@ -632,7 +632,7 @@ def get_ietf_network_link_request(network: str, link: str, content: str):
 def del_ietf_network_link_request(network: str, link: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', network, link, content)
     elif content == 'config':
         format_args = ('{}', content, network, link)
@@ -663,7 +663,7 @@ def del_oms_attr_request(link: str,):
 def get_ietf_network_node_request(network: str, node: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', network, node, content)
     elif content == 'config':
         format_args = ('{}', content, network, node)
@@ -684,7 +684,7 @@ def get_ietf_network_node_request(network: str, node: str, content: str):
 def del_ietf_network_node_request(network: str, node: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
-    if RESTCONF_VERSION in ('rfc8040'):
+    if RESTCONF_VERSION == 'rfc8040':
         format_args = ('{}', network, node, content)
     elif content == 'config':
         format_args = ('{}', content, network, node)
