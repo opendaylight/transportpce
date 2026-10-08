@@ -432,7 +432,7 @@ class TestTransportPCEEndtoend(unittest.TestCase):
                 self.assertEqual(
                     40.0,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['width']))
-            elif ele['tp-id'] in ('XPDR1-CLIENT1'):
+            elif ele['tp-id'] == 'XPDR1-CLIENT1':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
         time.sleep(1)
 
