@@ -122,8 +122,8 @@ public class PceTapiLinkTest  extends AbstractTest {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(getDataStoreContextUtil()).transformIntoNormalizedNode(targetStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
-                    throw new IllegalStateException(String.format(
-                        "Could not transform the input %s into normalized nodes", fileName));
+                    throw new IllegalStateException("Could not transform the input %s into normalized nodes"
+                            .formatted(fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter
                     .createWithDataStoreUtil(getDataStoreContextUtil())
@@ -419,8 +419,10 @@ public class PceTapiLinkTest  extends AbstractTest {
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
         PceTapiLink eodu4Link = null;
+
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iOTU Uuid
         Uuid linkOtu4Uuid = new Uuid("13b8ac31-56d7-36e9-814b-5d91f10ced16");
+        // TOP+SPDR-SA1-XPDR1+XPDR1-CLIENT1+SPDR-SC1-XPDR1+XPDR1-CLIENT1+DSR Uuid
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
@@ -510,7 +512,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         }
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
-        // TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iOTU Uuid
+
         Uuid linkOtu4Uuid = new Uuid("29b6a4ac-b5d3-33aa-aba1-52763259b838");
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id);
