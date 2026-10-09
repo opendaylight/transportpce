@@ -15,16 +15,18 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.SettableFuture;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -72,7 +74,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     private final MountPointService mountPointService;
     private final ScheduledExecutorService checkingExecutor;
     private final ListeningExecutorService listeningExecutor;
-    private final ConcurrentMap<String, CountDownLatch> deviceLocks = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, ListenableFuture<Void>> deviceQueues = new ConcurrentHashMap<>();
     private final long maxDurationToSubmitTransaction;
     private final long maxDurationToGetData;
 
@@ -97,68 +99,78 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     }
 
     @Override
-    public Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId) {
+    public ListenableFuture<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId) {
         return getDeviceTransaction(deviceId, maxDurationToSubmitTransaction, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId, long timeoutToSubmit,
-            TimeUnit timeUnit) {
-        CountDownLatch newLock = new CountDownLatch(1);
-        ListenableFuture<Optional<DeviceTransaction>> future = listeningExecutor.submit(() -> {
-            LOG.debug("Starting creation of transaction for device {}.", deviceId);
-            // get current lock from device and set new lock
-            CountDownLatch actualLock = swapActualLock(deviceId, newLock);
-            if (actualLock != null) {
-                // if lock was present on device wait until it unlocks
-                actualLock.await();
-            }
+    public ListenableFuture<Optional<DeviceTransaction>> getDeviceTransaction(
+            String deviceId,
+            long timeoutToSubmit,
+            TimeUnit unit) {
 
-            Optional<DataBroker> deviceDataBrokerOpt = getDeviceDataBroker(deviceId);
-            DataBroker deviceDataBroker;
-            if (deviceDataBrokerOpt.isPresent()) {
-                deviceDataBroker = deviceDataBrokerOpt.orElseThrow();
-            } else {
-                newLock.countDown();
-                return Optional.empty();
-            }
-            LOG.debug("Created transaction for device {}.", deviceId);
-            return Optional.of(new DeviceTransaction(deviceDataBroker.newReadWriteTransaction(), newLock));
-        });
+        final SettableFuture<Void> released = SettableFuture.create(); // Completed by commit()/cancel()
+        // When this transaction is closed and nobody has queued behind it, forget the device
+        released.addListener(() -> deviceQueues.remove(deviceId, released), MoreExecutors.directExecutor());
 
-        Futures.addCallback(future, new FutureCallback<Optional<DeviceTransaction>>() {
-            @Override
-            public void onSuccess(Optional<DeviceTransaction> deviceTransactionOptional) {
-                // creates timeout for transaction to submit right after transaction is created
-                // if time will run out and transaction was not closed then it will be cancelled (and unlocked)
-                checkingExecutor.schedule(() -> {
-                    if (deviceTransactionOptional.isPresent()) {
-                        DeviceTransaction deviceTx = deviceTransactionOptional.orElseThrow();
-                        LOG.debug("Timeout to submit transaction run out! Transaction was {} submitted or canceled.",
-                                deviceTx.wasSubmittedOrCancelled().get() ? "" : "not");
-                        if (!deviceTx.wasSubmittedOrCancelled().get()) {
-                            LOG.error(
-                                "Transaction for node {} not submitted/canceled after {} ms. Cancelling transaction.",
-                                deviceId, timeoutToSubmit);
-                            deviceTx.cancel();
-                        }
+        final ListenableFuture<Void> previous = enqueue(deviceId, released); // atomic swap of the device's tail
+        // Caller cancellation must not discard a transaction while it is being created.
+        final SettableFuture<Optional<DeviceTransaction>> result = SettableFuture.create();
+        ListenableFuture<Optional<DeviceTransaction>> creation = Futures.transform(
+                Futures.nonCancellationPropagating(previous),
+                ignored -> {
+                    if (result.isCancelled()) {
+                        released.set(null);
+                        return Optional.<DeviceTransaction>empty();
                     }
-                }, timeoutToSubmit, timeUnit);
+                    return createTransaction(deviceId, released);
+                },
+                listeningExecutor);
+
+        Futures.addCallback(creation, new FutureCallback<Optional<DeviceTransaction>>() {
+            @Override
+            public void onSuccess(Optional<DeviceTransaction> deviceTx) {
+                if (deviceTx.isPresent()) {
+                    try {
+                        // Before set(): it runs the caller's direct listeners, which may block. The timeout does
+                        // nothing if the transaction is already closed, so it is harmless when cancellation wins the
+                        // race below.
+                        scheduleSubmitTimeout(deviceId, deviceTx.orElseThrow(), timeoutToSubmit, unit);
+                    } catch (RejectedExecutionException e) {
+                        // preDestroy() has stopped the scheduler. Do not hand out a transaction without a timeout.
+                        LOG.warn("Could not schedule the submit timeout for device {}, cancelling its transaction",
+                                deviceId, e);
+                        try {
+                            deviceTx.orElseThrow().cancel();
+                        } finally {
+                            // Even if cancelling fails, the caller must not be left waiting
+                            result.setException(e);
+                        }
+                        return;
+                    }
+                }
+                if (!result.set(deviceTx)) {
+                    // Cancellation won the race with creation. Close the transaction before releasing the device.
+                    deviceTx.ifPresent(DeviceTransaction::cancel);
+                }
             }
 
             @Override
-            public void onFailure(Throwable throwable) {
-                LOG.error("Exception thrown while getting device transaction for device {}! Unlocking device.",
-                        deviceId, throwable);
-                newLock.countDown();
+            public void onFailure(@NonNull Throwable throwable) {
+                if (throwable instanceof CancellationException) {
+                    LOG.debug("Transaction request for device {} was cancelled", deviceId);
+                } else {
+                    LOG.error("Could not create transaction for device {}! Unlocking device.", deviceId, throwable);
+                }
+                // Keep our place in the queue until the transaction in front of us is done, then let the next one go.
+                // setFuture copies previous's result, so this relies on released never failing: it is only ever
+                // completed with set(null) or by mirroring another released.
+                released.setFuture(previous);
+                result.setException(throwable);
             }
-        }, checkingExecutor);
+        }, MoreExecutors.directExecutor());
 
-        return future;
-    }
-
-    private synchronized CountDownLatch swapActualLock(String deviceId, CountDownLatch newLock) {
-        return deviceLocks.put(deviceId, newLock);
+        return result;
     }
 
     private Optional<DataBroker> getDeviceDataBroker(String deviceId) {
@@ -218,5 +230,41 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
 
     public long getMaxDurationToSubmitTransaction() {
         return maxDurationToSubmitTransaction;
+    }
+
+    private ListenableFuture<Void> enqueue(String deviceId, SettableFuture<Void> released) {
+        ListenableFuture<Void> previous = deviceQueues.put(deviceId, released);
+
+        //Nobody in line: there is nothing to wait for
+        return previous != null ? previous : Futures.immediateVoidFuture();
+    }
+
+    private Optional<DeviceTransaction> createTransaction(String deviceId, SettableFuture<Void> released) {
+        Optional<DataBroker> dataBroker = getDeviceDataBroker(deviceId);
+        if (dataBroker.isEmpty()) {
+            // No transaction will ever hold the device, so let the next one in line go now
+            released.set(null);
+            return Optional.empty();
+        }
+        LOG.debug("Created transaction for device {}", deviceId);
+        return Optional.of(new DeviceTransaction(dataBroker.orElseThrow().newReadWriteTransaction(), released));
+    }
+
+    private void scheduleSubmitTimeout(
+            String deviceId,
+            DeviceTransaction deviceTx,
+            long timeoutToSubmit,
+            TimeUnit timeUnit) {
+
+        checkingExecutor.schedule(() -> {
+            LOG.debug("Timeout to submit transaction run out! Transaction was {} submitted or canceled.",
+                    deviceTx.wasSubmittedOrCancelled().get() ? "" : "not");
+            if (!deviceTx.wasSubmittedOrCancelled().get()) {
+                LOG.error(
+                        "Transaction for node {} not submitted/canceled after {} ms. Cancelling transaction.",
+                        deviceId, timeoutToSubmit);
+                deviceTx.cancel();
+            }
+        }, timeoutToSubmit, timeUnit);
     }
 }

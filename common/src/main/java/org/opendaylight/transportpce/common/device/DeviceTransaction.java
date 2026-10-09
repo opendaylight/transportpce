@@ -11,8 +11,8 @@ package org.opendaylight.transportpce.common.device;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,15 +40,15 @@ public class DeviceTransaction {
     private static final Logger LOG = LoggerFactory.getLogger(DeviceTransaction.class);
 
     private final ReadWriteTransaction rwTx;
-    private final CountDownLatch deviceLock;
+    private final SettableFuture<Void> released;
     private final ScheduledExecutorService scheduledExecutorService;
     private final AtomicBoolean wasSubmittedOrCancelled = new AtomicBoolean(false);
 
-    DeviceTransaction(ReadWriteTransaction rwTx, CountDownLatch deviceLock) {
+    DeviceTransaction(ReadWriteTransaction rwTx, SettableFuture<Void> released) {
         this.rwTx = rwTx;
-        this.deviceLock = deviceLock;
+        this.released = released;
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        LOG.debug("Device transaction created. Lock: {}", deviceLock);
+        LOG.debug("Device transaction created. Lock: {}", released);
     }
 
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
@@ -79,10 +79,13 @@ public class DeviceTransaction {
             return false;
         }
 
-        LOG.debug("Transaction cancelled. Lock: {}", deviceLock);
+        LOG.debug("Transaction cancelled. Lock: {}", released);
         wasSubmittedOrCancelled.set(true);
-        afterClose();
-        return rwTx.cancel();
+        try {
+            return rwTx.cancel();
+        } finally {
+            afterClose();
+        }
     }
 
     /**
@@ -100,7 +103,7 @@ public class DeviceTransaction {
             return FluentFutures.immediateFailedFluentFuture(new IllegalStateException(msg));
         }
 
-        LOG.debug("Transaction committed. Lock: {}", deviceLock);
+        LOG.debug("Transaction committed. Lock: {}", released);
         wasSubmittedOrCancelled.set(true);
         FluentFuture<? extends @NonNull CommitInfo> future =
                 rwTx.commit().withTimeout(timeout, timeUnit, scheduledExecutorService);
@@ -108,7 +111,7 @@ public class DeviceTransaction {
         future.addCallback(new FutureCallback<CommitInfo>() {
             @Override
             public void onSuccess(CommitInfo result) {
-                LOG.debug("Transaction with lock {} successfully committed: {}", deviceLock, result);
+                LOG.debug("Transaction with lock {} successfully committed: {}", released, result);
                 afterClose();
             }
 
@@ -132,6 +135,6 @@ public class DeviceTransaction {
 
     private void afterClose() {
         scheduledExecutorService.shutdown();
-        deviceLock.countDown();
+        released.set(null);
     }
 }

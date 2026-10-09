@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.common.device;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -102,10 +102,10 @@ public interface DeviceTransactionManager {
      * timeout for commit transaction.
      *
      * @param deviceId device identifier on which will be transaction created.
-     * @return Future returning Optional of DeviceTransaction. Optional will be empty if device with specified ID
-     *         does not exists or transaction will fail to obtain.
+     * @return ListenableFuture returning Optional of DeviceTransaction. Optional will be empty if device with
+     *         specified ID does not exists or transaction will fail to obtain.
      */
-    Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId);
+    ListenableFuture<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId);
 
     /**
     * Works same as {@link DeviceTransactionManager#getDeviceTransaction(String)} but with option to set custom timeout.
@@ -115,10 +115,13 @@ public interface DeviceTransactionManager {
      *                        closed (committed or cancelled) when times runs out it will be canceled (so device will
      *                        be unlocked).
      * @param timeUnit time units for timeout.
-     * @return Future returning Optional of DeviceTransaction. Optional will be empty if device with specified ID
-     *         does not exists or transaction will fail to obtain.
+     * @return ListenableFuture returning Optional of DeviceTransaction. Optional will be empty if device with
+     *         specified ID does not exists or transaction will fail to obtain.
      */
-    Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId, long timeoutToSubmit, TimeUnit timeUnit);
+    ListenableFuture<Optional<DeviceTransaction>> getDeviceTransaction(
+            String deviceId,
+            long timeoutToSubmit,
+            TimeUnit timeUnit);
 
     // TODO make private in impl
     Optional<MountPoint> getDeviceMountPoint(String deviceId);

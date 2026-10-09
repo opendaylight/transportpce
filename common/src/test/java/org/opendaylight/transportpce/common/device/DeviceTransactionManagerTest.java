@@ -10,22 +10,32 @@ package org.opendaylight.transportpce.common.device;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,6 +106,114 @@ public class DeviceTransactionManagerTest {
 
         verify(rwTransactionMock, times(1)).put(defaultDatastore, defaultIid, defaultData);
         verify(rwTransactionMock, times(1)).commit();
+    }
+
+    @Test
+    void transactionsWaitingOnOneDeviceDoNotBlockOtherDevicesTest() throws Exception {
+        // A dedicated manager with an explicit pool size, so the test does not depend on the defaults
+        int listeningThreads = 4;
+        long submitTimeoutMillis = 10_000;
+        DeviceTransactionManagerImpl manager = new DeviceTransactionManagerImpl(mountPointServiceMock,
+                submitTimeoutMillis, 3000, 4, listeningThreads);
+        try {
+            // The first transaction on the slow device is never committed, as if its device operation hangs
+            final DeviceTransaction holder = manager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+            // More transactions queue up behind it than the manager has threads
+            List<Future<Optional<DeviceTransaction>>> waiting = new LinkedList<>();
+            for (int i = 0; i < listeningThreads + 1; i++) {
+                waiting.add(manager.getDeviceTransaction(defaultDeviceId));
+            }
+
+            // A transaction on another device must not have to wait for the slow device
+            Future<Optional<DeviceTransaction>> otherDevice = manager.getDeviceTransaction("other-device");
+            await("transaction for another device").atMost(Duration.ofSeconds(1)).untilAsserted(() ->
+                    assertTrue(otherDevice.isDone()));
+            otherDevice.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+
+            // The waiting transactions are still queued behind the one that holds the slow device
+            waiting.forEach(future -> assertFalse(future.isDone()));
+
+            holder.cancel();
+            for (Future<Optional<DeviceTransaction>> future : waiting) {
+                future.get(5, TimeUnit.SECONDS).orElseThrow().cancel();
+            }
+        } finally {
+            manager.preDestroy();
+        }
+    }
+
+    @Test
+    void cancellingAWaitingTransactionDoesNotReleaseTheDeviceTest() throws Exception {
+        // The first transaction holds the device
+        final DeviceTransaction first = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        // The second one waits behind it, and its caller gives up
+        Future<Optional<DeviceTransaction>> second = transactionManager.getDeviceTransaction(defaultDeviceId);
+        assertFalse(second.isDone());
+        assertTrue(second.cancel(false));
+
+        // The first transaction still holds the device, so the third one must keep waiting
+        Future<Optional<DeviceTransaction>> third = transactionManager.getDeviceTransaction(defaultDeviceId);
+        await("third transaction keeps waiting").pollDelay(Duration.ofMillis(500)).untilAsserted(() ->
+                assertFalse(third.isDone()));
+
+        // Once the first transaction is committed, the third one gets the device
+        first.commit(defaultTimeout, defaultTimeUnit);
+        await("third transaction gets the device").atMost(Duration.ofSeconds(1)).untilAsserted(() ->
+                assertTrue(third.isDone()));
+        third.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+        // The cancelled request must never create a transaction.
+        verify(dataBrokerMock, times(2)).newReadWriteTransaction();
+    }
+
+    @Test
+    void cancellationDuringCreationClosesTheTransactionBeforeStartingTheNextTest() throws Exception {
+        CountDownLatch creating = new CountDownLatch(1);
+        CountDownLatch finishCreation = new CountDownLatch(1);
+        CountDownLatch cancelling = new CountDownLatch(1);
+        CountDownLatch finishCancellation = new CountDownLatch(1);
+        ReadWriteTransaction discarded = mock(ReadWriteTransaction.class);
+        AtomicInteger creations = new AtomicInteger();
+        when(dataBrokerMock.newReadWriteTransaction()).thenAnswer(invocation -> {
+            if (creations.incrementAndGet() == 1) {
+                creating.countDown();
+                if (!finishCreation.await(5, TimeUnit.SECONDS)) {
+                    throw new AssertionError("Transaction creation was not released");
+                }
+                return discarded;
+            }
+            return rwTransactionMock;
+        });
+        when(discarded.cancel()).thenAnswer(invocation -> {
+            cancelling.countDown();
+            if (!finishCancellation.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError("Transaction cancellation was not released");
+            }
+            return true;
+        });
+
+        try {
+            Future<Optional<DeviceTransaction>> request = transactionManager.getDeviceTransaction(defaultDeviceId);
+            assertTrue(creating.await(5, TimeUnit.SECONDS));
+            assertTrue(request.cancel(false));
+            Future<Optional<DeviceTransaction>> next = transactionManager.getDeviceTransaction(defaultDeviceId);
+
+            // The caller has given up, but creation still owns this position in the device queue.
+            assertThrows(TimeoutException.class, () -> next.get(100, TimeUnit.MILLISECONDS));
+            finishCreation.countDown();
+            assertTrue(cancelling.await(5, TimeUnit.SECONDS));
+
+            // Even after creation finishes, the device remains held until the underlying cancel returns.
+            assertThrows(TimeoutException.class, () -> next.get(100, TimeUnit.MILLISECONDS));
+            finishCancellation.countDown();
+            next.get(5, TimeUnit.SECONDS).orElseThrow().cancel();
+            verify(discarded).cancel();
+            verify(discarded, never()).commit();
+        } finally {
+            finishCreation.countDown();
+            finishCancellation.countDown();
+        }
     }
 
     @Test
@@ -217,6 +335,98 @@ public class DeviceTransactionManagerTest {
                 deviceTransactions.parallelStream()
                     .forEach(deviceTransaction -> assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
             });
+    }
+
+    @Test
+    void blockingListenerDoesNotDelayTheSubmitTimeoutTest() throws Exception {
+        CountDownLatch listenerAdded = new CountDownLatch(1);
+        CountDownLatch releaseListener = new CountDownLatch(1);
+        when(dataBrokerMock.newReadWriteTransaction()).thenAnswer(invocation -> {
+            // Hold creation until the caller's listener is in place, so the listener runs on completion
+            if (!listenerAdded.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError("Listener was not added");
+            }
+            return rwTransactionMock;
+        });
+
+        try {
+            ListenableFuture<Optional<DeviceTransaction>> request =
+                    transactionManager.getDeviceTransaction(defaultDeviceId, 100, TimeUnit.MILLISECONDS);
+            request.addListener(() -> {
+                try {
+                    releaseListener.await(5, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }, MoreExecutors.directExecutor());
+            listenerAdded.countDown();
+
+            // The transaction is cancelled by its timeout while the listener is still blocked
+            verify(rwTransactionMock, timeout(1000)).cancel();
+        } finally {
+            releaseListener.countDown();
+        }
+    }
+
+    @Test
+    void shutdownDuringCreationFailsTheRequestAndCancelsTheTransactionTest() throws Exception {
+        CountDownLatch creating = new CountDownLatch(1);
+        CountDownLatch finishCreation = new CountDownLatch(1);
+        when(dataBrokerMock.newReadWriteTransaction()).thenAnswer(invocation -> {
+            creating.countDown();
+            if (!finishCreation.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError("Transaction creation was not released");
+            }
+            return rwTransactionMock;
+        });
+
+        try {
+            final Future<Optional<DeviceTransaction>> request =
+                    transactionManager.getDeviceTransaction(defaultDeviceId);
+            assertTrue(creating.await(5, TimeUnit.SECONDS));
+
+            // The submit timeout can no longer be scheduled once creation finishes
+            transactionManager.preDestroy();
+            finishCreation.countDown();
+
+            ExecutionException thrown =
+                    assertThrows(ExecutionException.class, () -> request.get(5, TimeUnit.SECONDS));
+            assertInstanceOf(RejectedExecutionException.class, thrown.getCause());
+            verify(rwTransactionMock).cancel();
+        } finally {
+            finishCreation.countDown();
+        }
+    }
+
+    @Test
+    void shutdownDuringCreationFailsTheRequestEvenIfCancellingFailsTest() throws Exception {
+        CountDownLatch creating = new CountDownLatch(1);
+        CountDownLatch finishCreation = new CountDownLatch(1);
+        when(dataBrokerMock.newReadWriteTransaction()).thenAnswer(invocation -> {
+            creating.countDown();
+            if (!finishCreation.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError("Transaction creation was not released");
+            }
+            return rwTransactionMock;
+        });
+        when(rwTransactionMock.cancel()).thenThrow(new IllegalStateException("cancel failed"));
+
+        try {
+            final Future<Optional<DeviceTransaction>> request =
+                    transactionManager.getDeviceTransaction(defaultDeviceId);
+            assertTrue(creating.await(5, TimeUnit.SECONDS));
+
+            // The submit timeout can no longer be scheduled once creation finishes
+            transactionManager.preDestroy();
+            finishCreation.countDown();
+
+            ExecutionException thrown =
+                    assertThrows(ExecutionException.class, () -> request.get(5, TimeUnit.SECONDS));
+            assertInstanceOf(RejectedExecutionException.class, thrown.getCause());
+            verify(rwTransactionMock).cancel();
+        } finally {
+            finishCreation.countDown();
+        }
     }
 
     @Test

@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.eclipse.jdt.annotation.NonNull;
@@ -46,6 +48,9 @@ public class OpenRoadmInterfacesImpl221 {
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
     private final PortMappingVersion221 portMapping221;
+    // One lock per node: deletes on a node run one at a time, but a node that does not answer does not hold up
+    // deletes on the other nodes
+    private final ConcurrentMap<String, Object> deleteLocks = new ConcurrentHashMap<>();
 
     public OpenRoadmInterfacesImpl221(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
         this.deviceTransactionManager = deviceTransactionManager;
@@ -123,7 +128,13 @@ public class OpenRoadmInterfacesImpl221 {
     }
 
 
-    public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+        synchronized (deleteLocks.computeIfAbsent(nodeId, key -> new Object())) {
+            deleteInterfaceOnNode(nodeId, interfaceName);
+        }
+    }
+
+    private void deleteInterfaceOnNode(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         LOG.info("deleting interface {} on device221 {}", interfaceName, nodeId);
         Optional<Interface> intf2DeleteOpt;
         intf2DeleteOpt = getInterface(nodeId, interfaceName);

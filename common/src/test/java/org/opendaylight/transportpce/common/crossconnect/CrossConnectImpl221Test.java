@@ -17,9 +17,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
+import com.google.common.util.concurrent.Futures;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -106,7 +106,7 @@ public class CrossConnectImpl221Test {
             .thenReturn(Optional.of(new RoadmConnectionsBuilder().setConnectionName("1").build()));
 
         when(deviceTransactionManager.getDeviceTransaction("deviceId"))
-            .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
+            .thenReturn(Futures.immediateFuture(Optional.of(deviceTransaction)));
         doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         crossConnectImpl221.setPowerLevel("deviceId", OpticalControlMode.GainLoss, Decimal64.valueOf(2, 100), "1");
         assertTrue(true, "set Level should be true");
@@ -117,7 +117,7 @@ public class CrossConnectImpl221Test {
         Nodes nodes = mock(Nodes.class);
         when(nodes.getNodeId()).thenReturn("nodeId");
         when(deviceTransactionManager.getDeviceTransaction(any()))
-            .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
+            .thenReturn(Futures.immediateFuture(Optional.of(deviceTransaction)));
         doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         Optional<String> res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
         assertTrue(res.isPresent(), "Optional value should have a value");
