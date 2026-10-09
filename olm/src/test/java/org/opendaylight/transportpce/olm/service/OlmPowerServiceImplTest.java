@@ -9,10 +9,15 @@
 package org.opendaylight.transportpce.olm.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -20,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -63,10 +69,10 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     }
 
     @Test
-    void testGetPm() {
+    void testGetPm() throws DeviceReadException, UnknownNodeException {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
             .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.of(OlmPowerServiceRpcImplUtil.getCurrentPmList221()));
 
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
@@ -83,6 +89,42 @@ class OlmPowerServiceImplTest  extends AbstractTest {
         assertEquals(
             "ots-deg1",
             result.getResourceIdentifier().getResourceName());
+    }
+
+    @Test
+    void testGetPmWithoutPmDataReturnsNoMeasurements() throws DeviceReadException, UnknownNodeException {
+        when(this.mappingUtils.getOpenRoadmVersion(anyString()))
+            .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
+            .thenReturn(Optional.empty());
+
+        // The device has no PM data: that is a reply without measurements, not an error
+        GetPmOutput result = this.olmPowerService.getPm(OlmPowerServiceRpcImplUtil.getGetPmInput());
+        assertNull(result.getMeasurements());
+    }
+
+    @Test
+    void testGetPmFailsForANodeWithoutPortMapping() {
+        // For example a node that was removed, so its port mapping is gone
+        when(this.mappingUtils.getOpenRoadmVersion(anyString())).thenReturn(null);
+
+        UnknownNodeException thrown = assertThrows(UnknownNodeException.class,
+            () -> this.olmPowerService.getPm(OlmPowerServiceRpcImplUtil.getGetPmInput()));
+        assertTrue(thrown.getMessage().contains("is not in the port mapping"), thrown.getMessage());
+        verifyNoInteractions(this.deviceTransactionManager);
+    }
+
+    @Test
+    void testGetPmReadFailureIsPassedOn() throws DeviceReadException {
+        when(this.mappingUtils.getOpenRoadmVersion(anyString()))
+            .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
+        DeviceReadException failure = new DeviceReadException("Device ROADM-A1 is not mounted");
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
+            .thenThrow(failure);
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class,
+            () -> this.olmPowerService.getPm(OlmPowerServiceRpcImplUtil.getGetPmInput()));
+        assertSame(failure, thrown);
     }
 
     @Test

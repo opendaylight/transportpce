@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -92,8 +93,10 @@ final class OlmUtils710 {
      *            Device tx manager
      *
      * @return Result of the request list of PM readings
+     * @throws DeviceReadException if the PM data could not be read from the device
      */
-    public static List<Measurements> pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
+    public static List<Measurements> pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager)
+            throws DeviceReadException {
         LOG.info("Getting PM Data for 7.1.0 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
                 input.getResourceType(), input.getResourceIdentifier());
 
@@ -106,7 +109,7 @@ final class OlmUtils710 {
                 .builder(CurrentPmList.class)
                 .build();
 
-        Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
+        Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.readFromDevice(input.getNodeId(),
                 LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         List<Measurements> measurements = new ArrayList<>();
@@ -145,7 +148,7 @@ final class OlmUtils710 {
                 }
             }
         } else {
-            LOG.error("Unable to get CurrentPmList for node {}", input.getNodeId());
+            LOG.warn("Node {} has no current PM list", input.getNodeId());
         }
         return measurements;
     }

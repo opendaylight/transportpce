@@ -21,7 +21,7 @@ public class OlmUtilsTest {
 
     // Verifies that the correct version is called when PmFetch is called
     @Test
-    public void testPmFetch() {
+    public void testPmFetch() throws Exception {
         try (MockedStatic<OlmUtils710> olmUtils710MockedStatic = Mockito.mockStatic(OlmUtils710.class)) {
             OlmUtils.pmFetch(createGmInput(), null, OpenroadmNodeVersion._71);
             olmUtils710MockedStatic.verify(() -> OlmUtils710.pmFetch(createGmInput(), null), times(1));

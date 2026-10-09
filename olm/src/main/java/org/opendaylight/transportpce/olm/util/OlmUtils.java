@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
@@ -47,9 +48,10 @@ public final class OlmUtils {
      *            OpenRoadm version number
      *
      * @return Result of the request list of PM readings
+     * @throws DeviceReadException if the PM data could not be read from the device
      */
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager,
-                                             OpenroadmNodeVersion openRoadmVersion) {
+                                             OpenroadmNodeVersion openRoadmVersion) throws DeviceReadException {
         LOG.info("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();

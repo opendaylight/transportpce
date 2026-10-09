@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.olm.service;
 
 import java.util.List;
 import java.util.Map;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossCurrentInput;
@@ -34,9 +35,11 @@ public interface OlmPowerService {
      * @param input
      *            Input parameter from the olm yang model
      *
-     * @return Result of the request
+     * @return Result of the request; without measurements if the device has no matching PM data
+     * @throws DeviceReadException if the PM data could not be read from the device
+     * @throws UnknownNodeException if the node is not in the port mapping with a supported OpenROADM version
      */
-    GetPmOutput getPm(GetPmInput input);
+    GetPmOutput getPm(GetPmInput input) throws DeviceReadException, UnknownNodeException;
 
     /**
      * This method is the implementation of the 'get-pm' service.

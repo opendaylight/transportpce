@@ -40,6 +40,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
@@ -59,7 +60,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerResetInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerResetOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
@@ -126,19 +126,15 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     @Override
-    public GetPmOutput getPm(GetPmInput pmInput) {
-        GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
-        if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId()) == null) {
-            return pmOutputBuilder.build();
-        }
+    public GetPmOutput getPm(GetPmInput pmInput) throws DeviceReadException, UnknownNodeException {
         OpenroadmNodeVersion nodeVersion = getNodeVersion(pmInput.getNodeId());
         if (nodeVersion == null) {
-            return pmOutputBuilder.build();
+            // For example a node that was removed: an empty reply would look like a device without PM data
+            throw new UnknownNodeException("Node " + pmInput.getNodeId()
+                    + " is not in the port mapping with a supported OpenROADM version");
         }
         LOG.info("Now calling get pm data");
-        pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
-            nodeVersion);
-        return pmOutputBuilder.build();
+        return OlmUtils.pmFetch(pmInput, deviceTransactionManager, nodeVersion).build();
     }
 
     @Override

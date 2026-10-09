@@ -27,6 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.executor.DefaultRpcRejections;
 import org.opendaylight.transportpce.common.executor.ExecutorPoolManager;
 import org.opendaylight.transportpce.common.executor.ThreadPoolName;
@@ -37,6 +38,7 @@ import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerResetImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerSetupImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerTurndownImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
+import org.opendaylight.transportpce.olm.service.UnknownNodeException;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
@@ -104,7 +106,8 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
     }
 
     @Test
-    void testGetPmWithSuccess() throws InterruptedException, ExecutionException {
+    void testGetPmWithSuccess()
+            throws InterruptedException, ExecutionException, DeviceReadException, UnknownNodeException {
         GetPmInput input = new GetPmInputBuilder()
             .setNodeId("nodeId")
             .build();
@@ -116,6 +119,48 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         ).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
+    }
+
+    @Test
+    void testGetPmReadFailureIsReportedAsAnError() throws Exception {
+        GetPmInput input = new GetPmInputBuilder()
+            .setNodeId("nodeId")
+            .build();
+        when(this.olmPowerService.getPm(any()))
+            .thenThrow(new DeviceReadException("Timed out after 240 SECONDS waiting for device nodeId"));
+        RpcResult<GetPmOutput> result = new GetPmImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input).get();
+        // A failed read must not look like a successful reply without PM data
+        assertFalse(result.isSuccessful());
+        assertNull(result.getResult());
+        assertEquals(ErrorType.APPLICATION, result.getErrors().get(0).getErrorType());
+        assertEquals(ErrorTag.OPERATION_FAILED, result.getErrors().get(0).getTag());
+        assertTrue(result.getErrors().get(0).getMessage().contains("nodeId"));
+        assertTrue(result.getErrors().get(0).getMessage().contains("Timed out"));
+    }
+
+    @Test
+    void testGetPmForUnknownNodeIsReportedAsMissingData() throws Exception {
+        GetPmInput input = new GetPmInputBuilder()
+            .setNodeId("nodeId")
+            .build();
+        when(this.olmPowerService.getPm(any())).thenThrow(new UnknownNodeException(
+            "Node nodeId is not in the port mapping with a supported OpenROADM version"));
+        RpcResult<GetPmOutput> result = new GetPmImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input).get();
+        // No device was read, so the error must not blame the device
+        assertFalse(result.isSuccessful());
+        assertNull(result.getResult());
+        assertEquals(ErrorType.APPLICATION, result.getErrors().get(0).getErrorType());
+        assertEquals(ErrorTag.DATA_MISSING, result.getErrors().get(0).getTag());
+        assertEquals("Node nodeId is not in the port mapping with a supported OpenROADM version",
+            result.getErrors().get(0).getMessage());
     }
 
     @Test
