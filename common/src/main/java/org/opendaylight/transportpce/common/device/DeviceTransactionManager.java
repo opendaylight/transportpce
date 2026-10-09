@@ -25,7 +25,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
  *     from/to device.
  *
  * <p>Method
- *  {@link DeviceTransactionManager#getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
+ *  {@link #getDataFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long, TimeUnit)}
  *     is 'shortcut' to get data from device. It creates {@link DeviceTransaction}, gets data via it and then closes
  *     the transaction.
  *
@@ -49,11 +49,11 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
  * </ul>
  *
  * <p>If there is only need to read from device
- *  {@link DeviceTransactionManager#getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
+ *  {@link #getDataFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long, TimeUnit)}
  *     method can be used. It will automatically take care of {@link DeviceTransaction} and it will return data.
  *     This method <b>SHOULD NOT BE USED TOGETHER WITH DEVICE TRANSACTION ON THE SAME DEVICE IN THE SAME TIME</b>.
  *     In case that {@link DeviceTransaction} is created on device and before committing it
- *  {@link DeviceTransactionManager#getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
+ *  {@link #getDataFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long, TimeUnit)}
  *     method is called then get method will wait (will be blocking current thread) until device will be unlocked.
  *     However device is locked by transaction previously created. So this will result in blocking current thread until
  *     timeout for commit transaction will run out and cancel transaction. This can lead to incorrect execution of code.
