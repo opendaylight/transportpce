@@ -176,7 +176,7 @@ public class GnpyTopoImpl {
                     }
                 }
                 if (commonNetworkNode1 == null) {
-                    throw new GnpyException(String.format("In gnpyTopoImpl: the node type of %s is null",nodeRef));
+                    throw new GnpyException("In gnpyTopoImpl: the node type of %s is null".formatted(nodeRef));
                 }
                 if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
                     if (!elementsList.contains(nodeRef)) {
@@ -235,8 +235,8 @@ public class GnpyTopoImpl {
             if (linkType == OpenroadmLinkType.ROADMTOROADM.getIntValue()) {
                 OMSAttributes omsAttributes = openroadmNetworkLink1.getOMSAttributes();
                 if (omsAttributes == null) {
-                    throw new GnpyException(String.format(
-                        "In gnpyTopoImpl: OMS attributes do not exit for ROADM to ROADM link: %s",linkId));
+                    throw new GnpyException("In gnpyTopoImpl: OMS attributes do not exit for ROADM to ROADM link: %s"
+                            .formatted(linkId));
                 }
                 //Case of amplified link
                 if (omsAttributes.getAmplifiedLink() != null) {
@@ -322,8 +322,7 @@ public class GnpyTopoImpl {
             length += srlgLength / CONVERT_KM_M;
         }
         if (length == 0) {
-            throw new GnpyException(String.format(
-                "In gnpyTopoImpl: length of the link %s is equal to zero",linkId));
+            throw new GnpyException("In gnpyTopoImpl: length of the link %s is equal to zero".formatted(linkId));
         }
         double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
         Elements element = createElementsFiber(LATITUDE, LONGITUTE, REGION, CITY,

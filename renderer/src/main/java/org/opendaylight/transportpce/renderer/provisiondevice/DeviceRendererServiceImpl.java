@@ -522,8 +522,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     try {
                         this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     } catch (OpenRoadmInterfaceException e) {
-                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId,
-                                nodeId);
+                        String result = "Failed to delete interface %s on node %s!".formatted(interfaceId, nodeId);
                         success.set(false);
                         LOG.error(result, e);
                         results.add(result);
@@ -859,8 +858,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         Mapping oldMapping = this.portMapping.getMapping(input.getNodeId(), input.getLogicalConnectionPoint());
         if (oldMapping == null) {
             return new CreateOtsOmsOutputBuilder()
-                    .setResult(String.format("Logical Connection point %s does not exist for %s",
-                            input.getLogicalConnectionPoint(), input.getNodeId()))
+                    .setResult("Logical Connection point %s does not exist for %s"
+                            .formatted(input.getLogicalConnectionPoint(), input.getNodeId()))
                     .setSuccess(false)
                     .build();
         }
@@ -879,8 +878,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             count++;
             if (count >= 6) {
-                String result = String.format("Unable to get ots interface from mapping %s - %s",
-                        oldMapping.getLogicalConnectionPoint(), input.getNodeId());
+                String result = "Unable to get ots interface from mapping %s - %s"
+                        .formatted(oldMapping.getLogicalConnectionPoint(), input.getNodeId());
                 LOG.error(result);
                 return new CreateOtsOmsOutputBuilder().setResult(result).setSuccess(false).build();
             }
@@ -890,13 +889,13 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String omsInterface = this.openRoadmInterfaceFactory.createOpenRoadmOmsInterface(input.getNodeId(),
                 newMapping);
         if (omsInterface == null) {
-            String result = String.format("Fail to create OpenRoadmOms Interface for node : %s", input.getNodeId());
+            String result = "Fail to create OpenRoadmOms Interface for node : %s".formatted(input.getNodeId());
             LOG.error(result);
             return new CreateOtsOmsOutputBuilder().setResult(result).setSuccess(false).build();
         }
         return new CreateOtsOmsOutputBuilder()
-                .setResult(String.format("Interfaces %s - %s successfully created on node %s",
-                        otsInterface, omsInterface, input.getNodeId()))
+                .setResult("Interfaces %s - %s successfully created on node %s"
+                        .formatted(otsInterface, omsInterface, input.getNodeId()))
                 .setSuccess(true)
                 .build();
     }

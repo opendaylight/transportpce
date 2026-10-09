@@ -52,12 +52,12 @@ public class OpenConfigInterfacesImpl200 {
                 if (deviceTxOpt.isPresent()) {
                     deviceTx = deviceTxOpt.orElseThrow();
                 } else {
-                    throw new OpenConfigInterfacesException(String.format("Device transaction was"
-                            + " not found for node %s!", nodeId));
+                    throw new OpenConfigInterfacesException(
+                            "Device transaction was not found for node %s!".formatted(nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
-                throw new OpenConfigInterfacesException(String.format("Failed to obtain device transaction for "
-                        + "node %s!", nodeId), e);
+                throw new OpenConfigInterfacesException(
+                        "Failed to obtain device transaction for node %s!".formatted(nodeId), e);
             }
             DataObjectIdentifier<Component> identifier = DataObjectIdentifier
                     .builderOfInherited(OpenconfigPlatformData.class, Components.class)
@@ -81,8 +81,8 @@ public class OpenConfigInterfacesImpl200 {
                 LOG.debug("Successfully updated the component {} on node {}", componentBuilder.getName(), nodeId);
                 timer.interrupt();
             } catch (InterruptedException | ExecutionException e) {
-                throw new OpenConfigInterfacesException(String.format("Failed to configure component %s on node %s!",
-                        componentBuilder.getName(), nodeId), e);
+                throw new OpenConfigInterfacesException("Failed to configure component %s on node %s!"
+                        .formatted(componentBuilder.getName(), nodeId), e);
             }
         }
     }
@@ -97,12 +97,12 @@ public class OpenConfigInterfacesImpl200 {
                 if (deviceTxOpt.isPresent()) {
                     deviceTx = deviceTxOpt.orElseThrow();
                 } else {
-                    throw new OpenConfigInterfacesException(String.format("Device transaction was"
-                            + " not found for node %s!", nodeId));
+                    throw new OpenConfigInterfacesException(
+                            "Device transaction was not found for node %s!".formatted(nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
-                throw new OpenConfigInterfacesException(String.format("Failed to obtain device transaction for "
-                        + "node %s!", nodeId), e);
+                throw new OpenConfigInterfacesException(
+                        "Failed to obtain device transaction for node %s!".formatted(nodeId), e);
             }
             DataObjectIdentifier.WithKey<Interface, InterfaceKey> identifier = DataObjectIdentifier
                     .builderOfInherited(OpenconfigInterfacesData.class, Interfaces.class)
@@ -126,8 +126,8 @@ public class OpenConfigInterfacesImpl200 {
                 LOG.info("Successfully updated the interface {} on node {}", interfaceBuilder.getName(), nodeId);
                 timer.interrupt();
             } catch (InterruptedException | ExecutionException e) {
-                throw new OpenConfigInterfacesException(String.format("Failed to configure interface %s on node %s",
-                        interfaceBuilder.getName(), nodeId), e);
+                throw new OpenConfigInterfacesException("Failed to configure interface %s on node %s"
+                        .formatted(interfaceBuilder.getName(), nodeId), e);
             }
         }
 

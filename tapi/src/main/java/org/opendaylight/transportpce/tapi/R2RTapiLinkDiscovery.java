@@ -224,18 +224,10 @@ public class R2RTapiLinkDiscovery {
         return topologyRepository.read(
                 LogicalDatastoreType.CONFIGURATION,
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II
-        ).orElseThrow(() -> new IllegalStateException(
-                String.format(
-                        "Cannot create R2R TAPI link: OpenROADM topology is missing. srcNode=%s, interface=%s, "
-                                + "dstNode=%s, remoteInterface=%s, datastore=%s, iid=%s",
-                        nodeId.getValue(),
-                        interfaceName,
-                        destNodeId.getValue(),
-                        remoteInterfaceName,
-                        LogicalDatastoreType.CONFIGURATION,
-                        InstanceIdentifiers.OPENROADM_TOPOLOGY_II
-                )
-        ));
+        ).orElseThrow(() -> new IllegalStateException("Cannot create R2R TAPI link: OpenROADM topology is missing."
+                + "srcNode=%s, interface=%s, dstNode=%s, remoteInterface=%s, datastore=%s, iid=%s"
+                        .formatted(nodeId.getValue(), interfaceName, destNodeId.getValue(), remoteInterfaceName,
+                                LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OPENROADM_TOPOLOGY_II)));
     }
 
     /**

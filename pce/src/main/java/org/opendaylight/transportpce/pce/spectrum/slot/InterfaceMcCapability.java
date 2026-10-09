@@ -159,25 +159,18 @@ public class InterfaceMcCapability implements McCapability {
 
     @Override
     public String toString() {
-        return String.format(
-            "slot-width-granularity: %sGHz, center-freq-granularity: %sGHz, slots: %s..%s",
-            slotWidthGranularity != null ? slotWidthGranularity.stripTrailingZeros().toPlainString() : "null",
-            centerFrequencyGranularity != null
-                    ? centerFrequencyGranularity.stripTrailingZeros().toPlainString() : "null",
-            minSlots,
-            maxSlots);
+        return "slot-width-granularity: %sGHz, center-freq-granularity: %sGHz, slots: %s..%s".formatted(
+                slotWidthGranularity != null ? slotWidthGranularity.stripTrailingZeros().toPlainString() : "null",
+                centerFrequencyGranularity != null
+                        ? centerFrequencyGranularity.stripTrailingZeros().toPlainString() : "null", minSlots, maxSlots);
     }
 
     private String unsupportedServiceFrequency(BigDecimal requiredFrequencyWidthGHz) {
-        return String.format("%s does not support a service slot width of %sGHz (%s supports "
-                        + "slot-width-granularity: %sGHz, and min-slots: %s, and max-slots %s, i.e. slot width: %s).",
-                node,
-                requiredFrequencyWidthGHz.stripTrailingZeros().toPlainString(),
-                node,
-                slotWidthGranularity.stripTrailingZeros().toPlainString(),
-                minSlots,
-                maxSlots,
-                slotWidthRange(minSlots, maxSlots, slotWidthGranularity));
+        return ("%s does not support a service slot width of %sGHz (%s supports "
+                        + "slot-width-granularity: %sGHz, and min-slots: %s, and max-slots %s, i.e. slot width: %s).")
+                .formatted(node, requiredFrequencyWidthGHz.stripTrailingZeros().toPlainString(), node,
+                        slotWidthGranularity.stripTrailingZeros().toPlainString(), minSlots, maxSlots,
+                        slotWidthRange(minSlots, maxSlots, slotWidthGranularity));
     }
 
     private String slotWidthRange(long minSlotNb, long maxSlotNb, BigDecimal slotWidthGran) {
@@ -185,10 +178,10 @@ public class InterfaceMcCapability implements McCapability {
                 .stripTrailingZeros();
 
         if (minSlotNb == maxSlotNb) {
-            return String.format("%sGHz", minSlotWidth.toPlainString());
+            return "%sGHz".formatted(minSlotWidth.toPlainString());
         }
 
-        return String.format("%sGHz to %sGHz", minSlotWidth.toPlainString(),
+        return "%sGHz to %sGHz".formatted(minSlotWidth.toPlainString(),
                 this.slotWidthGranularity.multiply(BigDecimal.valueOf(maxSlotNb)).stripTrailingZeros().toPlainString());
     }
 }

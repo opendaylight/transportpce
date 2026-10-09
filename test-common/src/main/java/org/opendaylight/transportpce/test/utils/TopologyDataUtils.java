@@ -49,8 +49,8 @@ public final class TopologyDataUtils {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(inputStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
-                    throw new IllegalStateException(String.format(
-                        "Could not transform the input %s into normalized nodes", fileName));
+                    throw new IllegalStateException(
+                        "Could not transform the input %s into normalized nodes".formatted(fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .getDataObject(transformIntoNormalizedNode.orElseThrow(), Networks.QNAME);
@@ -85,8 +85,8 @@ public final class TopologyDataUtils {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(inputStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
-                    throw new IllegalStateException(String.format(
-                        "Could not transform the input %s into normalized nodes", fileName));
+                    throw new IllegalStateException(
+                        "Could not transform the input %s into normalized nodes".formatted(fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .getDataObject(transformIntoNormalizedNode.orElseThrow(), Context.QNAME);
@@ -172,8 +172,8 @@ public final class TopologyDataUtils {
                 transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .transformIntoNormalizedNode(inputStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
-                    throw new IllegalStateException(String.format(
-                        "Could not transform the input %s into normalized nodes", fileName));
+                    throw new IllegalStateException(
+                        "Could not transform the input %s into normalized nodes".formatted(fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .getDataObject(transformIntoNormalizedNode.orElseThrow(), Network.QNAME);

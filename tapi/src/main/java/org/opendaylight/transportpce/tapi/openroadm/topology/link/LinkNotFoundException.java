@@ -14,10 +14,7 @@ public class LinkNotFoundException extends RuntimeException {
     }
 
     public LinkNotFoundException(String srcNode, String srcTp, String destNode, String destTp) {
-        super(String.format(
-                "Link not found from %s/%s to %s/%s",
-                srcNode, srcTp, destNode, destTp
-        ));
+        super("Link not found from %s/%s to %s/%s".formatted(srcNode, srcTp, destNode, destTp));
     }
 
     public LinkNotFoundException(

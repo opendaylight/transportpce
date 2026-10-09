@@ -183,10 +183,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 PceComplianceCheckResult check = PceComplianceCheck.check(input);
                 if (!check.hasPassed()) {
                     LOG.error("Path not calculated, service not compliant : {}", check.getMessage());
-                    String errMessage = String.format(
-                        "Path not calculated, service not compliant : %s",
-                        check.getMessage()
-                    );
+                    String errMessage = "Path not calculated, service not compliant : %s".formatted(check.getMessage());
                     sendNotifications(
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),

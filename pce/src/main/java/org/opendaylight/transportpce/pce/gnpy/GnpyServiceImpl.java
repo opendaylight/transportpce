@@ -290,7 +290,7 @@ public class GnpyServiceImpl {
                 return idx;
             }
         }
-        throw new GnpyException(String.format("In gnpyServiceImpl : NodeRef %s does not exist",nodeRef));
+        throw new GnpyException("In gnpyServiceImpl : NodeRef %s does not exist".formatted(nodeRef));
     }
 
     //Add a link to the route object
@@ -305,7 +305,7 @@ public class GnpyServiceImpl {
         }
         List<String> listSubLink = this.mapLinkFiber.get(linkId);
         if (listSubLink == null) {
-            throw new GnpyException(String.format("In gnpyServiceImpl addNodeRouteObject : no sublink in %s",linkId));
+            throw new GnpyException("In gnpyServiceImpl addNodeRouteObject : no sublink in %s".formatted(linkId));
         }
         for (String subLink : listSubLink) {
             RouteObjectIncludeExclude routeObjectIncludeExclude =
