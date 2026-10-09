@@ -10,14 +10,24 @@ package org.opendaylight.transportpce.renderer.rpcs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_MOCKS;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +35,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.common.executor.DefaultRpcRejections;
+import org.opendaylight.transportpce.common.executor.ExecutorPoolManager;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
@@ -37,6 +50,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.RendererRollbackOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathOutputBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,17 +76,36 @@ public class DeviceRendererRPCImplTest {
 
     @BeforeEach
     void setup() {
-        servicePath = new ServicePathImpl(deviceRenderer);
+        servicePath = new ServicePathImpl(
+                deviceRenderer,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections());
         rendererRollback = new RendererRollbackImpl(deviceRenderer);
         createOtsOms = new CreateOtsOmsImpl(deviceRenderer);
     }
 
     @Test
     void testRpcRegistration() {
-        new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRendererService);
+        ExecutorPoolManager pools = mock(ExecutorPoolManager.class);
+        when(pools.executorService(any(), any(ThreadPoolName.class)))
+                .thenReturn(MoreExecutors.newDirectExecutorService());
+
+        new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRendererService, pools);
         verify(rpcProviderService, times(1)).registerRpcImplementations(
                 any(ServicePathImpl.class), any(OtnServicePathImpl.class), any(RendererRollbackImpl.class),
                 any(CreateOtsOmsImpl.class));
+    }
+
+    @Test
+    void testCloseShutsDownTheExecutors() {
+        ExecutorPoolManager pools = mock(ExecutorPoolManager.class);
+        when(pools.executorService(any(), any(ThreadPoolName.class)))
+                .thenReturn(MoreExecutors.newDirectExecutorService());
+
+        new DeviceRendererRPCImpl(mock(RpcProviderService.class, RETURNS_MOCKS), deviceRenderer,
+                otnDeviceRendererService, pools).close();
+
+        verify(pools).close();
     }
 
     @Test
@@ -86,6 +120,40 @@ public class DeviceRendererRPCImplTest {
         when(servicePathInput.getOperation()).thenReturn(Action.Delete);
         servicePath.invoke(servicePathInput);
         verify(deviceRenderer, times(1)).deleteServicePath(servicePathInput);
+    }
+
+    @Test
+    void testCancellingTheReplyKeepsThePoolThreadUntilTheDeviceWorkEnds() throws Exception {
+        ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
+        try {
+            CountDownLatch started = new CountDownLatch(1);
+            CountDownLatch release = new CountDownLatch(1);
+            AtomicBoolean interrupted = new AtomicBoolean();
+            when(servicePathInput.getOperation()).thenReturn(Action.Delete);
+            when(deviceRenderer.deleteServicePath(servicePathInput)).thenAnswer(invocation -> {
+                started.countDown();
+                try {
+                    release.await(5, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    interrupted.set(true);
+                }
+                return new ServicePathOutputBuilder().setSuccess(true).build();
+            });
+            ListenableFuture<RpcResult<ServicePathOutput>> reply =
+                    new ServicePathImpl(deviceRenderer, executor, new DefaultRpcRejections()).invoke(servicePathInput);
+            assertTrue(started.await(5, TimeUnit.SECONDS));
+
+            assertTrue(reply.cancel(true));
+
+            // The device work goes on, so the pool's only thread stays busy until it ends
+            ListenableFuture<?> next = executor.submit(() -> { });
+            assertThrows(TimeoutException.class, () -> next.get(200, TimeUnit.MILLISECONDS));
+            release.countDown();
+            next.get(5, TimeUnit.SECONDS);
+            assertFalse(interrupted.get());
+        } finally {
+            executor.shutdownNow();
+        }
     }
 
     @Test
