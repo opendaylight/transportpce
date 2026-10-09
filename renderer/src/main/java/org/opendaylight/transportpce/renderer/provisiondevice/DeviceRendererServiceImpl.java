@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
@@ -157,7 +156,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         Map<NodeInterfaceKey, NodeInterface> nodeInterfaces = new ConcurrentHashMap<>();
-        Set<String> nodesProvisioned = Sets.newConcurrentHashSet();
+        Set<String> nodesProvisioned = ConcurrentHashMap.newKeySet();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
@@ -182,6 +181,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             Set<String> portIds = new HashSet<>();
             String transceiver = "";
             boolean isOpenConfig = false;
+
             try {
                 // if the node is currently mounted then proceed
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
