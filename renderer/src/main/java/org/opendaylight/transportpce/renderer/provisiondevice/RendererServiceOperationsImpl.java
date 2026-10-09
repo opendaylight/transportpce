@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -87,6 +88,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.optical.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -620,7 +622,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         for (int i = 0; i < 3; i++) {
             List<Measurements> measurements = getMeasurements(nodeId, tpId);
             if (measurements == null) {
-                LOG.warn("Device {} is not reporting PreFEC on TP: {}", nodeId, tpId);
+                LOG.warn("No PreFEC measurements from device {} on TP {}, skipping the service activation test",
+                        nodeId, tpId);
                 return true;
             }
             if (verifyPreFecBer(measurements)) {
@@ -638,15 +641,21 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     private List<Measurements> getMeasurements(String nodeId, String tp) {
         try {
-            GetPmOutput getPmOutput = rpcService.getRpc(GetPm.class).invoke(
+            RpcResult<GetPmOutput> getPmResult = rpcService.getRpc(GetPm.class).invoke(
                         new GetPmInputBuilder()
                             .setNodeId(nodeId)
                             .setGranularity(PmGranularity._15min)
                             .setResourceIdentifier(new ResourceIdentifierBuilder().setResourceName(tp + "-OTU").build())
                             .setResourceType(ResourceTypeEnum.Interface)
                             .build())
-                    .get()
-                    .getResult();
+                    .get();
+            if (!getPmResult.isSuccessful()) {
+                // For example, the device could not be read, or get-pm was rejected because too many get-pm
+                // requests are in progress
+                LOG.warn("OLM's get PM failed for node {} and tp {}: {}", nodeId, tp, getPmResult.getErrors());
+                return null;
+            }
+            GetPmOutput getPmOutput = getPmResult.getResult();
             if ((getPmOutput == null) || (getPmOutput.getNodeId() == null)) {
                 LOG.warn("OLM's get PM failed for node {} and tp {}", nodeId, tp);
             } else {
@@ -655,8 +664,12 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 // may return null
             }
 
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | CancellationException e) {
+            // Cancelled, for example, when OLM shuts down its get-pm pool
             LOG.warn("Error occurred while getting PM for node {} and tp {}", nodeId, tp, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.warn("Interrupted while getting PM for node {} and tp {}", nodeId, tp, e);
         }
         return null;
     }

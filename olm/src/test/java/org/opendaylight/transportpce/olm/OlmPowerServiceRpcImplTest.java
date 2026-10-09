@@ -14,15 +14,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_MOCKS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.common.executor.DefaultRpcRejections;
+import org.opendaylight.transportpce.common.executor.ExecutorPoolManager;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossBaseImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossCurrentImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.GetPmImpl;
@@ -65,6 +72,17 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
     private RpcProviderService rpcProviderService;
 
     @Test
+    void testCloseShutsDownTheExecutors() {
+        ExecutorPoolManager pools = mock(ExecutorPoolManager.class);
+        when(pools.executorService(any(), any(ThreadPoolName.class)))
+            .thenReturn(MoreExecutors.newDirectExecutorService());
+
+        new OlmPowerServiceRpcImpl(olmPowerService, mock(RpcProviderService.class, RETURNS_MOCKS), pools).close();
+
+        verify(pools).close();
+    }
+
+    @Test
     void testGetPmFailWithNodeIdNull() throws InterruptedException, ExecutionException {
         GetPmInput input = new GetPmInputBuilder()
             .setGranularity(PmGranularity._15min)
@@ -72,7 +90,11 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
                     .setResourceName("ots-deg1").build())
             .setResourceType(ResourceTypeEnum.Interface)
             .build();
-        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(olmPowerService).invoke(input);
+        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input);
         assertFalse(output.get().isSuccessful());
         assertNull(output.get().getResult());
         assertEquals(ErrorType.RPC, output.get().getErrors().get(0).getErrorType());
@@ -87,7 +109,11 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
             .setNodeId("nodeId")
             .build();
         when(this.olmPowerService.getPm(any())).thenReturn(new GetPmOutputBuilder().build());
-        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(olmPowerService).invoke(input);
+        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(
+                olmPowerService,
+                MoreExecutors.newDirectExecutorService(),
+                new DefaultRpcRejections()
+        ).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
     }

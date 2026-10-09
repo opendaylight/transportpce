@@ -10,6 +10,10 @@ package org.opendaylight.transportpce.olm.rpc.impl;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import java.util.concurrent.RejectedExecutionException;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPm;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
@@ -30,9 +34,13 @@ import org.slf4j.LoggerFactory;
 public final class GetPmImpl implements GetPm {
     private static final Logger LOG = LoggerFactory.getLogger(GetPmImpl.class);
     private final OlmPowerService olmPowerService;
+    private final ListeningExecutorService executor;
+    private final RpcRejections rpcRejections;
 
-    public GetPmImpl(final OlmPowerService olmPowerService) {
+    public GetPmImpl(OlmPowerService olmPowerService, ListeningExecutorService executor, RpcRejections rpcRejections) {
         this.olmPowerService = requireNonNull(olmPowerService);
+        this.executor = requireNonNull(executor);
+        this.rpcRejections = requireNonNull(rpcRejections);
     }
 
     @Override
@@ -43,6 +51,11 @@ public final class GetPmImpl implements GetPm {
                     .withError(ErrorType.RPC, "Error with input parameters")
                     .buildFuture();
         }
-        return RpcResultBuilder.success(this.olmPowerService.getPm(input)).buildFuture();
+
+        try {
+            return executor.submit(() -> RpcResultBuilder.success(olmPowerService.getPm(input)).build());
+        } catch (RejectedExecutionException e) {
+            return rpcRejections.rejected(executor, ThreadPoolName.OLM_GET_PM, e);
+        }
     }
 }

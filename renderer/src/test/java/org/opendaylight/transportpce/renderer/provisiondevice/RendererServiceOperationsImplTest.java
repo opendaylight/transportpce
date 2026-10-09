@@ -14,6 +14,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.List;
@@ -328,6 +329,32 @@ public class RendererServiceOperationsImplTest {
                 .buildFuture()).when(servicePowerSetup).invoke(any());
         GetPmOutput getPmOutput1 = null;
         when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput1).buildFuture());
+
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
+
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
+                .get();
+        assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    void serviceImplementationSkipsTheActivationTestWhenGetPmIsCancelled()
+            throws InterruptedException, ExecutionException {
+        ServiceImplementationRequestInput input = ServiceDataUtils
+                .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        when(deviceRenderer.setupServicePath(any(), any(), any()))
+                .thenReturn(new ServicePathOutputBuilder().setResult("success").setSuccess(true).build());
+
+        when(rpcService.getRpc(ServicePowerSetup.class)).thenReturn(servicePowerSetup);
+        when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
+        when(rpcService.getRpc(GetPm.class)).thenReturn(getPm);
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerSetupOutputBuilder().setResult(ResponseCodes.SUCCESS_RESULT).build())
+                .buildFuture()).when(servicePowerSetup).invoke(any());
+        // For example, OLM shut down its get-pm pool while the request was queued
+        when(getPm.invoke(any())).thenReturn(Futures.immediateCancelledFuture());
 
         when(portMapping.getNode(any())).thenReturn(node);
         when(node.getNodeInfo()).thenReturn(nodeInfo);
