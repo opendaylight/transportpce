@@ -149,7 +149,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void roadm2roadmLinkTest() {
         //ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX Uuid
-        Uuid linkUuid = new Uuid("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef");
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr1Id;
         this.znodeId = spdrSC1xpdr1Id;
@@ -167,6 +166,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkUuid = new Uuid("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef");
         PceTapiLink rdm2rdmLink = null;
         try {
             rdm2rdmLink = getTapiOpticalLinkFromId(linkUuid, roadmCId, roadmAId, nepCUuid, nepAUuid);
@@ -220,7 +220,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void roadm2TspLinkTest() {
         //ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1 Uuid
-        Uuid linkUuid = new Uuid("c72c7995-8f3a-30ee-940f-309880898d57");
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr1Id;
         this.znodeId = spdrSC1xpdr1Id;
@@ -238,6 +237,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkUuid = new Uuid("c72c7995-8f3a-30ee-940f-309880898d57");
         PceTapiLink rdm2tspLink = null;
         try {
             rdm2tspLink = getTapiOpticalLinkFromId(linkUuid, roadmAId, spdrSA1xpdr1Id, nepRoadmAUuid, nepSpdrSA1Uuid);
@@ -255,7 +255,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void roadm2TspLink2Test() {
         //ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2 Uuid
-        Uuid linkUuid = new Uuid("79b23827-48eb-33ed-b110-fbeca32c4125");
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr2Id;
         this.znodeId = spdrSC1xpdr2Id;
@@ -273,6 +272,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkUuid = new Uuid("79b23827-48eb-33ed-b110-fbeca32c4125");
         PceTapiLink rdm2tspLink = null;
         try {
             rdm2tspLink = getTapiOpticalLinkFromId(linkUuid, roadmAId, spdrSA1xpdr2Id, nepRoadmAUuid, nepSpdrSA1Uuid);
@@ -324,7 +324,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void otuLinkBetweenXpdr2andXpdr2Test() {
         // TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU Uuid
-        Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
         Uuid iodunepSpdrSA1x2 = new Uuid("6f4777d4-41f0-3833-b811-68b90903d8");
         Uuid iodunepSpdrSC1x2 = new Uuid("8b82dac3-646c-301d-b455-b7a4802774f7");
         //Generic settings required to get source and dest node
@@ -340,6 +339,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
         PceTapiLink otu4Link = null;
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id);
@@ -399,11 +399,8 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void iOdu4LinkBetweenXpdr1andXpdr1Test() {
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iOTU Uuid
-        Uuid linkOtu4Uuid = new Uuid("13b8ac31-56d7-36e9-814b-5d91f10ced16");
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU Uuid
-        Uuid linkiOdu4Uuid = new Uuid("b90f7b96-4fe0-390c-8ef2-41942196f19e");
         // TOP+SPDR-SA1-XPDR1+XPDR1-CLIENT1+SPDR-SC1-XPDR1+XPDR1-CLIENT1+eODU Uuid
-        Uuid linkeOdu4Uuid = new Uuid("0fbf2cf1-4456-3271-af1f-32be6b3b4f40");
         // TOP+SPDR-SA1-XPDR1+XPDR1-CLIENT1+SPDR-SC1-XPDR1+XPDR1-CLIENT1+DSR Uuid
 
         //Generic settings required to get source and dest node
@@ -422,6 +419,9 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
         PceTapiLink eodu4Link = null;
+        Uuid linkOtu4Uuid = new Uuid("13b8ac31-56d7-36e9-814b-5d91f10ced16");
+        Uuid linkiOdu4Uuid = new Uuid("b90f7b96-4fe0-390c-8ef2-41942196f19e");
+        Uuid linkeOdu4Uuid = new Uuid("0fbf2cf1-4456-3271-af1f-32be6b3b4f40");
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
@@ -493,9 +493,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     @Test
     void iOdu4LinkBetweenXpdr3andXpdr3Test() {
         // TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iOTU Uuid
-        Uuid linkOtu4Uuid = new Uuid("29b6a4ac-b5d3-33aa-aba1-52763259b838");
         // TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iODU Uuid
-        Uuid linkiOdu4Uuid = new Uuid("9e237eea-ce80-3490-9a66-34f7cbdac55f");
 
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr3Id;
@@ -512,6 +510,8 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         }
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
+        Uuid linkOtu4Uuid = new Uuid("29b6a4ac-b5d3-33aa-aba1-52763259b838");
+        Uuid linkiOdu4Uuid = new Uuid("9e237eea-ce80-3490-9a66-34f7cbdac55f");
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id);
         } catch (ExecutionException e) {
@@ -572,7 +572,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     void iOdu4LinkX1toX1TestNoPortSpecified() {
         LOG.info("PceTapiLInkTest Line 684 Entering Test6");
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU Uuid
-        Uuid linkiOdu4Uuid = new Uuid("b90f7b96-4fe0-390c-8ef2-41942196f19e");
 
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr1Id;
@@ -583,6 +582,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkiOdu4Uuid = new Uuid("b90f7b96-4fe0-390c-8ef2-41942196f19e");
         PceTapiLink iodu4Link = null;
         try {
             iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
@@ -640,7 +640,6 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
     void otuX2toX2LinkTestNoPortSpecified() {
         LOG.info("PceTapiLInkTest Line 814 Entering Test7");
         // TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU Uuid
-        Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
 
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr2Id;
@@ -651,6 +650,7 @@ public class PceTapiLinkUnidirTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get node from mdsal: ", e);
         }
+        Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
         PceTapiLink otu4Link = null;
         try {
             otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id);
