@@ -40,13 +40,8 @@ public class SpectrumIndex implements Index {
         BigDecimal edgeFrequency = BigDecimal.valueOf(startFrequency);
 
         if (frequencyBigDecimal.compareTo(edgeFrequency) < 0) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Frequency out of bounds (expected no lower than %s), found: %s",
-                            edgeFrequency.doubleValue(),
-                            frequency
-                    )
-            );
+            throw new IllegalArgumentException("Frequency out of bounds (expected no lower than %s), found: %s"
+                    .formatted(edgeFrequency.doubleValue(), frequency));
         }
 
         BigDecimal endFrequency = edgeFrequency
@@ -56,9 +51,8 @@ public class SpectrumIndex implements Index {
                 );
 
         if (frequencyBigDecimal.compareTo(endFrequency) > 0) {
-            throw new IllegalArgumentException(
-                    String.format("Frequency %s greater than maximum %s ", frequency, endFrequency)
-            );
+            throw new IllegalArgumentException("Frequency %s greater than maximum %s "
+                    .formatted(frequency, endFrequency));
         }
 
         int index = (frequencyBigDecimal

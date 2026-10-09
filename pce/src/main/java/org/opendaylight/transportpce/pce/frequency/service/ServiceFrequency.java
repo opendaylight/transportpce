@@ -56,18 +56,12 @@ public class ServiceFrequency implements Service {
         }
 
         if (slotWidths.size() > 1) {
-            throw new InvalidClientInputException(
-                    String.format(
-                            "Can not process conflicting slot width values: %s, data from client %s",
-                            slotWidths,
-                            input
-                    )
-            );
+            throw new InvalidClientInputException("Can not process conflicting slot width values: %s, data from "
+                    + "client %s".formatted(slotWidths, input));
         }
 
-        return slotWidths.stream().findFirst().orElseThrow(() -> new InvalidClientInputException(
-                String.format("No slot width information provided %s", input)
-        ));
+        return slotWidths.stream().findFirst().orElseThrow(() -> new InvalidClientInputException(("No slot width "
+                + "information provided %s").formatted(input)));
     }
 
     @Override
@@ -79,22 +73,13 @@ public class ServiceFrequency implements Service {
         BigDecimal frequencyWidthGHz = BigDecimal.valueOf(frequencySlot.getSlotWidth().getValue().doubleValue());
 
         if (frequencyWidthGHz.remainder(BigDecimal.valueOf(12.5)).compareTo(BigDecimal.ZERO) > 0) {
-            throw new InvalidClientInputException(
-                    String.format(
-                            "Frequency slot width %s is not a multiple of 12.5",
-                            frequencySlot.getSlotWidth()
-                    )
-            );
+            throw new InvalidClientInputException("Frequency slot width %s is not a multiple of 12.5"
+                    .formatted(frequencySlot.getSlotWidth()));
         }
 
         if (frequencyWidthGHz.remainder(BigDecimal.valueOf(frequencyGranularity)).compareTo(BigDecimal.ZERO) > 0) {
-            throw new InvalidClientInputException(
-                    String.format(
-                            "Frequency slot width %s is not a multiple of frequency granularity %s",
-                            frequencySlot.getSlotWidth(),
-                            frequencyGranularity
-                    )
-            );
+            throw new InvalidClientInputException("Frequency slot width %s is not a multiple of frequency granularity"
+                    + " %s".formatted(frequencySlot.getSlotWidth(), frequencyGranularity));
         }
 
         return frequencyWidthGHz.divide(BigDecimal.valueOf(frequencyGranularity)).intValue();

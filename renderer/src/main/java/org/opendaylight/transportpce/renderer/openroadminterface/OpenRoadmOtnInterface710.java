@@ -81,9 +81,8 @@ public class OpenRoadmOtnInterface710 {
     private void throwException(String nodeId, String logicalConnPoint)
         throws OpenRoadmInterfaceException {
 
-        throw new OpenRoadmInterfaceException(String.format(
-            "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-            nodeId, logicalConnPoint));
+        throw new OpenRoadmInterfaceException(("Unable to get mapping from PortMapping for node %s and logical "
+                + "connection port %s").formatted(nodeId, logicalConnPoint));
     }
 
     public String createOpenRoadmOdu4Interface(String nodeId, String logicalConnPoint, String serviceName,

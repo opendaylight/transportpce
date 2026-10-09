@@ -39,7 +39,7 @@ public final class LinkIdUtil {
      * @return {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId}
      */
     public static LinkId buildLinkId(String srcNode, String srcTp, String destNode, String destTp) {
-        return new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
+        return new LinkId(LINK_ID_FORMAT.formatted(srcNode, srcTp, destNode, destTp));
     }
 
     /**
@@ -52,7 +52,7 @@ public final class LinkIdUtil {
      * @return {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId}
      */
     public static LinkId buildInterDomainLinkIdwABSnodeAsSource(String srcTp, String destNode, String destTp) {
-        return new LinkId(String.format(INTERDOMAIN_LINK_ID_FORMAT_TAPI_ABS_NODE_SRC, srcTp, destNode, destTp));
+        return new LinkId(INTERDOMAIN_LINK_ID_FORMAT_TAPI_ABS_NODE_SRC.formatted(srcTp, destNode, destTp));
     }
 
     /**
@@ -65,7 +65,7 @@ public final class LinkIdUtil {
      * @return {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId}
      */
     public static LinkId buildInterDomainLinkIdwABSnodeAsDest(String srcNode, String srcTp, String destTp) {
-        return new LinkId(String.format(INTERDOMAIN_LINK_ID_FORMAT_TAPI_ABS_NODE_DST, srcNode, srcTp, destTp));
+        return new LinkId(INTERDOMAIN_LINK_ID_FORMAT_TAPI_ABS_NODE_DST.formatted(srcNode, srcTp, destTp));
     }
 
     /**
@@ -81,7 +81,7 @@ public final class LinkIdUtil {
      */
     public static LinkId buildOtnLinkId(String srcNode, String srcTp, String destNode, String destTp,
         String otnPrefix) {
-        return new LinkId(String.format(OTN_LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp, otnPrefix));
+        return new LinkId(OTN_LINK_ID_FORMAT.formatted(srcNode, srcTp, destNode, destTp, otnPrefix));
     }
 
     /**
@@ -102,7 +102,7 @@ public final class LinkIdUtil {
 
         Object[] params = buildParams(srcNode, srcTp, destNode, destTp, false);
 
-        return new LinkId(String.format(LINK_ID_FORMAT, params));
+        return new LinkId(LINK_ID_FORMAT.formatted(params));
     }
 
     /**
@@ -134,7 +134,7 @@ public final class LinkIdUtil {
     public static LinkId getOppositeLinkId(String srcNode, String srcTp, String destNode, String destTp,
         boolean checkNode) {
         Object[] params = buildParams(srcNode, srcTp, destNode, destTp, checkNode);
-        return new LinkId(String.format(LINK_ID_FORMAT, params));
+        return new LinkId(LINK_ID_FORMAT.formatted(params));
     }
 
     private static Object[] buildParams(String srcNode, String srcTp, String destNode, String destTp,

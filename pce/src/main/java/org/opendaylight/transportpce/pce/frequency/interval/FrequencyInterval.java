@@ -72,6 +72,6 @@ public class FrequencyInterval implements Interval {
 
     @Override
     public String toString() {
-        return String.format("Frequency interval (THz): %s - %s", start, end);
+        return "Frequency interval (THz): %s - %s".formatted(start, end);
     }
 }

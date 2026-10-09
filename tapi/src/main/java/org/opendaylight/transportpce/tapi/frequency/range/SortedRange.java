@@ -60,8 +60,8 @@ public class SortedRange implements Range {
     @Override
     public boolean add(Frequency lowerBound, Frequency upperBound) {
         if (lowerBound.compareTo(upperBound) > 0) {
-            throw new InvalidFrequencyRangeException(
-                    String.format("Invalid frequency range: %s > %s", lowerBound, upperBound));
+            throw new InvalidFrequencyRangeException("Invalid frequency range: %s > %s"
+                    .formatted(lowerBound, upperBound));
         }
 
         if (frequencyRanges.encloses(closed(lowerBound, upperBound))) {

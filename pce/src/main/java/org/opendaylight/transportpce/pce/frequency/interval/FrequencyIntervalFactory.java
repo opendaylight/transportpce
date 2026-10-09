@@ -95,15 +95,8 @@ public class FrequencyIntervalFactory implements IntervalFactory {
 
     public BigDecimal lowerFrequency(BigDecimal centerFrequencyTHz, Double slotWidthGHz, int nrOfSlots) {
         if (nrOfSlots < 2 || nrOfSlots % 2 != 0) {
-            throw new InvalidIntervalException(
-                    String.format(
-                            "Cannot create a interval using slots (%s) on a "
-                                    + "center frequency %s and slot frequency %s",
-                            nrOfSlots,
-                            centerFrequencyTHz.doubleValue(),
-                            slotWidthGHz
-                    )
-            );
+            throw new InvalidIntervalException(("Cannot create a interval using slots (%s) on a center frequency %s "
+                    + "and slot frequency %s").formatted(nrOfSlots, centerFrequencyTHz.doubleValue(), slotWidthGHz));
         }
 
         return centerFrequencyTHz
@@ -117,15 +110,8 @@ public class FrequencyIntervalFactory implements IntervalFactory {
 
     public BigDecimal upperFrequency(BigDecimal centerFrequencyTHz, Double slotWidthGHz, int nrOfSlots) {
         if (nrOfSlots < 2 || nrOfSlots % 2 != 0) {
-            throw new InvalidIntervalException(
-                    String.format(
-                            "Cannot create a interval using slots (%s) on a "
-                                    + "center frequency %s and slot frequency %s",
-                            nrOfSlots,
-                            centerFrequencyTHz.doubleValue(),
-                            slotWidthGHz
-                    )
-            );
+            throw new InvalidIntervalException(("Cannot create a interval using slots (%s) on a center frequency %s "
+                    + "and slot frequency %s").formatted(nrOfSlots, centerFrequencyTHz.doubleValue(), slotWidthGHz));
         }
 
         return centerFrequencyTHz

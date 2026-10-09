@@ -61,15 +61,15 @@ public class OpenRoadmInterfacesImpl221 {
             if (deviceTxOpt.isPresent()) {
                 deviceTx = deviceTxOpt.orElseThrow();
             } else {
-                throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                    nodeId));
+                throw new OpenRoadmInterfaceException(
+                        "Device transaction was not found for node %s!".formatted(nodeId));
             }
         } catch (InterruptedException | ExecutionException e) {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                nodeId), e);
+            throw new OpenRoadmInterfaceException(
+                    "Failed to obtain device transaction for node %s!".formatted(nodeId), e);
         }
 
         DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
@@ -114,8 +114,8 @@ public class OpenRoadmInterfacesImpl221 {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
-                .getName(), nodeId), e);
+            throw new OpenRoadmInterfaceException(
+                    "Failed to post interface %s on node %s!".formatted(ifBuilder.getName(), nodeId), e);
         }
     }
 
@@ -145,8 +145,8 @@ public class OpenRoadmInterfacesImpl221 {
             try {
                 postInterface(nodeId, ifBuilder);
             } catch (OpenRoadmInterfaceException ex) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to set state of interface %s to %s while"
-                    + " deleting it!", interfaceName, AdminStates.OutOfService), ex);
+                throw new OpenRoadmInterfaceException("Failed to set state of interface %s to %s while"
+                    + " deleting it!".formatted(interfaceName, AdminStates.OutOfService), ex);
             }
 
             DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
@@ -161,15 +161,15 @@ public class OpenRoadmInterfacesImpl221 {
                 if (deviceTxOpt.isPresent()) {
                     deviceTx = deviceTxOpt.orElseThrow();
                 } else {
-                    throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                        nodeId));
+                    throw new OpenRoadmInterfaceException(
+                            "Device transaction was not found for node %s!".formatted(nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
                 if (e instanceof InterruptedException) {
                     Thread.currentThread().interrupt();
                 }
-                throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                    nodeId), e);
+                throw new OpenRoadmInterfaceException(
+                        "Failed to obtain device transaction for node %s!".formatted(nodeId), e);
             }
 
             deviceTx.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
@@ -183,8 +183,8 @@ public class OpenRoadmInterfacesImpl221 {
                 if (e instanceof InterruptedException) {
                     Thread.currentThread().interrupt();
                 }
-                throw new OpenRoadmInterfaceException(String.format("Failed to delete interface %s on " + "node %s",
-                    interfaceName, nodeId), e);
+                throw new OpenRoadmInterfaceException(
+                        "Failed to delete interface %s on node %s".formatted(interfaceName, nodeId), e);
             }
             // change the equipment state on circuit pack if xpdr node
             if (intf2Delete.getName().contains(StringConstants.CLIENT_TOKEN) || intf2Delete.getName().contains(
@@ -214,8 +214,9 @@ public class OpenRoadmInterfacesImpl221 {
         if (cpOpt.isPresent()) {
             cp = cpOpt.orElseThrow();
         } else {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Could not find CircuitPack %s in equipment config datastore for node %s", circuitPackName, nodeId));
+            throw new OpenRoadmInterfaceException(
+                "Could not find CircuitPack %s in equipment config datastore for node %s"
+                        .formatted(circuitPackName, nodeId));
         }
         CircuitPacksBuilder cpBldr = new CircuitPacksBuilder(cp);
         boolean change = false;
@@ -239,15 +240,15 @@ public class OpenRoadmInterfacesImpl221 {
                 if (deviceTxOpt.isPresent()) {
                     deviceTx = deviceTxOpt.orElseThrow();
                 } else {
-                    throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                        nodeId));
+                    throw new OpenRoadmInterfaceException(
+                            "Device transaction was not found for node %s!".formatted(nodeId));
                 }
             } catch (InterruptedException | ExecutionException e) {
                 if (e instanceof InterruptedException) {
                     Thread.currentThread().interrupt();
                 }
-                throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                    nodeId), e);
+                throw new OpenRoadmInterfaceException(
+                        "Failed to obtain device transaction for node %s!".formatted(nodeId), e);
             }
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
             FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
@@ -259,8 +260,8 @@ public class OpenRoadmInterfacesImpl221 {
                 if (e instanceof InterruptedException) {
                     Thread.currentThread().interrupt();
                 }
-                throw new OpenRoadmInterfaceException(String.format("Failed to post equipment state on node %s!",
-                    nodeId), e);
+                throw new OpenRoadmInterfaceException(
+                        "Failed to post equipment state on node %s!".formatted(nodeId), e);
             }
         }
     }

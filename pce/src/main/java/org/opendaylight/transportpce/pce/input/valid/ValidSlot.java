@@ -54,11 +54,8 @@ public class ValidSlot implements Slot {
 
         if (difference.remainder(centerFrequencyGranularityTHz).compareTo(BigDecimal.ZERO) != 0) {
 
-            observer.error(String.format(
-                    "Center frequency %s (THz) is not evenly dividable by %s (GHz)",
-                    centerFrequencyTHz,
-                    centerFrequencyGranularityTHz.multiply(BigDecimal.valueOf(1000))
-            ));
+            observer.error("Center frequency %s (THz) is not evenly dividable by %s (GHz)"
+                    .formatted(centerFrequencyTHz, centerFrequencyGranularityTHz.multiply(BigDecimal.valueOf(1000))));
 
             return false;
         }
@@ -66,12 +63,8 @@ public class ValidSlot implements Slot {
         if (centerFrequencyTHz.compareTo(lowerEdgeFrequency) < 0
                 || centerFrequencyTHz.compareTo(upperEdgeFrequency) > 0) {
 
-            observer.error(String.format(
-                    "Center frequency %s (THz) is outside the range %s - %s (THz)",
-                    centerFrequencyTHz,
-                    lowerEdgeFrequency,
-                    upperEdgeFrequency
-            ));
+            observer.error("Center frequency %s (THz) is outside the range %s - %s (THz)"
+                    .formatted(centerFrequencyTHz, lowerEdgeFrequency, upperEdgeFrequency));
 
             return false;
         }
@@ -85,11 +78,8 @@ public class ValidSlot implements Slot {
 
         if (slotWidthGHz.remainder(slotWidthGranularityGHz).compareTo(BigDecimal.ZERO) != 0) {
 
-            observer.error(String.format(
-                    "Slot width %s (GHz) is not evenly dividable by %s (GHz)",
-                    slotWidthGHz,
-                    slotWidthGranularityGHz
-            ));
+            observer.error("Slot width %s (GHz) is not evenly dividable by %s (GHz)"
+                    .formatted(slotWidthGHz, slotWidthGranularityGHz));
 
             return false;
         }
@@ -113,24 +103,17 @@ public class ValidSlot implements Slot {
         BigDecimal upper = centerFrequencyTHz.add(differenceTHz);
 
         if (lower.compareTo(lowerEdgeFrequency) < 0) {
-            observer.error(String.format(
-                    "Center frequency %s (THz) with slot width %s (GHz) has a lower frequency outside the range %s-%s",
-                    centerFrequencyTHz,
-                    slotWidthGHz,
-                    lowerEdgeFrequency,
-                    upperEdgeFrequency)
+            observer.error(("Center frequency %s (THz) with slot width %s (GHz) has a lower frequency outside the "
+                    + "range %s-%s")
+                    .formatted(centerFrequencyTHz, slotWidthGHz, lowerEdgeFrequency, upperEdgeFrequency)
             );
             return false;
         }
 
         if (upper.compareTo(upperEdgeFrequency) > 0) {
-            observer.error(String.format(
-                    "Center frequency %s (THz) with slot width %s (GHz) has a higher frequency outside the range %s-%s",
-                    centerFrequencyTHz,
-                    slotWidthGHz,
-                    lowerEdgeFrequency,
-                    upperEdgeFrequency)
-            );
+            observer.error(("Center frequency %s (THz) with slot width %s (GHz) has a higher frequency outside the "
+                    + "range %s-%s")
+                    .formatted(centerFrequencyTHz, slotWidthGHz, lowerEdgeFrequency, upperEdgeFrequency));
 
             return false;
         }

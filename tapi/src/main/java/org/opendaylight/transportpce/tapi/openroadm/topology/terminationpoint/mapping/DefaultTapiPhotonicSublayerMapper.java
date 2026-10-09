@@ -75,7 +75,7 @@ public class DefaultTapiPhotonicSublayerMapper implements TapiPhotonicSublayerMa
             return mapper.get(tp);
         }
 
-        throw new IllegalArgumentException(String.format("Termination point type %s is not supported", tp));
+        throw new IllegalArgumentException("Termination point type %s is not supported".formatted(tp));
     }
 
     @Override

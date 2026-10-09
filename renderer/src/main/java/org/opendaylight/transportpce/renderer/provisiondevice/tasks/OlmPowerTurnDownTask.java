@@ -62,7 +62,7 @@ public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
             ServicePathNotificationTypes.ServiceDelete,
             serviceName,
             RpcStatusEx.Pending,
-            String.format("Turning down power on %s path for service %s", path, serviceName)
+            "Turning down power on %s path for service %s".formatted(path, serviceName)
         );
 
         RpcResult<ServicePowerTurndownOutput> result = fr.get();
@@ -72,10 +72,10 @@ public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
                 ServicePathNotificationTypes.ServiceDelete,
                 serviceName,
                 RpcStatusEx.Failed,
-                String.format("Service power turn down failed on %s path for service %s", path, serviceName)
+                "Service power turn down failed on %s path for service %s".formatted(path, serviceName)
             );
             return OLMRenderingResult.failed(
-                String.format("Service power turn down failed on %s path for service %s", path, serviceName)
+                "Service power turn down failed on %s path for service %s".formatted(path, serviceName)
             );
         } else {
             LOG.debug("OLM power turn down finished successfully on {} for service {}", path, serviceName);

@@ -90,8 +90,7 @@ public class XpdrMcCapability implements McCapability {
 
     @Override
     public String toString() {
-        return String.format(
-            "center-freq-granularity: %sGHz (minimum center frequency spacing)",
-            centerFreqGranularity.stripTrailingZeros().toPlainString());
+        return "center-freq-granularity: %sGHz (minimum center frequency spacing)"
+                .formatted(centerFreqGranularity.stripTrailingZeros().toPlainString());
     }
 }
