@@ -66,8 +66,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
@@ -1173,13 +1173,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     private NodeBuilder createTapiNodeBuilder(String supportingLayer, String nodeId) {
-        SupportingNodeBuilder supNBd = new SupportingNodeBuilder()
+        SupportingNode supNode = new SupportingNodeBuilder()
             .setNetworkRef(new NetworkId(supportingLayer))
-            .setNodeRef(new NodeId(nodeId));
+            .setNodeRef(new NodeId(nodeId))
+            .build();
         return new NodeBuilder()
             .setNodeId(new NodeId("TAPI-SBI-ABS-NODE"))
-            .setSupportingNode(new HashMap<>(
-                Map.of(new SupportingNodeKey(supNBd.build().key()), supNBd.build())));
+            .setSupportingNode(new HashMap<>(Map.of(supNode.key(), supNode)));
 
     }
 

@@ -280,7 +280,7 @@ public class ConvertTopoORtoTapiNbi {
                 uuidNameMap.put(
                     String.join("--", nodeUuid, nep.getUuid().getValue()),
                     String.join("--", nodeName,
-                        nep.getName().get(new NameKey(nep.getName().keySet().stream().findFirst().orElseThrow()))
+                        nep.getName().get(nep.getName().keySet().stream().findFirst().orElseThrow())
                             .getValue()));
             }
         }
