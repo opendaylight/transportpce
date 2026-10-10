@@ -36,9 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.RxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev240329.routing.constraints.HardConstraintsBuilder;
@@ -72,6 +70,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
@@ -89,8 +88,8 @@ public final class ServiceDataUtils {
                         .service.create.input.ServiceZEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setSdncRequestHeader(
                 new SdncRequestHeaderBuilder()
@@ -115,8 +114,8 @@ public final class ServiceDataUtils {
                     .setServiceFormat(ServiceFormat.OC)
                     .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setSdncRequestHeader(
                 new SdncRequestHeaderBuilder()
@@ -142,8 +141,8 @@ public final class ServiceDataUtils {
                     .setServiceFormat(ServiceFormat.OC)
                     .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setSdncRequestHeader(
                 new SdncRequestHeaderBuilder()
@@ -188,16 +187,16 @@ public final class ServiceDataUtils {
                         .temp.service.create.input.ServiceAEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setServiceZEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
                         .temp.service.create.input.ServiceZEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setSdncRequestHeader(
                 new SdncRequestHeaderBuilder()
@@ -217,15 +216,15 @@ public final class ServiceDataUtils {
                 new ServiceAEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setServiceZEnd(
                 new ServiceZEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setSdncRequestHeader(
                 new SdncRequestHeaderBuilder()
@@ -244,8 +243,8 @@ public final class ServiceDataUtils {
             .setServiceFormat(ServiceFormat.OC)
             .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
-            .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-            .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
+            .setTxDirection(BindingMap.of(getTxDirection()))
+            .setRxDirection(BindingMap.of(getRxDirection()));
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
@@ -256,8 +255,8 @@ public final class ServiceDataUtils {
             .setServiceFormat(ServiceFormat.OC)
             .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
-            .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-            .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
+            .setTxDirection(BindingMap.of(getTxDirection()))
+            .setRxDirection(BindingMap.of(getRxDirection()));
     }
 
     private static TxDirection getTxDirection() {
@@ -361,8 +360,8 @@ public final class ServiceDataUtils {
                     .setServiceFormat(ServiceFormat.OC)
                     .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .setServiceZEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
@@ -371,8 +370,8 @@ public final class ServiceDataUtils {
                     .setServiceFormat(ServiceFormat.OC)
                     .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                    .setTxDirection(BindingMap.of(getTxDirection()))
+                    .setRxDirection(BindingMap.of(getRxDirection()))
                     .build())
             .build();
     }
@@ -511,8 +510,8 @@ public final class ServiceDataUtils {
             .setServiceFormat(ServiceFormat.OC)
             .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
-            .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-            .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
+            .setTxDirection(BindingMap.of(getTxDirection()))
+            .setRxDirection(BindingMap.of(getRxDirection()));
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
@@ -523,8 +522,8 @@ public final class ServiceDataUtils {
             .setServiceFormat(ServiceFormat.OC)
             .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
-            .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-            .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
+            .setTxDirection(BindingMap.of(getTxDirection()))
+            .setRxDirection(BindingMap.of(getRxDirection()));
     }
 
     public static <T> ListenableFuture<T> returnFuture(T output) {
