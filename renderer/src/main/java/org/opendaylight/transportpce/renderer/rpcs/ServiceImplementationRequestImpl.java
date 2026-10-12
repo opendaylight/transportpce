@@ -9,8 +9,9 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.concurrent.ExecutionException;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequest;
@@ -24,9 +25,18 @@ import org.slf4j.LoggerFactory;
 public class ServiceImplementationRequestImpl implements ServiceImplementationRequest {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceImplementationRequestImpl.class);
     private final RendererServiceOperations rendererServiceOperations;
+    private final RequestLimit requestLimit;
 
-    public ServiceImplementationRequestImpl(final RendererServiceOperations rendererServiceOperations) {
+    /**
+     * Creates the RPC implementation.
+     *
+     * @param rendererServiceOperations the renderer that implements the service
+     * @param maxRequests maximum number of requests in progress; further requests are rejected
+     */
+    public ServiceImplementationRequestImpl(final RendererServiceOperations rendererServiceOperations,
+            final int maxRequests) {
         this.rendererServiceOperations = requireNonNull(rendererServiceOperations);
+        this.requestLimit = new RequestLimit("service-implementation-request", maxRequests);
     }
 
     @Override
@@ -34,14 +44,11 @@ public class ServiceImplementationRequestImpl implements ServiceImplementationRe
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {}", serviceName);
-        ServiceImplementationRequestOutput output = null;
-        try {
-            output = this.rendererServiceOperations.serviceImplementation(input, false).get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("RPC service implementation failed !", e);
-            Thread.currentThread().interrupt();
-        }
-        return ModelMappingUtils.createServiceImplementationRpcResponse(output);
+
+        return requestLimit.run(() -> Futures.transformAsync(
+                rendererServiceOperations.serviceImplementation(input, false),
+                ModelMappingUtils::createServiceImplementationRpcResponse,
+                MoreExecutors.directExecutor()));
     }
 
 }
