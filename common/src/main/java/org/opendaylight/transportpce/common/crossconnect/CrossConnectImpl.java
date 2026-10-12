@@ -83,7 +83,7 @@ public class CrossConnectImpl implements CrossConnect {
 
 
     public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn)
-            throws DeviceReadException {
+            throws DeviceReadException, OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);

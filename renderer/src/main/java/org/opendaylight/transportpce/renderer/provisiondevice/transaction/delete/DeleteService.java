@@ -47,9 +47,9 @@ public class DeleteService implements Delete {
         List<String> result;
         try {
             result = crossConnect.deleteCrossConnect(deviceId, connectionNumber, isOtn);
-        } catch (DeviceReadException e) {
+        } catch (DeviceReadException | OpenRoadmInterfaceException e) {
             // Reported as a failed delete, like a cross connect that could not be found
-            LOG.error("Could not read cross connect {} on node {}", connectionNumber, deviceId, e);
+            LOG.error("Could not delete cross connect {} on node {}", connectionNumber, deviceId, e);
             result = null;
         }
 

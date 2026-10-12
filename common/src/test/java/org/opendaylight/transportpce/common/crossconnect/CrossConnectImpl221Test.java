@@ -25,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -229,6 +231,31 @@ public class CrossConnectImpl221Test {
         assertEquals(List.of("SRG1-PP1-TXRX-nmc-761:768", "SRG1-PP1-TXRX-mc-761:768"),
             crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
         verify(deviceTransaction).delete(eq(LogicalDatastoreType.CONFIGURATION), any());
+    }
+
+    @Test
+    void deleteCrossConnectReportsAFailedDelete() throws Exception {
+        givenTheTransaction();
+        givenTheRoadmConnection();
+        doReturn(FluentFutures.immediateFailedFluentFuture(new IllegalStateException("device rejected the delete")))
+            .when(deviceTransaction).commit(anyLong(), any());
+
+        // A failed delete must not look like a cross connect that does not exist
+        OpenRoadmInterfaceException thrown = assertThrows(OpenRoadmInterfaceException.class,
+            () -> crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        assertTrue(thrown.getMessage().contains("device rejected the delete"), thrown.getMessage());
+    }
+
+    @Test
+    void deleteCrossConnectReportsACancelledDelete() throws Exception {
+        givenTheTransaction();
+        givenTheRoadmConnection();
+        doReturn(FluentFuture.from(Futures.immediateCancelledFuture()))
+            .when(deviceTransaction).commit(anyLong(), any());
+
+        // A cancelled commit must be reported as a failed delete, not escape as an unchecked exception
+        assertThrows(OpenRoadmInterfaceException.class,
+            () -> crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
     }
 
     private void givenTheTransaction() throws DeviceReadException {

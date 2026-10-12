@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.eclipse.jdt.annotation.NonNull;
@@ -126,7 +127,7 @@ public class CrossConnectImpl221 {
     }
 
     public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn)
-            throws DeviceReadException {
+            throws DeviceReadException, OpenRoadmInterfaceException {
         // Read and delete in one transaction, so the cross connect cannot change in between. The wait for the device
         // is bounded, so a frozen device fails the delete instead of holding up the caller.
         DeviceTransaction deviceTx = deviceTransactionManager.awaitDeviceTransaction(deviceId,
@@ -156,12 +157,16 @@ public class CrossConnectImpl221 {
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);
-            return interfList;
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to delete {}", connectionName, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new OpenRoadmInterfaceException(String.format(
+                "Interrupted while deleting cross connect %s on node %s", connectionName, deviceId), e);
+        } catch (ExecutionException | CancellationException e) {
+            throw new OpenRoadmInterfaceException(String.format("Failed to delete cross connect %s on node %s: %s",
+                connectionName, deviceId, e.getMessage()), e);
         }
-        return null;
+        LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);
+        return interfList;
     }
 
 

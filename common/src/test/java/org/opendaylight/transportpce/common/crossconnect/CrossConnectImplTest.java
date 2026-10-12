@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
@@ -73,7 +74,7 @@ public class CrossConnectImplTest {
     }
 
     @Test
-    void deleteCrossConnect() throws DeviceReadException {
+    void deleteCrossConnect() throws DeviceReadException, OpenRoadmInterfaceException {
         when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn("bad node version");
         List<String> res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
         assertNull(res);

@@ -521,9 +521,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
                             input.getLowerSpectralSlotNumber().intValue(),
                             input.getHigherSpectralSlotNumber().intValue()));
-                } catch (DeviceReadException | OpenRoadmInterfaceException e) {
+                } catch (DeviceReadException e) {
                     // Without this, an unreadable node would look like a node with nothing to delete
                     String result = String.format("Could not read node %s to find what to delete: %s", nodeId,
+                            e.getMessage());
+                    success.set(false);
+                    LOG.error(result, e);
+                    results.add(result);
+                    return;
+                } catch (OpenRoadmInterfaceException e) {
+                    String result = String.format("Failed to delete service path on node %s: %s", nodeId,
                             e.getMessage());
                     success.set(false);
                     LOG.error(result, e);
@@ -689,8 +696,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             // odu-connection, and OTN rendering rolls back odu-connections through here
                             listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, true);
                         }
-                    } catch (DeviceReadException e) {
-                        LOG.error("Could not read cross connect {} on node {}", connectionId, nodeId, e);
+                    } catch (DeviceReadException | OpenRoadmInterfaceException e) {
+                        LOG.error("Could not delete cross connect {} on node {}", connectionId, nodeId, e);
                         listInter = null;
                     }
                     if (listInter != null) {

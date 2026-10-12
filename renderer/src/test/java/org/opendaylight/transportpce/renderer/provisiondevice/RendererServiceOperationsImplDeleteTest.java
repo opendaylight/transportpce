@@ -41,6 +41,7 @@ import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -181,7 +182,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     @Test
     void serviceDeleteOperationWithoutPathDescription()
-            throws InterruptedException, ExecutionException, DeviceReadException {
+            throws InterruptedException, ExecutionException, DeviceReadException,
+            OpenRoadmInterfaceException {
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         Services service = new ServicesBuilder()
@@ -206,7 +208,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     @Test
     void serviceDeleteOperationTearDownFailedAtoZ()
-            throws ExecutionException, InterruptedException, DeviceReadException {
+            throws ExecutionException, InterruptedException, DeviceReadException,
+            OpenRoadmInterfaceException {
         writePathDescription();
         Services service = new ServicesBuilder()
             .setServiceName("service 1")
@@ -247,7 +250,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     @Test
     void serviceDeleteOperationTearDownFailedZtoA()
-            throws ExecutionException, InterruptedException, DeviceReadException {
+            throws ExecutionException, InterruptedException, DeviceReadException,
+            OpenRoadmInterfaceException {
         writePathDescription();
         when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
         when(servicePowerTurndown.invoke(any()))

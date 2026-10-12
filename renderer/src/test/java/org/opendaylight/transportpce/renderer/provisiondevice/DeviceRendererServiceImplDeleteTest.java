@@ -106,6 +106,19 @@ class DeviceRendererServiceImplDeleteTest {
     }
 
     @Test
+    void deleteServicePathFailsWhenTheCrossConnectCannotBeDeleted() throws Exception {
+        when(crossConnect.deleteCrossConnect(eq(NODE), anyString(), eq(false)))
+            .thenThrow(new OpenRoadmInterfaceException("Failed to delete cross connect on node " + NODE));
+
+        ServicePathOutput output = deviceRendererService.deleteServicePath(input);
+
+        // Before, this reported success: a failed delete looked like a cross connect that did not exist
+        assertFalse(output.getSuccess());
+        assertTrue(output.getResult().contains("Failed to delete cross connect on node " + NODE), output.getResult());
+        verify(openRoadmInterfaces, never()).deleteInterface(any(), any());
+    }
+
+    @Test
     void deleteServicePathSucceedsWhenTheCrossConnectDoesNotExist() throws Exception {
         when(crossConnect.deleteCrossConnect(eq(NODE), anyString(), eq(false))).thenReturn(null);
 
@@ -127,7 +140,7 @@ class DeviceRendererServiceImplDeleteTest {
 
         // Before, this reported success: the unreadable network interfaces looked like ones that did not exist
         assertFalse(output.getSuccess());
-        assertTrue(output.getResult().contains("Could not read node " + XPDR), output.getResult());
+        assertTrue(output.getResult().contains("Could not read interface on node " + XPDR), output.getResult());
         assertTrue(output.getResult().contains("Timed out"), output.getResult());
         verify(openRoadmInterfaces, never()).deleteInterface(any(), any());
     }

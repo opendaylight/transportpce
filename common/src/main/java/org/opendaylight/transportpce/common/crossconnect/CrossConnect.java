@@ -61,9 +61,10 @@ public interface CrossConnect {
      * @return the list of interface-names that were supporting the connection, or null if the cross connect
      *         does not exist on the device.
      * @throws DeviceReadException if the device could not be read to find the cross connect
+     * @throws OpenRoadmInterfaceException if the cross connect exists but could not be deleted
      */
     List<String> deleteCrossConnect(String deviceId, String connectionNumber, Boolean isOtn)
-            throws DeviceReadException;
+            throws DeviceReadException, OpenRoadmInterfaceException;
 
     /**
      * This public method returns the list of ports (port-trail) for a roadm's

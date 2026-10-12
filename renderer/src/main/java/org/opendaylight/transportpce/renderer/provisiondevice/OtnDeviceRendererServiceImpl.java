@@ -368,6 +368,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     LOG.error(result, e);
                     results.add(result);
                     return;
+                } catch (OpenRoadmInterfaceException e) {
+                    String result = String.format("Failed to delete service path on node %s: %s", nodeId,
+                            e.getMessage());
+                    success.set(false);
+                    LOG.error(result, e);
+                    results.add(result);
+                    return;
                 }
                 for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
                     interfacesToDelete.add(interf);
