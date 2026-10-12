@@ -61,7 +61,6 @@ import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServ
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 // Add OTN
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl;
-import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
@@ -105,6 +104,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
     private List<Registration> rpcRegistrations = new ArrayList<>();
+    // owns the renderer executors and shuts them down when closed in stopProcedure()
+    private RendererServiceOperationsImpl rendererServiceOperations;
 
     public TransportPCEImpl(
             LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
@@ -184,7 +185,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 null);
         //FIXME: need mdsal.binding;api.RpcService from LightyServices
         RpcService rpcService = lightyServices.getRpcConsumerRegistry();
-        RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
+        rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, dataBroker,
                 new NotificationSender(notificationPublishService),
                 portMapping,
@@ -289,6 +290,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.close();
         LOG.info("Shutting down network-model provider ...");
         networkModelProvider.close();
+        // Before the transaction manager: shutting down the executors waits for requests that use the devices
+        LOG.info("Shutting down renderer ...");
+        rendererServiceOperations.close();
         LOG.info("Shutting down transaction providers ...");
         deviceTransactionManager.preDestroy();
         LOG.info("Closing registered RPCs...");

@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.executor.DefaultExecutorPool;
+import org.opendaylight.transportpce.common.executor.DefaultPoolShutdown;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
@@ -87,6 +90,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,6 +111,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private static final String OPERATION_FAILED = "Operation Failed";
     private static final String OPERATION_SUCCESSFUL = "Operation Successful";
     private static final int NUMBER_OF_THREADS = 4;
+    // Each request runs at most two sub-tasks at a time, A-Z and Z-A
+    private static final int NUMBER_OF_SUB_TASK_THREADS = 2 * NUMBER_OF_THREADS;
+    private static final Duration SHUTDOWN_TIMEOUT = Duration.ofSeconds(10);
 
     private final DeviceRendererService deviceRenderer;
     private final OtnDeviceRendererService otnDeviceRenderer;
@@ -114,7 +121,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final Notification notification;
     private final PortMapping portMapping;
     private final RpcService rpcService;
-    private ListeningExecutorService executor;
+    private final ListeningExecutorService executor;
+    // Requests wait for their sub-tasks, so the sub-tasks must not queue behind requests on the same executor
+    private final ListeningExecutorService subTaskExecutor;
 
     @Activate
     public RendererServiceOperationsImpl(@Reference DeviceRendererService deviceRenderer,
@@ -130,7 +139,22 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         this.portMapping = portMapping;
         this.rpcService = rpcService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
+        this.subTaskExecutor =
+                MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_SUB_TASK_THREADS));
         LOG.debug("RendererServiceOperationsImpl instantiated");
+    }
+
+    /**
+     * Shuts down the executors with a {@link DefaultPoolShutdown}. Running requests and sub-tasks are interrupted, and
+     * queued ones are cancelled so that callers waiting on their futures are not left hanging. Waits up to
+     * {@link #SHUTDOWN_TIMEOUT} in total for the executors' threads to finish.
+     */
+    @Deactivate
+    public void close() {
+        new DefaultPoolShutdown(SHUTDOWN_TIMEOUT).shutdown(List.of(
+                new DefaultExecutorPool("renderer-requests", executor),
+                new DefaultExecutorPool("renderer-sub-tasks", subTaskExecutor)));
+        LOG.info("RendererServiceOperationsImpl closed");
     }
 
     @Override
@@ -413,7 +437,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         History transactionHistory = new TransactionHistory();
         ListenableFuture<DeviceRenderingResult> atozrenderingFuture =
-            this.executor.submit(
+            this.subTaskExecutor.submit(
                 new DeviceRenderingTask(this.deviceRenderer, servicePathDataAtoZ, ServicePathDirection.A_TO_Z,
                         transactionHistory));
 
@@ -424,7 +448,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<DeviceRenderingResult> ztoarenderingFuture =
-            this.executor.submit(
+            this.subTaskExecutor.submit(
                 new DeviceRenderingTask(this.deviceRenderer, servicePathDataZtoA, ServicePathDirection.Z_TO_A,
                         transactionHistory));
 
@@ -477,7 +501,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RpcStatusEx.Pending,
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<OtnDeviceRenderingResult> atozrenderingFuture =
-            this.executor.submit(
+            this.subTaskExecutor.submit(
                 new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathAtoZ, serviceType));
 
         LOG.info(RENDERING_DEVICES_Z_A_MSG);
@@ -487,7 +511,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<OtnDeviceRenderingResult> ztoarenderingFuture =
-            this.executor.submit(
+            this.subTaskExecutor.submit(
                 new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathZtoA, serviceType));
 
         ListenableFuture<List<OtnDeviceRenderingResult>> renderingCombinedFuture =
@@ -540,7 +564,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 RpcStatusEx.Pending,
                 "Olm power setup A-Z");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureAtoZ =
-                this.executor.submit(
+                this.subTaskExecutor.submit(
                     new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputAtoZ));
 
         LOG.info("Olm power setup Z-A powerSetUpInputZtoA = {}", powerSetupInputZtoA);
@@ -550,7 +574,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 RpcStatusEx.Pending,
                 "Olm power setup Z-A");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureZtoA =
-                this.executor.submit(
+                this.subTaskExecutor.submit(
                     new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputZtoA));
         ListenableFuture<List<OLMRenderingResult>> olmFutures =
                 Futures.allAsList(olmPowerSetupFutureAtoZ, olmPowerSetupFutureZtoA);
@@ -773,11 +797,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils.rendererCreateServiceInputZToA(serviceName,
                 pathDescription, Action.Delete, isOpenConfig);
         if (!isOpenConfig) {
-            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ = this.executor.submit(
+            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ = this.subTaskExecutor.submit(
                     new OlmPowerTurnDownTask(serviceName, ATOZPATH, servicePathInputDataAtoZ, notification,
                             rpcService));
 
-            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA = this.executor.submit(
+            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA = this.subTaskExecutor.submit(
                     new OlmPowerTurnDownTask(serviceName, ZTOAPATH, servicePathInputDataZtoA, notification,
                             rpcService));
 

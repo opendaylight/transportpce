@@ -8,14 +8,20 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -90,6 +96,39 @@ public class RendererServiceOperationsImplTest {
                 dataBroker, new NotificationSender(notificationPublishService), portMapping, rpcService);
     }
 
+    @AfterEach
+    void tearDown() {
+        this.rendererServiceOperations.close();
+    }
+
+    @Test
+    void closeCompletesRunningAndQueuedRequests() throws Exception {
+        // Four requests fill the request executor and their eight renderings fill the sub-task executor; the fifth
+        // request waits in the queue
+        int running = 4;
+        CountDownLatch allRendering = new CountDownLatch(2 * running);
+        CountDownLatch never = new CountDownLatch(1);
+        when(deviceRenderer.setupServicePath(any(), any(), any())).thenAnswer(invocation -> {
+            allRendering.countDown();
+            never.await();
+            return new ServicePathOutputBuilder().setResult("success").setSuccess(true).build();
+        });
+        ServiceImplementationRequestInput input = ServiceDataUtils
+                .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.TTP_TOKEN);
+        List<ListenableFuture<ServiceImplementationRequestOutput>> results = new ArrayList<>();
+        for (int i = 0; i <= running; i++) {
+            results.add(this.rendererServiceOperations.serviceImplementation(input, false));
+        }
+        assertTrue(allRendering.await(10, TimeUnit.SECONDS), "the renderings did not all start");
+
+        this.rendererServiceOperations.close();
+
+        for (ListenableFuture<ServiceImplementationRequestOutput> result : results) {
+            assertTrue(result.isDone(), "a request was left hanging after close");
+        }
+        assertTrue(results.get(running).isCancelled(), "the queued request was not cancelled");
+    }
+
     @Test
     void serviceImplementationTerminationPointAsResourceTtp() throws InterruptedException, ExecutionException {
         ServiceImplementationRequestInput input = ServiceDataUtils
@@ -112,6 +151,44 @@ public class RendererServiceOperationsImplTest {
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
                 .get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    void concurrentServiceImplementationsRenderInParallel()
+            throws InterruptedException, ExecutionException, TimeoutException {
+        // Each request waits for its A-Z and Z-A rendering. With four requests in progress, all eight renderings run
+        // only if they do not queue behind the requests on the same executor.
+        int requests = 4;
+        CountDownLatch allRendering = new CountDownLatch(2 * requests);
+        when(deviceRenderer.setupServicePath(any(), any(), any())).thenAnswer(invocation -> {
+            allRendering.countDown();
+            allRendering.await(10, TimeUnit.SECONDS);
+            return new ServicePathOutputBuilder().setResult("success").setSuccess(true).build();
+        });
+        when(rpcService.getRpc(ServicePowerSetup.class)).thenReturn(servicePowerSetup);
+        when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
+        when(rpcService.getRpc(GetPm.class)).thenReturn(getPm);
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerSetupOutputBuilder().setResult(ResponseCodes.SUCCESS_RESULT).build())
+                .buildFuture()).when(servicePowerSetup).invoke(any());
+        doReturn(RpcResultBuilder.success(new GetPmOutputBuilder().setNodeId("node id").build()).buildFuture())
+                .when(getPm).invoke(any());
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
+
+        ServiceImplementationRequestInput input = ServiceDataUtils
+                .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.TTP_TOKEN);
+        List<ListenableFuture<ServiceImplementationRequestOutput>> results = new ArrayList<>();
+        for (int i = 0; i < requests; i++) {
+            results.add(this.rendererServiceOperations.serviceImplementation(input, false));
+        }
+
+        assertTrue(allRendering.await(10, TimeUnit.SECONDS), "the renderings did not all run at the same time");
+        for (ListenableFuture<ServiceImplementationRequestOutput> result : results) {
+            assertEquals(ResponseCodes.RESPONSE_OK,
+                    result.get(10, TimeUnit.SECONDS).getConfigurationResponseCommon().getResponseCode());
+        }
     }
 
     @Test
