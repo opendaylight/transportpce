@@ -10,11 +10,7 @@ package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -28,14 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Fr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R100G;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.EthAttributes;
@@ -70,7 +60,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
-import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -469,50 +458,6 @@ public class OpenRoadmInterface221 {
         this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);
         this.portMapping.updateMapping(nodeId, mapping);
         return otsInterfaceBldr.build().getName();
-    }
-
-    public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
-            DeviceTransactionManager deviceTransactionManager) {
-        DataObjectIdentifier<RoadmConnections> xciid = DataObjectIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
-            .build();
-        LOG.info("reading xc {} in node {}", xc, nodeId);
-        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (crossconnection.isEmpty()) {
-            LOG.info("xd {} not found !", xc);
-            return false;
-        }
-        RoadmConnections rc = crossconnection.orElseThrow();
-        LOG.info("xd {} found", xc);
-        String supportedinter =
-            interfaceName.contains("nmc")
-                ? null
-                : interfaceName.replace("mc", "nmc");
-        return rc.getSource().getSrcIf().equals(interfaceName)
-                || rc.getDestination().getDstIf().equals(interfaceName)
-                || rc.getSource().getSrcIf().equals(supportedinter)
-                || rc.getDestination().getDstIf().equals(supportedinter);
-    }
-
-    public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
-            DeviceTransactionManager deviceTransactionManager) {
-        DataObjectIdentifier<OduConnection> xciid = DataObjectIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(OduConnection.class, new OduConnectionKey(xc))
-            .build();
-        LOG.info("reading xc {} in node {}", xc, nodeId);
-        Optional<OduConnection> oduConnectionOpt = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (oduConnectionOpt.isEmpty()) {
-            LOG.info("xc {} not found !", xc);
-            return false;
-        }
-        OduConnection oduXc = oduConnectionOpt.orElseThrow();
-        LOG.info("xc {} found", xc);
-        return oduXc.getSource().getSrcIf().equals(interfaceName)
-                || oduXc.getDestination().getDstIf().equals(interfaceName);
     }
 
     public String createOpenRoadmOtnOdu4Interface(String nodeId, String logicalConnPoint, String supportingOtuInterface)

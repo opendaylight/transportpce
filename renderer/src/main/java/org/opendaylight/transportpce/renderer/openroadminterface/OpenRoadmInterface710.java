@@ -13,13 +13,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -50,12 +46,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Of
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Off;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Rsfec;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Scfec;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev200529.Interface1Builder;
@@ -97,7 +89,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otsi.group.interfaces.rev
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250530.IfOtsiOtsigroup;
-import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -1148,31 +1139,6 @@ public class OpenRoadmInterface710 {
         this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);
         this.portMapping.updateMapping(nodeId, mapping);
         return otsInterfaceBldr.build().getName();
-    }
-
-    public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
-                              DeviceTransactionManager deviceTransactionManager) {
-        DataObjectIdentifier<RoadmConnections> xciid = DataObjectIdentifier
-                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
-                .build();
-        LOG.info("reading xc {} in node {}", xc, nodeId);
-        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (crossconnection.isEmpty()) {
-            LOG.info("xd {} not found !", xc);
-            return false;
-        }
-        RoadmConnections rc = crossconnection.orElseThrow();
-        LOG.info("xd {} found", xc);
-        String supportedinter =
-                interfaceName.contains("nmc")
-                        ? null
-                        : interfaceName.replace("mc", "nmc");
-        return rc.getSource().getSrcIf().equals(interfaceName)
-                || rc.getDestination().getDstIf().equals(interfaceName)
-                || rc.getSource().getSrcIf().equals(supportedinter)
-                || rc.getDestination().getDstIf().equals(supportedinter);
     }
 
 

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.util.List;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -188,28 +187,6 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface710.createOpenRoadmOtsInterface(nodeId, mapping);
             default:
                 return null;
-        }
-    }
-
-    public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
-            DeviceTransactionManager deviceTransactionManager) {
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                return openRoadmInterface710.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
-            default:
-                return false;
-        }
-    }
-
-    public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
-            DeviceTransactionManager deviceTransactionManager) {
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.isUsedByOtnXc(nodeId, interfaceName, xc, deviceTransactionManager);
-            default:
-                return false;
         }
     }
 

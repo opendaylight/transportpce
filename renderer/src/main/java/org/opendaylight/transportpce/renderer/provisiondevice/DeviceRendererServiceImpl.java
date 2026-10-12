@@ -564,16 +564,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             return getInterfacesTodelete(nodeId, srcTp, destTp, spectralSlotName);
         }
 
-        List<String> interfacesToDelete = new LinkedList<>();
         String connectionNumber = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, destTp, spectralSlotName);
         List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, false);
-        for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
-            if (!this.openRoadmInterfaceFactory.isUsedByXc(
-                    nodeId, interf, connectionNumber, this.deviceTransactionManager)) {
-                interfacesToDelete.add(interf);
-            }
-        }
-        return interfacesToDelete;
+        return intToDelete == null ? new LinkedList<>() : new LinkedList<>(intToDelete);
     }
 
     private List<String> getInterfacesTodelete(String nodeId, String srcTp, String destTp, String spectralSlotName) {

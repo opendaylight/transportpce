@@ -358,18 +358,15 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 }
                 List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
                 for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
-                    if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
-                            this.deviceTransactionManager)) {
-                        interfacesToDelete.add(interf);
-                        String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
-                        if (supportedInterface == null) {
-                            continue;
-                        }
-                        // Here ODUC can be ODUC2, ODUC3, ODUC4
-                        if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC"))
-                                || (input.getServiceRate().intValue() != 100 && !supportedInterface.contains("ODU4"))) {
-                            interfacesToDelete.add(supportedInterface);
-                        }
+                    interfacesToDelete.add(interf);
+                    String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                    if (supportedInterface == null) {
+                        continue;
+                    }
+                    // Here ODUC can be ODUC2, ODUC3, ODUC4
+                    if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC"))
+                            || (input.getServiceRate().intValue() != 100 && !supportedInterface.contains("ODU4"))) {
+                        interfacesToDelete.add(supportedInterface);
                     }
                 }
 
