@@ -61,4 +61,43 @@ class OpenRoadmInterfacesImplTest {
         assertThrows(OpenRoadmInterfaceException.class, () -> openRoadmInterfaces.readInterface(NODE, INTERFACE));
         verifyNoInteractions(openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
     }
+
+    @Test
+    void getSupportedInterfaceReportsAnUnknownVersion() {
+        when(mappingUtils.getOpenRoadmVersion(NODE)).thenReturn("1.2.1");
+
+        // An unknown version must not look like an interface without a supporting interface
+        OpenRoadmInterfaceException thrown = assertThrows(OpenRoadmInterfaceException.class,
+            () -> openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
+        assertTrue(thrown.getMessage().contains("unknown OpenROADM version 1.2.1"), thrown.getMessage());
+        verifyNoInteractions(openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+    }
+
+    @Test
+    void getSupportedInterfaceReportsANodeWithoutAVersion() {
+        when(mappingUtils.getOpenRoadmVersion(NODE)).thenReturn(null);
+
+        assertThrows(OpenRoadmInterfaceException.class,
+            () -> openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
+        verifyNoInteractions(openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+    }
+
+    @Test
+    void deleteInterfaceReportsAnUnknownVersion() {
+        when(mappingUtils.getOpenRoadmVersion(NODE)).thenReturn("1.2.1");
+
+        // Returning normally would report an interface that is still on the device as deleted
+        OpenRoadmInterfaceException thrown = assertThrows(OpenRoadmInterfaceException.class,
+            () -> openRoadmInterfaces.deleteInterface(NODE, INTERFACE));
+        assertTrue(thrown.getMessage().contains("unknown OpenROADM version 1.2.1"), thrown.getMessage());
+        verifyNoInteractions(openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+    }
+
+    @Test
+    void deleteInterfaceReportsANodeWithoutAVersion() {
+        when(mappingUtils.getOpenRoadmVersion(NODE)).thenReturn(null);
+
+        assertThrows(OpenRoadmInterfaceException.class, () -> openRoadmInterfaces.deleteInterface(NODE, INTERFACE));
+        verifyNoInteractions(openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+    }
 }

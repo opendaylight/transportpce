@@ -111,17 +111,22 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Interface delete request received for node {} with version {}", nodeId, openRoadmVersion);
-        switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_2_2_1:
-                openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
-                return;
-            case OPENROADM_DEVICE_VERSION_7_1:
-                openRoadmInterfacesImpl710.deleteInterface(nodeId,interfaceName);
-                return;
-            default:
-                LOG.error("deleteInterface unknown ordm version error device {}", nodeId);
-                return;
+        if (openRoadmVersion != null) {
+            switch (openRoadmVersion) {
+                case OPENROADM_DEVICE_VERSION_2_2_1:
+                    openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
+                    return;
+                case OPENROADM_DEVICE_VERSION_7_1:
+                    openRoadmInterfacesImpl710.deleteInterface(nodeId,interfaceName);
+                    return;
+                default:
+                    break;
+            }
         }
+        // Not knowing how to delete the interface must not be mistaken for a successful delete
+        throw new OpenRoadmInterfaceException(String.format(
+            "Could not delete interface %s on node %s: unknown OpenROADM version %s",
+            interfaceName, nodeId, openRoadmVersion));
     }
 
     @Override
@@ -195,18 +200,19 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     @Override
     public String getSupportedInterface(String nodeId, String interfaceName)
             throws OpenRoadmInterfaceException {
-        String supportedInterface = "";
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_2_2_1:
-                supportedInterface = openRoadmInterfacesImpl221.getSupportedInterface(nodeId,interfaceName);
-                break;
-            case OPENROADM_DEVICE_VERSION_7_1:
-                supportedInterface = openRoadmInterfacesImpl710.getSupportedInterface(nodeId,interfaceName);
-                break;
-            default:
-                LOG.error("getSupportedInterface unknown ordm version error device {}", nodeId);
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        if (openRoadmVersion != null) {
+            switch (openRoadmVersion) {
+                case OPENROADM_DEVICE_VERSION_2_2_1:
+                    return openRoadmInterfacesImpl221.getSupportedInterface(nodeId, interfaceName);
+                case OPENROADM_DEVICE_VERSION_7_1:
+                    return openRoadmInterfacesImpl710.getSupportedInterface(nodeId, interfaceName);
+                default:
+                    break;
+            }
         }
-        return supportedInterface;
+        // Not knowing how to read the interface must not be mistaken for an interface without a supporting one
+        throw unknownVersion(nodeId, interfaceName, openRoadmVersion);
     }
 
     private static OpenRoadmInterfaceException unknownVersion(String nodeId, String interfaceName,

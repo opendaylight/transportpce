@@ -85,7 +85,8 @@ public interface OpenRoadmInterfaces {
      * @param interfaceName
      *            Name of the interface to delete.
      *
-     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
+     * @throws OpenRoadmInterfaceException if the interface could not be read or deleted, or the node's OpenROADM
+     *            version is unknown
      */
     void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
@@ -121,7 +122,8 @@ public interface OpenRoadmInterfaces {
      * @param interfaceName name of the supported interface
      * @return the name of the supporting interface, or null if the interface does not exist or has no supporting
      *     interface
-     * @throws OpenRoadmInterfaceException if the interface cannot be read from the device
+     * @throws OpenRoadmInterfaceException if the interface cannot be read from the device, or the node's OpenROADM
+     *     version is unknown
      */
     String getSupportedInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 

@@ -84,14 +84,21 @@ public class CrossConnectImpl implements CrossConnect {
 
     public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn)
             throws DeviceReadException, OpenRoadmInterfaceException {
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_2_2_1:
-                return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
-            case OPENROADM_DEVICE_VERSION_7_1:
-                return crossConnectImpl710.deleteCrossConnect(nodeId, connectionNumber, isOtn);
-            default:
-                return null;
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        if (openRoadmVersion != null) {
+            switch (openRoadmVersion) {
+                case OPENROADM_DEVICE_VERSION_2_2_1:
+                    return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
+                case OPENROADM_DEVICE_VERSION_7_1:
+                    return crossConnectImpl710.deleteCrossConnect(nodeId, connectionNumber, isOtn);
+                default:
+                    break;
+            }
         }
+        // Not knowing how to delete the cross connect must not be mistaken for a cross connect that does not exist
+        throw new OpenRoadmInterfaceException(String.format(
+            "Could not delete cross connect %s on node %s: unknown OpenROADM version %s",
+            connectionNumber, nodeId, openRoadmVersion));
     }
 
     public List<?> getConnectionPortTrail(String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber,

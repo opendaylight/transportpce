@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -75,15 +75,29 @@ public class CrossConnectImplTest {
 
     @Test
     void deleteCrossConnect() throws DeviceReadException, OpenRoadmInterfaceException {
-        when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn("bad node version");
-        List<String> res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
-        assertNull(res);
-
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(OPENROADM_DEVICE_VERSION_2_2_1);
         when(crossConnectImpl221.deleteCrossConnect(any(), any(), anyBoolean()))
                 .thenReturn(List.of("interface1", "interface2"));
-        res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
+        List<String> res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
         assertEquals(2, res.size());
+    }
+
+    @Test
+    void deleteCrossConnectReportsAnUnknownVersion() {
+        when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn("bad node version");
+
+        // null would mean that the cross connect does not exist, so there would be nothing left on the device
+        OpenRoadmInterfaceException thrown = assertThrows(OpenRoadmInterfaceException.class,
+            () -> crossConnectImpl.deleteCrossConnect("nodeId", "100", false));
+        assertTrue(thrown.getMessage().contains("unknown OpenROADM version bad node version"), thrown.getMessage());
+    }
+
+    @Test
+    void deleteCrossConnectReportsANodeWithoutAVersion() {
+        when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn(null);
+
+        assertThrows(OpenRoadmInterfaceException.class,
+            () -> crossConnectImpl.deleteCrossConnect("nodeId", "100", false));
     }
 
     @Test
