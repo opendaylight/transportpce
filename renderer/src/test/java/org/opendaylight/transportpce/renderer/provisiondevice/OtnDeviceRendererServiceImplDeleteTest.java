@@ -18,6 +18,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -115,5 +119,36 @@ class OtnDeviceRendererServiceImplDeleteTest {
         verify(openRoadmInterfaces).deleteInterface(NODE, CLIENT_INTERFACE);
         verify(openRoadmInterfaces).deleteInterface(NODE, NETWORK_INTERFACE);
         verify(openRoadmInterfaces, never()).deleteInterface(NODE, null);
+    }
+
+    @Test
+    void deleteOtnServicePathKeepsTheInterruptStatus() throws Exception {
+        CountDownLatch deleting = new CountDownLatch(1);
+        CountDownLatch releaseDelete = new CountDownLatch(1);
+        when(openRoadmInterfaces.getSupportedInterface(eq(NODE), anyString())).thenAnswer(invocation -> {
+            deleting.countDown();
+            releaseDelete.await();
+            return null;
+        });
+        AtomicReference<OtnServicePathOutput> output = new AtomicReference<>();
+        AtomicBoolean interruptStatus = new AtomicBoolean();
+        Thread caller = new Thread(() -> {
+            output.set(otnDeviceRendererService.deleteOtnServicePath(input, StringConstants.SERVICE_TYPE_10GE));
+            interruptStatus.set(Thread.currentThread().isInterrupted());
+        });
+        caller.start();
+        try {
+            assertTrue(deleting.await(10, TimeUnit.SECONDS));
+            // As at shutdown
+            caller.interrupt();
+            caller.join(10_000);
+        } finally {
+            releaseDelete.countDown();
+        }
+
+        assertFalse(caller.isAlive());
+        assertFalse(output.get().getSuccess());
+        assertTrue(output.get().getResult().contains("Interrupted"), output.get().getResult());
+        assertTrue(interruptStatus.get());
     }
 }

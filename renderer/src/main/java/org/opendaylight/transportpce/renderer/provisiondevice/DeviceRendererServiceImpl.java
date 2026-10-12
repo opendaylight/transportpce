@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
@@ -438,7 +439,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         return messages;
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "checkstyle:IllegalCatch"})
     // FIXME check if the ForkJoinTask raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
@@ -455,7 +456,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+        // Each node on its own, so an unexpected error on one node fails that node and the others are still
+        // cleaned up
+        Consumer<Nodes> deleteOnNode = node -> {
             String nodeId = node.getNodeId();
             LOG.info("Deleting service setup on node {}", nodeId);
             if (node.getDestTp() == null) {
@@ -549,11 +552,29 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                 }
             }
+        };
+        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+            try {
+                deleteOnNode.accept(node);
+            } catch (RuntimeException e) {
+                String result = String.format("Failed to delete service path on node %s: %s", node.getNodeId(),
+                        e);
+                success.set(false);
+                LOG.error(result, e);
+                results.add(result);
+            }
         }));
         try {
             forkJoinTask.get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Interrupted while deleting service paths!", e);
+            success.set(false);
+            results.add("Interrupted while deleting service paths");
+        } catch (ExecutionException e) {
             LOG.error("Error while deleting service paths!", e);
+            success.set(false);
+            results.add("Error while deleting service paths: " + e.getCause());
         }
         forkJoinPool.shutdown();
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
@@ -819,7 +840,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             commit.get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             LOG.info("Nodes are unregister for alarm suppression for service: {}", serviceName);
             return true;
-        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            // Keep the interrupt for the caller, for example a service-path delete that was interrupted
+            Thread.currentThread().interrupt();
+            LOG.warn("Interrupted while removing service {} from the alarm suppression list", serviceName, e);
+            return false;
+        } catch (TimeoutException | ExecutionException e) {
             LOG.warn("Failed to alarm suppresslist for service: {}", serviceName, e);
             return false;
         }

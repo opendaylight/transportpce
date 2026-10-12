@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceReadException;
@@ -234,7 +235,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         }
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "checkstyle:IllegalCatch"})
     // FIXME check if the ForkJoinTask raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
@@ -251,7 +252,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+        // Each node on its own, so an unexpected error on one node fails that node and the others are still
+        // cleaned up
+        Consumer<Nodes> deleteOnNode = node -> {
             String nodeId = node.getNodeId();
             LOG.info("Deleting service setup on node {}", nodeId);
             String networkTp = node.getNetworkTp();
@@ -413,13 +416,31 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     }
                 }
             }
+        };
+        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+            try {
+                deleteOnNode.accept(node);
+            } catch (RuntimeException e) {
+                String result = String.format("Failed to delete service path on node %s: %s", node.getNodeId(),
+                        e);
+                success.set(false);
+                LOG.error(result, e);
+                results.add(result);
+            }
         }));
         try {
             forkJoinTask.get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.error("Interrupted while deleting service paths!", e);
+            return new OtnServicePathOutputBuilder()
+                    .setResult("Interrupted while deleting service paths")
+                    .setSuccess(false)
+                    .build();
+        } catch (ExecutionException e) {
             LOG.error("Error while deleting service paths!", e);
             return new OtnServicePathOutputBuilder()
-                    .setResult("Error while deleting service paths!")
+                    .setResult("Error while deleting service paths: " + e.getCause())
                     .setSuccess(false)
                     .build();
         } finally {

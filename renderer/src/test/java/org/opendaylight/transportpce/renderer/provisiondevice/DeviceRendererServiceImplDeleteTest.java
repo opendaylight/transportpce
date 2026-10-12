@@ -20,8 +20,14 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -116,6 +122,63 @@ class DeviceRendererServiceImplDeleteTest {
         assertFalse(output.getSuccess());
         assertTrue(output.getResult().contains("Failed to delete cross connect on node " + NODE), output.getResult());
         verify(openRoadmInterfaces, never()).deleteInterface(any(), any());
+    }
+
+    @Test
+    void deleteServicePathFailsTheNodeWithAnUnexpectedError() throws Exception {
+        String otherNode = "ROADM-C1";
+        when(deviceTransactionManager.isDeviceMounted(otherNode)).thenReturn(true);
+        // For example a node without an OpenROADM version in the port mapping
+        when(crossConnect.deleteCrossConnect(eq(NODE), anyString(), eq(false)))
+            .thenThrow(new NullPointerException("no OpenROADM version"));
+        when(crossConnect.deleteCrossConnect(eq(otherNode), anyString(), eq(false)))
+            .thenReturn(List.of("SRG1-PP1-TXRX-nmc-761:768"));
+        ServicePathInput twoNodes = new ServicePathInputBuilder(ServiceDataUtils.buildServicePathInputs(List.of(
+                ServiceDataUtils.createNode(NODE, "DEG1-TTP-TXRX", "SRG1-PP1-TXRX"),
+                ServiceDataUtils.createNode(otherNode, "DEG1-TTP-TXRX", "SRG1-PP1-TXRX"))))
+            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+            .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+            .build();
+
+        ServicePathOutput output = deviceRendererService.deleteServicePath(twoNodes);
+
+        // Before, this reported success, and the error could stop the cleanup of the other node
+        assertFalse(output.getSuccess());
+        assertTrue(output.getResult().contains("Failed to delete service path on node " + NODE), output.getResult());
+        verify(openRoadmInterfaces).deleteInterface(otherNode, "SRG1-PP1-TXRX-nmc-761:768");
+    }
+
+    @Test
+    void deleteServicePathKeepsTheInterruptStatus() throws Exception {
+        CountDownLatch deleting = new CountDownLatch(1);
+        CountDownLatch releaseDelete = new CountDownLatch(1);
+        when(crossConnect.deleteCrossConnect(eq(NODE), anyString(), eq(false))).thenAnswer(invocation -> {
+            deleting.countDown();
+            releaseDelete.await();
+            return null;
+        });
+        AtomicReference<ServicePathOutput> output = new AtomicReference<>();
+        AtomicBoolean interruptStatus = new AtomicBoolean();
+        Thread caller = new Thread(() -> {
+            output.set(deviceRendererService.deleteServicePath(input));
+            interruptStatus.set(Thread.currentThread().isInterrupted());
+        });
+        caller.start();
+        try {
+            assertTrue(deleting.await(10, TimeUnit.SECONDS));
+            // Removing the nodes from alarm suppression afterwards does not finish at once either
+            doReturn(FluentFuture.from(SettableFuture.create())).when(writeTransaction).commit();
+            // As at shutdown
+            caller.interrupt();
+            caller.join(10_000);
+        } finally {
+            releaseDelete.countDown();
+        }
+
+        assertFalse(caller.isAlive());
+        assertFalse(output.get().getSuccess());
+        assertTrue(output.get().getResult().contains("Interrupted"), output.get().getResult());
+        assertTrue(interruptStatus.get());
     }
 
     @Test
