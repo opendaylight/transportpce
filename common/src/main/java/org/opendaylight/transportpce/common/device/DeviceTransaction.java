@@ -74,13 +74,13 @@ public class DeviceTransaction {
      * @return true if cancel was successful.
      */
     public boolean cancel() {
-        if (wasSubmittedOrCancelled.get()) {
+        // Atomic, so the submit timeout cannot cancel a transaction that is being committed
+        if (!wasSubmittedOrCancelled.compareAndSet(false, true)) {
             LOG.warn("Transaction was already submitted or canceled!");
             return false;
         }
 
         LOG.debug("Transaction cancelled. Lock: {}", released);
-        wasSubmittedOrCancelled.set(true);
         try {
             return rwTx.cancel();
         } finally {
@@ -98,14 +98,14 @@ public class DeviceTransaction {
      */
     @SuppressWarnings("checkstyle:IllegalCatch")
     public FluentFuture<? extends @NonNull CommitInfo> commit(long timeout, TimeUnit timeUnit) {
-        if (wasSubmittedOrCancelled.get()) {
+        // Atomic, so the submit timeout cannot cancel a transaction that is being committed
+        if (!wasSubmittedOrCancelled.compareAndSet(false, true)) {
             String msg = "Transaction was already submitted or canceled!";
             LOG.error(msg);
             return FluentFutures.immediateFailedFluentFuture(new IllegalStateException(msg));
         }
 
         LOG.debug("Transaction committed. Lock: {}", released);
-        wasSubmittedOrCancelled.set(true);
         FluentFuture<? extends @NonNull CommitInfo> commit;
         try {
             commit = rwTx.commit();
