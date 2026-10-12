@@ -13,9 +13,12 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
@@ -39,12 +42,14 @@ public class DeviceTransaction {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceTransaction.class);
 
+    private final String deviceId;
     private final ReadWriteTransaction rwTx;
     private final SettableFuture<Void> released;
     private final ScheduledExecutorService scheduledExecutorService;
     private final AtomicBoolean wasSubmittedOrCancelled = new AtomicBoolean(false);
 
-    DeviceTransaction(ReadWriteTransaction rwTx, SettableFuture<Void> released) {
+    DeviceTransaction(String deviceId, ReadWriteTransaction rwTx, SettableFuture<Void> released) {
+        this.deviceId = deviceId;
         this.rwTx = rwTx;
         this.released = released;
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -54,6 +59,42 @@ public class DeviceTransaction {
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
             DataObjectIdentifier<T> path) {
         return rwTx.read(store, path);
+    }
+
+    /**
+     * Reads data in this transaction, telling "no data" apart from "could not read", like
+     * {@link DeviceTransactionManager#readFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long,
+     * TimeUnit)}.
+     *
+     * <p>The transaction stays open; the caller still commits or cancels it.
+     *
+     * @param store datastore to read from
+     * @param path path of the data in the device's datastore
+     * @param timeout maximum time for the read
+     * @param unit unit of {@code timeout}
+     * @param <T> type of the data
+     * @return the data, or an empty Optional if the device has no data at this path
+     * @throws DeviceReadException if the read failed or did not complete in time
+     */
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    public <T extends DataObject> Optional<T> read(LogicalDatastoreType store, DataObjectIdentifier<T> path,
+            long timeout, TimeUnit unit) throws DeviceReadException {
+        try {
+            return rwTx.read(store, path).get(timeout, unit);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DeviceReadException("Interrupted while reading " + path + " from device " + deviceId, e);
+        } catch (TimeoutException e) {
+            throw new DeviceReadException("Timed out after " + timeout + " " + unit + " reading " + path
+                    + " from device " + deviceId, e);
+        } catch (CancellationException e) {
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " was cancelled", e);
+        } catch (ExecutionException e) {
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
+        } catch (RuntimeException e) {
+            // Thrown by the read itself, for example when the mount point is torn down while the read is issued
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
+        }
     }
 
     public <T extends DataObject> void put(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {

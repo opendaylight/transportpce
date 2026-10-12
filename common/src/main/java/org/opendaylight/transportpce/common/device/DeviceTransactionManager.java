@@ -174,6 +174,25 @@ public interface DeviceTransactionManager {
             TimeUnit unit) throws DeviceReadException;
 
     /**
+     * Waits for this request's turn on the device and returns a transaction on it, like
+     * {@link #getDeviceTransaction(String)}, but gives up after a timeout, without disturbing the order of the
+     * device's other transactions.
+     *
+     * <p>The caller must close the transaction with {@link DeviceTransaction#commit(long, TimeUnit)} or
+     * {@link DeviceTransaction#cancel()}. A transaction still open after {@code useTimeout} is cancelled, so the
+     * device is not held forever.
+     *
+     * @param deviceId device to open the transaction on
+     * @param waitTimeout maximum time to wait for the device, while earlier transactions on it are still open
+     * @param useTimeout maximum time the caller may keep the transaction open before it is cancelled
+     * @param unit unit of {@code waitTimeout} and {@code useTimeout}
+     * @return the transaction
+     * @throws DeviceReadException if the device is not mounted or could not be reached in time
+     */
+    DeviceTransaction awaitDeviceTransaction(String deviceId, long waitTimeout, long useTimeout, TimeUnit unit)
+            throws DeviceReadException;
+
+    /**
      * Checks if device with specified ID is mounted.
      *
      * @param deviceId Identifier of device to check.

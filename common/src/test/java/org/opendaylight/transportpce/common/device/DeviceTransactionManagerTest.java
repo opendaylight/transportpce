@@ -364,6 +364,52 @@ public class DeviceTransactionManagerTest {
     }
 
     @Test
+    void awaitDeviceTransactionReturnsATransactionOnTheDeviceTest() throws Exception {
+        DeviceTransaction tx = transactionManager.awaitDeviceTransaction(defaultDeviceId, defaultTimeout,
+                defaultTimeout, defaultTimeUnit);
+
+        // The caller holds the device until it closes the transaction
+        Future<Optional<DeviceTransaction>> next = transactionManager.getDeviceTransaction(defaultDeviceId);
+        await("next transaction waits").pollDelay(Duration.ofMillis(200)).untilAsserted(() ->
+                assertFalse(next.isDone()));
+        tx.commit(defaultTimeout, defaultTimeUnit);
+        await("next transaction gets the device").atMost(Duration.ofSeconds(1)).untilAsserted(() ->
+                assertTrue(next.isDone()));
+        next.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+    }
+
+    @Test
+    void awaitDeviceTransactionGivesUpWaitingTest() throws Exception {
+        // Another transaction holds the device
+        final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager
+                .awaitDeviceTransaction(defaultDeviceId, 300, defaultTimeout, TimeUnit.MILLISECONDS));
+        assertInstanceOf(TimeoutException.class, thrown.getCause());
+        holder.commit(defaultTimeout, defaultTimeUnit);
+    }
+
+    @Test
+    void awaitDeviceTransactionFailsWhenTheDeviceIsNotMountedTest() {
+        when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.empty());
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager
+                .awaitDeviceTransaction(defaultDeviceId, defaultTimeout, defaultTimeout, defaultTimeUnit));
+        assertTrue(thrown.getMessage().contains("not mounted"), thrown.getMessage());
+    }
+
+    @Test
+    void awaitDeviceTransactionCancelsATransactionLeftOpenTest() throws Exception {
+        DeviceTransaction tx = transactionManager.awaitDeviceTransaction(defaultDeviceId, defaultTimeout, 200,
+                TimeUnit.MILLISECONDS);
+
+        // A caller that never closes the transaction does not hold the device forever
+        await("transaction is cancelled").atMost(Duration.ofSeconds(2)).untilAsserted(() ->
+                assertTrue(tx.wasSubmittedOrCancelled().get()));
+        verify(rwTransactionMock).cancel();
+    }
+
+    @Test
     void readFromDeviceKeepsTheInterruptFlagTest() throws Exception {
         // Another transaction holds the device, so the read has to wait
         final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();

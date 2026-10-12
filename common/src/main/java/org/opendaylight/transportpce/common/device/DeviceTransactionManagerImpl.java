@@ -214,7 +214,6 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
         return read(deviceId, type, path, timeout, unit, true);
     }
 
-    @SuppressWarnings("checkstyle:IllegalCatch")
     private <T extends DataObject> Optional<T> read(
             String deviceId,
             LogicalDatastoreType type,
@@ -223,38 +222,33 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             TimeUnit unit,
             boolean boundedWait) throws DeviceReadException {
 
-        DeviceTransaction tx = awaitTransaction(deviceId, timeout, unit, boundedWait);
+        // The transaction's own timeout is only a safety net: the read closes the transaction when it is done or
+        // times out, so the safety net must not fire before that
+        DeviceTransaction tx = awaitTransaction(deviceId, timeout, unit, boundedWait,
+                unit.toMillis(timeout) + maxDurationToGetData);
         try {
-            return tx.read(type, path).get(timeout, unit);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new DeviceReadException("Interrupted while reading " + path + " from device " + deviceId, e);
-        } catch (TimeoutException e) {
-            throw new DeviceReadException("Timed out after " + timeout + " " + unit + " reading " + path
-                    + " from device " + deviceId, e);
-        } catch (CancellationException e) {
-            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " was cancelled", e);
-        } catch (ExecutionException e) {
-            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
-        } catch (RuntimeException e) {
-            // Thrown by the read itself, for example when the mount point is torn down while the read is issued
-            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
+            return tx.read(type, path, timeout, unit);
         } finally {
             tx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
         }
+    }
+
+    @Override
+    public DeviceTransaction awaitDeviceTransaction(String deviceId, long waitTimeout, long useTimeout,
+            TimeUnit unit) throws DeviceReadException {
+        return awaitTransaction(deviceId, waitTimeout, unit, true, unit.toMillis(useTimeout));
     }
 
     /**
      * Waits for this request's turn on the device and returns its transaction.
      *
      * @param boundedWait if true, gives up after the timeout; otherwise waits as long as it takes
+     * @param submitTimeoutMillis after how long the transaction is cancelled if it is still open
      */
-    private DeviceTransaction awaitTransaction(String deviceId, long timeout, TimeUnit unit, boolean boundedWait)
-            throws DeviceReadException {
-        // The transaction's own timeout is only a safety net: the read closes the transaction when it is done or
-        // times out, so the safety net must not fire before that
-        ListenableFuture<Optional<DeviceTransaction>> txFuture = getDeviceTransaction(deviceId,
-                unit.toMillis(timeout) + maxDurationToGetData, TimeUnit.MILLISECONDS);
+    private DeviceTransaction awaitTransaction(String deviceId, long timeout, TimeUnit unit, boolean boundedWait,
+            long submitTimeoutMillis) throws DeviceReadException {
+        ListenableFuture<Optional<DeviceTransaction>> txFuture =
+                getDeviceTransaction(deviceId, submitTimeoutMillis, TimeUnit.MILLISECONDS);
         Optional<DeviceTransaction> tx;
         try {
             tx = boundedWait ? txFuture.get(timeout, unit) : txFuture.get();
@@ -316,7 +310,8 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             return Optional.empty();
         }
         LOG.debug("Created transaction for device {}", deviceId);
-        return Optional.of(new DeviceTransaction(dataBroker.orElseThrow().newReadWriteTransaction(), released));
+        return Optional.of(
+                new DeviceTransaction(deviceId, dataBroker.orElseThrow().newReadWriteTransaction(), released));
     }
 
     private void scheduleSubmitTimeout(
