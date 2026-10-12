@@ -195,26 +195,95 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     @Override
     public <T extends DataObject> Optional<T> getDataFromDevice(String deviceId,
             LogicalDatastoreType logicalDatastoreType, DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit) {
-        Optional<DeviceTransaction> deviceTxOpt;
         try {
-            deviceTxOpt = getDeviceTransaction(deviceId, timeout, timeUnit).get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Exception thrown while getting transaction for device {}!", deviceId, e);
+            // Existing callers keep waiting for the device without a limit, as before
+            return read(deviceId, logicalDatastoreType, path, timeout, timeUnit, false);
+        } catch (DeviceReadException e) {
+            LOG.error("Could not read {} from device {}", path, deviceId, e);
             return Optional.empty();
         }
-        if (deviceTxOpt.isPresent()) {
-            DeviceTransaction deviceTx = deviceTxOpt.orElseThrow();
-            try {
-                return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
-            } finally {
-                deviceTx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
-            }
-        } else {
-            LOG.error("Could not obtain transaction for device {}!", deviceId);
+    }
+
+    @Override
+    public <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long timeout,
+            TimeUnit unit) throws DeviceReadException {
+        return read(deviceId, type, path, timeout, unit, true);
+    }
+
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    private <T extends DataObject> Optional<T> read(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long timeout,
+            TimeUnit unit,
+            boolean boundedWait) throws DeviceReadException {
+
+        DeviceTransaction tx = awaitTransaction(deviceId, timeout, unit, boundedWait);
+        try {
+            return tx.read(type, path).get(timeout, unit);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DeviceReadException("Interrupted while reading " + path + " from device " + deviceId, e);
+        } catch (TimeoutException e) {
+            throw new DeviceReadException("Timed out after " + timeout + " " + unit + " reading " + path
+                    + " from device " + deviceId, e);
+        } catch (CancellationException e) {
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " was cancelled", e);
+        } catch (ExecutionException e) {
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
+        } catch (RuntimeException e) {
+            // Thrown by the read itself, for example when the mount point is torn down while the read is issued
+            throw new DeviceReadException("Reading " + path + " from device " + deviceId + " failed", e);
+        } finally {
+            tx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
         }
-        return Optional.empty();
+    }
+
+    /**
+     * Waits for this request's turn on the device and returns its transaction.
+     *
+     * @param boundedWait if true, gives up after the timeout; otherwise waits as long as it takes
+     */
+    private DeviceTransaction awaitTransaction(String deviceId, long timeout, TimeUnit unit, boolean boundedWait)
+            throws DeviceReadException {
+        // The transaction's own timeout is only a safety net: the read closes the transaction when it is done or
+        // times out, so the safety net must not fire before that
+        ListenableFuture<Optional<DeviceTransaction>> txFuture = getDeviceTransaction(deviceId,
+                unit.toMillis(timeout) + maxDurationToGetData, TimeUnit.MILLISECONDS);
+        Optional<DeviceTransaction> tx;
+        try {
+            tx = boundedWait ? txFuture.get(timeout, unit) : txFuture.get();
+        } catch (TimeoutException e) {
+            giveUp(txFuture);
+            throw new DeviceReadException("Timed out after " + timeout + " " + unit + " waiting for device "
+                    + deviceId, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            giveUp(txFuture);
+            throw new DeviceReadException("Interrupted while waiting for device " + deviceId, e);
+        } catch (ExecutionException e) {
+            throw new DeviceReadException("Could not open a transaction on device " + deviceId, e);
+        }
+        return tx.orElseThrow(() -> new DeviceReadException("Device " + deviceId + " is not mounted"));
+    }
+
+    /**
+     * Gives up a request for a device transaction without disturbing the device's queue.
+     */
+    private static void giveUp(ListenableFuture<Optional<DeviceTransaction>> txFuture) {
+        if (!txFuture.cancel(false)) {
+            // The transaction was created just as we gave up: close it, so the next one in line gets the device
+            try {
+                Futures.getDone(txFuture).ifPresent(DeviceTransaction::cancel);
+            } catch (ExecutionException | CancellationException e) {
+                LOG.debug("No transaction to close after giving up", e);
+            }
+        }
     }
 
     @Override

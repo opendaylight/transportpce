@@ -147,6 +147,33 @@ public interface DeviceTransactionManager {
             DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit);
 
     /**
+     * Reads data from a device, telling "no data" apart from "could not read".
+     *
+     * <p>Unlike {@link #getDataFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long, TimeUnit)},
+     * which returns an empty Optional in both cases, this method returns an empty Optional only when the device has
+     * no data at the path, and throws {@link DeviceReadException} when the data could not be read.
+     *
+     * <p>The timeout applies separately to waiting for the device, while earlier transactions on it are still open,
+     * and to the read itself. If the wait times out, the request gives up its place without disturbing the order of
+     * the device's other transactions.
+     *
+     * @param deviceId device to read from
+     * @param type datastore to read from
+     * @param path path of the data in the device's datastore
+     * @param timeout maximum time to wait for the device, and maximum time for the read
+     * @param unit unit of {@code timeout}
+     * @param <T> type of the data
+     * @return the data, or an empty Optional if the device has no data at this path
+     * @throws DeviceReadException if the device is not mounted, could not be reached in time, or the read failed
+     */
+    <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long timeout,
+            TimeUnit unit) throws DeviceReadException;
+
+    /**
      * Checks if device with specified ID is mounted.
      *
      * @param deviceId Identifier of device to check.

@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -25,19 +26,25 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.SettableFuture;
 import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +56,7 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.ReadFailedException;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -83,9 +91,10 @@ public class DeviceTransactionManagerTest {
 
     @BeforeEach
     void before() {
-        when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.of(mountPointMock));
-        when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
-        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
+        // Lenient, so tests of an unmounted device can override them
+        lenient().when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        lenient().when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
+        lenient().when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
         lenient().when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         NetworkId networkId =  new NetworkId("NETWORK1");
         defaultData = new NetworkBuilder().setNetworkId(networkId).build();
@@ -216,6 +225,192 @@ public class DeviceTransactionManagerTest {
             finishCreation.countDown();
             finishCancellation.countDown();
         }
+    }
+
+    @Test
+    void readFromDeviceReportsACancelledReadTest() {
+        SettableFuture<Optional<Network>> read = SettableFuture.create();
+        read.cancel(false);
+        doReturn(FluentFuture.from(read)).when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        assertInstanceOf(CancellationException.class, thrown.getCause());
+        assertTrue(thrown.getMessage().contains("was cancelled"), thrown.getMessage());
+        verify(rwTransactionMock).commit();
+    }
+
+    @Test
+    void getDataFromDeviceReturnsEmptyForACancelledReadTest() {
+        SettableFuture<Optional<Network>> read = SettableFuture.create();
+        read.cancel(false);
+        doReturn(FluentFuture.from(read)).when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        assertEquals(Optional.empty(), transactionManager.getDataFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        verify(rwTransactionMock).commit();
+    }
+
+    @Test
+    void readFromDeviceReturnsTheDataTest() throws Exception {
+        doReturn(FluentFutures.immediateFluentFuture(Optional.of(defaultData)))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        assertEquals(Optional.of(defaultData), transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        verify(rwTransactionMock).commit();
+    }
+
+    @Test
+    void readFromDeviceReturnsEmptyWhenTheDeviceHasNoDataTest() throws Exception {
+        doReturn(FluentFutures.immediateFluentFuture(Optional.empty()))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        // No data at the path is not an error
+        assertEquals(Optional.empty(), transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+    }
+
+    @Test
+    void readFromDeviceFailsWhenTheDeviceIsNotMountedTest() {
+        when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.empty());
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        assertTrue(thrown.getMessage().contains("not mounted"), thrown.getMessage());
+    }
+
+    @Test
+    void readFromDeviceFailsWhenTheReadFailsTest() {
+        ReadFailedException failure = new ReadFailedException("device unreachable");
+        doReturn(FluentFutures.immediateFailedFluentFuture(failure))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        // The device's failure is kept in the cause chain, wrapped in the read's ExecutionException
+        assertInstanceOf(ExecutionException.class, thrown.getCause());
+        assertEquals(failure, thrown.getCause().getCause());
+        // The transaction is still closed, so the device is released
+        verify(rwTransactionMock).commit();
+    }
+
+    @Test
+    void readFromDeviceReportsAnExceptionThrownByTheReadTest() {
+        IllegalStateException failure = new IllegalStateException("mount point closed");
+        doThrow(failure).when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        assertEquals(failure, thrown.getCause());
+        // The transaction is still closed, so the device is released
+        verify(rwTransactionMock).commit();
+    }
+
+    @Test
+    void readFromDeviceReleasesTheDeviceWhenTheCommitThrowsTest() throws Exception {
+        IllegalStateException readFailure = new IllegalStateException("mount point closed");
+        doThrow(readFailure).when(rwTransactionMock).read(defaultDatastore, defaultIid);
+        doThrow(new IllegalStateException("mount point closed")).when(rwTransactionMock).commit();
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+        // The read's failure is reported, not the commit's
+        assertEquals(readFailure, thrown.getCause());
+        // The device is released, so the next transaction does not wait for it
+        assertTrue(transactionManager.getDeviceTransaction(defaultDeviceId)
+                .get(defaultTimeout, defaultTimeUnit)
+                .isPresent());
+    }
+
+    @Test
+    void readFromDeviceFailsWhenTheReadTimesOutTest() throws Exception {
+        doReturn(FluentFuture.from(SettableFuture.create()))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, 200, TimeUnit.MILLISECONDS));
+        assertInstanceOf(TimeoutException.class, thrown.getCause());
+        // The read closed the transaction itself, before the submit timeout could cancel it
+        verify(rwTransactionMock).commit();
+        verify(rwTransactionMock, never()).cancel();
+
+        // The transaction was closed, so the device is released
+        Future<Optional<DeviceTransaction>> next = transactionManager.getDeviceTransaction(defaultDeviceId);
+        await("next transaction gets the device").atMost(Duration.ofSeconds(1)).untilAsserted(() ->
+                assertTrue(next.isDone()));
+        next.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+    }
+
+    @Test
+    void readFromDeviceGivesUpWaitingWithoutDisturbingTheQueueTest() throws Exception {
+        // Another transaction holds the device
+        final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, 300, TimeUnit.MILLISECONDS));
+        assertInstanceOf(TimeoutException.class, thrown.getCause());
+
+        // The read gave up its place, but a later transaction still waits for the one holding the device
+        Future<Optional<DeviceTransaction>> next = transactionManager.getDeviceTransaction(defaultDeviceId);
+        await("next transaction keeps waiting").pollDelay(Duration.ofMillis(300)).untilAsserted(() ->
+                assertFalse(next.isDone()));
+
+        holder.commit(defaultTimeout, defaultTimeUnit);
+        await("next transaction gets the device").atMost(Duration.ofSeconds(1)).untilAsserted(() ->
+                assertTrue(next.isDone()));
+        next.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+        verify(rwTransactionMock, never()).read(defaultDatastore, defaultIid);
+    }
+
+    @Test
+    void readFromDeviceKeepsTheInterruptFlagTest() throws Exception {
+        // Another transaction holds the device, so the read has to wait
+        final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+        AtomicReference<DeviceReadException> thrown = new AtomicReference<>();
+        AtomicBoolean interruptedAfterwards = new AtomicBoolean();
+        Thread reader = new Thread(() -> {
+            try {
+                transactionManager.readFromDevice(defaultDeviceId, defaultDatastore, defaultIid, 10, TimeUnit.SECONDS);
+            } catch (DeviceReadException e) {
+                thrown.set(e);
+                interruptedAfterwards.set(Thread.currentThread().isInterrupted());
+            }
+        });
+
+        reader.start();
+        reader.interrupt();
+        reader.join(5000);
+
+        assertInstanceOf(InterruptedException.class, thrown.get().getCause());
+        assertTrue(interruptedAfterwards.get(), "the interrupt flag must be restored");
+        holder.commit(defaultTimeout, defaultTimeUnit);
+    }
+
+    @Test
+    void getDataFromDeviceStillReturnsEmptyWhenTheReadFailsTest() {
+        doReturn(FluentFutures.immediateFailedFluentFuture(new ReadFailedException("device unreachable")))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+
+        assertEquals(Optional.empty(), transactionManager.getDataFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, defaultTimeout, defaultTimeUnit));
+    }
+
+    @Test
+    void getDataFromDeviceStillWaitsForTheDeviceWithoutALimitTest() throws Exception {
+        doReturn(FluentFutures.immediateFluentFuture(Optional.of(defaultData)))
+                .when(rwTransactionMock).read(defaultDatastore, defaultIid);
+        // Another transaction holds the device for longer than the read timeout
+        final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        CompletableFuture<Optional<Network>> data = CompletableFuture.supplyAsync(() ->
+                transactionManager.getDataFromDevice(defaultDeviceId, defaultDatastore, defaultIid,
+                        200, TimeUnit.MILLISECONDS));
+        await("existing callers keep waiting").pollDelay(Duration.ofMillis(500)).untilAsserted(() ->
+                assertFalse(data.isDone()));
+
+        holder.commit(defaultTimeout, defaultTimeUnit);
+        assertEquals(Optional.of(defaultData), data.get(5, TimeUnit.SECONDS));
     }
 
     @Test
