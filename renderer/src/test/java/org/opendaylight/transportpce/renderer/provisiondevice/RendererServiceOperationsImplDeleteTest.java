@@ -14,6 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,12 +56,15 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev2105
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
@@ -137,6 +141,41 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         ServiceDeleteOutput serviceDeleteOutput = this.rendererServiceOperations
             .serviceDelete(serviceDeleteInputBuilder.build(), service).get();
         assertEquals(ResponseCodes.RESPONSE_OK, serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    void serviceDeleteOperationReadsServiceWhenNotGiven()
+            throws ExecutionException, InterruptedException, TimeoutException {
+        // The service-delete RPC gives only the service name
+        writePathDescription();
+        writeService(ethernetService());
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(null);
+        when(deviceRenderer.deleteServicePath(any()))
+            .thenReturn(new ServicePathOutputBuilder().setSuccess(true).build());
+        when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerTurndownOutputBuilder().setResult(ResponseCodes.SUCCESS_RESULT).build())
+                .buildFuture())
+            .when(servicePowerTurndown).invoke(any());
+
+        ServiceDeleteOutput serviceDeleteOutput = this.rendererServiceOperations
+            .serviceDelete(new ServiceDeleteInputBuilder().setServiceName("service 1").build(), null).get();
+
+        assertEquals(ResponseCodes.RESPONSE_OK, serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
+        verify(deviceRenderer, times(2)).deleteServicePath(any());
+    }
+
+    @Test
+    void serviceDeleteOperationFailsForUnknownService() throws ExecutionException, InterruptedException {
+        writePathDescription();
+
+        ServiceDeleteOutput serviceDeleteOutput = this.rendererServiceOperations
+            .serviceDelete(new ServiceDeleteInputBuilder().setServiceName("service 1").build(), null).get();
+
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
+        verify(deviceRenderer, never()).deleteServicePath(any());
     }
 
     @Test
@@ -258,5 +297,38 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                     .withKey(new ServicePathsKey("service 1"))
                     .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
                     .build());
+    }
+
+    private static Services ethernetService() {
+        return new ServicesBuilder()
+            .setServiceName("service 1")
+            .setConnectionType(ConnectionType.Service)
+            .setServiceAEnd(new ServiceAEndBuilder()
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf("100"))
+                .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
+                        new TxDirectionBuilder().setIndex(Uint8.ZERO).setPort(new PortBuilder().setPortName("port-name")
+                            .build()).build()))
+                .setNodeId(new NodeIdType("optical-node1"))
+                .setClli("clli")
+                .build())
+            .setServiceZEnd(new ServiceZEndBuilder()
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf("100"))
+                .setNodeId(new NodeIdType("optical-node2"))
+                .setClli("clli")
+                .build())
+            .build();
+    }
+
+    private void writeService(Services service) throws ExecutionException, InterruptedException {
+        TransactionUtils.writeTransaction(
+                this.deviceTransactionManager,
+                "node1" + StringConstants.PP_TOKEN,
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(ServiceList.class)
+                    .child(Services.class, new ServicesKey(service.getServiceName()))
+                    .build(),
+                service);
     }
 }

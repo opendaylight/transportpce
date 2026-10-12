@@ -76,7 +76,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev250530.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
@@ -277,11 +279,25 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     return ModelMappingUtils
                             .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                 }
+                // The service-delete RPC only gives the service name
+                Optional<Services> serviceOpt =
+                        service != null ? Optional.of(service) : getServiceFromDatastore(serviceName);
+                if (serviceOpt.isEmpty()) {
+                    LOG.error("Unable to get service {} from the service list!", serviceName);
+                    sendNotifications(
+                            ServicePathNotificationTypes.ServiceDelete,
+                            serviceName,
+                            RpcStatusEx.Failed,
+                            "Unable to get service from the service list");
+                    return ModelMappingUtils
+                            .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+                }
+                Services serviceToDelete = serviceOpt.orElseThrow();
                 PathDescription pathDescription = pathDescriptionOpt.orElseThrow();
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
                         .network.Nodes mappingNode =
-                        portMapping.isNodeExist(service.getServiceAEnd().getNodeId().getValue())
-                                ? portMapping.getNode(service.getServiceAEnd().getNodeId().getValue())
+                        portMapping.isNodeExist(serviceToDelete.getServiceAEnd().getNodeId().getValue())
+                                ? portMapping.getNode(serviceToDelete.getServiceAEnd().getNodeId().getValue())
                                 : null;
                 boolean isOpenConfig = false;
                 if (mappingNode != null && mappingNode.getDatamodelType() != null
@@ -293,20 +309,22 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 //      service-implementation-request input(port-name under service a/z-end's rx/tx-direction) and
                 //      getServiceType() is updated to handle appropriate service format.
                 if (isOpenConfig) {
-                    serviceType = ServiceTypes.getOtnServiceType(service.getServiceAEnd().getServiceFormat().getName(),
-                            service.getServiceAEnd().getServiceRate());
+                    serviceType = ServiceTypes.getOtnServiceType(
+                            serviceToDelete.getServiceAEnd().getServiceFormat().getName(),
+                            serviceToDelete.getServiceAEnd().getServiceRate());
                 } else {
                     serviceType = ServiceTypes.getServiceType(
-                            service.getServiceAEnd().getServiceFormat().getName(),
-                            service.getServiceAEnd().getServiceRate(),
-                            service.getServiceAEnd().getTxDirection() == null
-                                    || service.getServiceAEnd().getTxDirection().values().stream().findFirst()
+                            serviceToDelete.getServiceAEnd().getServiceFormat().getName(),
+                            serviceToDelete.getServiceAEnd().getServiceRate(),
+                            serviceToDelete.getServiceAEnd().getTxDirection() == null
+                                    || serviceToDelete.getServiceAEnd().getTxDirection().values().stream().findFirst()
                                     .orElseThrow().getPort() == null
-                                    || service.getServiceAEnd().getTxDirection().values().stream().findFirst()
+                                    || serviceToDelete.getServiceAEnd().getTxDirection().values().stream().findFirst()
                                     .orElseThrow().getPort().getPortName() == null
-                                    ? null : portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
-                                    service.getServiceAEnd().getTxDirection().values().stream().findFirst()
-                                            .orElseThrow().getPort().getPortName()),
+                                    ? null : portMapping.getMapping(
+                                            serviceToDelete.getServiceAEnd().getNodeId().getValue(),
+                                            serviceToDelete.getServiceAEnd().getTxDirection().values().stream()
+                                                    .findFirst().orElseThrow().getPort().getPortName()),
                              null);
                 }
                 switch (serviceType) {
@@ -330,7 +348,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_ODUC2:
                     case StringConstants.SERVICE_TYPE_ODUC3:
                     case StringConstants.SERVICE_TYPE_ODUC4:
-                        if (!manageOtnServicePathDeletion(serviceName, pathDescription, service,
+                        if (!manageOtnServicePathDeletion(serviceName, pathDescription, serviceToDelete,
                                 serviceType, isOpenConfig)) {
                             return ModelMappingUtils
                                     .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
@@ -418,6 +436,22 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     pathDescriptionIID, serviceName, e);
         }
         return Optional.empty();
+    }
+
+    private Optional<Services> getServiceFromDatastore(String serviceName) throws InterruptedException {
+        DataObjectIdentifier<Services> serviceIID = DataObjectIdentifier
+                .builder(ServiceList.class)
+                .child(Services.class, new ServicesKey(serviceName))
+                .build();
+        LOG.debug("Getting service {} from the service list", serviceName);
+        // An interrupt, for example at shutdown, stops the request instead of reporting the service as missing
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            return readTx.read(LogicalDatastoreType.OPERATIONAL, serviceIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting service {} from datastore {}!", serviceName, serviceIID, e);
+            return Optional.empty();
+        }
     }
 
     @SuppressFBWarnings(
