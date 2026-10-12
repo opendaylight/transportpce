@@ -20,6 +20,7 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -54,6 +55,9 @@ public class CrossConnectImpl221 {
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl221.class);
     private static final String DEV_TRANSACTION_NOT_FOUND = "Device transaction for device {} was not found!";
     private static final String UNABLE_DEV_TRANSACTION = "Unable to obtain device transaction for device {}!";
+    // Where cross connects are read from. TODO Change them to Operational later for real device
+    private static final LogicalDatastoreType ROADM_CONNECTION_STORE = LogicalDatastoreType.CONFIGURATION;
+    private static final LogicalDatastoreType ODU_CONNECTION_STORE = LogicalDatastoreType.CONFIGURATION;
     private final DeviceTransactionManager deviceTransactionManager;
 
     public CrossConnectImpl221(DeviceTransactionManager deviceTransactionManager) {
@@ -61,8 +65,7 @@ public class CrossConnectImpl221 {
     }
 
     public Optional<RoadmConnections> getCrossConnect(String deviceId, String connectionNumber) {
-        //TODO Change it to Operational later for real device
-        return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION,
+        return deviceTransactionManager.getDataFromDevice(deviceId, ROADM_CONNECTION_STORE,
                 generateRdmConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
@@ -70,8 +73,7 @@ public class CrossConnectImpl221 {
     public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
                 .org.openroadm.device.container.org.openroadm.device.OduConnection> getOtnCrossConnect(
             String deviceId, String connectionNumber) {
-        //TODO Change it to Operational later for real device
-        return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION,
+        return deviceTransactionManager.getDataFromDevice(deviceId, ODU_CONNECTION_STORE,
                 generateOduConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
@@ -124,40 +126,36 @@ public class CrossConnectImpl221 {
     }
 
     public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn) {
-        List<String> interfList = new ArrayList<>();
-        Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionName);
-        //Check if cross connect exists before delete
-        if (xc.isPresent()) {
-            interfList.add(xc.orElseThrow().getSource().getSrcIf());
-            interfList.add(xc.orElseThrow().getDestination().getDstIf());
-            interfList.add(xc.orElseThrow().getSource().getSrcIf().replace("nmc", "mc"));
-            interfList.add(xc.orElseThrow().getDestination().getDstIf().replace("nmc", "mc"));
-        } else {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
-                    .org.openroadm.device.container.org.openroadm.device.OduConnection> otnXc =
-                getOtnCrossConnect(deviceId, connectionName);
-            if (otnXc.isEmpty()) {
-                LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
-                return null;
-            }
-            interfList.add(otnXc.orElseThrow().getSource().getSrcIf());
-            interfList.add(otnXc.orElseThrow().getDestination().getDstIf());
-        }
-        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
+        // Read and delete in one transaction, so the cross connect cannot change in between. The wait for the device
+        // is bounded, so a frozen device fails the delete instead of holding up the caller.
         DeviceTransaction deviceTx;
         try {
-            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isEmpty()) {
-                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
-                return null;
-            }
-            deviceTx = deviceTxOpt.orElseThrow();
-        } catch (InterruptedException | ExecutionException e) {
+            deviceTx = deviceTransactionManager.awaitDeviceTransaction(deviceId,
+                    Timeouts.DEVICE_READ_TIMEOUT, 2 * Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        } catch (DeviceReadException e) {
             LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return null;
         }
+        List<String> interfList = null;
+        try {
+            interfList = isOtn
+                ? readOduConnectionInterfaces(deviceTx, connectionName)
+                : readRoadmConnectionInterfaces(deviceTx, connectionName);
+        } catch (DeviceReadException e) {
+            LOG.error("Could not read cross connect {} on device {}", connectionName, deviceId, e);
+            return null;
+        } finally {
+            if (interfList == null) {
+                // Nothing to delete, or the read failed: let the next transaction have the device
+                deviceTx.cancel();
+            }
+        }
+        if (interfList == null) {
+            LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
+            return null;
+        }
 
-        // post the cross connect on the device
+        // delete the cross connect on the device
         deviceTx.delete(
             LogicalDatastoreType.CONFIGURATION,
             isOtn ? generateOduConnectionIID(connectionName) : generateRdmConnectionIID(connectionName));
@@ -264,6 +262,46 @@ public class CrossConnectImpl221 {
             LOG.warn("Failed to post {}", newRdmConn, ex);
         }
         return false;
+    }
+
+    private List<String> readRoadmConnectionInterfaces(DeviceTransaction deviceTx, String connectionName)
+            throws DeviceReadException {
+        return deviceTx.read(ROADM_CONNECTION_STORE, generateRdmConnectionIID(connectionName),
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+            .map(xc -> {
+                List<String> interfaces = interfaceNames(
+                    xc.getSource() == null ? null : xc.getSource().getSrcIf(),
+                    xc.getDestination() == null ? null : xc.getDestination().getDstIf());
+                // and the mc interfaces under the nmc ones
+                interfaces.addAll(interfaces.stream().map(intf -> intf.replace("nmc", "mc")).toList());
+                return interfaces;
+            })
+            .orElse(null);
+    }
+
+    private List<String> readOduConnectionInterfaces(DeviceTransaction deviceTx, String connectionName)
+            throws DeviceReadException {
+        return deviceTx.read(ODU_CONNECTION_STORE, generateOduConnectionIID(connectionName),
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+            .map(xc -> interfaceNames(
+                xc.getSource() == null ? null : xc.getSource().getSrcIf(),
+                xc.getDestination() == null ? null : xc.getDestination().getDstIf()))
+            .orElse(null);
+    }
+
+    /**
+     * Returns the interfaces a cross connect read from the device names. A device may leave out src-if or dst-if,
+     * so a missing name is skipped instead of failing the delete.
+     */
+    private static List<String> interfaceNames(String srcIf, String dstIf) {
+        List<String> interfaces = new ArrayList<>();
+        if (srcIf != null) {
+            interfaces.add(srcIf);
+        }
+        if (dstIf != null) {
+            interfaces.add(dstIf);
+        }
+        return interfaces;
     }
 
     private DataObjectIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {

@@ -9,11 +9,17 @@
 package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
@@ -22,12 +28,14 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
@@ -35,6 +43,7 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
@@ -121,5 +130,109 @@ public class CrossConnectImpl221Test {
         doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         Optional<String> res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
         assertTrue(res.isPresent(), "Optional value should have a value");
+    }
+
+    @Test
+    void deleteCrossConnectGivesUpOnADeviceThatCannotBeReached() throws Exception {
+        DeviceReadException failure = new DeviceReadException("Timed out waiting for device deviceId");
+        when(deviceTransactionManager.awaitDeviceTransaction(eq("deviceId"), anyLong(), anyLong(), any()))
+            .thenThrow(failure);
+
+        // A frozen device ends the delete instead of holding up the caller
+        assertNull(crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+    }
+
+    @Test
+    void deleteCrossConnectReleasesTheDeviceWhenTheReadFails() throws Exception {
+        givenTheTransaction();
+        DeviceReadException failure = new DeviceReadException("Timed out reading from device deviceId");
+        when(deviceTransaction.read(any(), any(), anyLong(), any())).thenThrow(failure);
+
+        assertNull(crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        verify(deviceTransaction).cancel();
+        verify(deviceTransaction, never()).commit(anyLong(), any());
+    }
+
+    @Test
+    void deleteCrossConnectReturnsNullWhenTheCrossConnectDoesNotExist() throws Exception {
+        givenTheTransaction();
+        when(deviceTransaction.read(any(), any(), anyLong(), any())).thenReturn(Optional.empty());
+
+        // Nothing to delete is still not an error, so deleting twice stays harmless
+        assertNull(crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        verify(deviceTransaction).cancel();
+        verify(deviceTransaction, never()).commit(anyLong(), any());
+    }
+
+    @Test
+    void deleteCrossConnectReadsAndDeletesInOneTransaction() throws Exception {
+        givenTheTransaction();
+        givenTheRoadmConnection();
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
+
+        assertEquals(
+            List.of("SRG1-PP1-TXRX-nmc-761:768", "DEG1-TTP-TXRX-nmc-761:768",
+                "SRG1-PP1-TXRX-mc-761:768", "DEG1-TTP-TXRX-mc-761:768"),
+            crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        verify(deviceTransaction).delete(eq(LogicalDatastoreType.CONFIGURATION), any());
+        verify(deviceTransaction).commit(anyLong(), any());
+        verify(deviceTransaction, never()).cancel();
+        verify(deviceTransactionManager, never()).getDeviceTransaction(any());
+    }
+
+    @Test
+    void deleteCrossConnectReadsOnlyTheOduConnectionForOtn() throws Exception {
+        givenTheTransaction();
+        OduConnection xc = mock(OduConnection.class, RETURNS_DEEP_STUBS);
+        when(xc.getSource().getSrcIf()).thenReturn("XPDR1-CLIENT1-ODU2e");
+        when(xc.getDestination().getDstIf()).thenReturn("XPDR1-NETWORK1-ODU2e");
+        doReturn(Optional.of(xc)).when(deviceTransaction).read(any(), any(), anyLong(), any());
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
+
+        assertEquals(List.of("XPDR1-CLIENT1-ODU2e", "XPDR1-NETWORK1-ODU2e"),
+            crossConnectImpl221.deleteCrossConnect("deviceId", "1", true));
+        // One read, of the odu-connection: an OTN delete does not first look for a roadm-connection
+        ArgumentCaptor<DataObjectIdentifier<?>> path = ArgumentCaptor.captor();
+        verify(deviceTransaction, times(1)).read(any(), path.capture(), anyLong(), any());
+        assertEquals(OduConnection.class, path.getValue().lastStep().type());
+    }
+
+    @Test
+    void deleteCrossConnectSkipsAMissingOduConnectionInterface() throws Exception {
+        givenTheTransaction();
+        // As a device may report it: without src-if
+        OduConnection xc = mock(OduConnection.class, RETURNS_DEEP_STUBS);
+        when(xc.getDestination().getDstIf()).thenReturn("XPDR1-NETWORK1-ODU2e");
+        doReturn(Optional.of(xc)).when(deviceTransaction).read(any(), any(), anyLong(), any());
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
+
+        assertEquals(List.of("XPDR1-NETWORK1-ODU2e"), crossConnectImpl221.deleteCrossConnect("deviceId", "1", true));
+        verify(deviceTransaction).delete(eq(LogicalDatastoreType.CONFIGURATION), any());
+    }
+
+    @Test
+    void deleteCrossConnectSkipsAMissingRoadmConnectionInterface() throws Exception {
+        givenTheTransaction();
+        // As a device may report it: without dst-if
+        RoadmConnections xc = mock(RoadmConnections.class, RETURNS_DEEP_STUBS);
+        when(xc.getSource().getSrcIf()).thenReturn("SRG1-PP1-TXRX-nmc-761:768");
+        doReturn(Optional.of(xc)).when(deviceTransaction).read(any(), any(), anyLong(), any());
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
+
+        assertEquals(List.of("SRG1-PP1-TXRX-nmc-761:768", "SRG1-PP1-TXRX-mc-761:768"),
+            crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        verify(deviceTransaction).delete(eq(LogicalDatastoreType.CONFIGURATION), any());
+    }
+
+    private void givenTheTransaction() throws DeviceReadException {
+        when(deviceTransactionManager.awaitDeviceTransaction(eq("deviceId"), anyLong(), anyLong(), any()))
+            .thenReturn(deviceTransaction);
+    }
+
+    private void givenTheRoadmConnection() throws DeviceReadException {
+        RoadmConnections xc = mock(RoadmConnections.class, RETURNS_DEEP_STUBS);
+        when(xc.getSource().getSrcIf()).thenReturn("SRG1-PP1-TXRX-nmc-761:768");
+        when(xc.getDestination().getDstIf()).thenReturn("DEG1-TTP-TXRX-nmc-761:768");
+        doReturn(Optional.of(xc)).when(deviceTransaction).read(any(), any(), anyLong(), any());
     }
 }

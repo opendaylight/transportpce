@@ -686,6 +686,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             else {
                 for (String connectionId : nodeInterfaces.getConnectionId()) {
                     List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);
+                    if (listInter == null) {
+                        // The input does not say whether the cross connect is a roadm-connection or an
+                        // odu-connection, and OTN rendering rolls back odu-connections through here
+                        listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, true);
+                    }
                     if (listInter != null) {
                         LOG.info("Cross connect {} on node {} successfully deleted.", connectionId, nodeId);
                     } else {
