@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -72,7 +74,10 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     void testGetPm() throws DeviceReadException, UnknownNodeException {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
             .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
+        // A short wait for the device, but the full time for the read
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(),
+                eq(Timeouts.PM_DEVICE_WAIT_TIMEOUT), eq(Timeouts.DEVICE_READ_TIMEOUT),
+                eq(Timeouts.DEVICE_READ_TIMEOUT_UNIT)))
             .thenReturn(Optional.of(OlmPowerServiceRpcImplUtil.getCurrentPmList221()));
 
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
@@ -95,7 +100,7 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     void testGetPmWithoutPmDataReturnsNoMeasurements() throws DeviceReadException, UnknownNodeException {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
             .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), anyLong(), any()))
             .thenReturn(Optional.empty());
 
         // The device has no PM data: that is a reply without measurements, not an error
@@ -119,7 +124,7 @@ class OlmPowerServiceImplTest  extends AbstractTest {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
             .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         DeviceReadException failure = new DeviceReadException("Device ROADM-A1 is not mounted");
-        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), any()))
+        when(this.deviceTransactionManager.readFromDevice(anyString(), any(), any(), anyLong(), anyLong(), any()))
             .thenThrow(failure);
 
         DeviceReadException thrown = assertThrows(DeviceReadException.class,

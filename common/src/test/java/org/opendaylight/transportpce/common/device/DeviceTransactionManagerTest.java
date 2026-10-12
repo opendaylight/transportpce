@@ -410,6 +410,34 @@ public class DeviceTransactionManagerTest {
     }
 
     @Test
+    void readFromDeviceGivesTheReadItsOwnTimeoutTest() throws Exception {
+        // The read takes longer than the wait timeout, but less than the read timeout
+        SettableFuture<Optional<Network>> read = SettableFuture.create();
+        doReturn(FluentFuture.from(read)).when(rwTransactionMock).read(defaultDatastore, defaultIid);
+        CompletableFuture.runAsync(() -> read.set(Optional.of(defaultData)),
+                CompletableFuture.delayedExecutor(400, TimeUnit.MILLISECONDS));
+
+        assertEquals(Optional.of(defaultData), transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, 100, 2000, TimeUnit.MILLISECONDS));
+        verify(rwTransactionMock).commit();
+        verify(rwTransactionMock, never()).cancel();
+    }
+
+    @Test
+    void readFromDeviceGivesUpWaitingAfterTheWaitTimeoutTest() throws Exception {
+        // Another transaction holds the device
+        final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        DeviceReadException thrown = assertThrows(DeviceReadException.class, () -> transactionManager.readFromDevice(
+                defaultDeviceId, defaultDatastore, defaultIid, 100, 5000, TimeUnit.MILLISECONDS));
+        assertInstanceOf(TimeoutException.class, thrown.getCause());
+        assertTrue(thrown.getMessage().contains("after 100 MILLISECONDS waiting for device"), thrown.getMessage());
+
+        holder.commit(defaultTimeout, defaultTimeUnit);
+        verify(rwTransactionMock, never()).read(defaultDatastore, defaultIid);
+    }
+
+    @Test
     void readFromDeviceKeepsTheInterruptFlagTest() throws Exception {
         // Another transaction holds the device, so the read has to wait
         final DeviceTransaction holder = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();

@@ -197,7 +197,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             LogicalDatastoreType logicalDatastoreType, DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit) {
         try {
             // Existing callers keep waiting for the device without a limit, as before
-            return read(deviceId, logicalDatastoreType, path, timeout, timeUnit, false);
+            return read(deviceId, logicalDatastoreType, path, timeout, timeout, timeUnit, false);
         } catch (DeviceReadException e) {
             LOG.error("Could not read {} from device {}", path, deviceId, e);
             return Optional.empty();
@@ -211,23 +211,35 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             DataObjectIdentifier<T> path,
             long timeout,
             TimeUnit unit) throws DeviceReadException {
-        return read(deviceId, type, path, timeout, unit, true);
+        return read(deviceId, type, path, timeout, timeout, unit, true);
+    }
+
+    @Override
+    public <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long waitTimeout,
+            long readTimeout,
+            TimeUnit unit) throws DeviceReadException {
+        return read(deviceId, type, path, waitTimeout, readTimeout, unit, true);
     }
 
     private <T extends DataObject> Optional<T> read(
             String deviceId,
             LogicalDatastoreType type,
             DataObjectIdentifier<T> path,
-            long timeout,
+            long waitTimeout,
+            long readTimeout,
             TimeUnit unit,
             boolean boundedWait) throws DeviceReadException {
 
         // The transaction's own timeout is only a safety net: the read closes the transaction when it is done or
         // times out, so the safety net must not fire before that
-        DeviceTransaction tx = awaitTransaction(deviceId, timeout, unit, boundedWait,
-                unit.toMillis(timeout) + maxDurationToGetData);
+        DeviceTransaction tx = awaitTransaction(deviceId, waitTimeout, unit, boundedWait,
+                unit.toMillis(readTimeout) + maxDurationToGetData);
         try {
-            return tx.read(type, path, timeout, unit);
+            return tx.read(type, path, readTimeout, unit);
         } finally {
             tx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
         }
@@ -242,19 +254,20 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     /**
      * Waits for this request's turn on the device and returns its transaction.
      *
-     * @param boundedWait if true, gives up after the timeout; otherwise waits as long as it takes
+     * @param waitTimeout how long to wait for the device
+     * @param boundedWait if true, gives up after the wait timeout; otherwise waits as long as it takes
      * @param submitTimeoutMillis after how long the transaction is cancelled if it is still open
      */
-    private DeviceTransaction awaitTransaction(String deviceId, long timeout, TimeUnit unit, boolean boundedWait,
+    private DeviceTransaction awaitTransaction(String deviceId, long waitTimeout, TimeUnit unit, boolean boundedWait,
             long submitTimeoutMillis) throws DeviceReadException {
         ListenableFuture<Optional<DeviceTransaction>> txFuture =
                 getDeviceTransaction(deviceId, submitTimeoutMillis, TimeUnit.MILLISECONDS);
         Optional<DeviceTransaction> tx;
         try {
-            tx = boundedWait ? txFuture.get(timeout, unit) : txFuture.get();
+            tx = boundedWait ? txFuture.get(waitTimeout, unit) : txFuture.get();
         } catch (TimeoutException e) {
             giveUp(txFuture);
-            throw new DeviceReadException("Timed out after " + timeout + " " + unit + " waiting for device "
+            throw new DeviceReadException("Timed out after " + waitTimeout + " " + unit + " waiting for device "
                     + deviceId, e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

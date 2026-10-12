@@ -174,6 +174,31 @@ public interface DeviceTransactionManager {
             TimeUnit unit) throws DeviceReadException;
 
     /**
+     * Reads data from a device like {@link #readFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long,
+     * TimeUnit)}, with separate timeouts for waiting for the device and for the read.
+     *
+     * <p>A short wait timeout with a longer read timeout lets requests queued behind a frozen device give up early,
+     * while a slow read from a healthy device still gets the time it needs.
+     *
+     * @param deviceId device to read from
+     * @param type datastore to read from
+     * @param path path of the data in the device's datastore
+     * @param waitTimeout maximum time to wait for the device, while earlier transactions on it are still open
+     * @param readTimeout maximum time for the read
+     * @param unit unit of {@code waitTimeout} and {@code readTimeout}
+     * @param <T> type of the data
+     * @return the data, or an empty Optional if the device has no data at this path
+     * @throws DeviceReadException if the device is not mounted, could not be reached in time, or the read failed
+     */
+    <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long waitTimeout,
+            long readTimeout,
+            TimeUnit unit) throws DeviceReadException;
+
+    /**
      * Waits for this request's turn on the device and returns a transaction on it, like
      * {@link #getDeviceTransaction(String)}, but gives up after a timeout, without disturbing the order of the
      * device's other transactions.

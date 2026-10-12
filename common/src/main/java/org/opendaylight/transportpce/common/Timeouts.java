@@ -35,6 +35,13 @@ public final class Timeouts {
     public static final long DEVICE_READ_TIMEOUT = 240;
     public static final TimeUnit DEVICE_READ_TIMEOUT_UNIT = TimeUnit.SECONDS;
 
+    /**
+     * Timeout, in {@link #DEVICE_READ_TIMEOUT_UNIT}, for the get-pm RPC to wait for a device while earlier
+     * transactions on it are still open. It is shorter than {@link #DEVICE_READ_TIMEOUT}, which still bounds the read
+     * itself, so that requests queued behind a frozen device give up their get-pm workers early.
+     */
+    public static final long PM_DEVICE_WAIT_TIMEOUT = 60;
+
     public static final long DEVICE_WRITE_TIMEOUT = 240;
     public static final TimeUnit DEVICE_WRITE_TIMEOUT_UNIT = TimeUnit.SECONDS;
 

@@ -112,8 +112,8 @@ final class OlmUtils221 {
                 .build();
 
         Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.readFromDevice(input.getNodeId(),
-                LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.PM_DEVICE_WAIT_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         List<Measurements> measurements = new ArrayList<>();
         if (currentPmListOpt.isPresent()) {
             CurrentPmList currentPmList = currentPmListOpt.orElseThrow();
