@@ -53,6 +53,10 @@ public final class DeviceRenderingResult extends OperationResult {
         return new DeviceRenderingResult(false, message, null, null, null);
     }
 
+    public static DeviceRenderingResult failed(String message, List<LinkTp> otnLinkTps) {
+        return new DeviceRenderingResult(false, message, null, null, otnLinkTps);
+    }
+
     public static DeviceRenderingResult ok(List<Nodes> olmNodeList, List<NodeInterface> renderedNodeInterfaces,
             List<LinkTp> otnLinkTps) {
         return new DeviceRenderingResult(true, "", olmNodeList, renderedNodeInterfaces, otnLinkTps);

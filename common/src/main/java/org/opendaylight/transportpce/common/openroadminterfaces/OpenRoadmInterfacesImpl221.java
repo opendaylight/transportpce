@@ -151,8 +151,8 @@ public class OpenRoadmInterfacesImpl221 {
 
     private void deleteInterfaceOnNode(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         LOG.info("deleting interface {} on device221 {}", interfaceName, nodeId);
-        Optional<Interface> intf2DeleteOpt;
-        intf2DeleteOpt = getInterface(nodeId, interfaceName);
+        // A device that cannot be read must not be mistaken for a missing interface
+        Optional<Interface> intf2DeleteOpt = readInterface(nodeId, interfaceName);
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.orElseThrow();
             // State admin state to out of service
@@ -272,9 +272,9 @@ public class OpenRoadmInterfacesImpl221 {
         }
     }
 
-    public String getSupportedInterface(String nodeId, String interf) {
+    public String getSupportedInterface(String nodeId, String interf) throws OpenRoadmInterfaceException {
         Optional<Interface> supInterfOpt;
-        supInterfOpt = getInterface(nodeId, interf);
+        supInterfOpt = readInterface(nodeId, interf);
         return supInterfOpt.map(s -> s.getSupportingInterface()).orElse(null);
     }
 

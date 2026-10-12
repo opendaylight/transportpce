@@ -58,7 +58,8 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} service path failed.", operation);
-            return DeviceRenderingResult.failed(output.getResult());
+            // A delete that failed on some nodes still frees the link termination points it reports
+            return DeviceRenderingResult.failed(output.getResult(), new ArrayList<>(output.nonnullLinkTp()));
         }
         LOG.info("Device rendering {} service path finished successfully.", operation);
         return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()),

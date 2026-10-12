@@ -8,11 +8,16 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Duration;
@@ -28,6 +33,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 
@@ -51,17 +57,44 @@ class OpenRoadmInterfacesImpl221Test {
     }
 
     @Test
+    void deleteInterfaceReportsADeviceThatCannotBeRead() throws Exception {
+        DeviceReadException failure = new DeviceReadException("Timed out waiting for device " + NODE);
+        when(deviceTransactionManager.readFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+                anyLong(), any()))
+            .thenThrow(failure);
+
+        // A device that cannot be read must not look like a device without the interface
+        OpenRoadmInterfaceException thrown = assertThrows(OpenRoadmInterfaceException.class,
+            () -> openRoadmInterfaces.deleteInterface(NODE, INTERFACE));
+        assertSame(failure, thrown.getCause());
+        assertTrue(thrown.getMessage().contains(INTERFACE), thrown.getMessage());
+        assertTrue(thrown.getMessage().contains("Timed out"), thrown.getMessage());
+        verify(deviceTransactionManager, never()).getDeviceTransaction(any());
+    }
+
+    @Test
+    void deleteInterfaceDoesNothingWhenTheInterfaceDoesNotExist() throws Exception {
+        when(deviceTransactionManager.readFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+                anyLong(), any()))
+            .thenReturn(Optional.empty());
+
+        // Nothing to delete is still not an error, so deleting twice stays harmless
+        assertDoesNotThrow(() -> openRoadmInterfaces.deleteInterface(NODE, INTERFACE));
+        verify(deviceTransactionManager, never()).getDeviceTransaction(any());
+    }
+
+    @Test
     void deleteInterfaceOnANodeThatDoesNotAnswerDoesNotHoldUpOtherNodes() throws Exception {
         CountDownLatch frozenReadStarted = new CountDownLatch(1);
         CountDownLatch releaseFrozenRead = new CountDownLatch(1);
-        when(deviceTransactionManager.getDataFromDevice(eq(FROZEN_NODE), eq(LogicalDatastoreType.CONFIGURATION),
-                any(), anyLong(), any()))
+        when(deviceTransactionManager.readFromDevice(eq(FROZEN_NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+                anyLong(), any()))
             .thenAnswer(invocation -> {
                 frozenReadStarted.countDown();
                 releaseFrozenRead.await();
                 return Optional.empty();
             });
-        when(deviceTransactionManager.getDataFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+        when(deviceTransactionManager.readFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
                 anyLong(), any()))
             .thenReturn(Optional.empty());
         ExecutorService executor = Executors.newSingleThreadExecutor();

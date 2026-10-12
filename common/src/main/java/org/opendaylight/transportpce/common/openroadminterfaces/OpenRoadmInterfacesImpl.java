@@ -193,7 +193,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
-    public String getSupportedInterface(String nodeId, String interfaceName) {
+    public String getSupportedInterface(String nodeId, String interfaceName)
+            throws OpenRoadmInterfaceException {
         String supportedInterface = "";
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case OPENROADM_DEVICE_VERSION_2_2_1:

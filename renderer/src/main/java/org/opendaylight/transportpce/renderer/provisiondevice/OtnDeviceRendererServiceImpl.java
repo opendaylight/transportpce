@@ -24,6 +24,7 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -356,10 +357,33 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         success.set(false);
                         return;
                 }
-                List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
+                List<String> intToDelete;
+                try {
+                    intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
+                } catch (DeviceReadException e) {
+                    // Without this, an unreadable node would look like a node with nothing to delete
+                    String result = String.format("Could not read node %s to find what to delete: %s", nodeId,
+                            e.getMessage());
+                    success.set(false);
+                    LOG.error(result, e);
+                    results.add(result);
+                    return;
+                }
                 for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
                     interfacesToDelete.add(interf);
-                    String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                    String supportedInterface;
+                    try {
+                        supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                    } catch (OpenRoadmInterfaceException e) {
+                        // Still delete the interfaces we know of: the cross connect is gone, so a retry would
+                        // not find them again
+                        String result = String.format("Could not find the interface supporting %s on node %s,"
+                                + " it may remain on the device: %s", interf, nodeId, e.getMessage());
+                        success.set(false);
+                        LOG.error(result, e);
+                        results.add(result);
+                        continue;
+                    }
                     if (supportedInterface == null) {
                         continue;
                     }
@@ -374,7 +398,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     try {
                         this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     } catch (OpenRoadmInterfaceException e) {
-                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
+                        String result = String.format("Failed to delete interface %s on node %s: %s", interfaceId,
+                                nodeId, e.getMessage());
                         success.set(false);
                         LOG.error(result, e);
                         results.add(result);

@@ -49,8 +49,9 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} otn service path failed.", operation);
+            // A delete that failed on some nodes still frees the link termination points it reports
             return OtnDeviceRenderingResult.failed("Operation Failed",
-                    new ArrayList<>(output.nonnullNodeInterface().values()));
+                    new ArrayList<>(output.nonnullNodeInterface().values()), new ArrayList<>(output.nonnullLinkTp()));
         }
         LOG.info("Device rendering {} otn service path finished successfully.", operation);
         return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()),

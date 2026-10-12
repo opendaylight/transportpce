@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -133,22 +135,27 @@ public class CrossConnectImpl221Test {
     }
 
     @Test
-    void deleteCrossConnectGivesUpOnADeviceThatCannotBeReached() throws Exception {
+    void deleteCrossConnectReportsADeviceThatCannotBeReached() throws Exception {
         DeviceReadException failure = new DeviceReadException("Timed out waiting for device deviceId");
         when(deviceTransactionManager.awaitDeviceTransaction(eq("deviceId"), anyLong(), anyLong(), any()))
             .thenThrow(failure);
 
-        // A frozen device ends the delete instead of holding up the caller
-        assertNull(crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        // A frozen device fails the delete instead of holding up the caller
+        DeviceReadException thrown = assertThrows(DeviceReadException.class,
+            () -> crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        assertSame(failure, thrown);
     }
 
     @Test
-    void deleteCrossConnectReleasesTheDeviceWhenTheReadFails() throws Exception {
+    void deleteCrossConnectReportsADeviceThatCannotBeRead() throws Exception {
         givenTheTransaction();
         DeviceReadException failure = new DeviceReadException("Timed out reading from device deviceId");
         when(deviceTransaction.read(any(), any(), anyLong(), any())).thenThrow(failure);
 
-        assertNull(crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        // A device that cannot be read must not look like a device without the cross connect
+        DeviceReadException thrown = assertThrows(DeviceReadException.class,
+            () -> crossConnectImpl221.deleteCrossConnect("deviceId", "1", false));
+        assertSame(failure, thrown);
         verify(deviceTransaction).cancel();
         verify(deviceTransaction, never()).commit(anyLong(), any());
     }

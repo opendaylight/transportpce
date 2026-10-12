@@ -38,6 +38,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -516,15 +517,25 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     srcTp = node.getSrcTp();
                 }
                 List<String> interfacesToDelete = new LinkedList<>();
-                interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
-                        input.getLowerSpectralSlotNumber().intValue(),
-                        input.getHigherSpectralSlotNumber().intValue()));
+                try {
+                    interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
+                            input.getLowerSpectralSlotNumber().intValue(),
+                            input.getHigherSpectralSlotNumber().intValue()));
+                } catch (DeviceReadException | OpenRoadmInterfaceException e) {
+                    // Without this, an unreadable node would look like a node with nothing to delete
+                    String result = String.format("Could not read node %s to find what to delete: %s", nodeId,
+                            e.getMessage());
+                    success.set(false);
+                    LOG.error(result, e);
+                    results.add(result);
+                    return;
+                }
                 for (String interfaceId : interfacesToDelete) {
                     try {
                         this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     } catch (OpenRoadmInterfaceException e) {
-                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId,
-                                nodeId);
+                        String result = String.format("Failed to delete interface %s on node %s: %s", interfaceId,
+                                nodeId, e.getMessage());
                         success.set(false);
                         LOG.error(result, e);
                         results.add(result);
@@ -552,7 +563,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     }
 
     private List<String> getInterfaces2delete(
-            String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
+            String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
+            throws DeviceReadException, OpenRoadmInterfaceException {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 String.valueOf(lowerSpectralSlotNumber),
                 String.valueOf(higherSpectralSlotNumber));
@@ -569,7 +581,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         return intToDelete == null ? new LinkedList<>() : new LinkedList<>(intToDelete);
     }
 
-    private List<String> getInterfacesTodelete(String nodeId, String srcTp, String destTp, String spectralSlotName) {
+    private List<String> getInterfacesTodelete(String nodeId, String srcTp, String destTp, String spectralSlotName)
+            throws OpenRoadmInterfaceException {
 
         OpenroadmNodeVersion nodeOpenRoadmVersion =
                 this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
@@ -609,39 +622,22 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         return interfacesToDelete;
     }
 
-    private List<String> inf2Del(String termPoint, Map<String, List<String>> suffixListMap, String nodeId) {
+    private List<String> inf2Del(String termPoint, Map<String, List<String>> suffixListMap, String nodeId)
+            throws OpenRoadmInterfaceException {
         List<String> inf2Del = new LinkedList<>();
-        try {
-            for (String suffix : suffixListMap.get("ODU")) {
-                if (this.openRoadmInterfaces.getInterface(
-                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix)).isPresent()) {
-                    inf2Del.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
-                }
+        // Read with readInterface(), so that a device that cannot be read is not mistaken for missing interfaces
+        for (String suffix : suffixListMap.get("ODU")) {
+            String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix);
+            if (this.openRoadmInterfaces.readInterface(nodeId, interfaceName).isPresent()) {
+                inf2Del.add(interfaceName);
             }
         }
-        catch (OpenRoadmInterfaceException e) {
-            LOG.error("impossible to get one of the interfaces {}",
-                    termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
-                            " or " + termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR,
-                            suffixListMap.get("ODU")),
-                    e);
-        }
-        try {
-            for (String suffix : suffixListMap.get("other")) {
-                if (this.openRoadmInterfaces.getInterface(
-                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix)).isPresent()) {
-                    LOG.info("Deleting the interface {}",
-                            String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
-                    inf2Del.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
-                }
+        for (String suffix : suffixListMap.get("other")) {
+            String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix);
+            if (this.openRoadmInterfaces.readInterface(nodeId, interfaceName).isPresent()) {
+                LOG.info("Deleting the interface {}", interfaceName);
+                inf2Del.add(interfaceName);
             }
-        }
-        catch (OpenRoadmInterfaceException e) {
-            LOG.error("impossible to get one of the interfaces {}",
-                    termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
-                            " or " + termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR,
-                            suffixListMap.get("ODU")),
-                    e);
         }
         return inf2Del;
     }
@@ -685,11 +681,17 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             else {
                 for (String connectionId : nodeInterfaces.getConnectionId()) {
-                    List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);
-                    if (listInter == null) {
-                        // The input does not say whether the cross connect is a roadm-connection or an
-                        // odu-connection, and OTN rendering rolls back odu-connections through here
-                        listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, true);
+                    List<String> listInter;
+                    try {
+                        listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);
+                        if (listInter == null) {
+                            // The input does not say whether the cross connect is a roadm-connection or an
+                            // odu-connection, and OTN rendering rolls back odu-connections through here
+                            listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, true);
+                        }
+                    } catch (DeviceReadException e) {
+                        LOG.error("Could not read cross connect {} on node {}", connectionId, nodeId, e);
+                        listInter = null;
                     }
                     if (listInter != null) {
                         LOG.info("Cross connect {} on node {} successfully deleted.", connectionId, nodeId);

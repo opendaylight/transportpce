@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -72,7 +73,7 @@ public class CrossConnectImplTest {
     }
 
     @Test
-    void deleteCrossConnect() {
+    void deleteCrossConnect() throws DeviceReadException {
         when(mappingUtils.getOpenRoadmVersion(anyString())).thenReturn("bad node version");
         List<String> res = crossConnectImpl.deleteCrossConnect("nodeId", "100", false);
         assertNull(res);

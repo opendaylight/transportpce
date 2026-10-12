@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import java.util.List;
 import java.util.Optional;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.otn.renderer.nodes.Nodes;
@@ -57,9 +58,12 @@ public interface CrossConnect {
      * @param isOtn
      *            True for odu-connection, False for roadm-connection.
      *
-     * @return the list of interface-names that were supporting the connection.
+     * @return the list of interface-names that were supporting the connection, or null if the cross connect
+     *         does not exist on the device.
+     * @throws DeviceReadException if the device could not be read to find the cross connect
      */
-    List<String> deleteCrossConnect(String deviceId, String connectionNumber, Boolean isOtn);
+    List<String> deleteCrossConnect(String deviceId, String connectionNumber, Boolean isOtn)
+            throws DeviceReadException;
 
     /**
      * This public method returns the list of ports (port-trail) for a roadm's

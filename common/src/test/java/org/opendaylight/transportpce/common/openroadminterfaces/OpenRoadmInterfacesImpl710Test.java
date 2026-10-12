@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.Duration;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,6 +32,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class OpenRoadmInterfacesImpl710Test {
@@ -51,17 +55,33 @@ class OpenRoadmInterfacesImpl710Test {
     }
 
     @Test
+    void getSupportedInterfaceReturnsTheSupportingInterface() throws Exception {
+        deviceHas(new InterfaceBuilder()
+            .setName(INTERFACE)
+            .setSupportingInterfaceList(Set.of("XPDR2-NETWORK1-OTUC4"))
+            .build());
+
+        assertEquals("XPDR2-NETWORK1-OTUC4", openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
+    }
+
+    private void deviceHas(Interface intf) throws Exception {
+        when(deviceTransactionManager.readFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+                anyLong(), any()))
+            .thenReturn(Optional.of(intf));
+    }
+
+    @Test
     void deleteInterfaceOnANodeThatDoesNotAnswerDoesNotHoldUpOtherNodes() throws Exception {
         CountDownLatch frozenReadStarted = new CountDownLatch(1);
         CountDownLatch releaseFrozenRead = new CountDownLatch(1);
-        when(deviceTransactionManager.getDataFromDevice(eq(FROZEN_NODE), eq(LogicalDatastoreType.CONFIGURATION),
-                any(), anyLong(), any()))
+        when(deviceTransactionManager.readFromDevice(eq(FROZEN_NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+                anyLong(), any()))
             .thenAnswer(invocation -> {
                 frozenReadStarted.countDown();
                 releaseFrozenRead.await();
                 return Optional.empty();
             });
-        when(deviceTransactionManager.getDataFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
+        when(deviceTransactionManager.readFromDevice(eq(NODE), eq(LogicalDatastoreType.CONFIGURATION), any(),
                 anyLong(), any()))
             .thenReturn(Optional.empty());
         ExecutorService executor = Executors.newSingleThreadExecutor();

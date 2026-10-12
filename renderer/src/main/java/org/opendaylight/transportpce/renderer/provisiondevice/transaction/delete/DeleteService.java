@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -43,7 +44,14 @@ public class DeleteService implements Delete {
     @Override
     public @NonNull List<String> deleteCrossConnect(String deviceId, String connectionNumber,
                                                     boolean isOtn) {
-        List<String> result = crossConnect.deleteCrossConnect(deviceId, connectionNumber, isOtn);
+        List<String> result;
+        try {
+            result = crossConnect.deleteCrossConnect(deviceId, connectionNumber, isOtn);
+        } catch (DeviceReadException e) {
+            // Reported as a failed delete, like a cross connect that could not be found
+            LOG.error("Could not read cross connect {} on node {}", connectionNumber, deviceId, e);
+            result = null;
+        }
 
         if (result == null) {
             subscriber.result(false, deviceId, connectionNumber);

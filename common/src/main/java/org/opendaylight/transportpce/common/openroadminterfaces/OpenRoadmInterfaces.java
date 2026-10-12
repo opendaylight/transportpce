@@ -114,6 +114,15 @@ public interface OpenRoadmInterfaces {
     void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException;
 
-    String getSupportedInterface(String nodeId, String interfaceName);
+    /**
+     * Returns the interface that supports the given interface.
+     *
+     * @param nodeId node ID
+     * @param interfaceName name of the supported interface
+     * @return the name of the supporting interface, or null if the interface does not exist or has no supporting
+     *     interface
+     * @throws OpenRoadmInterfaceException if the interface cannot be read from the device
+     */
+    String getSupportedInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
 }

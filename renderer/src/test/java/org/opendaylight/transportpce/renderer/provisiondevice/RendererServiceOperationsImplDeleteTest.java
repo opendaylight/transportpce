@@ -37,6 +37,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -179,7 +180,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     }
 
     @Test
-    void serviceDeleteOperationWithoutPathDescription() throws InterruptedException, ExecutionException {
+    void serviceDeleteOperationWithoutPathDescription()
+            throws InterruptedException, ExecutionException, DeviceReadException {
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         Services service = new ServicesBuilder()
@@ -203,7 +205,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     }
 
     @Test
-    void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
+    void serviceDeleteOperationTearDownFailedAtoZ()
+            throws ExecutionException, InterruptedException, DeviceReadException {
         writePathDescription();
         Services service = new ServicesBuilder()
             .setServiceName("service 1")
@@ -243,7 +246,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     }
 
     @Test
-    void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
+    void serviceDeleteOperationTearDownFailedZtoA()
+            throws ExecutionException, InterruptedException, DeviceReadException {
         writePathDescription();
         when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
         when(servicePowerTurndown.invoke(any()))

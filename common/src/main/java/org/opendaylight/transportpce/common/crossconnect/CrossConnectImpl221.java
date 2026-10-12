@@ -125,25 +125,18 @@ public class CrossConnectImpl221 {
         return Optional.empty();
     }
 
-    public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn) {
+    public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn)
+            throws DeviceReadException {
         // Read and delete in one transaction, so the cross connect cannot change in between. The wait for the device
         // is bounded, so a frozen device fails the delete instead of holding up the caller.
-        DeviceTransaction deviceTx;
-        try {
-            deviceTx = deviceTransactionManager.awaitDeviceTransaction(deviceId,
-                    Timeouts.DEVICE_READ_TIMEOUT, 2 * Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        } catch (DeviceReadException e) {
-            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
-            return null;
-        }
+        DeviceTransaction deviceTx = deviceTransactionManager.awaitDeviceTransaction(deviceId,
+                Timeouts.DEVICE_READ_TIMEOUT, 2 * Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         List<String> interfList = null;
         try {
+            // A device that cannot be read throws, so it is not mistaken for a missing cross connect
             interfList = isOtn
                 ? readOduConnectionInterfaces(deviceTx, connectionName)
                 : readRoadmConnectionInterfaces(deviceTx, connectionName);
-        } catch (DeviceReadException e) {
-            LOG.error("Could not read cross connect {} on device {}", connectionName, deviceId, e);
-            return null;
         } finally {
             if (interfList == null) {
                 // Nothing to delete, or the read failed: let the next transaction have the device

@@ -13,6 +13,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 
 import java.util.List;
 import java.util.Optional;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -81,7 +82,8 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
+    public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn)
+            throws DeviceReadException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
