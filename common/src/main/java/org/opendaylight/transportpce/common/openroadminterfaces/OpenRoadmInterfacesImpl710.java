@@ -19,6 +19,7 @@ import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -119,12 +120,26 @@ public class OpenRoadmInterfacesImpl710 {
 
 
     public Optional<Interface> getInterface(String nodeId, String interfaceName) {
-        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+            interfaceIID(interfaceName), Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
+
+    public Optional<Interface> readInterface(String nodeId, String interfaceName)
+            throws OpenRoadmInterfaceException {
+        try {
+            return deviceTransactionManager.readFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+                interfaceIID(interfaceName), Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        } catch (DeviceReadException e) {
+            throw new OpenRoadmInterfaceException(String.format("Could not read interface %s on node %s: %s",
+                interfaceName, nodeId, e.getMessage()), e);
+        }
+    }
+
+    private static DataObjectIdentifier<Interface> interfaceIID(String interfaceName) {
+        return DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
-        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
 

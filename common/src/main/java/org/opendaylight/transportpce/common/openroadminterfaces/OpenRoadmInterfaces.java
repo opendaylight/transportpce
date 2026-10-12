@@ -62,6 +62,18 @@ public interface OpenRoadmInterfaces {
     <T> Optional<T> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
     /**
+     * Reads the given interface from the device like {@link #getInterface(String, String)}, but tells an
+     * interface that does not exist apart from a device that cannot be read.
+     *
+     * @param nodeId node ID
+     * @param interfaceName name of the interface
+     * @param <T> generic
+     * @return the interface, or an empty Optional if the device has no such interface
+     * @throws OpenRoadmInterfaceException if the device could not be read, or its OpenROADM version is unknown
+     */
+    <T> Optional<T> readInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
+
+    /**
      * This methods does an edit-config operation on the openROADM device in
      * order to delete the given interface.
      *

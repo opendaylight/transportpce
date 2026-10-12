@@ -88,6 +88,24 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <T> Optional<T> readInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        if (openRoadmVersion != null) {
+            switch (openRoadmVersion) {
+                case OPENROADM_DEVICE_VERSION_2_2_1:
+                    return (Optional<T>) openRoadmInterfacesImpl221.readInterface(nodeId, interfaceName);
+                case OPENROADM_DEVICE_VERSION_7_1:
+                    return (Optional<T>) openRoadmInterfacesImpl710.readInterface(nodeId, interfaceName);
+                default:
+                    break;
+            }
+        }
+        // Not knowing how to read the interface must not be mistaken for a missing interface
+        throw unknownVersion(nodeId, interfaceName, openRoadmVersion);
+    }
+
+    @Override
     public void deleteInterface(String nodeId, String interfaceName)
         throws OpenRoadmInterfaceException {
 
@@ -188,6 +206,13 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                 LOG.error("getSupportedInterface unknown ordm version error device {}", nodeId);
         }
         return supportedInterface;
+    }
+
+    private static OpenRoadmInterfaceException unknownVersion(String nodeId, String interfaceName,
+            String openRoadmVersion) {
+        return new OpenRoadmInterfaceException(String.format(
+            "Could not read interface %s on node %s: unknown OpenROADM version %s",
+            interfaceName, nodeId, openRoadmVersion));
     }
 
 }
