@@ -9,12 +9,14 @@
 package org.opendaylight.transportpce.common.device;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -214,6 +216,23 @@ public class DeviceTransactionManagerTest {
             finishCreation.countDown();
             finishCancellation.countDown();
         }
+    }
+
+    @Test
+    void commitReleasesTheDeviceWhenTheCommitCannotStartTest() throws Exception {
+        IllegalStateException failure = new IllegalStateException("mount point closed");
+        doThrow(failure).when(rwTransactionMock).commit();
+        DeviceTransaction transaction = transactionManager.getDeviceTransaction(defaultDeviceId).get().orElseThrow();
+
+        Future<?> commit = transaction.commit(defaultTimeout, defaultTimeUnit);
+
+        // The failure is reported through the future instead of being thrown
+        ExecutionException thrown = assertThrows(ExecutionException.class, commit::get);
+        assertEquals(failure, thrown.getCause());
+        // The device is released, so the next transaction does not wait for it
+        assertTrue(transactionManager.getDeviceTransaction(defaultDeviceId)
+                .get(defaultTimeout, defaultTimeUnit)
+                .isPresent());
     }
 
     @Test

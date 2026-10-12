@@ -94,8 +94,9 @@ public class DeviceTransaction {
      *
      * @param timeout a timeout
      * @param timeUnit a time unit
-     * @return FluentFuture which indicates when the commit is completed.
+     * @return FluentFuture which indicates when the commit is completed, failed if the commit could not be started.
      */
+    @SuppressWarnings("checkstyle:IllegalCatch")
     public FluentFuture<? extends @NonNull CommitInfo> commit(long timeout, TimeUnit timeUnit) {
         if (wasSubmittedOrCancelled.get()) {
             String msg = "Transaction was already submitted or canceled!";
@@ -105,8 +106,17 @@ public class DeviceTransaction {
 
         LOG.debug("Transaction committed. Lock: {}", released);
         wasSubmittedOrCancelled.set(true);
+        FluentFuture<? extends @NonNull CommitInfo> commit;
+        try {
+            commit = rwTx.commit();
+        } catch (RuntimeException e) {
+            // For example, the mount point was torn down. No callback will release the device, so release it here.
+            LOG.error("Device transaction commit could not be started! Unlocking device.", e);
+            afterClose();
+            return FluentFutures.immediateFailedFluentFuture(e);
+        }
         FluentFuture<? extends @NonNull CommitInfo> future =
-                rwTx.commit().withTimeout(timeout, timeUnit, scheduledExecutorService);
+                commit.withTimeout(timeout, timeUnit, scheduledExecutorService);
 
         future.addCallback(new FutureCallback<CommitInfo>() {
             @Override
