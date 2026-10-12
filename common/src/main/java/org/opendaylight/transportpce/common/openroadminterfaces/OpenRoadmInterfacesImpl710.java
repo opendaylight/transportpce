@@ -282,7 +282,11 @@ public class OpenRoadmInterfacesImpl710 {
     public String getSupportedInterface(String nodeId, String interf) throws OpenRoadmInterfaceException {
         Optional<Interface> supInterfOpt;
         supInterfOpt = readInterface(nodeId, interf);
-        return supInterfOpt.map(s -> s.getSupportingInterfaceList().stream().findFirst().orElseThrow()).orElse(null);
+        // A 7.1 interface lists its supporting interfaces, and the list may be missing or empty
+        return supInterfOpt
+            .map(Interface::getSupportingInterfaceList)
+            .flatMap(supporting -> supporting.stream().findFirst())
+            .orElse(null);
     }
 
     private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {

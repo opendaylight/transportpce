@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,6 +63,20 @@ class OpenRoadmInterfacesImpl710Test {
             .build());
 
         assertEquals("XPDR2-NETWORK1-OTUC4", openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
+    }
+
+    @Test
+    void getSupportedInterfaceIsNullForAnInterfaceWithoutSupportingInterface() throws Exception {
+        deviceHas(new InterfaceBuilder().setName(INTERFACE).build());
+
+        assertNull(openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
+    }
+
+    @Test
+    void getSupportedInterfaceIsNullForAnEmptySupportingInterfaceList() throws Exception {
+        deviceHas(new InterfaceBuilder().setName(INTERFACE).setSupportingInterfaceList(Set.of()).build());
+
+        assertNull(openRoadmInterfaces.getSupportedInterface(NODE, INTERFACE));
     }
 
     private void deviceHas(Interface intf) throws Exception {
