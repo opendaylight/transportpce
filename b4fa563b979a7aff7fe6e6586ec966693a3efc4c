@@ -22,6 +22,30 @@
       },
       "revId": "b4fa563b979a7aff7fe6e6586ec966693a3efc4c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53b27168_26311028",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-13T08:05:53Z",
+      "side": 1,
+      "message": "I believe this commit originated as a follow-up to a review comment during work on TRNSPRTPCE-699. The other related commits have since merged, leaving this cleanup with a ticket reference that no longer clearly reflects its scope.\n\nThe change only renames a local variable and adjusts formatting. Given its limited benefit, I’m dropping it rather than creating a separate ticket. No other commits depend on it, and it has been awaiting review for over six months, no point having this one blocking progress.",
+      "parentUuid": "6c5ba3c7_f61deb15",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 15,
+        "endChar": 20
+      },
+      "revId": "b4fa563b979a7aff7fe6e6586ec966693a3efc4c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
