@@ -39,7 +39,9 @@ public class ServiceImplementationRequestImpl implements ServiceImplementationRe
             output = this.rendererServiceOperations.serviceImplementation(input, false).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC service implementation failed !", e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
         return ModelMappingUtils.createServiceImplementationRpcResponse(output);
     }

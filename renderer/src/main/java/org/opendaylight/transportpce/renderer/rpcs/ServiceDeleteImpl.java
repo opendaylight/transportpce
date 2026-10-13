@@ -38,7 +38,9 @@ public class ServiceDeleteImpl implements ServiceDelete {
             output = this.rendererServiceOperations.serviceDelete(input, null).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC service delete failed !", e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
         return ModelMappingUtils.createServiceDeleteRpcResponse(output);
     }
