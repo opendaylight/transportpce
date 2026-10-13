@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "945c7428207da590dfe34d4e62fd82d845f6ffd3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caab7a42_46d9555a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-13T09:03:37Z",
+      "side": 1,
+      "message": "This code doesn\u0027t belong in this commit and was added by mistake. I didn\u0027t think this one through before committing. I\u0027ll extract it into its own change and create a ticket for it.",
+      "revId": "945c7428207da590dfe34d4e62fd82d845f6ffd3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
