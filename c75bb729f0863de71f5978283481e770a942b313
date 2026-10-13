@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33834673_2bb4d239",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-13T09:09:30Z",
+      "side": 0,
+      "message": "This random white space removal doesn\u0027t belong in this commit. I\u0027ll get rid of it.",
+      "revId": "c75bb729f0863de71f5978283481e770a942b313",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
