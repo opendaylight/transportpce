@@ -16,6 +16,24 @@
       "message": "Thanks Joakim for this contribution, could you please add a JIRA Ticket ?",
       "revId": "c54970e624a7ce0284ec7a7c08ac49dec57f42a8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5945ac48_e4565d8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-13T08:08:10Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "6b99e7ed_0652e1a0",
+      "revId": "c54970e624a7ce0284ec7a7c08ac49dec57f42a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
