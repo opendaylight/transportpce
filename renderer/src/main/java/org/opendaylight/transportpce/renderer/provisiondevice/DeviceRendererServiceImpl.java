@@ -411,19 +411,21 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             results.add(message + String.join(", ", nodesProvisioned));
             LOG.info("Setup service path successful. {} {}", message, nodesProvisioned);
         }
+        boolean noExceptionThrown = true;
         // setting topology in the service list data store
         try {
             ServiceListTopology topology = new ServiceListTopology();
             setTopologyForService(input.getServiceName(), topology.getTopology());
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
             LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
+            noExceptionThrown = false;
         }
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
             LOG.error("Alarm suppression node removal failed!!!!");
         }
         ServicePathOutputBuilder servicePathOutputBuilder = new ServicePathOutputBuilder()
                 .setNodeInterface(nodeInterfaces)
-                .setSuccess(success.get())
+                .setSuccess(success.get() && noExceptionThrown)
                 .setResult(String.join("\n", results));
         servicePathOutputBuilder.setLinkTp(otnLinkTps);
         return servicePathOutputBuilder.build();
