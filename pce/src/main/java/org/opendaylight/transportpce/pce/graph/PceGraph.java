@@ -24,6 +24,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.GraphWalk;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -38,7 +39,6 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
-import org.opendaylight.transportpce.pce.orchestrator.ModifiedGraphPath;
 import org.opendaylight.transportpce.pce.orchestrator.PceCrossDomainOrchestrator;
 import org.opendaylight.transportpce.pce.orchestrator.PceCrossDomainPathAggregator;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
@@ -190,7 +190,7 @@ public class PceGraph {
                         spectrumConstraint,
                         clientInput);
                 papv.setPceOperMode(pceOperMode);
-                pceResult = papv.checkPath(ModifiedGraphPath.fromGraphPath(path),
+                pceResult = papv.checkPath(path,
                         allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
                         false, null, null, 0);
                 this.margin = papv.getTpceCalculatedMargin();
@@ -240,7 +240,7 @@ public class PceGraph {
                         spectrumConstraint,
                         clientInput);
                 papv.setPceOperMode(pceOperMode);
-                pceResult = papv.checkPath(ModifiedGraphPath.fromGraphPath(path),
+                pceResult = papv.checkPath(path,
                     allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
                     true, pcdpa.getPrecedingEdge(firstStepKpathOrderInHybidPathComputation, npathorder),
                     pcdpa.getSucceedingEdge(firstStepKpathOrderInHybidPathComputation, npathorder), 0);
@@ -303,7 +303,8 @@ public class PceGraph {
                     if (pathelement.domainType.equals(DomainTypeEnum.Openroadm)) {
                         LOG.debug("ScanPath elt number {} of OR type", subPathPointer);
 
-                        ModifiedGraphPath subpath = (ModifiedGraphPath) subGraphPathMap
+                        //ModifiedGraphPath subpath = (ModifiedGraphPath) subGraphPathMap
+                        GraphPath<String, PceGraphEdge> subpath = subGraphPathMap
                             .get(kpathorder).get(subPathPointer).intermediateGraphPath();
 
                         pceResult = papv.checkPath(
@@ -690,37 +691,16 @@ public class PceGraph {
         List<SubGraphPath> subGraphPathList = new ArrayList<>();
         // LOOP that scans the different elements of the path and stores in SplitPathMap the partial paths.
         for (PathElement pathElt : pathEltList) {
-            Map<String, PceGraphEdge> splitPathMap = new HashMap<>();
             int lowIndex = pathElt.lowIndex;
             int highIndex = pathElt.highIndex;
-            List<String> intermediateVertexList = new ArrayList<>();
-            List<PceGraphEdge> intermediateEdgeList = new ArrayList<>();
-            String startVertex = "";
-            String endVertex = "";
-            //SubGraphPath subGraphPath = new SubGraphPath();
-            for (int pathIndex = lowIndex; pathIndex < highIndex + 1; pathIndex++) {
-                splitPathMap.put(vertices.get(pathIndex),
-                    pathIndex < edgeListSize ? edges.get(pathIndex) : null);
-                intermediateVertexList.add(vertices.get(pathIndex));
-                if (pathIndex == lowIndex)  {
-                    startVertex = vertices.get(pathIndex);
-                } else if (pathIndex == highIndex) {
-                    endVertex = vertices.get(pathIndex);
-                } else if (pathIndex < highIndex) {
-                    intermediateEdgeList.add(edges.get(pathIndex));
-                }
-            }
-            ModifiedGraphPath splitMdgp =  new ModifiedGraphPath(splitPathMap);
-            splitMdgp.setEdgeListForMap(intermediateEdgeList);
-            splitMdgp.setVertexListForMap(intermediateVertexList);
-            splitMdgp.setStartVertexForMap(startVertex);
-            splitMdgp.setEndVertexForMap(endVertex);
+            GraphWalk<String, PceGraphEdge> subGraph = extractSubPathFromEdges(path, lowIndex, highIndex);
             String precedingNodeId = lowIndex == 0 ? null : vertices.get(lowIndex - 1);
             String followingNodeId = highIndex < (verticeListSize - 1) ? vertices.get(highIndex + 1) : null;
             PceGraphEdge precedingEdge = lowIndex == 0 ? null : edges.get(lowIndex - 1);
             PceGraphEdge followingEdge = highIndex < (edgeListSize - 1) ? edges.get(highIndex) : null;
             SubGraphPath subGraphPath = new SubGraphPath(norder,pathElt.domainType,
-                pathElt.cdServiceOrder, splitMdgp, intermediateEdgeList, intermediateVertexList, startVertex, endVertex,
+                pathElt.cdServiceOrder, subGraph, subGraph.getEdgeList(), subGraph.getVertexList(),
+                subGraph.getStartVertex(), subGraph.getEndVertex(),
                 precedingNodeId, followingNodeId,
                 precedingEdge, followingEdge);
             subGraphPathList.add(subGraphPath);
@@ -795,13 +775,37 @@ public class PceGraph {
         return tp;
     }
 
+    /**
+     * Extracts a subGraph (GraphWalk) from an existing grapgh.
+     *
+     * @param originalPath The complete path.
+     * @param startEdgeIndex Index of start Edge (inclusive).
+     * @param endEdgeIndex   Index of end Edge (exclusive).
+     * @return a new GraphWalk object associated with a sub-graph.
+     */
+    public static <V, E> GraphWalk<V, E> extractSubPathFromEdges(GraphPath<V, E> originalPath, int startEdgeIndex,
+            int endEdgeIndex) {
+
+        Graph<V, E> graph = originalPath.getGraph();
+        List<E> originalEdges = originalPath.getEdgeList();
+
+        List<E> subEdges = originalEdges.subList(startEdgeIndex, endEdgeIndex);
+
+        V startVertex = originalPath.getVertexList().get(startEdgeIndex);
+        V endVertex = originalPath.getVertexList().get(endEdgeIndex);
+
+        double subWeight = subEdges.stream().mapToDouble(graph::getEdgeWeight).sum();
+
+        return new GraphWalk<>(graph, startVertex, endVertex, subEdges, subWeight);
+    }
+
     public record PathElement(int lowIndex, int highIndex, DomainTypeEnum domainType, int cdServiceOrder) {}
 
     public record SubGraphPath(
         int norder,
         DomainTypeEnum domainType,
         int cdServiceOrder,
-        ModifiedGraphPath intermediateGraphPath,
+        GraphWalk<String,PceGraphEdge> intermediateGraphPath,
         List<PceGraphEdge> edgeList,
         List<String> vertexList,
         String startVertex,

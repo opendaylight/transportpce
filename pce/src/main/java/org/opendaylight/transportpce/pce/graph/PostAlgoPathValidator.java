@@ -21,7 +21,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-//import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -45,9 +44,7 @@ import org.opendaylight.transportpce.pce.frequency.Select;
 import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
-//import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.transportpce.pce.orchestrator.ModifiedGraphPath;
 import org.opendaylight.transportpce.pce.spectrum.assignment.Assign;
 import org.opendaylight.transportpce.pce.spectrum.assignment.AssignSpectrumHighToLow;
 import org.opendaylight.transportpce.pce.spectrum.assignment.Range;
@@ -111,7 +108,7 @@ public class PostAlgoPathValidator {
     @SuppressFBWarnings(
         value = "SF_SWITCH_FALLTHROUGH",
         justification = "intentional fallthrough")
-    public PceResult checkPath(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
+    public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
             String serviceType, PceConstraintMode mode, boolean isPartialPath,
             PceGraphEdge precedingEdge, PceGraphEdge followingEdge, Integer npathorder) {
@@ -232,8 +229,8 @@ public class PostAlgoPathValidator {
                     .get(serviceType);
                 pceResult.error("An unknown error occurred while trying to find the spectrum assignment.");
                 pceResult.setServiceType(serviceType);
-                Map<String, List<Uint16>> tribSlot = chooseTribSlot((ModifiedGraphPath) path, allPceNodes, tribSlotNb);
-                Map<String, Uint16> tribPort = chooseTribPort((ModifiedGraphPath) path, allPceNodes, tribSlot,
+                Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
+                Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot,
                         tribSlotNb);
                 if (tribSlot == null || tribPort == null) {
                     if (this.pceOperMode.equals(PceSendingPceRPCs.TAPI_PCE_OPER_MODE)) {
@@ -279,7 +276,7 @@ public class PostAlgoPathValidator {
     }
 
     // Check the latency
-    private boolean checkLatency(Long maxLatency, ModifiedGraphPath path) {
+    private boolean checkLatency(Long maxLatency, GraphPath<String, PceGraphEdge> path) {
         double latency = 0;
         for (PceGraphEdge edge : path.getEdgeList()) {
             if (edge.link() == null || edge.link().getLatency() == null) {
@@ -293,7 +290,7 @@ public class PostAlgoPathValidator {
     }
 
     // Get the latency
-    private double getLatency(ModifiedGraphPath path) {
+    private double getLatency(GraphPath<String, PceGraphEdge> path) {
         double latency = 0;
         for (PceGraphEdge edge : path.getEdgeList()) {
             if (edge.link() == null || edge.link().getLatency() == null) {
@@ -308,7 +305,7 @@ public class PostAlgoPathValidator {
 
     // Check the inclusion if it is defined in the hard constraints
     //TODO: remove this checkstyle false positive warning when the checkstyle bug will be fixed
-    private boolean checkInclude(ModifiedGraphPath path, PceConstraints pceHardConstraintsInput,
+    private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput,
             PceConstraintMode mode) {
         List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
         if (listToInclude.isEmpty()) {
@@ -393,7 +390,7 @@ public class PostAlgoPathValidator {
         return new ArrayList<>(listOfElements);
     }
 
-    private Map<String, Uint16> chooseTribPort(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
+    private Map<String, Uint16> chooseTribPort(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
                 Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
         LOG.debug("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
@@ -434,8 +431,8 @@ public class PostAlgoPathValidator {
         return tribPortMap;
     }
 
-    private Map<String, List<Uint16>> chooseTribSlot(ModifiedGraphPath
-            path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
+    private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String, PceGraphEdge> path,
+            Map<NodeId, PceNode> allPceNodes, int nbSlot) {
         LOG.debug("In choosetribSlot: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -502,7 +499,7 @@ public class PostAlgoPathValidator {
             OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()))));
     }
 
-    private double checkOSNR(ModifiedGraphPath path, Map<NodeId, PceNode> allPceNodes,
+    private double checkOSNR(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu,
             PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         switch (direction) {
@@ -532,7 +529,7 @@ public class PostAlgoPathValidator {
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private AToZImpairmentsBuilder checkOSNRaz(ModifiedGraphPath path,
+    private AToZImpairmentsBuilder checkOSNRaz(GraphPath<String, PceGraphEdge> path,
             Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu,
             PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         Map<String, Double> signal = new HashMap<>(
@@ -824,7 +821,7 @@ public class PostAlgoPathValidator {
      * Calculates the OSNR of a path, according to the direction (AtoZ/ZtoA), using the operational-modes Catalog.
      *
      * @param path                      the AtoZ path provided by the PCE.
-     * @param allPceNodes                The map of chosen/relevant PceNodes build from topology pruning.
+     * @param allPceNodes               The map of chosen/relevant PceNodes build from topology pruning.
      * @param allPceLinks               The map of PceLinks build corresponding to the whole topology.
      * @param serviceType               The service Type used to extrapolate Operational mode when it is not provided.
      * @param cu                        CatalogUtils instance.
@@ -834,7 +831,7 @@ public class PostAlgoPathValidator {
      *         used for cross-domain E2E service associated impairments evaluation; and the calculated margin in the
      *         case of regular path computation of an E2E service (from Xponder to XPonder).
      */
-    private ZToAImpairmentsBuilder checkOSNRza(ModifiedGraphPath path,
+    private ZToAImpairmentsBuilder checkOSNRza(GraphPath<String, PceGraphEdge> path,
             Map<NodeId, PceNode> allPceNodes, Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu,
             PceGraphEdge precedingEdge, PceGraphEdge followingEdge) {
         Map<String, Double> signal = new HashMap<>(
@@ -1396,7 +1393,7 @@ public class PostAlgoPathValidator {
      * @return a SpectrumUsage record, which is an association of a BitSet object which represents the spectrum
      *         occupation and a Collection of supported Center Frequency Granularities.
      */
-    public SpectrumUsage computeSpectrumOccupation(ModifiedGraphPath path,
+    public SpectrumUsage computeSpectrumOccupation(GraphPath<String, PceGraphEdge> path,
             Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber,
             Collection centerFreqGranularityCollection) {
         LOG.debug("Processing path {} with length {}", path, path.getLength());
@@ -1498,9 +1495,7 @@ public class PostAlgoPathValidator {
         boolean isFlexGrid = true;
         Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
 
-        SpectrumUsage spectrumUsage = computeSpectrumOccupation(
-            (ModifiedGraphPath) path,
-            allPceNodes, spectralWidthSlotNumber, subscriber,
+        SpectrumUsage spectrumUsage = computeSpectrumOccupation(path, allPceNodes, spectralWidthSlotNumber, subscriber,
             centerFrequencyGranularityCollection);
 
         if (spectrumUsage.spectrumOccupation.isEmpty()) {

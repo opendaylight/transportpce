@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
-//import org.jgrapht.GraphPath;
+import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
@@ -26,7 +26,6 @@ import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
 import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
-import org.opendaylight.transportpce.pce.orchestrator.ModifiedGraphPath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev260910.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -136,7 +135,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-B-DEG1", "ROADM-B-SRG3", "(ROADM-B-DEG1 : ROADM-B-SRG3)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -147,7 +146,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 16, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
     }
 
     /**
@@ -190,7 +189,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-B-DEG1", "ROADM-B-SRG3", "(ROADM-B-DEG1 : ROADM-B-SRG3)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         SpectrumAssignment expected = new SpectrumAssignmentBuilder()
                 .setBeginIndex(Uint16.valueOf(761))
@@ -201,7 +200,7 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 6, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, mock(Subscriber.class)));
     }
 
 
@@ -260,7 +259,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-C-DEG2", "ROADM-C-SRG12", "(ROADM-C-DEG2 : ROADM-C-SRG12)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 5.0, 5);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 5.0, 5);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -271,7 +270,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 6, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 6, mock(Subscriber.class)));
     }
 
     /**
@@ -328,7 +327,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-C-DEG2", "ROADM-C-SRG12", "(ROADM-C-DEG2 : ROADM-C-SRG12)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 5.0, 5);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 5.0, 5);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -342,7 +341,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 8, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 8, mock(Subscriber.class)));
     }
 
     /**
@@ -399,7 +398,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-C-DEG2", "ROADM-C-SRG12", "(ROADM-C-DEG2 : ROADM-C-SRG12)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 5.0, 5);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 5.0, 5);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -411,7 +410,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 16, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
     }
 
     /**
@@ -455,7 +454,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-C-DEG2", "ROADM-C-SRG13", "(ROADM-C-DEG2 : ROADM-C-SRG13)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -466,7 +465,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 10, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 10, mock(Subscriber.class)));
     }
 
     /**
@@ -511,7 +510,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-C-DEG2", "ROADM-C-SRG13", "(ROADM-C-DEG2 : ROADM-C-SRG13)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -523,7 +522,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 10, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 10, mock(Subscriber.class)));
     }
 
     /**
@@ -568,7 +567,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-B-DEG1", "ROADM-B-SRG3", "(ROADM-B-DEG1 : ROADM-B-SRG3)")
         );
 
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -579,7 +578,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 16, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
     }
 
     /**
@@ -625,7 +624,7 @@ class PostAlgoPathValidatorTest {
                 mockEdge("ROADM-B-DEG1", "ROADM-B-SRG3", "(ROADM-B-DEG1 : ROADM-B-SRG3)")
         );
         //GraphPath<String, PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
-        ModifiedGraphPath mdpath = mockModifiedGraphPath(edges, 3.0, 3);
+        GraphPath<String,PceGraphEdge> path = mockGraphPath(edges, 3.0, 3);
 
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(networkTransactionService,
                 customerAvailableFrequencies, clientInputMock);
@@ -636,7 +635,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(mdpath, nodes, 16, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(path, nodes, 16, mock(Subscriber.class)));
     }
 
     private PceGraphEdge mockXponder(String sourceId, String destId, String edgeString) {
@@ -663,9 +662,10 @@ class PostAlgoPathValidatorTest {
         return edge;
     }
 
-    private ModifiedGraphPath mockModifiedGraphPath(List<PceGraphEdge> edges, double weight, int length) {
+    private GraphPath<String,PceGraphEdge> mockGraphPath(List<PceGraphEdge> edges, double weight, int length) {
 
-        ModifiedGraphPath path = mock(ModifiedGraphPath.class);
+        @SuppressWarnings("unchecked")
+        GraphPath<String,PceGraphEdge> path = mock(GraphPath.class);
 
         when(path.getEdgeList()).thenReturn(edges);
         when(path.getWeight()).thenReturn(weight);
