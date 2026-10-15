@@ -65,6 +65,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev260422.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
@@ -798,6 +799,6 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         AvailFreqMaps updatedAvailFreqMaps = new AvailFreqMapsBuilder(availFreqMaps)
                 .setFreqMap(Arrays.copyOf(bitSetFreq.toByteArray(), GridConstant.NB_OCTECTS))
                 .build();
-        return new HashMap<>(Map.of(availFreqMaps.key(), updatedAvailFreqMaps));
+        return BindingMap.of(updatedAvailFreqMaps);
     }
 }

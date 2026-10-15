@@ -172,6 +172,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -688,7 +689,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LayerProtocolName.DIGITALOTN, LayerProtocolName.PHOTONICMEDIA),
             nodeId, new Uuid(UUID.nameUUIDFromBytes(nameVal.getBytes(StandardCharsets.UTF_8)).toString()),
             xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPoolMap);
-        return new HashMap<>(Map.of(dsrNode.key(), dsrNode));
+        return BindingMap.of(dsrNode);
     }
 
     private Map<OduSwitchingPoolsKey,OduSwitchingPools> createSwitchPoolForAnyXpdr(Nodes node,
@@ -1478,7 +1479,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         if (keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             ConnectionEndPoint otsCep = tapiFactory.createOTSCepXpdr(
                 String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS, tpid));
-            Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(Map.of(otsCep.key(), otsCep));
+            Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = BindingMap.of(otsCep);
             onepBldr.addAugmentation(
                 new OwnedNodeEdgePoint1Builder().setCepList(
                         new CepListBuilder().setConnectionEndPoint(cepMap).build())
