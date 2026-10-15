@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df9ae7a1_fd29412e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-10-15T06:11:42Z",
+      "side": 1,
+      "message": "BindingMap.of(supNode) does the same thing -- allowing \u0027supNode\u0027 to be built inline",
+      "range": {
+        "startLine": 1227,
+        "startChar": 45,
+        "endLine": 1227,
+        "endChar": 48
+      },
+      "revId": "0a259f1c920c4e10085cf38f01e7ff119a4f0ffd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
