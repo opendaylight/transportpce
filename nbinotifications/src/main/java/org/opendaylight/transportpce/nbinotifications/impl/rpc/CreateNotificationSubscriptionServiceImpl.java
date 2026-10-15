@@ -29,6 +29,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotificationKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterBuilder;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -67,11 +68,10 @@ public class CreateNotificationSubscriptionServiceImpl implements CreateNotifica
             .build();
         SubscriptionService subscriptionService = new SubscriptionServiceBuilder()
             .setUuid(notifSubscriptionUuid)
-            .setSubscriptionFilter(new HashMap<>(Map.of(subscriptionFilter.key(), subscriptionFilter)))
+            .setSubscriptionFilter(BindingMap.of(subscriptionFilter))
             .setSubscriptionState(input.getSubscriptionState())
             .build();
-        Map<NotifSubscriptionKey, NotifSubscription> notifSubscriptions = new HashMap<>(Map.of(
-            new NotifSubscriptionKey(notifSubscriptionUuid),
+        Map<NotifSubscriptionKey, NotifSubscription> notifSubscriptions = BindingMap.of(
             new NotifSubscriptionBuilder()
                 .setSubscriptionState(subscriptionService.getSubscriptionState())
                 .setSubscriptionFilter(subscriptionService.getSubscriptionFilter())
@@ -80,7 +80,7 @@ public class CreateNotificationSubscriptionServiceImpl implements CreateNotifica
 //              .setSupportedNotificationTypes(notificationTypes)
 //              .setSupportedObjectTypes(objectTypes)
                 .setName(subscriptionService.getName())
-                .build()));
+                .build());
         Map<NotificationKey, Notification> notifications;
         NotificationContext notificationContext = nbiNotifications.getNotificationContext();
         if (notificationContext == null) {

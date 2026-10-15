@@ -152,6 +152,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -430,13 +431,13 @@ public class ORtoTapiTopoConversionTools {
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
             .setName(Map.of(nrgName.key(), nrgName))
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
-            .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
+            .setRule(BindingMap.of(rule))
             .setNodeEdgePoint(nepMap)
             .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
             .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
             .setLatencyCharacteristic(Map.of(defaultChars.latency().key(), defaultChars.latency()))
             .build();
-        return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
+        return BindingMap.of(nodeRuleGroup);
     }
 
     /**
@@ -527,7 +528,7 @@ public class ORtoTapiTopoConversionTools {
         InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(irgName.key(), irgName))
-            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+            .setRule(BindingMap.of(rule))
             .setAssociatedNodeRuleGroup(associatedNrgMap)
             .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
             .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
@@ -590,7 +591,7 @@ public class ORtoTapiTopoConversionTools {
             InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
                 .setName(Map.of(irgName.key(), irgName))
-                .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+                .setRule(BindingMap.of(rule))
                 .setAssociatedNodeRuleGroup(associatedNrgMap)
                 .setRiskCharacteristic(Map.of(defaultChars.risk().key(), defaultChars.risk()))
                 .setCostCharacteristic(Map.of(defaultChars.cost().key(), defaultChars.cost()))
@@ -1996,7 +1997,7 @@ public class ORtoTapiTopoConversionTools {
                 .findAny().orElseThrow().getValue().getValue();
             if (nepId != null) {
                 ConnectionEndPoint otsCep = createOTSCepXpdr(nepId);
-                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(Map.of(otsCep.key(), otsCep));
+                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = BindingMap.of(otsCep);
                 onepBldr.addAugmentation(
                     new OwnedNodeEdgePoint1Builder().setCepList(
                             new CepListBuilder().setConnectionEndPoint(cepMap).build())
