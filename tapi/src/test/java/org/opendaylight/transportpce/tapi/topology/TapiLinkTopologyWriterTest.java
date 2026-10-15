@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -31,6 +32,18 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public class TapiLinkTopologyWriterTest extends AbstractTest {
+
+    @BeforeEach
+    void setUp() throws InterruptedException, ExecutionException {
+        // Clean up the OPERATIONAL datastore before each test to ensure a clean state
+        NetworkTransactionService setupService = new NetworkTransactionImpl(getDataBroker());
+        setupService.delete(LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .build());
+        setupService.commit().get();
+    }
 
     @Test
     void mergeLinksInTopologyWritesLinkAndReturnsTrue() throws InterruptedException, ExecutionException {
