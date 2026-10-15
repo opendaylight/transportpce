@@ -8,8 +8,6 @@
 
 package org.opendaylight.transportpce.servicehandler.utils;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250530.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.AddOpenroadmOperationalModesToCatalogInput;
@@ -26,6 +24,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.add.ope
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.add.specific.operational.modes.to.catalog.input.operational.mode.info.SpecificOperationalModesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.add.specific.operational.modes.to.catalog.input.operational.mode.info.specific.operational.modes.SpecificOperationalModeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530.add.specific.operational.modes.to.catalog.input.operational.mode.info.specific.operational.modes.SpecificOperationalModeKey;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 
 public final class CatalogDataUtils {
 
@@ -46,11 +45,10 @@ public final class CatalogDataUtils {
                 .setGridParameters(new GridParametersBuilder().build())
                 .setXpondersPluggables(
                     new XpondersPluggablesBuilder()
-                        .setXponderPluggableOpenroadmOperationalMode(new HashMap<>(Map.of(
-                            key,
+                        .setXponderPluggableOpenroadmOperationalMode(BindingMap.of(
                             new XponderPluggableOpenroadmOperationalModeBuilder()
                                 .setOpenroadmOperationalModeId(key.toString())
-                                .build())))
+                                .build()))
                         .build())
                 .setRoadms(new RoadmsBuilder().build())
                 .setAmplifiers(new AmplifiersBuilder().build())
@@ -70,13 +68,10 @@ public final class CatalogDataUtils {
                     .add.specific.operational.modes.to.catalog.input.OperationalModeInfoBuilder()
                 .setSpecificOperationalModes(
                     new SpecificOperationalModesBuilder()
-                        .setSpecificOperationalMode(
-                            new HashMap<>(Map.of(
-                                key,
-                                new SpecificOperationalModeBuilder()
-                                    .setOperationalModeId(key.toString())
-                                    .build()))
-                            )
+                        .setSpecificOperationalMode(BindingMap.of(
+                            new SpecificOperationalModeBuilder()
+                                .setOperationalModeId(key.toString())
+                                .build()))
                         .build())
                 .build())
             .build();
