@@ -1022,19 +1022,20 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .build();
             ListenableFuture<Optional<Link>> linkOptLf = networkTransactionService
                 .read(LogicalDatastoreType.CONFIGURATION, iiLink);
-            if (linkOptLf.isDone()) {
-                try {
-                    if (linkOptLf.get().isPresent()) {
-                        links.add(linkOptLf.get().orElseThrow());
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    if (e instanceof InterruptedException) {
-                        Thread.currentThread().interrupt();
-                    }
-                    LOG.error("Error retreiving OTN links from otn-topology", e);
+            try {
+                Optional<Link> linkOpt = Optional.ofNullable(
+                        linkOptLf.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+                if (linkOpt.isPresent()) {
+                    links.add(linkOpt.orElseThrow());
                 }
-            } else {
-                LOG.error("Error retreiving link {} from otn-topology", linkId.getValue());
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                    LOG.error("Interrupted while retrieving OTN links from OTN-topology", e);
+                    return links;
+                }
+                LOG.error("Error retreiving link {} from otn-topology", linkId.getValue(), e);
             }
         }
         return links;
@@ -1084,20 +1085,21 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             .build();
         Optional<TerminationPoint> tpZOpt = Optional.empty();
 
-        if (networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpA).isDone()
-                && networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpZ).isDone()) {
-            try {
-                tpAOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpA).get();
-                tpZOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpZ).get();
-            } catch (InterruptedException | ExecutionException e) {
-                if (e instanceof InterruptedException) {
-                    Thread.currentThread().interrupt();
-                }
-                LOG.error("Error retreiving tp {} of node {} or tp {} from node {} from otn-topology", tpA, nodeTopoA,
-                    tpZ, nodeTopoZ, e);
+        ListenableFuture<Optional<TerminationPoint>> tpAOptLf =
+            networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpA);
+        ListenableFuture<Optional<TerminationPoint>> tpZOptLf =
+            networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTpZ);
+        try {
+            tpAOpt = Optional.ofNullable(tpAOptLf.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+            tpZOpt = Optional.ofNullable(tpZOptLf.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
             }
-        } else {
-            LOG.error("error getting node termination points from the datastore");
+            LOG.error("Error retreiving tp {} of node {} or tp {} from node {} from otn-topology", tpA, nodeTopoA,
+                tpZ, nodeTopoZ, e);
         }
 
         if (tpAOpt.isPresent() && tpZOpt.isPresent()) {
@@ -1118,21 +1120,21 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .augmentation(Node1.class)
                 .child(TerminationPoint.class, new TerminationPointKey(new TpId(tp)))
                 .build();
-            Optional<TerminationPoint> tpOpt;
-            if (networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTp).isDone()) {
-                try {
-                    tpOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTp).get();
-                    if (tpOpt.isPresent()) {
-                        tps.add(tpOpt.orElseThrow());
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    if (e instanceof InterruptedException) {
-                        Thread.currentThread().interrupt();
-                    }
-                    LOG.error("Error retreiving tp {} of node {} from otn-topology", tp, nodeId, e);
+            try {
+                Optional<TerminationPoint> tpOpt = Optional.ofNullable(
+                        networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTp)
+                            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
+                if (tpOpt.isPresent()) {
+                    tps.add(tpOpt.orElseThrow());
                 }
-            } else {
-                LOG.error("error getting node termination points from the datastore");
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                    LOG.error("Interrupted while retrieving OTN termination points from OTN-topology", e);
+                    return tps;
+                }
+                LOG.error("Error retreiving tp {} of node {} from otn-topology", tp, nodeId, e);
             }
         }
         return tps;
@@ -1167,15 +1169,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         ListenableFuture<Optional<Network1>> netw1Fl = networkTransactionService
             .read(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLinks);
         Optional<Network1> netw1Opt = Optional.empty();
-        if (netw1Fl.isDone()) {
-            try {
-                netw1Opt = netw1Fl.get();
-            } catch (InterruptedException | ExecutionException e) {
-                if (e instanceof InterruptedException) {
-                    Thread.currentThread().interrupt();
-                }
-                LOG.error("Error retreiving list of links from otn-topology", e);
+        try {
+            netw1Opt = Optional.ofNullable(netw1Fl.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                .orElse(Optional.empty());
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
             }
+            LOG.error("Error retreiving list of links from otn-topology", e);
         }
         List<Link> odu4links = null;
         if (netw1Opt.isPresent() && netw1Opt.orElseThrow().getLink() != null) {
