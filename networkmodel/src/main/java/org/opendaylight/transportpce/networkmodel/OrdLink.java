@@ -78,6 +78,11 @@ final class OrdLink {
         // Check status of TPs to provide R2R link state
         TerminationPoint rdmSrcTp = getTpofNode(srcNode, srcTp, dataBroker);
         TerminationPoint rdmDstTp = getTpofNode(destNode, destTp, dataBroker);
+        if (rdmSrcTp == null || rdmDstTp == null) {
+            LOG.error("Failed to create Roadm 2 Roadm Link: tp-id {} of node {} or tp-id {} of node {} not found in {}",
+                srcTp, srcNode, destTp, destNode, StringConstants.OPENROADM_TOPOLOGY);
+            return false;
+        }
         if (State.InService.equals(rdmSrcTp.augmentation(TerminationPoint1.class).getOperationalState())
                 && State.InService.equals(rdmDstTp.augmentation(TerminationPoint1.class).getOperationalState())) {
             oppsiteLinkBuilder.setAdministrativeState(AdminStates.InService).setOperationalState(State.InService);
@@ -151,6 +156,11 @@ final class OrdLink {
                 .append(input.getAEnd().getDegNum()).toString();
             srcTp = input.getAEnd().getTerminationPoint();
             rdmSrcTp = getTpofNode(srcNode, srcTp, dataBroker);
+            if (rdmSrcTp == null) {
+                LOG.error("Creation of Interdomain Link Error : tp-id {} of node {} not found in {}",
+                    srcTp, srcNode, StringConstants.OPENROADM_TOPOLOGY);
+                return false;
+            }
             destNode = "TAPI-SBI-ABS-NODE";
             destTp = input.getZEnd().getTerminationPoint();
             linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
@@ -163,6 +173,11 @@ final class OrdLink {
                 .append(input.getZEnd().getDegNum()).toString();
             destTp = input.getZEnd().getTerminationPoint();
             rdmDestTp = getTpofNode(destNode, destTp, dataBroker);
+            if (rdmDestTp == null) {
+                LOG.error("Creation of Interdomain Link Error : tp-id {} of node {} not found in {}",
+                    destTp, destNode, StringConstants.OPENROADM_TOPOLOGY);
+                return false;
+            }
             srcNode = "TAPI-SBI-ABS-NODE";
             srcTp = input.getAEnd().getTerminationPoint();
             linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
