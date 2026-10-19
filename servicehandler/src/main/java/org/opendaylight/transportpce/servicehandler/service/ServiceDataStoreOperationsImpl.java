@@ -153,9 +153,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.error("Failed to read services from operational datastore", e);
+            LOG.error("Failed to read service list from operational datastore", e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.error("Failed to read services from operational datastore", e);
+            LOG.error("Failed to read service list from operational datastore", e);
 
         }
         return Optional.empty();
@@ -178,9 +178,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
+            LOG.error("Failed to read temp service {} from operational datastore", serviceName, e);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.error("Failed to read service {} from operational datastore", serviceName, e);
+            LOG.error("Failed to read temp service {} from operational datastore", serviceName, e);
         }
         return Optional.empty();
     }
