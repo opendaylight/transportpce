@@ -126,13 +126,14 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<Services> getService(String serviceName) {
         try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
-            return tx.read(
+            return Optional.ofNullable(tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServiceList.class)
                             .child(Services.class, new ServicesKey(serviceName))
                             .build()
                         )
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             LOG.error("Failed to read service {} from operational datastore", serviceName, e);
@@ -145,10 +146,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<ServiceList> getServices() {
         try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
-            return tx.read(
+            return Optional.ofNullable(tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServiceList.class).build())
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             LOG.error("Failed to read services from operational datastore", e);
@@ -163,7 +165,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
             .temp.service.list.Services> getTempService(String serviceName) {
         try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
-            return tx.read(
+            return Optional.ofNullable(tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(TempServiceList.class)
                             .child(
@@ -172,7 +174,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250530
                                     .temp.service.list.ServicesKey(serviceName))
                             .build())
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             LOG.error("Failed to read service {} from operational datastore", serviceName, e);
@@ -350,10 +353,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public Optional<ServicePathList> getServicePaths() {
         LOG.debug("Retrieving list of ServicePath...");
         try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
-            return tx.read(
+            return Optional.ofNullable(tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServicePathList.class).build())
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
@@ -367,12 +371,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public Optional<ServicePaths> getServicePath(String serviceName) {
         LOG.debug("Retrieving service path of service {}", serviceName);
         try (ReadTransaction tx = this.dataBroker.newReadOnlyTransaction()) {
-            return tx.read(
+            return Optional.ofNullable(tx.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(ServicePathList.class)
                             .child(ServicePaths.class, new ServicePathsKey(serviceName))
                             .build())
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
