@@ -290,10 +290,9 @@ public final class TopologyUtils {
                 .getAssociatedConnectionMapTp().iterator().next().getValue()
             : tp.getTpId().getValue();
         LOG.info("Network LCP associated = {}", networkLcp);
-        Mapping mapping;
+        Optional<Mapping> mappingOpt;
         try (ReadTransaction readTransaction = this.dataBroker.newReadOnlyTransaction()) {
-
-            Optional<Mapping> mappingOpt = Optional.ofNullable(readTransaction.read(
+            mappingOpt = Optional.ofNullable(readTransaction.read(
                     LogicalDatastoreType.CONFIGURATION,
                     DataObjectIdentifier.builder(
                             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
@@ -303,22 +302,22 @@ public final class TopologyUtils {
                             .build())
                             .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
                     .orElse(Optional.empty());
-
-            if (mappingOpt.isEmpty()) {
-                LOG.info("Mapping not found for node {}-{}", nodeIdTopo, nodeIdPortMap);
-                return false;
-            }
-
-            mapping = mappingOpt.orElseThrow();
-
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.error("Error getting mapping for {}", networkLcp, e);
+            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
+                    networkLcp, tp.getTpId().getValue(), e);
             return false;
         } catch (ExecutionException | TimeoutException e) {
-            LOG.error("Error getting mapping for {}", networkLcp, e);
+            LOG.error("Impossible to get mapping of associated network port {} of tp {}",
+                    networkLcp, tp.getTpId().getValue(), e);
             return false;
         }
+        if (mappingOpt.isEmpty()) {
+            LOG.warn("No mapping found for associated network port {} of tp {} on node {}",
+                    networkLcp, tp.getTpId().getValue(), nodeIdPortMap);
+            return false;
+        }
+        Mapping mapping = mappingOpt.orElseThrow();
         LOG.info("Mapping found = {}", mapping);
         switch (mapping.getPortDirection()) {
             // TODO -> remove the part of counting only if the Network LCP is part of a Link.
