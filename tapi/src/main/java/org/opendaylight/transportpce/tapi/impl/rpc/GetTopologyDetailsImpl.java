@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -365,9 +364,9 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.TerminationPoint1.class)
                     .getAssociatedConnectionMapTp().iterator().next().getValue()
                 : tp.getTpId().getValue();
-        Mapping mapping;
+        Optional<Mapping> mappingOpt;
         try {
-            mapping = networkTransactionService.read(
+            mappingOpt = Optional.ofNullable(networkTransactionService.read(
                     LogicalDatastoreType.CONFIGURATION,
                     DataObjectIdentifier.builder(
                             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612
@@ -375,18 +374,24 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                             .child(Nodes.class, new NodesKey(nodeIdPortMap))
                             .child(Mapping.class, new MappingKey(networkLcp))
                             .build())
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS)
-                    .orElseThrow();
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             LOG.error("Impossible to get mapping of associated network port {} of tp {}",
                     networkLcp, tp.getTpId().getValue(), e);
             return false;
-        } catch (ExecutionException | TimeoutException | NoSuchElementException e) {
+        } catch (ExecutionException | TimeoutException e) {
             LOG.error("Impossible to get mapping of associated network port {} of tp {}",
                     networkLcp, tp.getTpId().getValue(), e);
             return false;
         }
+        if (mappingOpt.isEmpty()) {
+            LOG.warn("No mapping found for associated network port {} of tp {} on node {}",
+                    networkLcp, tp.getTpId().getValue(), nodeIdPortMap);
+            return false;
+        }
+        Mapping mapping = mappingOpt.orElseThrow();
         long count = 0;
         switch (mapping.getPortDirection()) {
             case "bidirectional":
