@@ -767,8 +767,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 .build();
         Optional<Node> realNode;
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
-            realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            realNode = Optional.ofNullable(readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();

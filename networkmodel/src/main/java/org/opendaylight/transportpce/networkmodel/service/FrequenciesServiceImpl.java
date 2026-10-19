@@ -199,9 +199,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250530.Node1> optionalNode =
-                nodeReadTx
+                Optional.ofNullable(nodeReadTx
                     .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
+                    .orElse(Optional.empty());
             if (optionalNode.isEmpty()) {
                 LOG.error("Unable to get common network node for node id {} from topology {}",
                         nodeId, StringConstants.OPENROADM_TOPOLOGY);
