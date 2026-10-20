@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbbee054_5b6c5f09",
+        "filename": "tests/transportpce_tests/tapi/test06_pce_tapi_transversal.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-10-20T15:05:07Z",
+      "side": 1,
+      "message": "Hello Olivier,\nChange the class name to TestTransportPCEPceTapiTransversal so that the logs appear.",
+      "revId": "1c6be1d3735912894afde7f407d77206b8dcd24d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
