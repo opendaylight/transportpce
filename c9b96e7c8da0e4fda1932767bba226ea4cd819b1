@@ -34,6 +34,24 @@
       "parentUuid": "c3be8330_876e13f9",
       "revId": "c9b96e7c8da0e4fda1932767bba226ea4cd819b1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64db9857_477ed135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-10-20T11:36:00Z",
+      "side": 1,
+      "message": "Alright, understood.\nIt’s probably simpler if I let you review the chain relationship.",
+      "parentUuid": "c42f09f1_6fbbeb1e",
+      "revId": "c9b96e7c8da0e4fda1932767bba226ea4cd819b1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
