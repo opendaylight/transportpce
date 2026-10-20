@@ -16,6 +16,24 @@
       "message": "Hi Joakim, Jimmi,\n\nI rebased your relation chain onto the \u0027master\u0027 branch (on top of \u0027Manganese\u0027) and encountered some difficult conflicts to manage.\nI attempted to resolve them, but I am not certain that everything is correct. Specifically, two unit tests in the `ConvertTopoORtoTapiNbiTest` suite failed:\n\n`org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest`\n[ERROR] Tests run: 14, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 12.03 s \u003c\u003c\u003c FAILURE! -- in `org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest`\n[ERROR] `org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest.convertOtnLinkWhenNoStateOnOppositeLink` -- Time elapsed: 0.050 s \u003c\u003c\u003c FAILURE!\n`org.opentest4j.AssertionFailedError`: administrative state should not be present \u003d\u003d\u003e expected: \u003cnull\u003e but was: \u003cUNLOCKED\u003e\n        at `org.junit.jupiter.api.Assertions.assertNull(Assertions.java:317)`\n        at `org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest.convertOtnLinkWhenNoStateOnOppositeLink(ConvertTopoORtoTapiNbiTest.java:369)`\n[ERROR] `org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest.convertOtnLinkWhenBadStateOnOppositeLink` -- Time elapsed: 0.026 s \u003c\u003c\u003c FAILURE! org.opentest4j.AssertionFailedError: Administrative state should be LOCKED \u003d\u003d\u003e expected: \u003cLOCKED\u003e but obtained: \u003cUNLOCKED\u003e\n        at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1210)\n        at org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbiTest.convertOtnLinkWhenBadStateOnOppositeLink(ConvertTopoORtoTapiNbiTest.java:511)\n\t\t\n\t\t\nI have updated the test suite, but I am not certain that this fully aligns with expectations.\n\nCould you please review it?",
       "revId": "c9b96e7c8da0e4fda1932767bba226ea4cd819b1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c42f09f1_6fbbeb1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-10-20T11:30:42Z",
+      "side": 1,
+      "message": "The problem you had in `ConvertTopoORtoTapiNbiTest` is due to unidirectional links. This branch was started before unidirectional links were merged into master. \n\n`OpenRoadmLinkStateResolver` has its opposite-link logic commented out (\"Switch to UNIDIR links in TAPI topology\"). So the link comes out UNLOCKED/ENABLED no matter what state the opposite link has. This relation chain still had the old expectations.",
+      "parentUuid": "c3be8330_876e13f9",
+      "revId": "c9b96e7c8da0e4fda1932767bba226ea4cd819b1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
