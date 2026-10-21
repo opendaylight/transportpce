@@ -23,7 +23,7 @@ import test_utils  # nopep8
 import test_utils_oc  # nopep8
 
 
-class TransportPCEOC200End2EndTesting(unittest.TestCase):
+class TestTransportPCEEnd2end(unittest.TestCase):
     """
     End-to-end functional tests for OpenConfig 2.0.0 (oc200) XPDR devices
     with OpenROADM 7.1 ROADMs.
