@@ -38,7 +38,7 @@ class UuidServices:
         self.oduservicelist = []
 
 
-class TransportPCEtest(unittest.TestCase):
+class TestTransportPCEPceTapi(unittest.TestCase):
     # SPDR-SA1-XPDR1 UUID is
     s1Auuid = "4e44bcc5-08d3-3fee-8fac-f021489e5a61"
     # SPDR-SA1-XPDR2 UUID is
