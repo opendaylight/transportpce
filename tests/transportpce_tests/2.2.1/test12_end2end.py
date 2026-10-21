@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TestTransportPCEEndtoend(unittest.TestCase):
+class TestTransportPCEEnd2end(unittest.TestCase):
 
     processes = None
     cr_serv_input_data = {

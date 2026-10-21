@@ -25,7 +25,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TestTransportPCEFreqEndtoend(unittest.TestCase):
+class TestTransportPCEFreqEnd2end(unittest.TestCase):
 
     processes = None
     WAITING = 20  # nominal value is 300

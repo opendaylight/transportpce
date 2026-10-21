@@ -24,7 +24,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TestTransportPCEOtnEndtoendIntermediateSwitch(unittest.TestCase):
+class TestTransportPCEOtnEnd2endWithIntermediateSwitch(unittest.TestCase):
 
     processes = None
     WAITING = 20  # nominal value is 300

@@ -40,7 +40,7 @@ class UuidServices:
 # 3b726367-6f2d-3e3f-9033-d99b61459075
 
 
-class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
+class TestTransportPCETapiDeviceChangeNotifications(unittest.TestCase):
 
     cr_serv_input_data = {
         "name": [
