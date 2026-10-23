@@ -11,11 +11,11 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -29,9 +29,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.cp.to.degree.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev260707.Direction;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint8;
@@ -212,13 +212,20 @@ public class R2RLinkDiscovery {
     }
 
     /**
-     * Get the kind of WDM line interface of the node (Bidirectional or Unidirectional).
-     *
-     * @param degreeCounter Number of the degree
-     * @param nodeId Node name
-     * @return Direction
+     * TX and RX TTP termination points of a degree. Both are the TXRX TP for a bidirectional degree.
      */
-    public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
+    private record DegreeTtps(String tx, String rx) {
+    }
+
+    /**
+     * Get the TTP termination points of a degree, as declared in the port mapping of the node.
+     *
+     * @param nodeId Node name
+     * @param degreeNb Number of the degree
+     * @return TX and RX TTPs of the degree, or null if the port mapping has neither a bidirectional TTP nor both
+     *     unidirectional TTPs for this degree
+     */
+    private DegreeTtps getDegreeTtps(NodeId nodeId, Integer degreeNb) {
         DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue()))
             .build();
@@ -226,25 +233,28 @@ public class R2RLinkDiscovery {
             Optional<Nodes> nodesObject = Optional.ofNullable(readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS))
                     .orElse(Optional.empty());
-            if (nodesObject.isPresent() && (nodesObject.orElseThrow().getMapping() != null)) {
-                Collection<Mapping> mappingList = nodesObject.orElseThrow().nonnullMapping().values();
-                mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
-                    + degreeCounter)).collect(Collectors.toList());
-                if (mappingList.size() == 1) {
-                    return Direction.Bidirectional;
-                } else if (mappingList.size() > 1) {
-                    return Direction.Tx;
-                } else {
-                    return Direction.NotApplicable;
+            if (nodesObject.isPresent()) {
+                Map<MappingKey, Mapping> mappings = nodesObject.orElseThrow().nonnullMapping();
+                String ttpPrefix = "DEG" + degreeNb + "-TTP-";
+                String txrx = ttpPrefix + "TXRX";
+                if (mappings.containsKey(new MappingKey(txrx))) {
+                    return new DegreeTtps(txrx, txrx);
+                }
+                String tx = ttpPrefix + "TX";
+                String rx = ttpPrefix + "RX";
+                if (mappings.containsKey(new MappingKey(tx)) && mappings.containsKey(new MappingKey(rx))) {
+                    return new DegreeTtps(tx, rx);
                 }
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            LOG.error("Failed getting Mapping data from portMapping",e);
+            LOG.error("Failed getting Mapping data from portMapping", e);
+            return null;
         }
-        return Direction.NotApplicable;
+        LOG.error("Couldnt find TTP of degree {} in port mapping of nodeId: {}", degreeNb, nodeId.getValue());
+        return null;
     }
 
     /**
@@ -264,53 +274,29 @@ public class R2RLinkDiscovery {
             LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", nodeId);
             return false;
         }
-        // Check whether degree is Unidirectional or Bidirectional by counting
-        // number of
-        // circuit-packs under degree subtree
-        String srcTpTx = null;
-        String srcTpRx = null;
-        Direction sourceDirection = getDegreeDirection(srcDegId, nodeId);
-        if (Direction.NotApplicable == sourceDirection) {
-            LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", nodeId, srcDegId);
+        DegreeTtps srcTtps = getDegreeTtps(nodeId, srcDegId);
+        if (srcTtps == null) {
             return false;
-        } else if (Direction.Bidirectional == sourceDirection) {
-            srcTpTx = "DEG" + srcDegId + "-TTP-TXRX";
-            srcTpRx = "DEG" + srcDegId + "-TTP-TXRX";
-        } else {
-            srcTpTx = "DEG" + srcDegId + "-TTP-TX";
-            srcTpRx = "DEG" + srcDegId + "-TTP-RX";
         }
         // Find degree for which Ethernet interface is created on other end
         NodeId destNodeId = new NodeId(remoteSystemName);
         Integer destDegId = getDegFromInterface(destNodeId, remoteInterfaceName);
         if (destDegId == null) {
-            LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", nodeId);
+            LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", destNodeId);
             return false;
         }
-        // Check whether degree is Unidirectional or Bidirectional by counting
-        // number of
-        // circuit-packs under degree subtree
-        String destTpTx = null;
-        String destTpRx = null;
-        Direction destinationDirection = getDegreeDirection(destDegId, destNodeId);
-        if (Direction.NotApplicable == destinationDirection) {
-            LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", destNodeId, destDegId);
+        DegreeTtps destTtps = getDegreeTtps(destNodeId, destDegId);
+        if (destTtps == null) {
             return false;
-        } else if (Direction.Bidirectional == destinationDirection) {
-            destTpTx = "DEG" + destDegId + "-TTP-TXRX";
-            destTpRx = "DEG" + destDegId + "-TTP-TXRX";
-        } else {
-            destTpTx = "DEG" + destDegId + "-TTP-TX";
-            destTpRx = "DEG" + destDegId + "-TTP-RX";
         }
         // A->Z
         LOG.debug(
             "Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , DestDegId: {}, DestTPId: {}",
-            nodeId.getValue(), srcDegId, srcTpTx, destNodeId, destDegId, destTpRx);
+            nodeId.getValue(), srcDegId, srcTtps.tx(), destNodeId, destDegId, destTtps.rx());
         InitRoadmNodesInputBuilder r2rlinkBuilderAToZ = new InitRoadmNodesInputBuilder();
         r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(Uint8.valueOf(srcDegId))
-            .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(Uint8.valueOf(destDegId))
-            .setTerminationPointZ(destTpRx);
+            .setTerminationPointA(srcTtps.tx()).setRdmZNode(destNodeId.getValue())
+            .setDegZNum(Uint8.valueOf(destDegId)).setTerminationPointZ(destTtps.rx());
         if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in A->Z direction", nodeId.getValue(),
                 destNodeId.getValue());
@@ -320,15 +306,15 @@ public class R2RLinkDiscovery {
         LOG.debug(
             "Found a neighbor SrcNodeId: {} , SrcDegId: {}"
                 + ", SrcTPId: {}, DestNodeId:{} , DestDegId: {}, DestTPId: {}",
-            destNodeId, destDegId, destTpTx, nodeId.getValue(), srcDegId, srcTpRx);
+            destNodeId, destDegId, destTtps.tx(), nodeId.getValue(), srcDegId, srcTtps.rx());
 
         InitRoadmNodesInputBuilder r2rlinkBuilderZToA = new InitRoadmNodesInputBuilder()
             .setRdmANode(destNodeId.getValue())
             .setDegANum(Uint8.valueOf(destDegId))
-            .setTerminationPointA(destTpTx)
+            .setTerminationPointA(destTtps.tx())
             .setRdmZNode(nodeId.getValue())
             .setDegZNum(Uint8.valueOf(srcDegId))
-            .setTerminationPointZ(srcTpRx);
+            .setTerminationPointZ(srcTtps.rx());
         if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in Z->A direction",
                 destNodeId.getValue(), nodeId.getValue());
@@ -354,47 +340,25 @@ public class R2RLinkDiscovery {
             LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", nodeId);
             return false;
         }
-        // Check whether degree is Unidirectional or Bidirectional by counting number of
-        // circuit-packs under degree subtree
-        String srcTpTx = null;
-        String srcTpRx = null;
-        Direction sourceDirection = getDegreeDirection(srcDegId, nodeId);
-        if (Direction.NotApplicable == sourceDirection) {
-            LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", nodeId, srcDegId);
+        DegreeTtps srcTtps = getDegreeTtps(nodeId, srcDegId);
+        if (srcTtps == null) {
             return false;
-        } else if (Direction.Bidirectional == sourceDirection) {
-            srcTpTx = "DEG" + srcDegId + "-TTP-TXRX";
-            srcTpRx = "DEG" + srcDegId + "-TTP-TXRX";
-        } else {
-            srcTpTx = "DEG" + srcDegId + "-TTP-TX";
-            srcTpRx = "DEG" + srcDegId + "-TTP-RX";
         }
         // Find degree for which Ethernet interface is created on other end
         NodeId destNodeId = new NodeId(remoteSystemName);
         Integer destDegId = getDegFromInterface(destNodeId, remoteInterfaceName);
         if (destDegId == null) {
-            LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", nodeId);
+            LOG.error("Couldnt find degree connected to Ethernet interface for nodeId: {}", destNodeId);
             return false;
         }
-        // Check whether degree is Unidirectional or Bidirectional by counting number of
-        // circuit-packs under degree subtree
-        String destTpTx = null;
-        String destTpRx = null;
-        Direction destinationDirection = getDegreeDirection(destDegId, destNodeId);
-        if (Direction.NotApplicable == destinationDirection) {
-            LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", destNodeId, destDegId);
+        DegreeTtps destTtps = getDegreeTtps(destNodeId, destDegId);
+        if (destTtps == null) {
             return false;
-        } else if (Direction.Bidirectional == destinationDirection) {
-            destTpTx = "DEG" + destDegId + "-TTP-TXRX";
-            destTpRx = "DEG" + destDegId + "-TTP-TXRX";
-        } else {
-            destTpTx = "DEG" + destDegId + "-TTP-TX";
-            destTpRx = "DEG" + destDegId + "-TTP-RX";
         }
         return TopologyUtils.deleteLink(nodeId.getValue() + "-" + srcDegId, destNodeId.getValue() + "-" + destDegId,
-            srcTpTx, destTpRx, networkTransactionService)
+            srcTtps.tx(), destTtps.rx(), networkTransactionService)
             && TopologyUtils.deleteLink(destNodeId.getValue() + "-" + destDegId, nodeId.getValue() + "-" + srcDegId,
-                destTpTx, srcTpRx, networkTransactionService);
+                destTtps.tx(), srcTtps.rx(), networkTransactionService);
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
