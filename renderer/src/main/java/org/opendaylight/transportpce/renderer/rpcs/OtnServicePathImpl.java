@@ -9,7 +9,12 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import java.util.concurrent.RejectedExecutionException;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.OtnServicePath;
@@ -24,10 +29,17 @@ import org.slf4j.LoggerFactory;
 
 public class OtnServicePathImpl implements OtnServicePath {
     private static final Logger LOG = LoggerFactory.getLogger(OtnServicePathImpl.class);
-    private OtnDeviceRendererService otnDeviceRendererService;
+    private final OtnDeviceRendererService otnDeviceRendererService;
+    private final ListeningExecutorService executorService;
+    private final RpcRejections rpcRejections;
 
-    public OtnServicePathImpl(final OtnDeviceRendererService otnDeviceRendererService) {
+    public OtnServicePathImpl(
+            final OtnDeviceRendererService otnDeviceRendererService,
+            final ListeningExecutorService executorService,
+            final RpcRejections rpcRejections) {
         this.otnDeviceRendererService = requireNonNull(otnDeviceRendererService);
+        this.executorService = requireNonNull(executorService);
+        this.rpcRejections = requireNonNull(rpcRejections);
     }
 
     @Override
@@ -39,17 +51,26 @@ public class OtnServicePathImpl implements OtnServicePath {
                 .buildFuture();
         }
         String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
-        return switch (input.getOperation()) {
-            case Create -> {
-                LOG.info("Create operation request received");
-                yield RpcResultBuilder.success(this.otnDeviceRendererService
-                    .setupOtnServicePath(input, serviceType)).buildFuture();
-            }
-            case Delete -> {
-                LOG.info("Delete operation request received");
-                yield RpcResultBuilder.success(this.otnDeviceRendererService
-                    .deleteOtnServicePath(input, serviceType)).buildFuture();
-            }
-        };
+
+        try {
+            // Cancelling the reply must not interrupt the request: the device work runs on further threads and would
+            // continue after its pool thread is freed
+            return Futures.nonCancellationPropagating(executorService.submit(() -> switch (input.getOperation()) {
+                case Create -> {
+                    LOG.info("Create operation request received");
+                    yield RpcResultBuilder
+                            .success(otnDeviceRendererService.setupOtnServicePath(input, serviceType))
+                            .build();
+                }
+                case Delete -> {
+                    LOG.info("Delete operation request received");
+                    yield RpcResultBuilder
+                            .success(otnDeviceRendererService.deleteOtnServicePath(input, serviceType))
+                            .build();
+                }
+            }));
+        } catch (RejectedExecutionException e) {
+            return rpcRejections.rejected(executorService, ThreadPoolName.OTN_SERVICE_PATH, e);
+        }
     }
 }

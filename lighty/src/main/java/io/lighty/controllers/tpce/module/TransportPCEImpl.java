@@ -107,8 +107,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
     private List<Registration> rpcRegistrations = new ArrayList<>();
+    // sizes of the executors; outside OSGi, the built-in defaults
     private final ExecutorPoolConfig executorPoolConfig = new DefaultExecutorPoolConfig();
+    // own the RPC executors and shut them down when closed in stopProcedure()
     private OlmPowerServiceRpcImpl olmPowerServiceRpc;
+    private DeviceRendererRPCImpl deviceRendererRpc;
 
     public TransportPCEImpl(
             LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
@@ -193,14 +196,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 new NotificationSender(notificationPublishService),
                 portMapping,
                 rpcService);
-        rpcRegistrations.add(new DeviceRendererRPCImpl(
-                        lightyServices.getRpcProviderService(),
-                        deviceRendererService,
-                        otnDeviceRendererService)
-                    .getRegisteredRpc());
+        deviceRendererRpc = new DeviceRendererRPCImpl(
+                lightyServices.getRpcProviderService(),
+                deviceRendererService,
+                otnDeviceRendererService,
+                executorPoolConfig);
         rpcRegistrations.add(new RendererRPCImpl(
                 rendererServiceOperations,
-                lightyServices.getRpcProviderService())
+                lightyServices.getRpcProviderService(),
+                executorPoolConfig)
             .getRegisteredRpc());
 
         LOG.info("Creating service-handler beans ...");
@@ -297,7 +301,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         for (Registration reg : rpcRegistrations) {
             reg.close();
         }
+        // Before the transaction manager: shutting down the executors waits for requests that use the devices
+        LOG.info("Closing RPCs that own executors ...");
         olmPowerServiceRpc.close();
+        deviceRendererRpc.close();
         LOG.info("Shutting down transaction providers ...");
         deviceTransactionManager.preDestroy();
         LOG.info("Shutdown done.");
