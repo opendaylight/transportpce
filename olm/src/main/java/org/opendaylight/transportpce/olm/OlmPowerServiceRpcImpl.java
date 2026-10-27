@@ -8,7 +8,14 @@
 
 package org.opendaylight.transportpce.olm;
 
+import com.google.common.util.concurrent.ListeningExecutorService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.common.executor.DefaultExecutorPoolManager;
+import org.opendaylight.transportpce.common.executor.DefaultRpcRejections;
+import org.opendaylight.transportpce.common.executor.ExecutorPoolConfig;
+import org.opendaylight.transportpce.common.executor.ExecutorPoolManager;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.pool.ThreadPoolName;
 import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossBaseImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossCurrentImpl;
 import org.opendaylight.transportpce.olm.rpc.impl.GetPmImpl;
@@ -30,17 +37,36 @@ import org.slf4j.LoggerFactory;
 @Component
 public class OlmPowerServiceRpcImpl {
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceRpcImpl.class);
+    private final ExecutorPoolManager pools;
     private Registration rpcRegistration;
 
     @Activate
     public OlmPowerServiceRpcImpl(@Reference OlmPowerService olmPowerService,
-            @Reference RpcProviderService rpcProviderService) {
+            @Reference RpcProviderService rpcProviderService,
+            @Reference ExecutorPoolConfig poolConfig) {
+        this(olmPowerService, rpcProviderService, new DefaultExecutorPoolManager(poolConfig));
+    }
+
+    /**
+     * Creates the RPC implementations with executors from the given manager.
+     *
+     * @param pools the manager of the executors; this object takes ownership of it and closes it in {@link #close()}
+     */
+    public OlmPowerServiceRpcImpl(OlmPowerService olmPowerService, RpcProviderService rpcProviderService,
+            ExecutorPoolManager pools) {
+        this.pools = pools;
+        ListeningExecutorService getPmExecutor =
+            pools.executorService(OlmPowerServiceRpcImpl.class, ThreadPoolName.OLM_GET_PM);
+        // Separate pool, so long spanloss calculations cannot starve get-pm
+        ListeningExecutorService spanlossExecutor =
+            pools.executorService(OlmPowerServiceRpcImpl.class, ThreadPoolName.OLM_SPANLOSS);
+        RpcRejections rpcRejections = new DefaultRpcRejections();
         this.rpcRegistration = rpcProviderService.registerRpcImplementations(
-            new GetPmImpl(olmPowerService),
+            new GetPmImpl(olmPowerService, getPmExecutor, rpcRejections),
             new ServicePowerSetupImpl(olmPowerService),
             new ServicePowerTurndownImpl(olmPowerService),
-            new CalculateSpanlossBaseImpl(olmPowerService),
-            new CalculateSpanlossCurrentImpl(olmPowerService),
+            new CalculateSpanlossBaseImpl(olmPowerService, spanlossExecutor, rpcRejections),
+            new CalculateSpanlossCurrentImpl(olmPowerService, spanlossExecutor, rpcRejections),
             new ServicePowerResetImpl(olmPowerService));
         LOG.info("OlmPowerServiceRpcImpl instantiated");
     }
@@ -48,6 +74,8 @@ public class OlmPowerServiceRpcImpl {
     @Deactivate
     public void close() {
         this.rpcRegistration.close();
+        // Shuts down the executors, which cancels the requests they are still processing
+        this.pools.close();
         LOG.info("OlmPowerServiceRpcImpl Closed");
     }
 

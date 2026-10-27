@@ -21,6 +21,8 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.executor.config.DefaultExecutorPoolConfig;
+import org.opendaylight.transportpce.common.executor.config.ExecutorPoolConfig;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion200;
@@ -105,6 +107,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
     private List<Registration> rpcRegistrations = new ArrayList<>();
+    private final ExecutorPoolConfig executorPoolConfig = new DefaultExecutorPoolConfig();
+    private OlmPowerServiceRpcImpl olmPowerServiceRpc;
 
     public TransportPCEImpl(
             LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
@@ -146,7 +150,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
         OpenConfigInterfaces openConfigInterfaces = initOpenConfigInterfaces();
-        OlmPowerServiceRpcImpl olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
+        olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
             new OlmPowerServiceImpl(
                     dataBroker,
                     new PowerMgmtImpl(
@@ -162,8 +166,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                     portMapping,
                     mappingUtils,
                     openRoadmInterfaces),
-            rpcProviderService);
-        rpcRegistrations.add(olmPowerServiceRpc.getRegisteredRpc());
+            rpcProviderService,
+            executorPoolConfig);
 
         LOG.info("Creating renderer beans ...");
         new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
@@ -289,12 +293,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.close();
         LOG.info("Shutting down network-model provider ...");
         networkModelProvider.close();
-        LOG.info("Shutting down transaction providers ...");
-        deviceTransactionManager.preDestroy();
         LOG.info("Closing registered RPCs...");
         for (Registration reg : rpcRegistrations) {
             reg.close();
         }
+        olmPowerServiceRpc.close();
+        LOG.info("Shutting down transaction providers ...");
+        deviceTransactionManager.preDestroy();
         LOG.info("Shutdown done.");
         return true;
     }
