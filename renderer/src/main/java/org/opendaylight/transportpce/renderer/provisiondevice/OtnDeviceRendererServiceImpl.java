@@ -361,7 +361,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
                             this.deviceTransactionManager)) {
                         interfacesToDelete.add(interf);
-                        String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                        String supportedInterface;
+                        try {
+                            supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                        } catch (OpenRoadmInterfaceException e) {
+                            LOG.error("impossible to get the interface supporting {} on node {}", interf, nodeId, e);
+                            continue;
+                        }
                         if (supportedInterface == null) {
                             continue;
                         }

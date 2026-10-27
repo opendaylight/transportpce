@@ -9,6 +9,8 @@
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import com.google.common.util.concurrent.FluentFuture;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -17,6 +19,7 @@ import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceReadException;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -46,6 +49,9 @@ public class OpenRoadmInterfacesImpl710 {
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
     private final PortMappingVersion710 portMapping710;
+    // One lock per node: deletes on a node run one at a time, but a node that does not answer does not hold up
+    // deletes on the other nodes
+    private final NodeLocks deleteLocks = new NodeLocks();
 
     public OpenRoadmInterfacesImpl710(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
         this.deviceTransactionManager = deviceTransactionManager;
@@ -121,19 +127,67 @@ public class OpenRoadmInterfacesImpl710 {
 
 
     public Optional<Interface> getInterface(String nodeId, String interfaceName) {
-        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+            interfaceIID(interfaceName), Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
+
+    public Optional<Interface> readInterface(String nodeId, String interfaceName)
+            throws OpenRoadmInterfaceException {
+        try {
+            return deviceTransactionManager.readFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+                interfaceIID(interfaceName), Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        } catch (DeviceReadException e) {
+            throw new OpenRoadmInterfaceException("Could not read interface %s on node %s: %s"
+                .formatted(interfaceName, nodeId, e.getMessage()), e);
+        }
+    }
+
+    public List<String> readExistingInterfaces(String nodeId, List<String> interfaceNames)
+            throws OpenRoadmInterfaceException {
+        List<DataObjectIdentifier<Interface>> paths = interfaceNames.stream()
+            .map(OpenRoadmInterfacesImpl710::interfaceIID)
+            .toList();
+        List<Optional<Interface>> interfaces;
+        try {
+            // The reads share one deadline, so the transaction is only open for about as long as one read
+            DeviceTransaction deviceTx = deviceTransactionManager.awaitDeviceTransaction(nodeId,
+                Timeouts.DEVICE_READ_TIMEOUT, 2 * Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            try {
+                interfaces = deviceTx.readAll(LogicalDatastoreType.CONFIGURATION, paths, Timeouts.DEVICE_READ_TIMEOUT,
+                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            } finally {
+                // Nothing to commit: let the next transaction have the device
+                deviceTx.cancel();
+            }
+        } catch (DeviceReadException e) {
+            throw new OpenRoadmInterfaceException("Could not read interfaces on node %s: %s"
+                .formatted(nodeId, e.getMessage()), e);
+        }
+        List<String> existing = new ArrayList<>();
+        for (int i = 0; i < interfaceNames.size(); i++) {
+            if (interfaces.get(i).isPresent()) {
+                existing.add(interfaceNames.get(i));
+            }
+        }
+        return existing;
+    }
+
+    private static DataObjectIdentifier<Interface> interfaceIID(String interfaceName) {
+        return DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
-        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
 
-    public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+        deleteLocks.runLocked(nodeId, () -> deleteInterfaceOnNode(nodeId, interfaceName));
+    }
+
+    private void deleteInterfaceOnNode(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         LOG.info("deleting interface {} on device71 {}", interfaceName, nodeId);
-        Optional<Interface> intf2DeleteOpt;
-        intf2DeleteOpt = getInterface(nodeId, interfaceName);
+        // A device that cannot be read must not be mistaken for a missing interface
+        Optional<Interface> intf2DeleteOpt = readInterface(nodeId, interfaceName);
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.orElseThrow();
             // set the name and set the type. Having these two lines will post the interface with just
@@ -151,8 +205,8 @@ public class OpenRoadmInterfacesImpl710 {
             try {
                 postInterface(nodeId, ifBuilder);
             } catch (OpenRoadmInterfaceException ex) {
-                throw new OpenRoadmInterfaceException("Failed to set state of interface %s to %s while"
-                    + " deleting it!".formatted(interfaceName, AdminStates.OutOfService), ex);
+                throw new OpenRoadmInterfaceException(("Failed to set state of interface %s to %s while"
+                    + " deleting it!").formatted(interfaceName, AdminStates.OutOfService), ex);
             }
 
             DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
@@ -273,10 +327,14 @@ public class OpenRoadmInterfacesImpl710 {
         }
     }
 
-    public String getSupportedInterface(String nodeId, String interf) {
+    public String getSupportedInterface(String nodeId, String interf) throws OpenRoadmInterfaceException {
         Optional<Interface> supInterfOpt;
-        supInterfOpt = getInterface(nodeId, interf);
-        return supInterfOpt.map(s -> s.getSupportingInterfaceList().stream().findFirst().orElseThrow()).orElse(null);
+        supInterfOpt = readInterface(nodeId, interf);
+        // A 7.1 interface lists its supporting interfaces, and the list may be missing or empty
+        return supInterfOpt
+            .map(Interface::getSupportingInterfaceList)
+            .flatMap(supporting -> supporting.stream().findFirst())
+            .orElse(null);
     }
 
     private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {

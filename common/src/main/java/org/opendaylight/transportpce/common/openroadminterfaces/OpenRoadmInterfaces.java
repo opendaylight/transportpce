@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface OpenRoadmInterfaces {
@@ -62,6 +63,34 @@ public interface OpenRoadmInterfaces {
     <T> Optional<T> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
     /**
+     * Reads the given interface from the device like {@link #getInterface(String, String)}, but tells an
+     * interface that does not exist apart from a device that cannot be read.
+     *
+     * @param nodeId node ID
+     * @param interfaceName name of the interface
+     * @param <T> generic
+     * @return the interface, or an empty Optional if the device has no such interface
+     * @throws OpenRoadmInterfaceException if the device could not be read, or its OpenROADM version is unknown
+     */
+    <T> Optional<T> readInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
+
+    /**
+     * Returns which of the given interfaces exist on the device, reading them all in one device transaction.
+     *
+     * <p>Like {@link #readInterface(String, String)}, this tells an interface that does not exist apart from a device
+     * that cannot be read. Reading them in one transaction waits for the device once, instead of once for each
+     * interface behind the device's other transactions.
+     *
+     * @param nodeId node ID
+     * @param interfaceNames names of the interfaces to look for
+     * @return the names of the interfaces that exist, in the order given
+     * @throws OpenRoadmInterfaceException if the device could not be reached in time or read, or its OpenROADM
+     *     version is unknown
+     */
+    List<String> readExistingInterfaces(String nodeId, List<String> interfaceNames)
+        throws OpenRoadmInterfaceException;
+
+    /**
      * This methods does an edit-config operation on the openROADM device in
      * order to delete the given interface.
      *
@@ -73,7 +102,8 @@ public interface OpenRoadmInterfaces {
      * @param interfaceName
      *            Name of the interface to delete.
      *
-     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
+     * @throws OpenRoadmInterfaceException if the interface could not be read or deleted, or the node's OpenROADM
+     *            version is unknown
      */
     void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
@@ -102,6 +132,16 @@ public interface OpenRoadmInterfaces {
     void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException;
 
-    String getSupportedInterface(String nodeId, String interfaceName);
+    /**
+     * Returns the interface that supports the given interface.
+     *
+     * @param nodeId node ID
+     * @param interfaceName name of the supported interface
+     * @return the name of the supporting interface, or null if the interface does not exist or has no supporting
+     *     interface
+     * @throws OpenRoadmInterfaceException if the interface cannot be read from the device, or the node's OpenROADM
+     *     version is unknown
+     */
+    String getSupportedInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
 }

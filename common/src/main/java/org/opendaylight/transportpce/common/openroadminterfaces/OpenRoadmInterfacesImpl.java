@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
+import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -29,6 +30,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
     MappingUtils mappingUtils;
+    private final DeviceVersionResolver deviceVersions;
 
     @Activate
     public OpenRoadmInterfacesImpl(@Reference DeviceTransactionManager deviceTransactionManager,
@@ -42,6 +44,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                                    OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221,
                                    OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710) {
         this.mappingUtils = mappingUtils;
+        this.deviceVersions = new DeviceVersionResolver(mappingUtils);
         this.openRoadmInterfacesImpl221 = openRoadmInterfacesImpl221;
         this.openRoadmInterfacesImpl710 = openRoadmInterfacesImpl710;
     }
@@ -88,21 +91,33 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <T> Optional<T> readInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+        return switch (deviceVersions.resolve(nodeId, "read interface " + interfaceName)) {
+            case V2_2_1 -> (Optional<T>) openRoadmInterfacesImpl221.readInterface(nodeId, interfaceName);
+            case V7_1 -> (Optional<T>) openRoadmInterfacesImpl710.readInterface(nodeId, interfaceName);
+        };
+    }
+
+    @Override
+    public List<String> readExistingInterfaces(String nodeId, List<String> interfaceNames)
+            throws OpenRoadmInterfaceException {
+        return switch (deviceVersions.resolve(nodeId, "read interfaces")) {
+            case V2_2_1 -> openRoadmInterfacesImpl221.readExistingInterfaces(nodeId, interfaceNames);
+            case V7_1 -> openRoadmInterfacesImpl710.readExistingInterfaces(nodeId, interfaceNames);
+        };
+    }
+
+    @Override
     public void deleteInterface(String nodeId, String interfaceName)
         throws OpenRoadmInterfaceException {
 
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        LOG.info("Interface delete request received for node {} with version {}", nodeId, openRoadmVersion);
-        switch (openRoadmVersion) {
-            case OPENROADM_DEVICE_VERSION_2_2_1:
-                openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
-                return;
-            case OPENROADM_DEVICE_VERSION_7_1:
-                openRoadmInterfacesImpl710.deleteInterface(nodeId,interfaceName);
-                return;
-            default:
-                LOG.error("deleteInterface unknown ordm version error device {}", nodeId);
-                return;
+        DeviceVersion version = deviceVersions.resolve(nodeId, "delete interface " + interfaceName);
+        LOG.info("Interface delete request received for node {} with version {}", nodeId, version);
+        switch (version) {
+            case V2_2_1 -> openRoadmInterfacesImpl221.deleteInterface(nodeId, interfaceName);
+            case V7_1 -> openRoadmInterfacesImpl710.deleteInterface(nodeId, interfaceName);
+            default -> throw new IllegalStateException("No interface implementation for version " + version);
         }
     }
 
@@ -175,19 +190,12 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
-    public String getSupportedInterface(String nodeId, String interfaceName) {
-        String supportedInterface = "";
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case OPENROADM_DEVICE_VERSION_2_2_1:
-                supportedInterface = openRoadmInterfacesImpl221.getSupportedInterface(nodeId,interfaceName);
-                break;
-            case OPENROADM_DEVICE_VERSION_7_1:
-                supportedInterface = openRoadmInterfacesImpl710.getSupportedInterface(nodeId,interfaceName);
-                break;
-            default:
-                LOG.error("getSupportedInterface unknown ordm version error device {}", nodeId);
-        }
-        return supportedInterface;
+    public String getSupportedInterface(String nodeId, String interfaceName)
+            throws OpenRoadmInterfaceException {
+        return switch (deviceVersions.resolve(nodeId, "read interface " + interfaceName)) {
+            case V2_2_1 -> openRoadmInterfacesImpl221.getSupportedInterface(nodeId, interfaceName);
+            case V7_1 -> openRoadmInterfacesImpl710.getSupportedInterface(nodeId, interfaceName);
+        };
     }
 
 }
