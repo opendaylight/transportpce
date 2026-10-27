@@ -11,8 +11,8 @@ package org.opendaylight.transportpce.common.device;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -39,16 +39,18 @@ public class DeviceTransaction {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceTransaction.class);
 
+    private final String deviceId;
     private final ReadWriteTransaction rwTx;
-    private final CountDownLatch deviceLock;
+    private final SettableFuture<Void> released;
     private final ScheduledExecutorService scheduledExecutorService;
     private final AtomicBoolean wasSubmittedOrCancelled = new AtomicBoolean(false);
 
-    DeviceTransaction(ReadWriteTransaction rwTx, CountDownLatch deviceLock) {
+    DeviceTransaction(String deviceId, ReadWriteTransaction rwTx, SettableFuture<Void> released) {
+        this.deviceId = deviceId;
         this.rwTx = rwTx;
-        this.deviceLock = deviceLock;
+        this.released = released;
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        LOG.debug("Device transaction created. Lock: {}", deviceLock);
+        LOG.debug("Device transaction created. Lock: {}", released);
     }
 
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
@@ -75,15 +77,18 @@ public class DeviceTransaction {
      * @return true if cancel was successful.
      */
     public boolean cancel() {
-        if (wasSubmittedOrCancelled.get()) {
+        // Atomic, so the submit timeout cannot cancel a transaction that is being committed
+        if (!wasSubmittedOrCancelled.compareAndSet(false, true)) {
             LOG.warn("Transaction was already submitted or canceled!");
             return false;
         }
 
-        LOG.debug("Transaction cancelled. Lock: {}", deviceLock);
-        wasSubmittedOrCancelled.set(true);
-        afterClose();
-        return rwTx.cancel();
+        LOG.debug("Transaction cancelled. Lock: {}", released);
+        try {
+            return rwTx.cancel();
+        } finally {
+            afterClose();
+        }
     }
 
     /**
@@ -92,24 +97,34 @@ public class DeviceTransaction {
      *
      * @param timeout a timeout
      * @param timeUnit a time unit
-     * @return FluentFuture which indicates when the commit is completed.
+     * @return FluentFuture which indicates when the commit is completed, failed if the commit could not be started.
      */
+    @SuppressWarnings("checkstyle:IllegalCatch")
     public FluentFuture<? extends @NonNull CommitInfo> commit(long timeout, TimeUnit timeUnit) {
-        if (wasSubmittedOrCancelled.get()) {
+        // Atomic, so the submit timeout cannot cancel a transaction that is being committed
+        if (!wasSubmittedOrCancelled.compareAndSet(false, true)) {
             String msg = "Transaction was already submitted or canceled!";
             LOG.error(msg);
             return FluentFutures.immediateFailedFluentFuture(new IllegalStateException(msg));
         }
 
-        LOG.debug("Transaction committed. Lock: {}", deviceLock);
-        wasSubmittedOrCancelled.set(true);
+        LOG.debug("Transaction committed. Lock: {}", released);
+        FluentFuture<? extends @NonNull CommitInfo> commit;
+        try {
+            commit = rwTx.commit();
+        } catch (RuntimeException e) {
+            // For example, the mount point was torn down. No callback will release the device, so release it here.
+            LOG.error("Device transaction commit could not be started! Unlocking device.", e);
+            afterClose();
+            return FluentFutures.immediateFailedFluentFuture(e);
+        }
         FluentFuture<? extends @NonNull CommitInfo> future =
-                rwTx.commit().withTimeout(timeout, timeUnit, scheduledExecutorService);
+                commit.withTimeout(timeout, timeUnit, scheduledExecutorService);
 
         future.addCallback(new FutureCallback<CommitInfo>() {
             @Override
             public void onSuccess(CommitInfo result) {
-                LOG.debug("Transaction with lock {} successfully committed: {}", deviceLock, result);
+                LOG.debug("Transaction with lock {} successfully committed: {}", released, result);
                 afterClose();
             }
 
@@ -134,6 +149,6 @@ public class DeviceTransaction {
 
     private void afterClose() {
         scheduledExecutorService.shutdown();
-        deviceLock.countDown();
+        released.set(null);
     }
 }
