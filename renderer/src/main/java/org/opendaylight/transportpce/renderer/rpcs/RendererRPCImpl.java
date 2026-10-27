@@ -8,6 +8,10 @@
 package org.opendaylight.transportpce.renderer.rpcs;
 
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.common.executor.DefaultRpcRejections;
+import org.opendaylight.transportpce.common.executor.ExecutorPoolConfig;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.pool.RequestLimitName;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
@@ -25,10 +29,14 @@ public class RendererRPCImpl {
 
     @Activate
     public RendererRPCImpl(@Reference RendererServiceOperations rendererServiceOperations,
-            @Reference RpcProviderService rpcProviderService) {
+            @Reference RpcProviderService rpcProviderService,
+            @Reference ExecutorPoolConfig poolConfig) {
+        RpcRejections rpcRejections = new DefaultRpcRejections();
         this.reg = rpcProviderService.registerRpcImplementations(
-                new ServiceImplementationRequestImpl(rendererServiceOperations),
-                new ServiceDeleteImpl(rendererServiceOperations));
+                new ServiceImplementationRequestImpl(rendererServiceOperations,
+                        poolConfig.maxRequests(RequestLimitName.SERVICE_IMPLEMENTATION_REQUEST), rpcRejections),
+                new ServiceDeleteImpl(rendererServiceOperations,
+                        poolConfig.maxRequests(RequestLimitName.SERVICE_DELETE), rpcRejections));
         LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
 
