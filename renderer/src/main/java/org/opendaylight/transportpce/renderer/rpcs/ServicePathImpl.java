@@ -9,7 +9,12 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import java.util.concurrent.RejectedExecutionException;
+import org.opendaylight.transportpce.common.executor.RpcRejections;
+import org.opendaylight.transportpce.common.executor.ThreadPoolName;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathInput;
@@ -39,10 +44,17 @@ import org.slf4j.LoggerFactory;
  */
 public class ServicePathImpl implements ServicePath {
     private static final Logger LOG = LoggerFactory.getLogger(ServicePathImpl.class);
-    private DeviceRendererService deviceRendererService;
+    private final DeviceRendererService deviceRendererService;
+    private final ListeningExecutorService executor;
+    private final RpcRejections rpcRejections;
 
-    public ServicePathImpl(final DeviceRendererService deviceRendererService) {
+    public ServicePathImpl(
+            final DeviceRendererService deviceRendererService,
+            final ListeningExecutorService executor,
+            final RpcRejections rpcRejections) {
         this.deviceRendererService = requireNonNull(deviceRendererService);
+        this.executor = requireNonNull(executor);
+        this.rpcRejections = requireNonNull(rpcRejections);
     }
 
     @Override
@@ -53,17 +65,25 @@ public class ServicePathImpl implements ServicePath {
                 .success(new ServicePathOutputBuilder().setResult("Invalid operation").build())
                 .buildFuture();
         }
-        return switch (input.getOperation()) {
-            case Create -> {
-                LOG.info("Create operation request received");
-                yield RpcResultBuilder.success(this.deviceRendererService.setupServicePath(input, null))
-                    .buildFuture();
-            }
-            case Delete -> {
-                LOG.info("Delete operation request received");
-                yield RpcResultBuilder.success(this.deviceRendererService.deleteServicePath(input))
-                    .buildFuture();
-            }
-        };
+        try {
+            // Returns at once; the lambda runs later on an executor thread. Cancelling the reply must not interrupt
+            // it: the device work runs on further threads and would continue after its pool thread is freed.
+            return Futures.nonCancellationPropagating(executor.submit(() -> switch (input.getOperation()) {
+                case Create -> {
+                    LOG.info("Create operation request received");
+                    yield RpcResultBuilder
+                            .success(deviceRendererService.setupServicePath(input, null))
+                            .build();
+                }
+                case Delete -> {
+                    LOG.info("Delete operation request received");
+                    yield RpcResultBuilder
+                            .success(deviceRendererService.deleteServicePath(input))
+                            .build();
+                }
+            }));
+        } catch (RejectedExecutionException e) {
+            return rpcRejections.rejected(executor, ThreadPoolName.SERVICE_PATH, e);
+        }
     }
 }
