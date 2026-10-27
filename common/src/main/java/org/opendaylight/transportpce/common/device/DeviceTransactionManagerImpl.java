@@ -195,32 +195,107 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     @Override
     public <T extends DataObject> Optional<T> getDataFromDevice(String deviceId,
             LogicalDatastoreType logicalDatastoreType, DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit) {
-        Optional<DeviceTransaction> deviceTxOpt;
         try {
-            deviceTxOpt = getDeviceTransaction(deviceId, timeout, timeUnit).get();
-        } catch (InterruptedException | ExecutionException e) {
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
+            // Existing callers keep waiting for the device without a limit, as before
+            return read(deviceId, logicalDatastoreType, path, timeout, timeout, timeUnit, false);
+        } catch (DeviceReadException e) {
+            if (e.getCause() == null) {
+                // A device that is not mounted: no stack trace, or a device going away would flood the log
+                LOG.error("Could not read {} from device {}: {}", path, deviceId, e.getMessage());
+            } else {
+                LOG.error("Could not read {} from device {}", path, deviceId, e);
             }
-            LOG.error("Exception thrown while getting transaction for device {}!", deviceId, e);
             return Optional.empty();
         }
-        if (deviceTxOpt.isPresent()) {
-            DeviceTransaction deviceTx = deviceTxOpt.orElseThrow();
-            try {
-                return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                if (e instanceof InterruptedException) {
-                    Thread.currentThread().interrupt();
-                }
-                LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
-            } finally {
-                deviceTx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
-            }
-        } else {
-            LOG.error("Could not obtain transaction for device {}!", deviceId);
+    }
+
+    @Override
+    public <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long timeout,
+            TimeUnit unit) throws DeviceReadException {
+        return read(deviceId, type, path, timeout, timeout, unit, true);
+    }
+
+    @Override
+    public <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long waitTimeout,
+            long readTimeout,
+            TimeUnit unit) throws DeviceReadException {
+        return read(deviceId, type, path, waitTimeout, readTimeout, unit, true);
+    }
+
+    private <T extends DataObject> Optional<T> read(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long waitTimeout,
+            long readTimeout,
+            TimeUnit unit,
+            boolean boundedWait) throws DeviceReadException {
+
+        // The transaction's own timeout is only a safety net: the read closes the transaction when it is done or
+        // times out, so the safety net must not fire before that
+        DeviceTransaction tx = awaitTransaction(deviceId, waitTimeout, unit, boundedWait,
+                unit.toMillis(readTimeout) + maxDurationToGetData);
+        try {
+            return tx.read(type, path, readTimeout, unit);
+        } finally {
+            tx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
         }
-        return Optional.empty();
+    }
+
+    @Override
+    public DeviceTransaction awaitDeviceTransaction(String deviceId, long waitTimeout, long useTimeout,
+            TimeUnit unit) throws DeviceReadException {
+        return awaitTransaction(deviceId, waitTimeout, unit, true, unit.toMillis(useTimeout));
+    }
+
+    /**
+     * Waits for this request's turn on the device and returns its transaction.
+     *
+     * @param waitTimeout how long to wait for the device
+     * @param boundedWait if true, gives up after the wait timeout; otherwise waits as long as it takes
+     * @param submitTimeoutMillis after how long the transaction is cancelled if it is still open
+     */
+    private DeviceTransaction awaitTransaction(String deviceId, long waitTimeout, TimeUnit unit, boolean boundedWait,
+            long submitTimeoutMillis) throws DeviceReadException {
+        ListenableFuture<Optional<DeviceTransaction>> txFuture =
+                getDeviceTransaction(deviceId, submitTimeoutMillis, TimeUnit.MILLISECONDS);
+        Optional<DeviceTransaction> tx;
+        try {
+            tx = boundedWait ? txFuture.get(waitTimeout, unit) : txFuture.get();
+        } catch (TimeoutException e) {
+            giveUp(txFuture);
+            throw new DeviceReadException("Timed out after " + waitTimeout + " " + unit + " waiting for device "
+                    + deviceId, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            giveUp(txFuture);
+            throw new DeviceReadException("Interrupted while waiting for device " + deviceId, e);
+        } catch (ExecutionException e) {
+            throw new DeviceReadException("Could not open a transaction on device " + deviceId, e);
+        }
+        return tx.orElseThrow(() -> new DeviceReadException("Device " + deviceId + " is not mounted"));
+    }
+
+    /**
+     * Gives up a request for a device transaction without disturbing the device's queue.
+     */
+    private static void giveUp(ListenableFuture<Optional<DeviceTransaction>> txFuture) {
+        if (!txFuture.cancel(false)) {
+            // The transaction was created just as we gave up: close it, so the next one in line gets the device
+            try {
+                Futures.getDone(txFuture).ifPresent(DeviceTransaction::cancel);
+            } catch (ExecutionException | CancellationException e) {
+                LOG.debug("No transaction to close after giving up", e);
+            }
+        }
     }
 
     @Override

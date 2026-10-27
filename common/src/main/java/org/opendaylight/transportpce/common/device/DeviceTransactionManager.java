@@ -148,6 +148,77 @@ public interface DeviceTransactionManager {
             DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit);
 
     /**
+     * Reads data from a device, telling "no data" apart from "could not read".
+     *
+     * <p>Unlike {@link #getDataFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long, TimeUnit)},
+     * which returns an empty Optional in both cases, this method returns an empty Optional only when the device has
+     * no data at the path, and throws {@link DeviceReadException} when the data could not be read.
+     *
+     * <p>The timeout applies separately to waiting for the device, while earlier transactions on it are still open,
+     * and to the read itself. If the wait times out, the request gives up its place without disturbing the order of
+     * the device's other transactions.
+     *
+     * @param deviceId device to read from
+     * @param type datastore to read from
+     * @param path path of the data in the device's datastore
+     * @param timeout maximum time to wait for the device, and maximum time for the read
+     * @param unit unit of {@code timeout}
+     * @param <T> type of the data
+     * @return the data, or an empty Optional if the device has no data at this path
+     * @throws DeviceReadException if the device is not mounted, could not be reached in time, or the read failed
+     */
+    <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long timeout,
+            TimeUnit unit) throws DeviceReadException;
+
+    /**
+     * Reads data from a device like {@link #readFromDevice(String, LogicalDatastoreType, DataObjectIdentifier, long,
+     * TimeUnit)}, with separate timeouts for waiting for the device and for the read.
+     *
+     * <p>A short wait timeout with a longer read timeout lets requests queued behind a frozen device give up early,
+     * while a slow read from a healthy device still gets the time it needs.
+     *
+     * @param deviceId device to read from
+     * @param type datastore to read from
+     * @param path path of the data in the device's datastore
+     * @param waitTimeout maximum time to wait for the device, while earlier transactions on it are still open
+     * @param readTimeout maximum time for the read
+     * @param unit unit of {@code waitTimeout} and {@code readTimeout}
+     * @param <T> type of the data
+     * @return the data, or an empty Optional if the device has no data at this path
+     * @throws DeviceReadException if the device is not mounted, could not be reached in time, or the read failed
+     */
+    <T extends DataObject> Optional<T> readFromDevice(
+            String deviceId,
+            LogicalDatastoreType type,
+            DataObjectIdentifier<T> path,
+            long waitTimeout,
+            long readTimeout,
+            TimeUnit unit) throws DeviceReadException;
+
+    /**
+     * Waits for this request's turn on the device and returns a transaction on it, like
+     * {@link #getDeviceTransaction(String)}, but gives up after a timeout, without disturbing the order of the
+     * device's other transactions.
+     *
+     * <p>The caller must close the transaction with {@link DeviceTransaction#commit(long, TimeUnit)} or
+     * {@link DeviceTransaction#cancel()}. A transaction still open after {@code useTimeout} is cancelled, so the
+     * device is not held forever.
+     *
+     * @param deviceId device to open the transaction on
+     * @param waitTimeout maximum time to wait for the device, while earlier transactions on it are still open
+     * @param useTimeout maximum time the caller may keep the transaction open before it is cancelled
+     * @param unit unit of {@code waitTimeout} and {@code useTimeout}
+     * @return the transaction
+     * @throws DeviceReadException if the device is not mounted or could not be reached in time
+     */
+    DeviceTransaction awaitDeviceTransaction(String deviceId, long waitTimeout, long useTimeout, TimeUnit unit)
+            throws DeviceReadException;
+
+    /**
      * Checks if device with specified ID is mounted.
      *
      * @param deviceId Identifier of device to check.
