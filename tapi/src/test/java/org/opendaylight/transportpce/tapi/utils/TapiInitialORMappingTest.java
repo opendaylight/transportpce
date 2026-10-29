@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -137,6 +138,38 @@ class TapiInitialORMappingTest {
 
         assertEquals(
                 Set.of(connectivityService(one.getServiceName()).key()),
+                connServMap.getValue().keySet());
+    }
+
+    @Test
+    void performServInitialMappingMapsTheOtherServicesWhenOneFails() {
+        Services one = createService("service 1", ServiceFormat.OTU);
+        Services two = createService("service 2", ServiceFormat.ODU);
+        Services three = createService("service 3", ServiceFormat.Ethernet);
+
+        ConnectivityUtils connectivityUtils = mock(ConnectivityUtils.class);
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(one))
+                .thenReturn(connectivityService(one.getServiceName()));
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(two))
+                .thenThrow(new NoSuchElementException("No value present"));
+        Mockito.when(connectivityUtils.mapORServiceToTapiConnectivity(three))
+                .thenReturn(connectivityService(three.getServiceName()));
+
+        TapiContext tapi = mock(TapiContext.class);
+
+        assertFalse(
+                new TapiInitialORMapping(null, connectivityUtils, tapi, null)
+                        .performServInitialMapping(serviceList(one, two, three)));
+
+        // The services before and after the one that failed are still mapped and written.
+        Mockito.verify(connectivityUtils, Mockito.times(3)).mapORServiceToTapiConnectivity(Mockito.any());
+        ArgumentCaptor<Map<ConnectivityServiceKey, ConnectivityService>> connServMap = ArgumentCaptor.captor();
+        Mockito.verify(tapi).updateConnectivityContext(connServMap.capture(), Mockito.any());
+
+        assertEquals(
+                Set.of(
+                        connectivityService(one.getServiceName()).key(),
+                        connectivityService(three.getServiceName()).key()),
                 connServMap.getValue().keySet());
     }
 
