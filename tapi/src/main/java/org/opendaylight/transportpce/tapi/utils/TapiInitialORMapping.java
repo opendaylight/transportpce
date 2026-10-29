@@ -118,7 +118,7 @@ public class TapiInitialORMapping {
         for (Service service:orderedServices) {
             // map services
             // connections needed to be created --> looking at path description
-            ConnectivityService connServ = this.connectivityUtils.mapORServiceToTapiConnectivity(service);
+            ConnectivityService connServ = mapService(service);
 
             if (connServ == null) {
                 LOG.warn("Couldn't map service {} to TAPI", service.getServiceName());
@@ -142,6 +142,24 @@ public class TapiInitialORMapping {
         }
 
         return true;
+    }
+
+    /**
+     * Maps one OpenROADM service to a TAPI connectivity service. A service that cannot be mapped
+     * must not stop the services after it from being mapped, so a failure is logged and reported
+     * as an unmapped service.
+     *
+     * @param service the service to map
+     * @return the connectivity service, or null if the service could not be mapped
+     */
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    private ConnectivityService mapService(Service service) {
+        try {
+            return this.connectivityUtils.mapORServiceToTapiConnectivity(service);
+        } catch (RuntimeException e) {
+            LOG.error("Failed to map service {} to TAPI", service.getServiceName(), e);
+            return null;
+        }
     }
 
     /**
