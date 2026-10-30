@@ -940,8 +940,13 @@ public final class ConnectivityUtils {
     }
 
     private void populateServiceInConnectionVsServiceAtInit(String servName, Uuid servUuid) {
-        List<String> supServiceList = Optional.ofNullable(getServiceFromServiceName(servName)
-                .orElseThrow().getSupportingServiceName())
+        Optional<Services> optService = getServiceFromServiceName(servName);
+        if (optService.isEmpty()) {
+            LOG.warn("Service {} not found in the OpenROADM service list, mapping it without supporting services",
+                servName);
+        }
+        List<String> supServiceList = optService
+                .map(Services::getSupportingServiceName)
                 .map(set -> set.stream().sorted().collect(Collectors.toList()))
                 .orElseGet(Collections::emptyList);
         if (supServiceList.isEmpty()) {
@@ -951,8 +956,14 @@ public final class ConnectivityUtils {
         }
         Map<String, Integer> supServiceMap = new HashMap<>();
         for (String supServiceName : supServiceList) {
-            Set<String> sup2ServList = Optional.ofNullable(getServiceFromServiceName(supServiceName).orElseThrow()
-                .getSupportingServiceName()).orElseGet(Collections::emptySet);
+            Optional<Services> optSupService = getServiceFromServiceName(supServiceName);
+            if (optSupService.isEmpty()) {
+                LOG.warn("Supporting service {} of service {} not found in the OpenROADM service list, ignoring it",
+                    supServiceName, servName);
+                continue;
+            }
+            Set<String> sup2ServList = Optional.ofNullable(optSupService.orElseThrow().getSupportingServiceName())
+                .orElseGet(Collections::emptySet);
             // We fill supServiceMap with the supporting service name, and a number which is inversely proportional to
             // the number of supporting services (to sort the list at a later step form highest to lowest number of
             // supported services.
@@ -960,13 +971,12 @@ public final class ConnectivityUtils {
         }
         var servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
             .rev250207.connection.vs.service.ServicesBuilder();
-        if (!servicesMap.isEmpty()
-                && this.servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
-                    .findFirst().orElseThrow().getValue() != null) {
+        // A service mapped after other services is not in servicesMap yet: start a new entry for it then.
+        var existingServ = this.servicesMap.get(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce
+            .tapi.connectivityutils.rev250207.connection.vs.service.ServicesKey(servName));
+        if (existingServ != null) {
             servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
-                .rev250207.connection.vs.service.ServicesBuilder(this.servicesMap.entrySet().stream()
-                    .filter(serv -> serv.getKey().getServiceName().equals(servName))
-                    .findFirst().orElseThrow().getValue());
+                .rev250207.connection.vs.service.ServicesBuilder(existingServ);
         } else {
             servBldr.setServiceName(servName);
         }
