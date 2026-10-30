@@ -214,11 +214,14 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection>
             connectionFullMap;
+    // the top connections of every service mapped so far, kept to link a service to the service it rides on
+    private final Map<
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection>
+            mappedTopConnections;
     private final NetworkTransactionService networkTransactionService;
     private Connection topConnRdmRdm;
     private Connection topConnXpdrXpdrPhtn;
-    private Connection topConnXpdrXpdrOdu;
-    private Connection topConnXpdrXpdrOtu;
     private ORtoTapiTopoConversionTools tapiFactory;
     private Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils.rev250207
             .connection.vs.service.ServicesKey,
@@ -267,11 +270,10 @@ public final class ConnectivityUtils {
         this.tapiContext = tapiContext;
         this.sipMap = sipMap;
         this.connectionFullMap = new HashMap<>();
+        this.mappedTopConnections = new HashMap<>();
         this.networkTransactionService = networkTransactionService;
         this.topConnRdmRdm = null;
         this.topConnXpdrXpdrPhtn = null;
-        this.topConnXpdrXpdrOtu = null;
-        this.topConnXpdrXpdrOdu = null;
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.servicesMap = new HashMap<>();
@@ -630,7 +632,6 @@ public final class ConnectivityUtils {
                     connectionServMap.putAll(
                         createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist, xpdrNodelist,
                             nodeToTopoUuidMap));
-                    this.topConnXpdrXpdrOdu = null;
                 }
                 break;
             default:
@@ -641,6 +642,9 @@ public final class ConnectivityUtils {
             .stream().map(Map.Entry::getValue).collect(Collectors.toList())
             .stream().map(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection::getName).collect(Collectors.toList()));
+        this.connectionFullMap.values().stream()
+            .filter(conn -> connectionName(conn).startsWith("TOP+"))
+            .forEach(conn -> this.mappedTopConnections.put(conn.key(), conn));
         return connectionServMap;
     }
 
@@ -1396,7 +1400,10 @@ public final class ConnectivityUtils {
                 .connectivity.context.Connection connectionOdu =
             createTopConnection(
                 spcXpdr1, spcXpdr2, cepMapOdu, TapiConstants.E_ODU, LayerProtocolName.ODU,
-                getLowerConnectionMap(TapiConstants.E_ODU), this.topConnXpdrXpdrOdu);
+                getLowerConnectionMap(TapiConstants.E_ODU),
+                // the iODU between the network ports of these clients, not the last iODU created
+                findTopConnection(getAssociatedNetworkPort(spcXpdr1, xpdrNetworkTplist),
+                    getAssociatedNetworkPort(spcXpdr2, xpdrNetworkTplist), TapiConstants.I_ODU));
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionOdu.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
@@ -1413,7 +1420,12 @@ public final class ConnectivityUtils {
                 .connectivity.context.Connection connectionDsr =
             createTopConnection(
                 spcXpdr1, spcXpdr2, cepMapDsr, TapiConstants.DSR,
-                LayerProtocolName.DSR, getLowerConnectionMap(TapiConstants.DSR), this.topConnXpdrXpdrPhtn);
+                LayerProtocolName.DSR, getLowerConnectionMap(TapiConstants.DSR),
+                // the OTSi of this stack (its iODU -> that iODU's iOTU -> that iOTU's OTSi), not the last one created
+                lowerTopConnection(lowerTopConnection(
+                    findTopConnection(getAssociatedNetworkPort(spcXpdr1, xpdrNetworkTplist),
+                        getAssociatedNetworkPort(spcXpdr2, xpdrNetworkTplist), TapiConstants.I_ODU),
+                    TapiConstants.I_OTU), TapiConstants.OTSI_MC));
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionDsr.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
@@ -1488,7 +1500,14 @@ public final class ConnectivityUtils {
                 xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
                     .findFirst().orElseThrow(),
                 cepMap1, TapiConstants.I_ODU,
-                LayerProtocolName.ODU, getLowerConnectionMap(TapiConstants.I_ODU), this.topConnXpdrXpdrOtu);
+                LayerProtocolName.ODU, getLowerConnectionMap(TapiConstants.I_ODU),
+                // the iOTU between the same network ports, not the last iOTU created
+                findTopConnection(
+                    xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(0))).findFirst()
+                        .orElseThrow(),
+                    xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
+                        .findFirst().orElseThrow(),
+                    TapiConstants.I_OTU));
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionOdu.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
@@ -1498,7 +1517,6 @@ public final class ConnectivityUtils {
         Connection connOdu = new ConnectionBuilder().setConnectionUuid(connectionOdu.getUuid()).build();
         Map<ConnectionKey, Connection> connServMap = new HashMap<>();
         connServMap.put(connOdu.key(), connOdu);
-        this.topConnXpdrXpdrOdu = connOdu;
         return connServMap;
     }
 
@@ -1589,7 +1607,6 @@ public final class ConnectivityUtils {
         Connection conOtu = new ConnectionBuilder().setConnectionUuid(connectionOtu.getUuid()).build();
 
         conServMap.put(conOtu.key(), conOtu);
-        this.topConnXpdrXpdrOtu = conOtu;
 
         LOG.debug("CU:createXpdrCepsAndConnectionsPht : ReturnedMap = {}", new HashMap<>(Map.of(conn.key(), conn)));
         return conServMap;
@@ -2012,6 +2029,83 @@ public final class ConnectivityUtils {
         return (cnep == null)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+    }
+
+    /**
+     * Finds the top connection of a layer between two termination points, in either direction, among
+     * the connections of the service being mapped and the top connections of the services mapped
+     * before it. A service riding on another service (ODU on OTU, DSR on ODU) is linked to the top
+     * connection of the service below it through the ports both share, so that it is linked to its
+     * own service stack whatever order the services are mapped in.
+     *
+     * @param tp1 one end, as "node+tp"
+     * @param tp2 the other end, as "node+tp"
+     * @param qual the layer qualifier of the top connection (e.g. iOTU, iODU)
+     * @return the connection reference, or null if there is no such top connection
+     */
+    private Connection findTopConnection(String tp1, String tp2, String qual) {
+        if (tp1 != null && tp2 != null) {
+            for (String name : List.of(
+                    String.join("+", "TOP", tp1, tp2, qual), String.join("+", "TOP", tp2, tp1, qual))) {
+                Uuid uuid = new Uuid(UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8)).toString());
+                if (lookupConnection(uuid) != null) {
+                    return new ConnectionBuilder().setConnectionUuid(uuid).build();
+                }
+            }
+        }
+        LOG.warn("Service {}: no {} top connection between {} and {}, no lower connection added",
+            serviceName, qual, tp1, tp2);
+        return null;
+    }
+
+    /**
+     * Returns the lower connection of a top connection that is itself the top connection of the
+     * given layer (e.g. the iOTU an iODU rides on, the OTSi an iOTU rides on). Following this chain
+     * from a connection of a service stack only reaches connections of the same stack.
+     *
+     * @param conn the top connection, may be null
+     * @param qual the layer qualifier of the lower top connection
+     * @return the connection reference, or null if there is not exactly one
+     */
+    private Connection lowerTopConnection(Connection conn, String qual) {
+        if (conn == null) {
+            return null;
+        }
+        var top = lookupConnection(conn.getConnectionUuid());
+        List<Uuid> found = new ArrayList<>();
+        if (top != null) {
+            for (LowerConnection lower : top.nonnullLowerConnection().values()) {
+                var lowerConn = lookupConnection(lower.getConnectionUuid());
+                if (lowerConn != null && connectionName(lowerConn).startsWith("TOP+")
+                        && connectionName(lowerConn).endsWith("+" + qual)) {
+                    found.add(lower.getConnectionUuid());
+                }
+            }
+        }
+        if (found.size() == 1) {
+            return new ConnectionBuilder().setConnectionUuid(found.get(0)).build();
+        }
+        LOG.warn("Service {}: {} {} top connections below connection {}, no lower {} connection added",
+            serviceName, found.size(), qual, conn.getConnectionUuid().getValue(), qual);
+        return null;
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context
+            .Connection lookupConnection(Uuid uuid) {
+        var key = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context
+            .ConnectionKey(uuid);
+        var conn = this.connectionFullMap.get(key);
+        return conn != null ? conn : this.mappedTopConnections.get(key);
+    }
+
+    private static String connectionName(
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context
+                .Connection conn) {
+        return conn.nonnullName().values().stream()
+            .filter(nm -> "Connection name".equals(nm.getValueName()))
+            .map(Name::getValue)
+            .findFirst()
+            .orElse("");
     }
 
     private Map<LowerConnectionKey, LowerConnection> getLowerConnectionMap(String lpq) {
