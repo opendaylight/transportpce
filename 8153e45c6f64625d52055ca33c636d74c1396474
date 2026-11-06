@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "8153e45c6f64625d52055ca33c636d74c1396474",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dba7f2f_7dd65c16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9434
+      },
+      "writtenOn": "2026-11-06T19:11:28Z",
+      "side": 1,
+      "message": "recheck\n\ntests_tapi failed only test_59_check_update_tapi_neps (NEP still ENABLED): test_57/58 passed \n tests_tapi: the timing flake in test_59_check_update_tapi_neps",
+      "revId": "8153e45c6f64625d52055ca33c636d74c1396474",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
