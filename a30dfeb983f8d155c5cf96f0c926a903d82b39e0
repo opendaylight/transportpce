@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "a30dfeb983f8d155c5cf96f0c926a903d82b39e0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1c127c1_16320e83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9434
+      },
+      "writtenOn": "2026-11-06T19:12:55Z",
+      "side": 1,
+      "message": "recheck\ntests71 errored at setup in every test: OpenDaylight (karaf) did not start within 100 s (start_tpce -\u003e SystemExit). No test ran. tests71 passed on 127286 and 127288 in the same round,and the full stack passes on 127288 (build 6485). Infra flake.",
+      "revId": "a30dfeb983f8d155c5cf96f0c926a903d82b39e0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
