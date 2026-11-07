@@ -50,6 +50,23 @@
       "message": "recheck\n\n  test_59_check_update_tapi_neps failed again on this change alone, while 127287/127288 (which contain it) pass it. Comparing the karaf logs of build 6486 (fail) and 6484 (127287, pass) for TestTransportPCEDeviceChangeNotifications: the init mapping sequence is identical (OTU4 then ODU4,no \"Failed to map service\" logged, so the new catch in this change never fires), and the ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX NEP is updated to LOCKED/DISABLED in both at the port change. I can\u0027t find a behavioural difference this change introduces; is test_59 known to be order- or timing-sensitive on master?",
       "revId": "8153e45c6f64625d52055ca33c636d74c1396474",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce26a7d7_054145dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9434
+      },
+      "writtenOn": "2026-11-07T03:11:36Z",
+      "side": 1,
+      "message": "recheck\n\n  Fourth tests_tapi failure on this change alone, now a different test: build 6488 failed test02_full_topology::test_35_check_uninstall_Tapi_Feature on a 30 s ReadTimeout from the controller (GET otn-topology after the TAPI feature uninstall), before test03 ran. \n  Earlier runs failed test03 test_59 (NEP still ENABLED). 127287 and 127288, which contain this change, have passed tests_tapi in full four times. Is the tapi lane known to be flaky on master? Happy to dig further if you see something specific to this change.",
+      "revId": "8153e45c6f64625d52055ca33c636d74c1396474",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
