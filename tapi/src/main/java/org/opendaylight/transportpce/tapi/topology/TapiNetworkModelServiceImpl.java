@@ -985,12 +985,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry :
                 builtNode.getOwnedNodeEdgePoint().entrySet()) {
             LOG.debug("TNMSI:createTapiXpdrNode : analyzing NEP {}", entry.getValue().getName());
-            if (entry.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
-                        .filter(sclpqi -> sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
-                        .collect(Collectors.toList()).isEmpty()) {
+            var cepInstances = entry.getValue().getSupportedCepLayerProtocolQualifierInstances();
+            if (cepInstances == null || cepInstances.stream()
+                    .filter(sclpqi -> sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
+                    .collect(Collectors.toList()).isEmpty()) {
                 continue;
             }
-            var aug1 = entry.getValue().augmentationOrElseThrow(
+            var aug1 = entry.getValue().augmentation(
                                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
                             .OwnedNodeEdgePoint1.class);
             if (aug1 == null) {
@@ -1018,6 +1019,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             AdministrativeState newAdmState = transformAdminState(mapping.getPortAdminState());
             OperationalState newOprState = transformOperState(mapping.getPortOperState());
             String rate = mapping.getRate();
+            if (rate == null || rate.isEmpty() || rate.equals("0")) {
+                rate = getTpRateFromSicList(mapping.getSupportedInterfaceCapability()).toString();
+            }
             LOG.debug("TNMSI:createXpdrPhtnMdNeps : the rate declared in portMapping for LCP {} is {}", lcp, rate);
             List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
             onepList.addAll(createNep(
@@ -1026,8 +1030,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 lcp, Map.of(onedName.key(), onedName),
                 LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA, true,
                 String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping,
-                opModeList, newOprState, newAdmState));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, opModeList, newOprState, newAdmState));
         // OTSi_MC Nep creation on otsi node
             String onedNameVal2 = String.join("+", nodeId, TapiConstants.OTSI_MC, lcp);
             Name onedName2 = new NameBuilder().setValueName("PhotMedNodeEdgePoint").setValue(onedNameVal2).build();
@@ -1037,8 +1042,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 lcp, Map.of(onedName2.key(), onedName2),
                 LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA, false,
                 String.join("+", nodeId, TapiConstants.OTSI_MC),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping,
-                opModeList, newOprState, newAdmState));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, opModeList, newOprState, newAdmState));
             for (OwnedNodeEdgePoint onep : onepList) {
                 onepl.put(onep.key(), onep);
             }
@@ -1062,7 +1068,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             AdministrativeState newAdmState = transformAdminState(mapping.getPortAdminState());
             OperationalState newOprState = transformOperState(mapping.getPortOperState());
             String rate = mapping.getRate();
-            if (rate == null || rate.equals("0")) {
+            if (rate == null || rate.isEmpty() || rate.equals("0")) {
                 rate = getTpRateFromSicList(mapping.getSupportedInterfaceCapability()).toString();
                 LOG.debug("TNMSiLine 975 : retrieve rate for {} lcp {} from SicList with rate = {}", nodeId, lcp, rate);
             }
@@ -1072,7 +1078,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 nodeId, rate, new Uuid(UUID.nameUUIDFromBytes(nepvalue.getBytes(StandardCharsets.UTF_8)).toString()),
                 lcp, Map.of(name.key(), name), LayerProtocolName.DSR, LayerProtocolName.DSR, true,
                 String.join("+", nodeId, TapiConstants.DSR),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping, null, newOprState, newAdmState));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, null, newOprState, newAdmState));
         // network nep creation on E_ODU node
             String onedNameVal = String.join("+", nodeId, TapiConstants.E_ODU, lcp);
             LOG.info("eODU NEP = {}", onedNameVal);
@@ -1083,7 +1091,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 nodeId, rate, new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString()),
                 lcp, Map.of(onedName.key(), onedName), LayerProtocolName.ODU, LayerProtocolName.DSR, true,
                 String.join("+", nodeId, TapiConstants.E_ODU),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping, null, newOprState, newAdmState));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, null, newOprState, newAdmState));
             for (OwnedNodeEdgePoint onep : onepList) {
                 onepl.put(onep.key(), onep);
             }
@@ -1093,8 +1103,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             var lcp = mapping.getLogicalConnectionPoint();
             String onedNameVal = String.join("+", nodeId, TapiConstants.I_ODU, lcp);
             LOG.info("iODU NEP = {}", onedNameVal);
-            Name onedName = new NameBuilder().setValueName("iNodeEdgePoint_N").setValue(onedNameVal).build();
+            final Name onedName = new NameBuilder().setValueName("iNodeEdgePoint_N").setValue(onedNameVal).build();
             String rate = mapping.getRate();
+            if (rate == null || rate.isEmpty() || rate.equals("0")) {
+                rate = getTpRateFromSicList(mapping.getSupportedInterfaceCapability()).toString();
+            }
             LOG.debug("TNMSI:createXpdrDsrOduNeps : the rate declared in portMapping for LCP {} is {}", lcp, rate);
             List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
             LOG.info("TNMSI Line 1005 before create NEP iODU");
@@ -1102,8 +1115,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 nodeId, rate, new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString()),
                 lcp, Map.of(onedName.key(), onedName), LayerProtocolName.ODU, LayerProtocolName.DSR, true,
                 String.join("+", nodeId, TapiConstants.I_ODU),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping,
-                null, transformOperState(mapping.getPortOperState()),transformAdminState(mapping.getPortAdminState())));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, null, transformOperState(mapping.getPortOperState()),
+                transformAdminState(mapping.getPortAdminState())));
             LOG.info("TNMSI Line 1012 after create NEP IODU, onepList contains {}", onepList);
             for (OwnedNodeEdgePoint onep : onepList) {
                 onepl.put(onep.key(), onep);
@@ -1114,8 +1129,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             var lcp = mapping.getLogicalConnectionPoint();
             String onedNameVal = String.join("+", nodeId, TapiConstants.I_OTU, lcp);
             LOG.info("iOTU NEP = {}", onedNameVal);
-            Name onedName = new NameBuilder().setValueName("iNodeEdgePoint_OTU").setValue(onedNameVal).build();
+            final Name onedName = new NameBuilder().setValueName("iNodeEdgePoint_OTU").setValue(onedNameVal).build();
             String rate = mapping.getRate();
+            if (rate == null || rate.isEmpty() || rate.equals("0")) {
+                rate = getTpRateFromSicList(mapping.getSupportedInterfaceCapability()).toString();
+            }
             LOG.debug("TNMSI:createXpdrDsrOduNeps : the rate declared in portMapping for LCP {} is {}", lcp, rate);
             List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
             LOG.debug("TNMSI:createXpdrDsrOduNeps : before create NEP iOTU");
@@ -1123,8 +1141,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 nodeId, rate, new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString()),
                 lcp, Map.of(onedName.key(), onedName), LayerProtocolName.DIGITALOTN, LayerProtocolName.DIGITALOTN, true,
                 String.join("+", nodeId, TapiConstants.I_OTU),
-                new ArrayList<>(mapping.getSupportedInterfaceCapability()), mapping,
-                null, transformOperState(mapping.getPortOperState()),transformAdminState(mapping.getPortAdminState())));
+                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                    .orElse(Collections.emptySet())),
+                mapping, null, transformOperState(mapping.getPortOperState()),
+                transformAdminState(mapping.getPortAdminState())));
             LOG.debug("TNMSI:createXpdrDsrOduNeps : after create NEP IOTU, onepList contains {}", onepList);
             for (OwnedNodeEdgePoint onep : onepList) {
                 onepl.put(onep.key(), onep);
@@ -1134,6 +1154,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Integer getTpRateFromSicList(Set<SupportedIfCapability> sicList) {
+        if (sicList == null) {
+            return 0;
+        }
         List<Integer> rateList = new ArrayList<>();
         for (SupportedIfCapability sic : sicList) {
             if (sic.toString().contains("ODU0") || sic.toString().contains("TYPEGigE")) {
@@ -1155,13 +1178,19 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private OperationalState transformOperState(String operString) {
-        return org.opendaylight.transportpce.networkmodel.util.TopologyUtils.setNetworkOperState(operString)
-                .equals(State.InService) ? OperationalState.ENABLED : OperationalState.DISABLED;
+        State state =
+            org.opendaylight.transportpce.networkmodel.util.TopologyUtils.setNetworkOperState(operString);
+        return (state != null && state.equals(State.InService))
+            ? OperationalState.ENABLED
+            : OperationalState.DISABLED;
     }
 
     private AdministrativeState transformAdminState(String adminString) {
-        return org.opendaylight.transportpce.networkmodel.util.TopologyUtils.setNetworkAdminState(adminString)
-                .equals(AdminStates.InService) ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
+        AdminStates adminState =
+            org.opendaylight.transportpce.networkmodel.util.TopologyUtils.setNetworkAdminState(adminString);
+        return (adminState != null && adminState.equals(AdminStates.InService))
+            ? AdministrativeState.UNLOCKED
+            : AdministrativeState.LOCKED;
     }
 
     private List<OwnedNodeEdgePoint> createNep(String nodeId, String nepRate, Uuid nepUuid, String tpid,
@@ -1205,13 +1234,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         String rate = (nepRate == null) ? "0" : nepRate;
         if (!keyword.contains(TapiConstants.OTSI_MC) && !keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             if (nepProtocol.equals(LayerProtocolName.DSR)) {
-                if (!sicColl.stream()
+                var geMatch = sicColl.stream()
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
-                        .findFirst().orElseThrow().toString().isEmpty()) {
+                        .findFirst();
+                if (geMatch.isPresent()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(ORtoTapiTopoConversionTools.LPN_MAP.get("ETH").get(sicColl.stream()
-                        .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
-                        .findFirst().orElseThrow().getIfCapType().implementedInterface().getSimpleName()));
+                    String geCapName = geMatch.orElseThrow().getIfCapType()
+                        .implementedInterface().getSimpleName();
+                    supInt.putAll(ORtoTapiTopoConversionTools.LPN_MAP.get("ETH").get(geCapName));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
                     onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
@@ -1230,8 +1260,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                             this.tapiFactory.createTotalSizeForCommonNeps(0.0)).build());
                     }
-                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
-                        .contains("OTU4")).findFirst().orElseThrow().toString().isEmpty()) {
+                } else if (sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("OTU4")).findFirst().isPresent()) {
                     Set<LAYERPROTOCOLQUALIFIER> supIntLpq = new HashSet<>();
                     //supInt.putAll(ORtoTapiTopoConversionTools.LPN_MAP.get("ETH").get("IfOCH"));
                     supIntLpq.addAll(ORtoTapiTopoConversionTools.LPN_MAP.get("ETH").get("IfOCH").keySet().stream()
@@ -1326,7 +1356,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                     onedNameVal.getBytes(StandardCharsets.UTF_8)).toString()),
                                 lcp, Map.of(onedName.key(), onedName), LayerProtocolName.DIGITALOTN,
                                 LayerProtocolName.DIGITALOTN, true, String.join("+", nodeId, TapiConstants.E_ODUCN),
-                                new ArrayList<>(mapping.getSupportedInterfaceCapability()),
+                                new ArrayList<>(Optional.ofNullable(mapping.getSupportedInterfaceCapability())
+                                    .orElse(Collections.emptySet())),
                                 mapping, null, transformOperState(mapping.getPortOperState()),
                                 transformAdminState(mapping.getPortAdminState())));
                         } else {

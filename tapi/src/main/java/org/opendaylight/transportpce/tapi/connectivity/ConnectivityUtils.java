@@ -254,6 +254,8 @@ public final class ConnectivityUtils {
             .put("800", OTUCn.VALUE)
             .build();
 
+    private static final String OPENROADM_NODE_ID = "OpenROADM node id";
+
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
     public ConnectivityUtils(
             ServiceDataStoreOperations serviceDataStoreOperations,
@@ -2675,13 +2677,25 @@ public final class ConnectivityUtils {
             }
         }
         String nodeid;
-        String txPortDeviceName;
+        String txPortDeviceName = "";
         String txPortName;
         String rxPortDeviceName;
         String rxPortName;
         if (applianceDomain.equals("OR")) {
             nodeid = nodeZZid;
-            txPortDeviceName = nodeid;
+            for (Map.Entry<
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name> entry:
+                    endPoint.getName().entrySet()) {
+                if (OPENROADM_NODE_ID.equals(entry.getValue().getValueName())) {
+                    txPortDeviceName = entry.getValue().getValue();
+                }
+            }
+            if (txPortDeviceName.isEmpty()) {
+                LOG.warn("No '{}' name entry found for Z-end endpoint, "
+                    + "txPortDeviceName will be empty for node {}",
+                    OPENROADM_NODE_ID, nodeZZid);
+            }
             txPortName = nep.getName().entrySet().iterator().next().getValue().getValue().split("\\+")[2];
             rxPortDeviceName = txPortDeviceName;
             rxPortName = txPortName;
@@ -2837,13 +2851,25 @@ public final class ConnectivityUtils {
             }
         }
         String nodeid;
-        String txPortDeviceName;
+        String txPortDeviceName = "";
         String txPortName;
         String rxPortDeviceName;
         String rxPortName;
         if (applianceDomain.equals("OR")) {
             nodeid = nodeAAid;
-            txPortDeviceName = nodeid;
+            for (Map.Entry<
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name> entry:
+                    endPoint.getName().entrySet()) {
+                if (OPENROADM_NODE_ID.equals(entry.getValue().getValueName())) {
+                    txPortDeviceName = entry.getValue().getValue();
+                }
+            }
+            if (txPortDeviceName.isEmpty()) {
+                LOG.warn("No '{}' name entry found for A-end endpoint, "
+                    + "txPortDeviceName will be empty for node {}",
+                    OPENROADM_NODE_ID, nodeAAid);
+            }
             txPortName = nep.getName().entrySet().iterator().next().getValue().getValue().split("\\+")[2];
             rxPortDeviceName = txPortDeviceName;
             rxPortName = txPortName;
@@ -2860,7 +2886,6 @@ public final class ConnectivityUtils {
         LOG.info("Node a id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
         // TODO --> get clli from datastore as soon as for a SBI implementation we identify a value name for the Node
         //  name that may corresponds to clli/building. Use nodeName and try to avoid relying on it in the meanwhile.
-        OtuRateIdentity otuRate = null;
         String clli = nodeName;
         ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
             .setClli(clli)

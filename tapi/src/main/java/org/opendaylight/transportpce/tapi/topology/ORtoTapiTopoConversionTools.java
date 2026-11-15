@@ -255,6 +255,11 @@ public class ORtoTapiTopoConversionTools {
             .get("PHOTONIC_MEDIA").put("IfOCHOTUCnODUCnUniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTUCnODUCn"));
         LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Regen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
         LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Uniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
+        LPN_MAP.get("OTU").put("IfOTUCnODUCn", LPN_MAP.get("OTU").get("IfOCHOTUCnODUCn"));
+        LPN_MAP.get("ODU").put("IfOTUCnODUCn", LPN_MAP.get("ODU").get("IfOCHOTUCnODUCn"));
+        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOTUCnODUCn", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTUCnODUCn"));
+        LPN_MAP.put("DIGITAL_OTN", new HashMap<>(LPN_MAP.get("ODU")));
+        LPN_MAP.get("DIGITAL_OTN").put("IfOTUCnODUCn", LPN_MAP.get("DIGITAL_OTN").get("IfOCHOTUCnODUCn"));
     }
 
     /**
@@ -1081,7 +1086,7 @@ public class ORtoTapiTopoConversionTools {
         justification = "Voluntarily No break in switchcase where comment is inserted in following method")
     public List<SupportedCepLayerProtocolQualifierInstances> createSupportedCepLayerProtocolQualifier(
             Collection<SupportedInterfaceCapability> sicList, LayerProtocolName lpn, String key) {
-        if (sicList == null) {
+        if (sicList == null || sicList.isEmpty()) {
             return new ArrayList<>(List.of(
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
                     .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
@@ -1120,7 +1125,16 @@ public class ORtoTapiTopoConversionTools {
                 .filter(sclpqi -> !sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
                 .collect(Collectors.toList());
         }
-        return sclpqiList.stream().distinct().toList();
+        List<SupportedCepLayerProtocolQualifierInstances> distinctList = sclpqiList.stream().distinct().toList();
+        if (distinctList.isEmpty()) {
+            LOG.warn("No matching qualifier found for NEP layer protocol {} key {}, using default", lpn, key);
+            return new ArrayList<>(List.of(
+                new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                    .setNumberOfCepInstances(Uint64.ONE)
+                    .build()));
+        }
+        return distinctList;
     }
 
     /**
@@ -2095,7 +2109,7 @@ public class ORtoTapiTopoConversionTools {
                 .service._interface.point.SupportedCepLayerProtocolQualifierInstances>
              createSipSupportedLayerProtocolQualifier(
                 Collection<SupportedInterfaceCapability> supportedInterfaceCapability, LayerProtocolName lpn) {
-        if (supportedInterfaceCapability == null) {
+        if (supportedInterfaceCapability == null || supportedInterfaceCapability.isEmpty()) {
             return new ArrayList<>(List.of(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
                     .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
                 .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
@@ -2125,7 +2139,18 @@ public class ORtoTapiTopoConversionTools {
                         .build());
             }
         }
-        return sclpqiList.stream().distinct().toList();
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+            .service._interface.point.SupportedCepLayerProtocolQualifierInstances> distinctList =
+                sclpqiList.stream().distinct().toList();
+        if (distinctList.isEmpty()) {
+            LOG.warn("No matching qualifier found for SIP layer protocol {}, using default", lpn);
+            return new ArrayList<>(List.of(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                .setNumberOfCepInstances(Uint64.ONE)
+                .build()));
+        }
+        return distinctList;
     }
 
     public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
