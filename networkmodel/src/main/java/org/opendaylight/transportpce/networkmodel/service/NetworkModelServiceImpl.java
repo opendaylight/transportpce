@@ -197,7 +197,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
             if (attempt < maxRetries) {
                 LOG.warn("Attempt {}/{} to create portmapping for {} failed. "
-                    + "PortMappingRegistry or OCMetaDataTransaction service may not be available yet. "
+                    + "See preceding portmapping logs for the cause. "
                     + "Retrying in {}ms...",
                     attempt, maxRetries, nodeId, retryDelayMs);
                 try {
@@ -211,9 +211,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
 
         if (!mappingCreated) {
-            LOG.error("Failed to create portmapping for {} after {} attempts ({}s total). "
-                + "PortMappingRegistry or OCMetaDataTransaction services were not available.",
-                nodeId, maxRetries, (maxRetries * retryDelayMs) / 1000);
+            LOG.error("Failed to create portmapping for {} after {} attempts. "
+                + "See preceding portmapping logs for the cause; topology creation is skipped.",
+                nodeId, maxRetries);
             return;
         }
 
