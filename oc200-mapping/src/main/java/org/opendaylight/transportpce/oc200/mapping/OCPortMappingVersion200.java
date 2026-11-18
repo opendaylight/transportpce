@@ -172,22 +172,6 @@ public class OCPortMappingVersion200 implements OCPortMappingVersionService {
         this.networkTransactionService = networkTransactionService;
     }
 
-//    /**
-//     * Setter for OCMetaDataTransaction (for DYNAMIC injection from OSGi).
-//     */
-//    public void setOCMetaDataTransaction(OCMetaDataTransaction service) {
-//        this.ocMetaDataTransaction = service;
-//        LOG.info("OCPortMappingVersion200: OCMetaDataTransaction injected");
-//    }
-//
-//    /**
-//     * Unsetter for OCMetaDataTransaction (called when service is removed).
-//     */
-//    public void unsetOCMetaDataTransaction(OCMetaDataTransaction service) {
-//        LOG.info("OCPortMappingVersion200: OCMetaDataTransaction removed");
-//        this.ocMetaDataTransaction = null;
-//    }
-
     /**
      * Setter for NetworkTransactionService (for DYNAMIC injection from OSGi).
      */

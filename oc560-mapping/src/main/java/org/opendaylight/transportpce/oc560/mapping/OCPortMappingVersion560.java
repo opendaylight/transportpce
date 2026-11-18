@@ -18,14 +18,12 @@ import static org.opendaylight.transportpce.common.StringConstants.OPTICALCHANNE
 import static org.opendaylight.transportpce.common.StringConstants.PORT;
 import static org.opendaylight.transportpce.common.StringConstants.PROT_100GE;
 import static org.opendaylight.transportpce.common.StringConstants.SWITCH;
-import static org.opendaylight.transportpce.common.StringConstants.TERMINALCLIENT;
-import static org.opendaylight.transportpce.common.StringConstants.TERMINALLINE;
 import static org.opendaylight.transportpce.common.StringConstants.TRANSCEIVER;
 import static org.opendaylight.transportpce.common.StringConstants.XPDR_MCPROFILE;
 
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -36,9 +34,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
@@ -65,13 +64,15 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.component.top.components.component.State;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.subcomponent.ref.top.Subcomponents;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.subcomponent.ref.top.subcomponents.Subcomponent;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev250715.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.OpenconfigTerminalDeviceData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.TerminalLogicalChanAssignmentConfig.AssignmentType;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.terminal.device.top.TerminalDevice;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.terminal.logical.channel.ingress.top.Ingress;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.terminal.logical.channel.top.logical.channels.Channel;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev260114.terminal.logical.channel.top.logical.channels.ChannelKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev250812.PROTETHERNET;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev250812.TERMINALCLIENT;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev250812.TERMINALLINE;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev250812.TRIBUTARYPROTOCOLTYPE;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard;
@@ -172,22 +173,6 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
     }
 
     /**
-     * Setter for OCMetaDataTransaction (for DYNAMIC injection from OSGi).
-     */
-    public void setOCMetaDataTransaction(OCMetaDataTransaction service) {
-        this.ocMetaDataTransaction = service;
-        LOG.info("OCPortMappingVersion560: OCMetaDataTransaction injected");
-    }
-
-    /**
-     * Unsetter for OCMetaDataTransaction (called when service is removed).
-     */
-    public void unsetOCMetaDataTransaction(OCMetaDataTransaction service) {
-        LOG.info("OCPortMappingVersion560: OCMetaDataTransaction removed");
-        this.ocMetaDataTransaction = null;
-    }
-
-    /**
      * Setter for NetworkTransactionService (for DYNAMIC injection from OSGi).
      */
     public void setNetworkTransactionService(NetworkTransactionService service) {
@@ -225,13 +210,7 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 LOG.error("Component data not found in device for node {}", nodeId);
                 return false;
             }
-            // Filtering to remove all components that are not required for port-mapping discovery
-            List<Component> componentList =
-                    componentMap.values().stream().filter(component -> checkComponentType(component, CHASSIS)
-                            || checkComponentType(component, LINECARD) || checkComponentType(component, TRANSCEIVER)
-                            || checkComponentType(component, PORT) || checkComponentType(component, OPERATINGSYSTEM)
-                            || checkComponentType(component, OPTICALCHANNEL))
-                            .toList();
+            List<Component> componentList = List.copyOf(componentMap.values());
             var componentSoftwareVersion =
                     componentList.stream().filter(component -> checkComponentType(component, OPERATINGSYSTEM))
                             .findFirst();
@@ -246,8 +225,13 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 nodeInfo = createNodeInfo(ipAddress, chassisComponent.orElseThrow().getState(), softwareVersion);
             }
             postPortMapping(nodeId, nodeInfo, null, null, null);
-            if (!createXpdrPortMapping(nodeId, componentList, portMapList, mcCapabilities)) {
-                LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "Xponder");
+            try {
+                if (!createXpdrPortMapping(nodeId, componentList, portMapList, mcCapabilities)) {
+                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "Xponder");
+                    return false;
+                }
+            } catch (IllegalArgumentException e) {
+                LOG.error("Invalid OC560 discovery data for node {}", nodeId, e);
                 return false;
             }
         } else {
@@ -308,13 +292,14 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      */
     protected boolean createXpdrPortMapping(String nodeId, List<Component> componentList, List<Mapping> portMapList,
                                           Map<McCapabilitiesKey, McCapabilities> mcCapabilities) {
-        List<Component> lineCardComponentList = componentList.stream()
-                .filter(component -> checkComponentType(component, LINECARD))
-                .toList();
-        if (lineCardComponentList.isEmpty()) {
+        SortedMap<Integer, Component> lineCards = getLineCardIndexes(componentList);
+        if (lineCards.isEmpty()) {
             LOG.error("No LINECARD component found for node {}", nodeId);
             return false;
         }
+        List<Channel> logicalChannels = readLogicalChannels(nodeId);
+        final Map<String, String> portRoles = resolvePortRoles(componentList, logicalChannels);
+        LOG.info("Resolved OC560 client/line port roles for node {}: {}", nodeId, portRoles);
         if (ocMetaDataTransaction == null) {
             LOG.error("OCMetaDataTransaction service not available for node {}", nodeId);
             return false;
@@ -332,13 +317,11 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
         Map<String, Mapping> mappingMap = new HashMap<>();
         Map<String, Set<String>> lcpNamingMap = null;
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
-        int xpdrIndex = 1;
         AtomicInteger switchingPoolCounter = new AtomicInteger(1);
         Map<LineCardKey, LineCard> lineCardMap = terminalMetaData.getLineCardInfo().getLineCard();
-        if (lineCardComponentList.isEmpty() || lineCardMap == null) {
-            return false;
-        }
-        for (Component lineCardComponent : lineCardComponentList) {
+        for (Map.Entry<Integer, Component> entry : lineCards.entrySet()) {
+            int xpdrIndex = entry.getKey();
+            Component lineCardComponent = entry.getValue();
             String lineCardName = lineCardComponent.getName();
             String partNo;
             if (lineCardComponent.getState().getPartNo() != null
@@ -347,10 +330,7 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
             } else {
                 partNo = lineCardComponent.getState().getDescription();
             }
-            List<Component> portComponentList =
-                    componentList.stream().filter(component -> (checkComponentType(component, PORT)
-                                    && component.getState().getParent().equalsIgnoreCase(lineCardName)))
-                            .collect(Collectors.toList());
+            List<Component> portComponentList = getChildComponents(componentList, lineCardComponent, PORT);
             var lineCardMetaDataEntry =
                     Objects.requireNonNull(lineCardMap).values().stream().filter(lineCard
                             -> lineCard.key().toString().contains(partNo)).findFirst();
@@ -358,13 +338,14 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 lcpNamingMap =
                         createNetworkLcpMapping(nodeId, portComponentList, lineCardMetaDataEntry.orElseThrow(), lcpMap,
                                 mappingMap, xpdrIndex, lineCardComponent.getSubcomponents(), componentList,
-                                frequencyGHzSet, switchingPoolCounter);
+                                frequencyGHzSet, switchingPoolCounter, portRoles);
                 createClientLcpMapping(nodeId, portComponentList, lcpMap, mappingMap,
-                        lineCardMetaDataEntry.orElseThrow(), xpdrIndex, lcpNamingMap, componentList, frequencyGHzSet);
+                        lineCardMetaDataEntry.orElseThrow(), xpdrIndex, lcpNamingMap, componentList, frequencyGHzSet,
+                        portRoles, logicalChannels);
             } else {
                 LOG.error("Line card entry doesn't exist in meta data for line card component {}", lineCardName);
+                return false;
             }
-            xpdrIndex++;
         }
         List<Component> transceiverComponents = componentList.stream()
                 .filter(component -> checkComponentType(component, TRANSCEIVER))
@@ -372,6 +353,159 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
         createMcCapabilities(mcCapabilities, frequencyGHzSet, nodeId, transceiverComponents);
         mappingMap.forEach((k, v) -> portMapList.add(v));
         return true;
+    }
+
+    protected List<Channel> readLogicalChannels(String nodeId) {
+        DataObjectIdentifier<TerminalDevice> iid =
+                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
+                        .build();
+        var terminalDevice = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+                iid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (terminalDevice.isEmpty() || terminalDevice.orElseThrow().getLogicalChannels() == null) {
+            LOG.warn("No logical channels found for node {}; only explicit port roles can be used", nodeId);
+            return List.of();
+        }
+        return List.copyOf(terminalDevice.orElseThrow().getLogicalChannels().nonnullChannel().values());
+    }
+
+    /**
+     * Keeps device roles when present and checks them against configured Ethernet ingress and optical assignments.
+     * No role is inferred from component names, part numbers, state/index or metadata.
+     */
+    protected Map<String, String> resolvePortRoles(List<Component> components, List<Channel> channels) {
+        Map<String, String> roles = new HashMap<>();
+        for (Component lineCard : getLineCardIndexes(components).values()) {
+            for (Component port : getChildComponents(components, lineCard, PORT)) {
+                Port1 augmentation = port.getPort() == null ? null : port.getPort().augmentation(Port1.class);
+                if (augmentation != null && augmentation.getOpticalPort() != null
+                        && augmentation.getOpticalPort().getState() != null) {
+                    var type = augmentation.getOpticalPort().getState().getOpticalPortType();
+                    if (type != null) {
+                        if (TERMINALCLIENT.VALUE.equals(type)) {
+                            roles.put(port.getName(), CLIENT_TOKEN);
+                        } else if (TERMINALLINE.VALUE.equals(type)) {
+                            roles.put(port.getName(), StringConstants.NETWORK_TOKEN);
+                        } else {
+                            throw new IllegalArgumentException("Unsupported optical-port-type " + type
+                                    + " for port " + port.getName());
+                        }
+                    }
+                }
+            }
+        }
+        for (Channel channel : channels) {
+            Ingress ingress = channel.getIngress();
+            if (channel.getState() != null
+                    && PROTETHERNET.VALUE.equals(channel.getState().getLogicalChannelType())
+                    && ingress != null && ingress.getState() != null
+                    && ingress.getState().getTransceiver() != null) {
+                Component transceiver = requireComponent(components, ingress.getState().getTransceiver(), TRANSCEIVER);
+                assignPortRole(roles, portForTransceiver(components, transceiver), CLIENT_TOKEN);
+            }
+            if (channel.getLogicalChannelAssignments() == null) {
+                continue;
+            }
+            for (var assignment : channel.getLogicalChannelAssignments().nonnullAssignment().values()) {
+                var state = assignment.getState();
+                if (state == null || state.getAssignmentType() != AssignmentType.OPTICALCHANNEL) {
+                    continue;
+                }
+                Component opticalChannel = requireComponent(components, state.getOpticalChannel(), OPTICALCHANNEL);
+                Component transceiver =
+                        requireComponent(components, opticalChannel.getState().getParent(), TRANSCEIVER);
+                if (!getChildComponents(components, transceiver, OPTICALCHANNEL).contains(opticalChannel)) {
+                    throw new IllegalArgumentException("Inconsistent optical channel " + opticalChannel.getName());
+                }
+                assignPortRole(roles, portForTransceiver(components, transceiver), StringConstants.NETWORK_TOKEN);
+            }
+        }
+        for (Component lineCard : getLineCardIndexes(components).values()) {
+            for (Component port : getChildComponents(components, lineCard, PORT)) {
+                if (getSupportingCircuitPackName(components, port) != null && !roles.containsKey(port.getName())) {
+                    throw new IllegalArgumentException("Unknown client/line role for equipped port " + port.getName()
+                            + ": neither optical-port-type nor usable terminal-device references");
+                }
+            }
+        }
+        return Map.copyOf(roles);
+    }
+
+    private Component requireComponent(List<Component> components, String name, String type) {
+        return components.stream().filter(component -> component.getName().equals(name)
+                && checkComponentType(component, type)).findFirst().orElseThrow(() -> new IllegalArgumentException(
+                        "Missing " + type + " component reference: " + name));
+    }
+
+    private Component portForTransceiver(List<Component> components, Component transceiver) {
+        Component port = requireComponent(components, transceiver.getState().getParent(), PORT);
+        Component lineCard = requireComponent(components, port.getState().getParent(), LINECARD);
+        if (!getChildComponents(components, lineCard, PORT).contains(port)
+                || !transceiver.getName().equals(getSupportingCircuitPackName(components, port))) {
+            throw new IllegalArgumentException("Inconsistent transceiver " + transceiver.getName());
+        }
+        return port;
+    }
+
+    private void assignPortRole(Map<String, String> roles, Component port, String role) {
+        String previous = roles.putIfAbsent(port.getName(), role);
+        if (previous != null && !previous.equals(role)) {
+            throw new IllegalArgumentException("Conflicting client/line roles for port " + port.getName());
+        }
+    }
+
+    /**
+     * Uses the physical slot as the XPDR index, independently of inventory order or vacant slots.
+     * Multiple chassis containing line cards require an explicit numbering policy.
+     */
+    protected SortedMap<Integer, Component> getLineCardIndexes(List<Component> components) {
+        SortedMap<Integer, Component> lineCards = new TreeMap<>();
+        String chassisName = null;
+        for (Component component : components) {
+            if (!checkComponentType(component, LINECARD)) {
+                continue;
+            }
+            String parent = component.getState().getParent();
+            boolean chassisExists = components.stream().anyMatch(candidate -> checkComponentType(candidate, CHASSIS)
+                    && candidate.getName().equals(parent));
+            if (!chassisExists) {
+                throw new IllegalArgumentException("Line card " + component.getName()
+                        + " has no valid chassis parent: " + parent);
+            }
+            if (chassisName != null && !chassisName.equals(parent)) {
+                throw new IllegalArgumentException("XPDR numbering across multiple chassis is not supported");
+            }
+            chassisName = parent;
+            String position = component.getState().getInstallPosition();
+            int slot;
+            try {
+                slot = Integer.parseInt(position);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid install-position for line card "
+                        + component.getName() + ": " + position, e);
+            }
+            if (slot <= 0 || lineCards.putIfAbsent(slot, component) != null) {
+                throw new IllegalArgumentException("Non-positive or duplicate line card slot: " + slot);
+            }
+        }
+        return lineCards;
+    }
+
+    protected List<Component> getChildComponents(List<Component> components, Component parent, String type) {
+        if (parent.getSubcomponents() != null) {
+            for (Subcomponent reference : parent.getSubcomponents().nonnullSubcomponent().values()) {
+                String name = reference.getName().toString();
+                Component child = components.stream().filter(component -> component.getName().equals(name))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException(
+                                "Missing subcomponent " + name + " of " + parent.getName()));
+                if (child.getState() == null || !parent.getName().equals(child.getState().getParent())) {
+                    throw new IllegalArgumentException("Inconsistent parent for subcomponent " + name
+                            + " of " + parent.getName());
+                }
+            }
+        }
+        return components.stream().filter(component -> checkComponentType(component, type)
+                && parent.getName().equals(component.getState().getParent()))
+                .sorted(Comparator.comparing(Component::getName)).toList();
     }
 
     /**
@@ -499,7 +633,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                                                              Subcomponents subcomponents,
                                                              List<Component> componentsList,
                                                              Set<Float> frequencyGHzSet,
-                                                             AtomicInteger switchingPoolCounter) {
+                                                             AtomicInteger switchingPoolCounter,
+                                                             Map<String, String> portRoles) {
         Map<String, Set<String>> lcpNamingMap = new HashMap<>();
         List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
         Map<String,
@@ -519,16 +654,12 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
         }
         Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
         for (Component portComponent : portComponentList) {
-            Port portData = portComponent.getPort();
-            if (portData == null) {
-                LOG.warn("Port data is null for component {}", portComponent.getName());
-                continue;
-            }
-            Port1 augmentationPort = portData.augmentation(Port1.class);
             String portName = portComponent.getName();
-            if (augmentationPort != null
-                    && augmentationPort.getOpticalPort().getState()
-                    .getOpticalPortType().toString().contains(TERMINALLINE)) {
+            if (StringConstants.NETWORK_TOKEN.equals(portRoles.get(portName))) {
+                if (getSupportingCircuitPackName(componentsList, portComponent) == null) {
+                    LOG.warn("No transceiver found for network port {} on node {}; skipping port", portName, nodeId);
+                    continue;
+                }
                 Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 Set<SupportedIfCapability> supportedIfCapabilities = null;
                 Set<String> operationalModeList = null;
@@ -547,7 +678,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 var supportedPort =
                         supportedPortMap.values().stream().toList().stream().filter(supportPort -> {
                             try {
-                                return Pattern.matches(supportPort.getComponentName(), portName);
+                                return Pattern.matches(supportPort.getComponentName(), portName)
+                                        && supportPort.getType().contains(StringConstants.TERMINALLINE);
                             } catch (PatternSyntaxException e) {
                                 LOG.warn("Invalid regex pattern in metadata component-name: {}",
                                         supportPort.getComponentName(), e);
@@ -556,6 +688,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                         }).findFirst();
                 if (supportedPort.isPresent()) {
                     Uint8 networkPortId = supportedPort.orElseThrow().getId();
+                    Port portData = portComponent.getPort();
+                    Port1 augmentationPort = portData == null ? null : portData.augmentation(Port1.class);
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.NETWORK_TOKEN,
                             networkPortId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
                             supportedIfCapabilities, null, rate, operationalModeList);
@@ -574,7 +708,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                             Objects.requireNonNull(connectablePortsSet).remove(networkPortId);
                             List<Optional<SupportedPort>> clientPorts =
                                     getSupportedClientPorts(connectablePortsSet, supportedPortMap);
-                            Set<Uint8> neClientIds = clientPortsExistsOnNELineCard(clientPorts, subcomponents);
+                            Set<Uint8> neClientIds =
+                                    clientPortsExistsOnNELineCard(clientPorts, portComponentList, componentsList);
                             for (Uint8 unit8 : neClientIds) {
                                 clientSet.add(PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex,
                                         unit8.intValue(), StringConstants.CLIENT_TOKEN));
@@ -585,6 +720,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                         }
                     }
                     lcpNamingMap.put(network, clients);
+                } else {
+                    throw new IllegalArgumentException("No matching line port metadata for " + portName);
                 }
             }
         }
@@ -598,7 +735,7 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 String nblKeyPrefix = xpdrIndex + "." + switchFabricId + ".";
                 for (Map.Entry<String, org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
                         .rev260908.switching.pool.lcp.switching.pool.lcp.NonBlockingList> entry : nbMap.entrySet()) {
-                    if (entry.getKey().startsWith(switchFabricId.toString())) {
+                    if (entry.getKey().startsWith(nblKeyPrefix)) {
                         String nblNumberStr = entry.getKey().substring(nblKeyPrefix.length());
                         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260908
                                 .switching.pool.lcp.switching.pool.lcp
@@ -636,24 +773,47 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      */
     protected Set<SupportedIfCapability> createSupportedInterfaceCapability(Transceiver transceiver) {
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
+        if (transceiver.getSupportedInterfaceCapability() == null) {
+            LOG.warn("No interface capability metadata for transceiver {}; leaving capabilities unset",
+                    transceiver.getPartNo());
+            return supportedIntf;
+        }
         for (SupportedInterfaceCapability supportedInterfaceCapability :
-                Objects.requireNonNull(transceiver.getSupportedInterfaceCapability())) {
+                transceiver.getSupportedInterfaceCapability()) {
             Map<InterfaceSequenceKey, InterfaceSequence> interfaceSequenceMap =
                     supportedInterfaceCapability.getInterfaceSequence();
+            if (interfaceSequenceMap == null || interfaceSequenceMap.isEmpty()) {
+                LOG.warn("Empty interface sequence for transceiver {}; omitting capability", transceiver.getPartNo());
+                continue;
+            }
             List<String> interfaceTypeList = new ArrayList<>();
-            if (interfaceSequenceMap != null) {
-                for (Map.Entry<InterfaceSequenceKey, InterfaceSequence> interfaceSequenceEntry :
-                        interfaceSequenceMap.entrySet()) {
-                    interfaceTypeList.add(MappingUtilsImpl.getInterfaceType(interfaceSequenceEntry.getValue()
-                            .getInterfaceType()));
+            for (InterfaceSequence sequence : interfaceSequenceMap.values().stream()
+                    .sorted(Comparator.comparing(InterfaceSequence::getPosition)).toList()) {
+                String type = sequence.getInterfaceType();
+                String interfaceType = type == null ? null : MappingUtilsImpl.getInterfaceType(type);
+                if (interfaceType == null) {
+                    LOG.warn("Interface type {} for transceiver {} cannot be represented in portmapping; "
+                            + "omitting the entire capability sequence", type, transceiver.getPartNo());
+                    interfaceTypeList.clear();
+                    break;
                 }
+                interfaceTypeList.add(interfaceType);
+            }
+            if (interfaceTypeList.isEmpty()) {
+                continue;
             }
             StringBuilder supportedIntfCapBuilder = new StringBuilder();
             for (String intfType : interfaceTypeList) {
                 supportedIntfCapBuilder.append("-").append(intfType);
             }
             String supportedIntfCap = "if" + supportedIntfCapBuilder;
-            supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa(supportedIntfCap));
+            SupportedIfCapability capability = MappingUtilsImpl.ocConvertSupIfCapa(supportedIntfCap);
+            if (capability == null) {
+                LOG.warn("Interface sequence {} for transceiver {} cannot be represented in portmapping; "
+                        + "omitting capability", supportedIntfCap, transceiver.getPartNo());
+            } else {
+                supportedIntf.add(capability);
+            }
         }
         return supportedIntf;
     }
@@ -663,30 +823,33 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      *
      * @param supportedClientPorts - input
      *                 supported client ports from metadata.
-     * @param subcomponents - input
-     *                 subcomponents of NE LineCard.
+     * @param ports - input
+     *                 physical ports of the line card.
+     * @param components - input
+     *                 device component inventory.
      * @return supported client id's.
      */
-    private Set<Uint8> clientPortsExistsOnNELineCard(List<Optional<SupportedPort>> supportedClientPorts,
-                                                     Subcomponents subcomponents) {
+    protected Set<Uint8> clientPortsExistsOnNELineCard(List<Optional<SupportedPort>> supportedClientPorts,
+                                                     List<Component> ports, List<Component> components) {
         Set<Uint8> clientIds = new HashSet<>();
-        Collection<Subcomponent> lineCardComponentSubcomponents =
-                Objects.requireNonNull(subcomponents.getSubcomponent()).values();
         for (var supportedPort : supportedClientPorts) {
-            String clientPortName = supportedPort.orElseThrow().getComponentName();
-            var subComp =
-                    lineCardComponentSubcomponents.stream().filter(subcomponent -> {
+            SupportedPort metadata = supportedPort.orElseThrow(
+                    () -> new IllegalArgumentException("Connectable client port is missing from line card metadata"));
+            String clientPortName = metadata.getComponentName();
+            var physicalPort =
+                    ports.stream().filter(port -> {
                         try {
-                            return Pattern.matches(clientPortName, String.valueOf(subcomponent.getName()));
+                            return Pattern.matches(clientPortName, port.getName());
                         } catch (PatternSyntaxException e) {
                             LOG.warn("Invalid regex pattern in metadata component-name: {}", clientPortName, e);
                             return false;
                         }
                     }).findFirst();
-            if (subComp.isPresent()) {
-                clientIds.add(supportedPort.orElseThrow().getId());
+            if (physicalPort.isPresent()
+                    && getSupportingCircuitPackName(components, physicalPort.orElseThrow()) != null) {
+                clientIds.add(metadata.getId());
             } else {
-                LOG.info("Client Port doesn't exist in NE Line Card {} ", clientPortName);
+                LOG.info("Client port {} has no physical port or transceiver on the line card", clientPortName);
             }
         }
         return clientIds;
@@ -707,7 +870,7 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
         for (Uint8 uint8 : connectablePorts) {
             var supportedPort =
                     supportedPortMap.values().stream().filter(clientPort -> clientPort.getId().equals(uint8)
-                                    && clientPort.getType().contains(TERMINALCLIENT))
+                                    && clientPort.getType().contains(StringConstants.TERMINALCLIENT))
                             .findFirst();
             supportedClientPorts.add(supportedPort);
         }
@@ -761,6 +924,10 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
             }
             nbMap.put(key, nonBlockingList);
         } else if (xpdrType.getName().equalsIgnoreCase(XpdrType.TPDR.getName())) {
+            if (clientList.isEmpty()) {
+                LOG.info("No equipped client port is available for network LCP {}", network);
+                return;
+            }
             if (mappingMap.containsKey(network)) {
                 Mapping mapping = mappingMap.get(network);
                 String clientConnectionMapLcp = clientList.stream().findFirst().orElseThrow();
@@ -798,35 +965,18 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
     protected void createClientLcpMapping(String nodeId, List<Component> portComponentList,  Map<String, String> lcpMap,
                                         Map<String, Mapping> mappingMap, LineCard lineCardMetaData,int xpdrIndex,
                                         Map<String, Set<String>> lcpNamingMap, List<Component> componentsList,
-                                        Set<Float> frequencyGHzSet) {
+                                        Set<Float> frequencyGHzSet, Map<String, String> portRoles,
+                                        List<Channel> logicalChannelList) {
         Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
-        DataObjectIdentifier<TerminalDevice> terminalDeviceIid =
-                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
-                        .build();
-        var deviceInfoOptionalTerminalDevice =
-                this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-                        terminalDeviceIid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        List<Channel> logicalChannelList = null;
-        if (deviceInfoOptionalTerminalDevice.isPresent()) {
-            Map<ChannelKey, Channel> channelMap =  deviceInfoOptionalTerminalDevice.orElseThrow()
-                    .getLogicalChannels().getChannel();
-            if (channelMap == null) {
-                LOG.error("logical channel  not found in terminal-device data for node {}", nodeId);
-            } else {
-                logicalChannelList = channelMap.values().stream().toList();
-            }
-        }
         for (Component portComponent : portComponentList) {
             Port portData = portComponent.getPort();
-            if (portData == null) {
-                LOG.warn("Port data is null for component {}", portComponent.getName());
-                continue;
-            }
-            Port1 augmentationPort = portData.augmentation(Port1.class);
+            Port1 augmentationPort = portData == null ? null : portData.augmentation(Port1.class);
             String portName = portComponent.getName();
-            if (augmentationPort != null
-                    && augmentationPort.getOpticalPort().getState().getOpticalPortType()
-                    .toString().contains(TERMINALCLIENT)) {
+            if (CLIENT_TOKEN.equals(portRoles.get(portName))) {
+                if (getSupportingCircuitPackName(componentsList, portComponent) == null) {
+                    LOG.warn("No transceiver found for client port {} on node {}; skipping port", portName, nodeId);
+                    continue;
+                }
                 Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 LineCard.XpdrType xpdrType = lineCardMetaData.getXpdrType();
                 Map<SupportedPortKey, SupportedPort>  supportedPortMap = lineCardMetaData.getSupportedPort();
@@ -835,7 +985,7 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                         supportedPortList.stream().filter(supportedPort -> {
                             try {
                                 return Pattern.matches(supportedPort.getComponentName(), portName)
-                                        && supportedPort.getType().contains(TERMINALCLIENT);
+                                        && supportedPort.getType().contains(StringConstants.TERMINALCLIENT);
                             } catch (PatternSyntaxException e) {
                                 LOG.warn("Invalid regex pattern in metadata component-name: {}",
                                         supportedPort.getComponentName(), e);
@@ -878,6 +1028,8 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                                     null, null, rate, operationalModeList));
                         }
                     }
+                } else {
+                    throw new IllegalArgumentException("No matching client port metadata for " + portName);
                 }
             }
         }
@@ -923,6 +1075,11 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                                     List<Channel> logicalChannelList, String rate, Set<String> operationalModeList) {
         String lcpName = PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, lcpValue, token);
         String supportingCircuitPackName = getSupportingCircuitPackName(componentsList, portComponent);
+        if (supportingCircuitPackName == null) {
+            LOG.warn("No transceiver found for port {} on node {}; skipping LCP {}",
+                    portComponent.getName(), nodeId, lcpName);
+            return;
+        }
         Set<String> supportedInterfaceSet = null;
         if (token.equalsIgnoreCase(CLIENT_TOKEN)) {
             supportedInterfaceSet = createSupportedInterfaces(supportingCircuitPackName, logicalChannelList);
@@ -934,26 +1091,13 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 supportedIfCapabilities, token, supportedInterfaceSet, opticalChannels, rate, operationalModeList));
     }
 
-    private static Set<String> getOpticalChannels(List<Component> componentsList, String supportingCircuitPackName) {
-        Set<String> opticalChannels = new HashSet<>();
-        HashMap<String, Component> componentsMap = componentsList.stream()
-                .collect(Collectors.toMap(Component::getName, Function.identity(), (a, b) -> a, HashMap::new));
-        Component mainComponent = Optional.ofNullable(componentsMap.get(supportingCircuitPackName)).orElseThrow();
-        Subcomponents subcomponents = mainComponent.getSubcomponents();
-        if (subcomponents != null && subcomponents.getSubcomponent() != null) {
-            subcomponents.getSubcomponent().values().forEach(subcomponent -> {
-                String subcomponentName = subcomponent.getName().toString();
-                Component component = componentsMap.get(subcomponentName);
-                if (component != null) {
-                    PlatformComponentState.Type type = component.getState().getType();
-                    if (type != null && type.getOPENCONFIGHARDWARECOMPONENT() != null
-                            && type.getOPENCONFIGHARDWARECOMPONENT().toString().contains(OPTICALCHANNEL)) {
-                        opticalChannels.add(subcomponentName);
-                    }
-                }
-            });
-        }
-        return opticalChannels;
+    protected Set<String> getOpticalChannels(List<Component> componentsList, String supportingCircuitPackName) {
+        Component transceiver = componentsList.stream()
+                .filter(component -> component.getName().equals(supportingCircuitPackName))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException(
+                        "Missing supporting transceiver " + supportingCircuitPackName));
+        return getChildComponents(componentsList, transceiver, OPTICALCHANNEL).stream()
+                .map(Component::getName).collect(Collectors.toSet());
     }
 
 
@@ -967,32 +1111,35 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      */
     private Set<String> createSupportedInterfaces(String supportingCircuitPackName, List<Channel> logicalChannelList) {
         Set<String> supportedInterfaceSet = new LinkedHashSet<>();
-        if (logicalChannelList != null && !logicalChannelList.isEmpty()) {
-            Optional<Channel> logicalChannel = logicalChannelList.stream().filter(channel -> {
-                Ingress ingress = channel.getIngress();
-                return (ingress != null && ingress.getState().getTransceiver()
-                        .equalsIgnoreCase(supportingCircuitPackName));
-            }).findFirst();
-            String logicalChannelIndex = null;
-            if (logicalChannel.isPresent()) {
-                addLogicalChannelToSet(supportedInterfaceSet, logicalChannel.orElseThrow());
-                logicalChannelIndex = logicalChannel.orElseThrow().getLogicalChannelAssignments().getAssignment()
-                        .values().stream().findFirst().orElseThrow().getState().getLogicalChannel().toString();
+        if (logicalChannelList == null || logicalChannelList.isEmpty()) {
+            return supportedInterfaceSet;
+        }
+        Channel current = logicalChannelList.stream().filter(channel -> {
+            Ingress ingress = channel.getIngress();
+            return ingress != null && ingress.getState() != null
+                    && supportingCircuitPackName.equals(ingress.getState().getTransceiver());
+        }).findFirst().orElse(null);
+        Set<Uint32> visited = new HashSet<>();
+        while (current != null) {
+            if (!visited.add(current.getIndex())) {
+                throw new IllegalArgumentException("Cycle in logical channels at " + current.getIndex());
             }
-            for (int i = 0; i < logicalChannelList.size(); i++) {
-                if (logicalChannelList.get(i).getIndex().toString().equalsIgnoreCase(logicalChannelIndex)) {
-                    addLogicalChannelToSet(supportedInterfaceSet, logicalChannelList.get(i));
-                    if (logicalChannelList.get(i).getLogicalChannelAssignments().getAssignment().values().stream()
-                            .findFirst().orElseThrow().getState().getLogicalChannel() != null) {
-                        logicalChannelIndex =
-                                logicalChannelList.get(i).getLogicalChannelAssignments().getAssignment().values()
-                                        .stream().findFirst().orElseThrow().getState().getLogicalChannel().toString();
-                        i = -1;
-                    } else {
-                        break;
-                    }
-                }
+            if (current.getState() != null) {
+                addLogicalChannelToSet(supportedInterfaceSet, current);
             }
+            if (current.getLogicalChannelAssignments() == null) {
+                break;
+            }
+            var assignment = current.getLogicalChannelAssignments().nonnullAssignment().values().stream().findFirst();
+            if (assignment.isEmpty() || assignment.orElseThrow().getState() == null) {
+                break;
+            }
+            Uint32 next = assignment.orElseThrow().getState().getLogicalChannel();
+            if (next == null) {
+                break;
+            }
+            current = logicalChannelList.stream().filter(channel -> next.equals(channel.getIndex()))
+                    .findFirst().orElseThrow(() -> new IllegalArgumentException("Missing logical channel " + next));
         }
         return supportedInterfaceSet;
     }
@@ -1026,18 +1173,12 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      *            port component from device of type PORT
      * @return String subComponent name
      */
-    private String getSupportingCircuitPackName(List<Component> componentsList, Component portComponent) {
-        List<Component> transceiverComponentList =
-                componentsList.stream().filter(component -> (checkComponentType(component,
-                                TRANSCEIVER) && component.getState().getParent()
-                                .equalsIgnoreCase(portComponent.getName()))).toList();
-        Map<SubcomponentKey, Subcomponent> portSubComponentsMap = portComponent.getSubcomponents().getSubcomponent();
-        for (Map.Entry<SubcomponentKey, Subcomponent> entry : Objects.requireNonNull(portSubComponentsMap).entrySet()) {
-            String portSubCompName = entry.getKey().getName().toString();
-            return transceiverComponentList.stream().filter(component -> component.getName()
-                    .contains(portSubCompName)).findFirst().orElseThrow().getName();
+    protected String getSupportingCircuitPackName(List<Component> componentsList, Component portComponent) {
+        List<Component> transceivers = getChildComponents(componentsList, portComponent, TRANSCEIVER);
+        if (transceivers.size() > 1) {
+            throw new IllegalArgumentException("Multiple transceivers for port " + portComponent.getName());
         }
-        return null;
+        return transceivers.isEmpty() ? null : transceivers.getFirst().getName();
     }
 
     /**
@@ -1069,31 +1210,21 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
      */
     protected Transceiver getTransceiverMetaData(List<Component> componentsList, Component portComponent,
             Map<TransceiverKey, Transceiver> transceiverMap) {
-        Optional<Transceiver> transceiverMetadata;
-        List<Component> transceiverComponentList =
-                componentsList.stream().filter(component -> (checkComponentType(component,
-                        TRANSCEIVER) && component.getState().getParent().contains(portComponent.getName()))).toList();
-        Map<SubcomponentKey, Subcomponent> portSubComponentsMap = portComponent.getSubcomponents().getSubcomponent();
-        for (Map.Entry<SubcomponentKey, Subcomponent> entry : portSubComponentsMap.entrySet()) {
-            String portSubCompName = entry.getKey().getName().toString();
-            var transceiverComponent =
-                    transceiverComponentList.stream().filter(component -> component.getName()
-                            .equalsIgnoreCase(portSubCompName)).findFirst();
-            String transceiverPartNo;
-            if (transceiverComponent.orElseThrow().getState().getPartNo() != null
-                    && !transceiverComponent.orElseThrow().getState().getPartNo().isEmpty()) {
-                transceiverPartNo = transceiverComponent.orElseThrow().getState().getPartNo();
-            } else {
-                transceiverPartNo = transceiverComponent.orElseThrow().getState().getDescription();
-            }
-            transceiverMetadata =
-                    Objects.requireNonNull(transceiverMap).values().stream().filter(transceiver
-                            -> transceiver.key().getPartNo().equalsIgnoreCase(transceiverPartNo)).findFirst();
-            if (transceiverMetadata.isPresent()) {
-                return transceiverMetadata.orElseThrow();
-            }
+        String name = getSupportingCircuitPackName(componentsList, portComponent);
+        if (name == null || transceiverMap == null) {
+            LOG.warn("No transceiver or transceiver metadata available for port {}", portComponent.getName());
+            return null;
         }
-        return null;
+        Component transceiver = componentsList.stream().filter(component -> component.getName().equals(name))
+                .findFirst().orElseThrow();
+        String partNo = transceiver.getState().getPartNo();
+        if (partNo == null || partNo.isEmpty()) {
+            partNo = transceiver.getState().getDescription();
+        }
+        String transceiverPartNo = partNo;
+        return transceiverMap.values().stream()
+                .filter(metadata -> metadata.key().getPartNo().equalsIgnoreCase(transceiverPartNo))
+                .findFirst().orElse(null);
     }
 
     /**
@@ -1293,10 +1424,13 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
                 .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
                 .setRate(rate)
                 .setSupportedOperationalMode(operationalModeList);
-        if (augmentationPort.getOpticalPort().getState().getAdminState() != null) {
-            mpBldr.setPortAdminState(augmentationPort.getOpticalPort().getState().getAdminState().getName());
-        } else if (augmentationPort.getOpticalPort().getConfig().getAdminState() != null) {
-            mpBldr.setPortAdminState(augmentationPort.getOpticalPort().getConfig().getAdminState().getName());
+        if (augmentationPort != null && augmentationPort.getOpticalPort() != null) {
+            var opticalPort = augmentationPort.getOpticalPort();
+            if (opticalPort.getState() != null && opticalPort.getState().getAdminState() != null) {
+                mpBldr.setPortAdminState(opticalPort.getState().getAdminState().getName());
+            } else if (opticalPort.getConfig() != null && opticalPort.getConfig().getAdminState() != null) {
+                mpBldr.setPortAdminState(opticalPort.getConfig().getAdminState().getName());
+            }
         }
         if (xpdrType != null && (XpdrNodeTypes.Mpdr.toString().equalsIgnoreCase(xpdrType.toString())
                 || XpdrNodeTypes.Switch.toString().equalsIgnoreCase(xpdrType.toString()))) {
@@ -1379,6 +1513,9 @@ public class OCPortMappingVersion560 implements OCPortMappingVersionService {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
