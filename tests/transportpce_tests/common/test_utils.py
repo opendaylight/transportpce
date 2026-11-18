@@ -375,6 +375,9 @@ def mount_device(node: str, sim: str):
                 "netconf-node-topology:max-backoff-millis": 1800000,
                 "netconf-node-topology:backoff-multiplier": 1.5,
                 "netconf-node-topology:keepalive-delay": 120}}]}
+    if sim[1] in ('oc200', 'oc560'):
+        body['node'][0]['netconf-node-topology:netconf-node'][
+            'netconf-node-topology:schema-cache-directory'] = 'schema-' + sim[1]
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
     if wait_until_log_contains(TPCE_LOG,
                                [f'Triggering notification stream NETCONF for node {node}',
