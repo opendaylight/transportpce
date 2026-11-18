@@ -181,7 +181,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                                 deviceCapability.orElseThrow().getCapability(),
                                 ipAddress);
                         onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
-                        LOG.info("OpenConfig device {} correctly connected to controller", nodeId);
+                        LOG.info("OpenConfig NETCONF session established for {}; "
+                                + "portmapping and topology creation results are logged separately", nodeId);
                     }
                 }
                 if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
