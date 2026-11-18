@@ -72,6 +72,27 @@
                         "slot-width-granularity": 50
                     }
                 ]
+            },
+            {
+                "node-id": "XPDR-OC200",
+                "node-info": {
+                    "node-type": "xpdr",
+                    "openconfig-version": "2.0.0"
+                }
+            },
+            {
+                "node-id": "XPDR-OC560",
+                "node-info": {
+                    "node-type": "xpdr",
+                    "openconfig-version": "5.6.0"
+                }
+            },
+            {
+                "node-id": "XPDR-PROTOTYPE",
+                "node-info": {
+                    "node-type": "xpdr",
+                    "openconfig-version": "PROTOTYPE"
+                }
             }
         ]
     }

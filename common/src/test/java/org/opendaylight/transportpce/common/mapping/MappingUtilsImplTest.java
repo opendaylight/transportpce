@@ -74,6 +74,17 @@ public class MappingUtilsImplTest extends AbstractTest {
     }
 
     @Test
+    void getOpenConfigVersionTest() {
+        assertEquals(StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0, mappingUtils.getOpenConfigVersion("XPDR-OC200"),
+                "NodeInfo with XPDR-OC200 as id should be 2.0.0 version");
+        assertEquals(StringConstants.OPENCONFIG_DEVICE_VERSION_5_6_0, mappingUtils.getOpenConfigVersion("XPDR-OC560"),
+                "NodeInfo with XPDR-OC560 as id should be 5.6.0 version");
+        assertNull(mappingUtils.getOpenConfigVersion("XPDR-PROTOTYPE"), "Prototype version should not be supported");
+        assertNull(mappingUtils.getOpenConfigVersion("ROADM-A1"), "ROADM-A1 should not have an OpenConfig version");
+        assertNull(mappingUtils.getOpenConfigVersion("nodes3"), "NodeInfo with nodes3 as id should not exist");
+    }
+
+    @Test
     void getMcCapabilitiesForNodeTest() {
         assertEquals(2, mappingUtils.getMcCapabilitiesForNode("ROADM-A1").size(),
             "Mc capabilities list size should be 2");
