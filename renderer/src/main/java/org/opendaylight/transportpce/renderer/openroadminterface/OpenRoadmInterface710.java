@@ -137,7 +137,8 @@ public class OpenRoadmInterface710 {
                             // Ethernet interface specific data
                             // We have to differentiate if-100GE vs if-400GE
                             // Default set to 400G
-                            portMap.getSupportedInterfaceCapability().contains(If100GE.VALUE)
+                            portMap.getSupportedInterfaceCapability() != null
+                                && portMap.getSupportedInterfaceCapability().contains(If100GE.VALUE)
                                 // There could be different client pluggables on either side QSFP28-LR4 or QSFP28-FR4
                                 // LR4-requires FEC to off, while FR4 can accept even when FEC is off
                                 ? new EthernetBuilder().setFec(Off.VALUE).setSpeed(Uint32.valueOf(100000)).build()
@@ -450,11 +451,11 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
+        if (supportsOchOtu4Odu4(portMap)) {
             // create OCH interface
             return createOpenRoadmOchInterface(nodeId, logicalConnPoint, spectrumInformation);
         }
-        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        if (supportsOtsiOtsigroup(portMap)) {
             // Create OTSi and OTSi-group and concat the names of the interface
             String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation,
                     operationalMode);
@@ -583,11 +584,11 @@ public class OpenRoadmInterface710 {
         }
         // Depending on OCH-OTU4-ODU4 interface or OTSi-OTSi-group, supporting interface should
         // reflect that
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
+        if (supportsOchOtu4Odu4(portMap)) {
             // create OTU4 interface
             return createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportingInterface, apiInfoA, apiInfoZ);
         }
-        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        if (supportsOtsiOtsigroup(portMap)) {
             // Create OTUCn
             return createOpenRoadmOtucnInterface(nodeId, logicalConnPoint, supportingInterface, apiInfoA, apiInfoZ);
         }
@@ -944,11 +945,11 @@ public class OpenRoadmInterface710 {
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Depending on OTU4 or OTUCn, supporting interface should reflect that
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
+        if (supportsOchOtu4Odu4(portMap)) {
             // create OTU4 interface
             return createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
         }
-        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        if (supportsOtsiOtsigroup(portMap)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
             return interfaceOducn + "#"
@@ -1111,6 +1112,17 @@ public class OpenRoadmInterface710 {
             .setType(type)
             .setName(key)
             .withKey(new InterfaceKey(key));
+    }
+
+    private boolean supportsOchOtu4Odu4(Mapping portMap) {
+        var capabilities = portMap.getSupportedInterfaceCapability();
+        // Mappings created before capability reporting use the legacy OCH/OTU4/ODU4 stack.
+        return capabilities == null || capabilities.isEmpty() || capabilities.contains(IfOCHOTU4ODU4.VALUE);
+    }
+
+    private boolean supportsOtsiOtsigroup(Mapping portMap) {
+        var capabilities = portMap.getSupportedInterfaceCapability();
+        return capabilities != null && capabilities.contains(IfOtsiOtsigroup.VALUE);
     }
 
     public String createOpenRoadmOmsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {

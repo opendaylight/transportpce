@@ -20,4 +20,4 @@ echo "build karaf in " $USE_ODL_ALT_KARAF_INSTALL_DIR "with " $USE_ODL_ALT_KARAF
 . ./reflectwarn.sh
 cd  ../$USE_ODL_ALT_KARAF_INSTALL_DIR
 mvn clean install -B -q -s ../tests/odl_settings.xml -Pq
-./target/assembly/ressources/post_install_for_tests.sh
+sh ./target/assembly/ressources/post_install_for_tests.sh

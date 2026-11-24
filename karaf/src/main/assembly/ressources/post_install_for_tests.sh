@@ -15,7 +15,7 @@ sed -i'_' -e '1 a\
 . \$(dirname \$0)/\.\./\.\./\.\./\.\./tests/reflectwarn.sh\
 \
 if [ ! -f \$(dirname \$0)/\.\./ressources/karaf_configured ]; then\
-    \$(dirname \$0)/\.\./ressources/karaf_pre_launch.sh\
+    sh \$(dirname \$0)/\.\./ressources/karaf_pre_launch.sh\
 fi\
 echo "karaf exec tainted for tests"\
 \

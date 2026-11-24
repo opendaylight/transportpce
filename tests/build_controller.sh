@@ -26,7 +26,7 @@ else
     mvn clean install -B -q -s $1 -Pq
 fi
 #patch Karaf exec for the same reason at runtime and also to have the possibility to use alternative ports
-./karaf/target/assembly/ressources/post_install_for_tests.sh
+sh ./karaf/target/assembly/ressources/post_install_for_tests.sh
 
 #build Lighty if needed
 if [ "$USE_LIGHTY" = "True" ]; then

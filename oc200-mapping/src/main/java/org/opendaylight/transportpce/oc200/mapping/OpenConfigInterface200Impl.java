@@ -49,7 +49,6 @@ import org.opendaylight.yangtools.yang.common.Uint16;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +68,7 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
 
     @Activate
     public OpenConfigInterface200Impl(
-            @Reference(cardinality = ReferenceCardinality.OPTIONAL) PortMapping portMapping,
+            @Reference PortMapping portMapping,
             @Reference(target = "(openconfig.version=2.0.0)")
             OpenConfigInterfaces openConfigInterfaces) {
         this.portMapping = portMapping;
@@ -88,8 +87,8 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
         LOG.info("Configuring OpenConfig port admin state to {} on node {}",
                 (adminStateType != null ? adminStateType.toString() : "null"), nodeId);
         Set<String> portIds = new HashSet<>();
+        Mapping mapping = getMapping(nodeId, logicalConnPoint);
         try {
-            Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
             ComponentBuilder portComponentBuilder =
                     createPortComponentBuilder(mapping.getSupportingPort(),
                             (AdminStateType) adminStateType);
@@ -119,7 +118,7 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
     @Override
     public Set<String> configureClientOpticalChannel(String nodeId, String logicalConnPoint, String componentProperty)
             throws OpenConfigInterfacesException {
-        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        Mapping mapping = getMapping(nodeId, logicalConnPoint);
         List<ComponentBuilder> clientOpticalChannelBuilders = getClientOpticalChannelBuilders(
                 mapping.getOpenconfigInfo().getSupportedOpticalChannels(), componentProperty);
         Set<String> opticalChannelComponentNames = new HashSet<>();
@@ -183,7 +182,7 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
     public String configureNetworkOpticalChannel(String nodeId, String logicalConnPoint, Object input)
             throws OpenConfigInterfacesException {
         ServicePathInput servicePathInput = (ServicePathInput) input;
-        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        Mapping mapping = getMapping(nodeId, logicalConnPoint);
         boolean isAend = false;
         if (servicePathInput.getAEndApiInfo() != null && servicePathInput.getAEndApiInfo().getNodeId() != null) {
             isAend = servicePathInput.getAEndApiInfo().getNodeId().equals(nodeId);
@@ -205,7 +204,7 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
     @Override
     public String configureTransceiversTxLaser(String nodeId, String logicalConnPoint,
                     List<Integer> channelIndexes, boolean isTxLaserEnabled) throws OpenConfigInterfacesException {
-        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        Mapping mapping = getMapping(nodeId, logicalConnPoint);
         LOG.info("Configuring OpenConfig tx-laser as {} on the channels {} for transceiver {} on node {}",
                 isTxLaserEnabled, channelIndexes.toString(), mapping.getSupportingCircuitPackName(), nodeId);
         ComponentBuilder lineTransceiverComponentBuilder = createTransceiverComponentBuilder(
@@ -291,10 +290,21 @@ public class OpenConfigInterface200Impl implements OpenConfigInterfaceConfigurat
         return componentBuilderList;
     }
 
+    private Mapping getMapping(String nodeId, String logicalConnPoint) throws OpenConfigInterfacesException {
+        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (mapping == null) {
+            String message = "Port mapping was not found for node %s and logical connection point %s"
+                    .formatted(nodeId, logicalConnPoint);
+            LOG.error(message);
+            throw new OpenConfigInterfacesException(message);
+        }
+        return mapping;
+    }
+
     @Override
     public Set<String> configureInterface(String nodeId, String logicalConnPoint, boolean enableState)
             throws OpenConfigInterfacesException {
-        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        Mapping mapping = getMapping(nodeId, logicalConnPoint);
         List<InterfaceBuilder> clientInterfaceBuilders = getClientInterfaceBuilders(mapping.getOpenconfigInfo()
                         .getSupportedInterfaces(), enableState);
         Set<String> clientInterfaces = new HashSet<>();
