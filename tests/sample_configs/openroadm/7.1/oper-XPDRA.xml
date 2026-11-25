@@ -137,6 +137,11 @@
         <port-name>1</port-name>
         <port-type>CFP2</port-type>
         <port-qual>xpdr-network</port-qual>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+          </supported-interface-capability>
+        </port-capabilities>
         <port-wavelength-type>wavelength</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <is-physical>true</is-physical>
@@ -183,6 +188,11 @@
         <port-name>C1</port-name>
         <port-type>QSFP28</port-type>
         <port-qual>xpdr-client</port-qual>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
+          </supported-interface-capability>
+        </port-capabilities>
         <port-wavelength-type>wavelength</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <is-physical>true</is-physical>
@@ -228,6 +238,11 @@
         <port-name>1</port-name>
         <port-type>CFP2</port-type>
         <port-qual>xpdr-network</port-qual>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+          </supported-interface-capability>
+        </port-capabilities>
         <port-wavelength-type>wavelength</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <is-physical>true</is-physical>
@@ -273,6 +288,11 @@
         <port-name>C1</port-name>
         <port-type>QSFP28</port-type>
         <port-qual>xpdr-client</port-qual>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
+          </supported-interface-capability>
+        </port-capabilities>
         <port-wavelength-type>wavelength</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
