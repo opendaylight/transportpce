@@ -16,6 +16,23 @@
       "message": "Thank you very much Giridhar, for this great contribution. We will review it and can discuss it tomorrow morning during our meeting.",
       "revId": "db338f2b5d2fbe6ca9d28910185b2abb44ef4622",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a27b7d43_fce1eac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2026-11-25T17:05:17Z",
+      "side": 1,
+      "message": "Thanks so much for this outstanding contribution!\n\nI finished my review (giving only a quick look at unitary tests since I don\u0027t have enough knowledge to review them consistently). This is huge and everything LGTM. I really like the way you did it, and think it should be easy to integrate for OFC demo since everything present in the SouthBound topology will be saved in the top instance of tpce (at least from my understanding). \n\nI have no specific comment: it just looks perfect to me. \n\nAs I see it, the methods adhering to Tapi Release (such as process[XXXX]MapNodeEntries, transform[XXXX], save[XXXX]InTopology with [XXXX] \u003d Node/Link/SIP/Profile....) allow to copy the topology and make it comply with 2.4 TAPI objects in the DataStore, whatever is the release of SouthBound Controller. Can you confirm ? If this is really the case, this means we could support very easily support upper release of TAPI in SouthBound controller, which would be awesome.\n\nThanks again and BRAVO!!!!",
+      "revId": "db338f2b5d2fbe6ca9d28910185b2abb44ef4622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
